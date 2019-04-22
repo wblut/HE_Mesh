@@ -37,10 +37,8 @@ To the extent possible under law, I, Frederik Vanhoutte, have waived all copyrig
 
 The following classes are subject to the license agreement of their original authors, included in the source file:
 
-* wblut.geom.WB_Earcut
 * wblut.geom.WB_PolygonDecomposer
 * wblut.geom.WB_PolygonSplitter
-* wblut.geom.WB_ShapeReader
 * wblut.hemesh.HEC_SuperDuper
 * wblut.hemesh.HET_FaceSplitter
 * wblut.math.WB_DoubleDouble
