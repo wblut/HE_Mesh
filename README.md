@@ -24,6 +24,11 @@ Download the current release here: http://www.wblut.com/hemesh/hemesh.zip.
 
 Download a recent built here: http://www.wblut.com/hemesh/hemesh20180516.zip.
 
+## Examples
+
+Download: http://www.wblut.com/hemesh/examples.zip.
+
+
 ## License
 
 HE_Mesh, with the below exceptions, is dedicated to the public domain. 
