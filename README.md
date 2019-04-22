@@ -9,12 +9,10 @@ The first thing you need to do is download or fork this repository and import th
 You need to add some other external *.jar files to the properties of your Eclipse project to compile HE_Mesh. These are included in the repository (folder external).
 
 * `core.jar`: This is the core Processing API for Processing 3. (http://processing.org/)
-* `jts.jar`: The JTS Topology Suite is an API of spatial predicates and functions for processing planar geometry.  (http://tsusiatsoftware.net/jts/main.html)
 * `eclipse-collections-9.0.0.jar`: Eclipse Collections project.(http://www.eclipse.org/collections/)
-* `hemesh-external-3_0_0.jar`: HE_Mesh contains source code from other authors that was converted to use my geometry classes for convenience. To protect the rights of the original authors whose work is not in the public domain, the source code is only available on request.
-* `hemesh-data-4_0_0.jar`: Data for HE_Mesh.
-* `exp4j.jar`: A simple expression evaluator for Java. (https://github.com/fasseg/exp4j)
-* `ParallelColt-0.9.4.jar` and dependecies: some functions use least-square approximations and other linear algebra approaches. (https://sites.google.com/site/piotrwendykier/software/parallelcolt)
+* `javaluator-3.0.2.jar` : Evaluation of mathematical expressions http://javaluator.fathzer.com/en/home/
+* `hemesh-external-6_0_0.jar`: HE_Mesh contains source code from other authors that was converted to use my geometry classes for convenience. To protect the rights of the original authors whose work is not in the public domain, the source code is only available on request.
+* `hemesh-data-3_0_0.jar`: Data for HE_Mesh.
 
 
 ## Current release 
@@ -54,5 +52,6 @@ The following packages are part of hemesh-external.jar and are subject to the li
 * wblut.external.ProGAL http://www.diku.dk/~rfonseca/ProGAL/
 * wblut.external.straightskeleton https://code.google.com/p/campskeleton/
 * wblut.external.QuickHull3D https://www.cs.ubc.ca/~lloyd/java/quickhull3d.html
+* The JTS Topology Suite is an API of spatial predicates and functions for processing planar geometry. http://tsusiatsoftware.net/jts/main.html
 
 The modified code is available on request.
