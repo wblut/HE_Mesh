@@ -59,7 +59,7 @@ public class HEC_Cylinder extends HEC_Creator {
 		H = 100;
 		facets = 6;
 		steps = 1;
-		Z = new WB_Vector(WB_Vector.Y());
+		setVerticalAxis(WB_Vector.Y());
 		topcap = true;
 		bottomcap = true;
 		profile = new WB_ConstantScalarParameter(1.0);

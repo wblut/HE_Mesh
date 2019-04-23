@@ -51,7 +51,7 @@ public class HEC_SweepTube extends HEC_Creator {
 		steps = 1;
 		topcap = true;
 		bottomcap = true;
-		override = true;
+		setOverride(true);
 		umin = 0;
 		umax = 1;
 		scale = 1;
@@ -71,7 +71,7 @@ public class HEC_SweepTube extends HEC_Creator {
 		this.facets = facets;
 		this.steps = steps;
 		this.curve = curve;
-		override = true;
+		setOverride(true);
 		umin = 0;
 		umax = 1;
 	}

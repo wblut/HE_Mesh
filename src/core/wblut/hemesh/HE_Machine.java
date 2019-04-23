@@ -16,9 +16,10 @@ import wblut.core.WB_ProgressReporter.WB_ProgressTracker;
  */
 public abstract class HE_Machine {
 	private String name;
-
+	protected HE_ParameterSet parameters;
 	HE_Machine() {
 		setName(this.getClass().getSimpleName());
+		parameters=new HE_ParameterSet(name);
 	}
 
 	/**
@@ -49,6 +50,14 @@ public abstract class HE_Machine {
 
 	public void setName(final String name) {
 		this.name = name;
+	}
+	
+	public HE_ParameterSet getParameterSet() {
+		return parameters;
+	}
+	
+	public void setParameterSet(HE_ParameterSet parameters) {
+		this.parameters=parameters;
 	}
 
 }

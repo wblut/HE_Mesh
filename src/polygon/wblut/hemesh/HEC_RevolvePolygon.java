@@ -40,7 +40,7 @@ public class HEC_RevolvePolygon extends HEC_Creator {
 	 */
 	public HEC_RevolvePolygon() {
 		super();
-		override = true;
+		setOverride(true);
 		facets = 6;
 	}
 

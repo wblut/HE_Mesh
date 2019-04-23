@@ -43,7 +43,7 @@ public class HEC_FromSurface extends HEC_Creator {
 	 */
 	public HEC_FromSurface() {
 		super();
-		override = true;
+		setOverride(true);
 	}
 
 	/**

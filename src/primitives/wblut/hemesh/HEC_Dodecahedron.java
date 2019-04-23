@@ -39,7 +39,6 @@ public class HEC_Dodecahedron extends HEC_Creator {
 	public HEC_Dodecahedron(final double R) {
 		super();
 		this.R = R;
-		center = new WB_Point();
 	}
 
 	/**

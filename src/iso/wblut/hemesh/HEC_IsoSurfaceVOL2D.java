@@ -169,7 +169,7 @@ public class HEC_IsoSurfaceVOL2D extends HEC_Creator {
 				}
 			}
 		}
-		override = true;
+		setOverride(true);
 		zFactor = 0.0;
 	}
 

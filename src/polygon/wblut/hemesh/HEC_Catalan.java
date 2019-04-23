@@ -56,7 +56,6 @@ public class HEC_Catalan extends HEC_Creator {
 			throw new IllegalArgumentException("Type of polyhedron should be between 1 and " + names.length + ".");
 		}
 		name = names[type - 1];
-		center = new WB_Point();
 	}
 
 	/**

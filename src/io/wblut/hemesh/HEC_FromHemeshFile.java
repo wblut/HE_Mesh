@@ -26,7 +26,7 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 	 */
 	public HEC_FromHemeshFile() {
 		super();
-		override = true;
+		setOverride(true);
 	}
 
 	/**

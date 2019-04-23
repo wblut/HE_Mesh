@@ -215,11 +215,11 @@ public class HEC_IsoSurface extends HEC_Creator {
 			}
 		}
 		gamma = 0.3;
-		override = true;
+		setOverride(true);
 		boundary = Double.NaN;
 		valueFactor = WB_ScalarParameter.ONE;
 		valueShift = WB_ScalarParameter.ZERO;
-		manifoldCheck = true;
+		setManifoldCheck(true);
 	}
 
 	/**

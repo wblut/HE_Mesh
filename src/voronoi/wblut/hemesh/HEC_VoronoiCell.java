@@ -55,7 +55,7 @@ public class HEC_VoronoiCell extends HEC_Creator {
 	 */
 	public HEC_VoronoiCell() {
 		super();
-		override = true;
+		setOverride(true);
 		offset = WB_ScalarParameter.ZERO;
 	}
 

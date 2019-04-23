@@ -30,7 +30,7 @@ public class HEC_FromQuads extends HEC_Creator {
 	 */
 	public HEC_FromQuads() {
 		super();
-		override = true;
+		setOverride(true);
 	}
 
 	/**

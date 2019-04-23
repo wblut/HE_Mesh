@@ -28,7 +28,6 @@ public class HEC_StellatedIcosahedron extends HEC_Creator {
 			throw new IllegalArgumentException(
 					"Type of stellated icosahedron should be between 1 and 59.");
 		}
-		center = new WB_Point();
 	}
 
 	public HEC_StellatedIcosahedron setRadius(final double R) {

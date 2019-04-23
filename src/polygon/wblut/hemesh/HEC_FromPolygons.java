@@ -39,7 +39,7 @@ public class HEC_FromPolygons extends HEC_Creator {
 	 */
 	public HEC_FromPolygons() {
 		super();
-		override = true;
+		setOverride(true);
 	}
 
 	/**

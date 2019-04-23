@@ -29,7 +29,7 @@ public class HEC_IsoSkin extends HEC_Creator {
 	private double		gamma;
 
 	public HEC_IsoSkin() {
-		override = true;
+		setOverride(true);
 		substrate = null;
 		isolevel = 0.5;
 		gamma = 0.0;

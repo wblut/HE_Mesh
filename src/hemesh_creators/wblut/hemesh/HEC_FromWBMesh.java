@@ -52,7 +52,7 @@ public class HEC_FromWBMesh extends HEC_Creator {
 		this.source = source;
 		duplicate = true;
 		normalcheck = true;
-		override = true;
+		setOverride(true);
 		uniform = true;
 	}
 
@@ -66,7 +66,7 @@ public class HEC_FromWBMesh extends HEC_Creator {
 		this.source = source.create();
 		duplicate = true;
 		normalcheck = true;
-		override = true;
+		setOverride(true);
 		uniform = true;
 	}
 

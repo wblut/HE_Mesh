@@ -33,7 +33,7 @@ public class HEC_FromTriangles extends HEC_Creator {
 	 */
 	public HEC_FromTriangles() {
 		super();
-		override = true;
+		setOverride(true);
 	}
 
 	/**

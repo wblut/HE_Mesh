@@ -39,7 +39,7 @@ public class HEC_Hemisphere extends HEC_Creator {
 		uFacets = 12;
 		vFacets = 6;
 		cap = false;
-		Z = new WB_Vector(WB_Vector.Y());
+		setVerticalAxis(WB_Vector.Y());
 	}
 
 	/**

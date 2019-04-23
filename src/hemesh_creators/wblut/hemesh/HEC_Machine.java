@@ -22,7 +22,7 @@ public class HEC_Machine extends HEC_Creator {
 		super();
 		machine = null;
 		source = null;
-		override = true;
+		setOverride(true);
 
 	}
 
@@ -30,7 +30,7 @@ public class HEC_Machine extends HEC_Creator {
 		super();
 		this.machine = machine;
 		this.source = source;
-		override = true;
+		setOverride(true);
 
 	}
 

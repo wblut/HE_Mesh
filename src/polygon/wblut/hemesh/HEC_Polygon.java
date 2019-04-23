@@ -38,7 +38,7 @@ public class HEC_Polygon extends HEC_Creator {
 	 */
 	public HEC_Polygon() {
 		super();
-		override = true;
+		setOverride(true);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class HEC_Polygon extends HEC_Creator {
 	 */
 	public HEC_Polygon(final WB_Polygon poly, final double d) {
 		this();
-		override = true;
+		setOverride(true);
 		polygon = new FastList<WB_Polygon>();
 		polygon.add(poly);
 		thickness = d;
@@ -58,7 +58,7 @@ public class HEC_Polygon extends HEC_Creator {
 
 	public HEC_Polygon(final Collection<? extends WB_Polygon> polygons, final double d) {
 		this();
-		override = true;
+		setOverride(true);
 		setPolygon(polygons);
 		thickness = d;
 		offset = 0;
@@ -66,7 +66,7 @@ public class HEC_Polygon extends HEC_Creator {
 
 	public HEC_Polygon(final WB_Polygon[] polygons, final double d) {
 		this();
-		override = true;
+		setOverride(true);
 		setPolygon(polygons);
 		thickness = d;
 		offset = 0;

@@ -61,7 +61,6 @@ public class HEC_Plato extends HEC_Creator {
 			throw new IllegalArgumentException("Type of Platonic polyhedron should be between 1 and 5.");
 		}
 		name = names[type - 1];
-		center = new WB_Point();
 	}
 
 	/**

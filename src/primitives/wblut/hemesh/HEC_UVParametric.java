@@ -29,7 +29,7 @@ public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
 	 */
 	public HEC_UVParametric() {
 		super();
-		override = true;
+		setOverride(true);
 		usteps = 32;
 		vsteps = 32;
 		scale = 1.0;

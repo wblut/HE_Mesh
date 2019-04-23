@@ -65,7 +65,6 @@ public class HEC_Johnson extends HEC_Creator {
 		} else {
 			name = WB_JohnsonPolyhedraData04.names[type - 71];
 		}
-		center = new WB_Point();
 	}
 
 	/**

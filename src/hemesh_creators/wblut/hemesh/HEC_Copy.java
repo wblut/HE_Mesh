@@ -33,7 +33,7 @@ public class HEC_Copy extends HEC_Creator {
 	 */
 	public HEC_Copy() {
 		super();
-		override = true;
+		setOverride(true);
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class HEC_Copy extends HEC_Creator {
 	public HEC_Copy(final HE_HalfedgeStructure source) {
 		super();
 		setMesh(source);
-		override = true;
+		setOverride(true);
 	}
 
 	/**

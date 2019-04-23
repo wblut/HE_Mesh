@@ -17,7 +17,7 @@ public class HEC_Interpolate extends HEC_Creator {
 
 	public HEC_Interpolate() {
 		super();
-		override = true;
+		setOverride(true);
 	}
 
 	public HEC_Interpolate setMeshA(final HE_Mesh mesh) {

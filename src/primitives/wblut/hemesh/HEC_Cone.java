@@ -55,7 +55,7 @@ public class HEC_Cone extends HEC_Creator {
 		H = 100;
 		facets = 6;
 		steps = 1;
-		Z = new WB_Vector(WB_Vector.Y());
+		setVerticalAxis(WB_Vector.Y());
 		cap = true;
 		profile = new WB_ConstantScalarParameter(1.0);
 		taper = new WB_LinearScalarParameter(0.0, 1.0, 0.0, 1.0);

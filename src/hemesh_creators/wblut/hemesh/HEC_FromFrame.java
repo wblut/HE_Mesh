@@ -192,7 +192,7 @@ public class HEC_FromFrame extends HEC_Creator {
 		strutRadius = new WB_ConstantScalarParameter(5.0);
 		strutFacets = 6;
 		maximumStrutLength = 100.0;
-		override = true;
+		setOverride(true);
 		fidget = 1.0001;
 		fillfactor = 0.99;
 		minimumBalljointAngle = 0.55 * Math.PI;

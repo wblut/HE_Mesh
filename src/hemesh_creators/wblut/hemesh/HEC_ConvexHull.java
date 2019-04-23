@@ -36,7 +36,7 @@ public class HEC_ConvexHull extends HEC_Creator {
 	 */
 	public HEC_ConvexHull() {
 		super();
-		override = true;
+		setOverride(true);
 	}
 
 	/**

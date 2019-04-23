@@ -44,7 +44,7 @@ public class HEC_From3dsFile extends HEC_Creator {
 		super();
 		scale = 1;
 		path = null;
-		override = true;
+		setOverride(true);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class HEC_From3dsFile extends HEC_Creator {
 		super();
 		this.path = path;
 		scale = 1;
-		override = true;
+		setOverride(true);
 	}
 
 	/**

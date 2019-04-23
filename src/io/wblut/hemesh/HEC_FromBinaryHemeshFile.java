@@ -31,7 +31,7 @@ public class HEC_FromBinaryHemeshFile extends HEC_Creator {
 	 */
 	public HEC_FromBinaryHemeshFile() {
 		super();
-		override = true;
+		setOverride(true);
 	}
 
 	/**

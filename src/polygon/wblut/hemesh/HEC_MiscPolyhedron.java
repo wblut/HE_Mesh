@@ -72,7 +72,6 @@ public class HEC_MiscPolyhedron extends HEC_Creator {
 							+ ".");
 		}
 		name = names[type - 1];
-		center = new WB_Point();
 	}
 
 	/**

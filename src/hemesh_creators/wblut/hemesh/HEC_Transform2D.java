@@ -20,14 +20,14 @@ public class HEC_Transform2D extends HEC_Creator {
 		super();
 		T = null;
 		source = null;
-		override = true;
+		setOverride(true);
 	}
 
 	public HEC_Transform2D(final HE_Mesh source, final WB_Transform2D T) {
 		super();
 		this.T = T;
 		this.source = source;
-		override = true;
+		setOverride(true);
 	}
 
 	public HEC_Transform2D setTransform(final WB_Transform2D T) {

@@ -57,7 +57,6 @@ public class HEC_Archimedes extends HEC_Creator {
 			throw new IllegalArgumentException("Type of Archimedean polyhedron should be between 1 and 13.");
 		}
 		name = names[type - 1];
-		center = new WB_Point();
 	}
 
 	/**

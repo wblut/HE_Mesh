@@ -42,7 +42,7 @@ public class HEC_Capsule extends HEC_Creator {
 		H = 100;
 		facets = 6;
 		steps = 1;
-		Z = new WB_Vector(WB_Vector.Y());
+		setVerticalAxis(new WB_Vector(WB_Vector.Y()));
 		topcap = true;
 		bottomcap = true;
 		topcapsteps = 3;

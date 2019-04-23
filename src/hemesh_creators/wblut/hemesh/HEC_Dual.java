@@ -34,8 +34,7 @@ public class HEC_Dual extends HEC_Creator {
 	 */
 	public HEC_Dual() {
 		super();
-		override = true;
-		toModelview = false;
+		setOverride(true);
 	}
 
 	/**

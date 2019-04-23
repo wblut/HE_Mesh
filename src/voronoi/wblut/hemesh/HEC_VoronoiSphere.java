@@ -61,7 +61,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 		level = 1;
 		traceStep = 10;
 		numTracers = 100;
-		override = true;
+		setOverride(true);
 		randomGen = new WB_RandomOnSphere();
 	}
 

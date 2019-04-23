@@ -46,7 +46,7 @@ public class HEC_FromVoronoiCells extends HEC_Creator {
 	 */
 	public HEC_FromVoronoiCells() {
 		super();
-		override = true;
+		setOverride(true);
 		cells = null;
 		on = null;
 		capBoundaries = true;

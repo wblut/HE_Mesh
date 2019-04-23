@@ -24,34 +24,54 @@ import wblut.math.WB_Math;
  *
  */
 public abstract class HEC_Creator extends HE_Machine {
-	/** Calling applet. */
-	public PApplet		home;
-	/** Center. */
-	protected WB_Point	center;
-	/** Rotation angle about Z-axis. */
-	protected double	zangle;
-	/** Z-axis. */
-	protected WB_Vector	zaxis;
-	/** Override. */
-	protected boolean	override;
-	protected boolean	override2D;
-	/** Use applet model coordinates. */
-	protected boolean	toModelview;
-	/** Base Z-axis. */
-	protected WB_Vector	Z;
-	protected boolean	manifoldCheck;
-	protected double	scale;
+	
 
-	/**
-	 * Constructor.
-	 */
 	public HEC_Creator() {
 		super();
-		center = new WB_Point();
-		zaxis = new WB_Vector(WB_Vector.Z());
-		Z = new WB_Vector(WB_Vector.Z());
-		scale = 1.0;
-		toModelview = false;
+		parameters.set("center", new WB_Point());
+		parameters.set("zaxis", new WB_Vector(WB_Vector.Z()));
+		parameters.set("verticalaxis", new WB_Vector(WB_Vector.Z()));
+		parameters.set("rotationangle", 0.0);
+		parameters.set("scale", 1.0);
+		parameters.set("modelview",false);
+		parameters.set("manifoldcheck",false);
+		parameters.set("override",false);	
+	}
+	
+	public WB_Point getCenter() {
+		return (WB_Point)parameters.get("center",new WB_Point());	
+	}
+	
+	public WB_Vector getZAxis() {
+		return (WB_Vector)parameters.get("zaxis",new WB_Vector());
+	}
+	
+	protected WB_Vector getVerticalAxis() {
+		return (WB_Vector)parameters.get("verticalaxis",new WB_Vector());
+	}
+	
+	protected double getRotationAngle() {
+		return parameters.get("rotationangle",0.0);
+	}
+	
+	protected double getScale() {
+		return parameters.get("scale",0.0);
+	}
+	
+	protected boolean getModelView() {
+		return parameters.get("modelView",false);
+	}
+	
+	protected PApplet getHome() {
+		return (PApplet)parameters.get("home",null);
+	}
+	
+	protected boolean getManifoldCheck() {
+		return parameters.get("manifoldcheck",false);
+	}
+	
+	protected boolean getOverride() {
+		return parameters.get("override",false);
 	}
 
 	/**
@@ -67,18 +87,7 @@ public abstract class HEC_Creator extends HE_Machine {
 	 */
 	public HEC_Creator setCenter(final double x, final double y,
 			final double z) {
-		center.set(x, y, z);
-		return this;
-	}
-
-	/**
-	 *
-	 *
-	 * @param s
-	 * @return
-	 */
-	public HEC_Creator setScale(final double s) {
-		scale = s;
+		parameters.set("center",new WB_Point(x, y, z));
 		return this;
 	}
 
@@ -90,7 +99,18 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @return self
 	 */
 	public HEC_Creator setCenter(final WB_Coord c) {
-		center.set(c);
+		parameters.set("center",c);
+		return this;
+	}
+
+	/**
+	 *
+	 *
+	 * @param s
+	 * @return
+	 */
+	public HEC_Creator setScale(final double s) {
+		parameters.set("scale",s);
 		return this;
 	}
 
@@ -102,7 +122,7 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @return self
 	 */
 	public HEC_Creator setZAngle(final double a) {
-		zangle = a;
+		parameters.set("rotationangle", a);
 		return this;
 	}
 
@@ -119,11 +139,12 @@ public abstract class HEC_Creator extends HE_Machine {
 	 */
 	public HEC_Creator setZAxis(final double x, final double y,
 			final double z) {
-		zaxis.set(x, y, z);
+		WB_Vector zaxis= new WB_Vector(x, y, z);
 		zaxis.normalizeSelf();
+		parameters.set("zaxis",zaxis);
 		return this;
 	}
-
+	
 	/**
 	 * Local Z-axis of mesh.
 	 *
@@ -144,8 +165,9 @@ public abstract class HEC_Creator extends HE_Machine {
 	public HEC_Creator setZAxis(final double p0x, final double p0y,
 			final double p0z, final double p1x, final double p1y,
 			final double p1z) {
-		zaxis.set(p1x - p0x, p1y - p0y, p1z - p0z);
+		WB_Vector zaxis= new WB_Vector(p1x - p0x, p1y - p0y, p1z - p0z);
 		zaxis.normalizeSelf();
+		parameters.set("zaxis",zaxis);
 		return this;
 	}
 
@@ -157,8 +179,9 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @return self
 	 */
 	public HEC_Creator setZAxis(final WB_Coord p) {
-		zaxis.set(p);
+		WB_Vector zaxis= new WB_Vector(p);
 		zaxis.normalizeSelf();
+		parameters.set("zaxis",zaxis);
 		return this;
 	}
 
@@ -172,8 +195,40 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @return self
 	 */
 	public HEC_Creator setZAxis(final WB_Coord p0, final WB_Coord p1) {
-		zaxis.set(WB_Vector.sub(p0, p1));
+		WB_Vector zaxis= WB_Vector.sub(p0, p1);
 		zaxis.normalizeSelf();
+		parameters.set("zaxis",zaxis);
+		return this;
+	}
+
+	protected HEC_Creator setVerticalAxis(final double x, final double y,
+			final double z) {
+		WB_Vector verticalaxis= new WB_Vector(x, y, z);
+		verticalaxis.normalizeSelf();
+		parameters.set("verticalaxis",verticalaxis);
+		return this;
+	}
+	
+	protected HEC_Creator setVerticalAxis(final double p0x, final double p0y,
+			final double p0z, final double p1x, final double p1y,
+			final double p1z) {
+		WB_Vector verticalaxis= new WB_Vector(p1x - p0x, p1y - p0y, p1z - p0z);
+		verticalaxis.normalizeSelf();
+		parameters.set("verticalaxis",verticalaxis);
+		return this;
+	}
+	
+	protected HEC_Creator setVerticalAxis(WB_Coord axis) {
+		WB_Vector verticalaxis= new WB_Vector(axis);
+		verticalaxis.normalizeSelf();
+		parameters.set("verticalaxis",verticalaxis);
+		return this;
+	}
+	
+	protected HEC_Creator setVerticalAxis(final WB_Coord p0, final WB_Coord p1) {
+		WB_Vector verticalaxis= WB_Vector.sub(p0, p1);
+		verticalaxis.normalizeSelf();
+		parameters.set("verticalaxis",verticalaxis);
 		return this;
 	}
 
@@ -185,8 +240,8 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @return self
 	 */
 	public HEC_Creator setToModelview(final PApplet home) {
-		this.home = home;
-		toModelview = true;
+		parameters.set("home", home);
+		parameters.set("modelview",true);
 		return this;
 	}
 
@@ -196,8 +251,8 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @return self
 	 */
 	public HEC_Creator setToWorldview() {
-		home = null;
-		toModelview = false;
+		parameters.remove("home");
+		parameters.set("modelview",false);
 		return this;
 	}
 
@@ -208,7 +263,7 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @return
 	 */
 	public HEC_Creator setManifoldCheck(final boolean b) {
-		manifoldCheck = b;
+		parameters.set("manifoldcheck" , b);
 		return this;
 	}
 
@@ -219,7 +274,7 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @return
 	 */
 	public HEC_Creator setOverride(final boolean b) {
-		override = b;
+		parameters.set("override" , b);
 		return this;
 	}
 
@@ -241,26 +296,27 @@ public abstract class HEC_Creator extends HE_Machine {
 		tracker.setStopStatus(this, "Base mesh created.");
 		tracker.setStartStatus(this, "Transforming base mesh.");
 		WB_Coord ctr = HE_MeshOp.getCenter(base);
-		if (!override) {
-			base.scaleSelf(scale);
-			if (zangle != 0) {
-				base.rotateAboutAxis2PSelf(zangle, ctr.xd(), ctr.yd(), ctr.zd(),
+		if (!getOverride()) {
+			base.scaleSelf(getScale());
+			if (getRotationAngle() != 0) {
+				base.rotateAboutAxis2PSelf(getRotationAngle(), ctr.xd(), ctr.yd(), ctr.zd(),
 						ctr.xd(), ctr.yd(), ctr.zd() + 1);
 			}
-			final WB_Vector tmp = zaxis.cross(Z);
+			final WB_Vector tmp = getZAxis().cross(getVerticalAxis());
 			if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
 				base.rotateAboutAxis2PSelf(
-						-Math.acos(WB_Math.clamp(zaxis.dot(Z), -1, 1)),
+						-Math.acos(WB_Math.clamp(getZAxis().dot(getVerticalAxis()), -1, 1)),
 						ctr.xd(), ctr.yd(), ctr.zd(), ctr.xd() + tmp.xd(),
 						ctr.yd() + tmp.yd(), ctr.zd() + tmp.zd());
-			} else if (zaxis.dot(Z) < -1 + WB_Epsilon.EPSILON) {
+			} else if (getZAxis().dot(getVerticalAxis()) < -1 + WB_Epsilon.EPSILON) {
 				base.scaleSelf(1, 1, -1);
 			}
-			base.moveToSelf(center);
+			base.moveToSelf(getCenter());
 		}
 		float cx, cy, cz;
 		HE_Vertex v;
-		if (toModelview) {
+		if (getModelView()) {
+			PApplet home=getHome();
 			if (home.g instanceof PGraphics3D) {
 				final Iterator<HE_Vertex> vItr = base.vItr();
 				while (vItr.hasNext()) {
@@ -273,7 +329,7 @@ public abstract class HEC_Creator extends HE_Machine {
 				}
 			}
 		}
-		if (manifoldCheck) {
+		if (getManifoldCheck()) {
 			tracker.setStartStatus(this, "Checking and fixing manifold.");
 			HET_Fixer.fixNonManifoldVertices(base);
 			tracker.setStopStatus(this, "Manifold checked.");

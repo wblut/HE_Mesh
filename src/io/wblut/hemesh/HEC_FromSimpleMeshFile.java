@@ -30,7 +30,7 @@ public class HEC_FromSimpleMeshFile extends HEC_Creator {
 	 */
 	public HEC_FromSimpleMeshFile() {
 		super();
-		override = true;
+		setOverride(true);
 	}
 
 	/**

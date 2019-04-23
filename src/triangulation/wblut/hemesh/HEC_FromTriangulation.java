@@ -33,7 +33,7 @@ public class HEC_FromTriangulation extends HEC_Creator {
 	 */
 	public HEC_FromTriangulation() {
 		super();
-		override = true;
+		setOverride(true);
 	}
 
 	public HEC_FromTriangulation setTriangulation(final WB_Triangulation2D tri) {

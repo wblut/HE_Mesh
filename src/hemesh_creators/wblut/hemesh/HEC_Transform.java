@@ -24,7 +24,7 @@ public class HEC_Transform extends HEC_Creator {
 		super();
 		T = null;
 		source = null;
-		override = true;
+		setOverride(true);
 
 	}
 
@@ -32,7 +32,7 @@ public class HEC_Transform extends HEC_Creator {
 		super();
 		this.T = T;
 		this.source = source;
-		override = true;
+		setOverride(true);
 
 	}
 

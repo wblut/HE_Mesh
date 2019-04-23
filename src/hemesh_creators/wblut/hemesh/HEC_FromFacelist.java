@@ -60,7 +60,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 	 */
 	public HEC_FromFacelist() {
 		super();
-		override = true;
+		setOverride(true);
 		duplicate = true;
 		normalcheck = false;
 		cleanunused = true;

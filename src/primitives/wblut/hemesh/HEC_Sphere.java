@@ -36,7 +36,7 @@ public class HEC_Sphere extends HEC_Creator {
 		rx = ry = rz = 100;
 		uFacets = 12;
 		vFacets = 6;
-		Z = new WB_Vector(WB_Vector.Y());
+		setVerticalAxis(WB_Vector.Y());
 	}
 
 	/**
