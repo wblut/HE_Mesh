@@ -2,10 +2,10 @@ package wblut.core;
 
 public class WB_Version {
 	public static final WB_Version	CURRENT_VERSION	= new WB_Version();
-	public static final int			MAJOR			= 6;
-	public static final int			MINOR			= 2;
+	public static final int			MAJOR			= 2019;
+	public static final int			MINOR			= 0;
 	public static final int			PATCH			= 0;
-	private static final String		releaseInfo		= "Titan";
+	private static final String		releaseInfo		= "Phoenix";
 
 	public static void main(final String[] args) {
 		System.out.println(CURRENT_VERSION);
