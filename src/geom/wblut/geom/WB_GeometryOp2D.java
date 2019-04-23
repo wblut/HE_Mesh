@@ -1074,6 +1074,18 @@ public class WB_GeometryOp2D extends WB_GeometryOpGLU {
 			final WB_Line L) {
 		return Math.sqrt(getSqDistanceToLine2D(p, L));
 	}
+	
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param q
+	 * @return
+	 */
+	public static final double getDistance2D(final WB_Coord p,
+			final WB_Coord q) {
+		return Math.sqrt(getSqDistance2D(p, q));
+	}
 
 	/**
 	 *

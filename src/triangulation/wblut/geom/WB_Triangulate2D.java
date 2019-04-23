@@ -365,28 +365,7 @@ class WB_Triangulate2D {
 				constraints, tol);
 	}
 
-	/**
-	 *
-	 *
-	 * @param polygon
-	 * @return
-	 */
-	public static WB_Triangulation2DWithPoints triangulateConforming2D(
-			final WB_Polygon polygon) {
-		return triangulateConforming2D(polygon, WB_Epsilon.EPSILON);
-	}
 
-	/**
-	 *
-	 *
-	 * @param polygon
-	 * @param tol
-	 * @return
-	 */
-	public static WB_Triangulation2DWithPoints triangulateConforming2D(
-			final WB_Polygon polygon, final double tol) {
-		return WB_JTS.triangulateConforming2D(polygon, tol);
-	}
 
 	/**
 	 *

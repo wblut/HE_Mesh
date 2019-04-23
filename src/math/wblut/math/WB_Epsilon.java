@@ -15,9 +15,10 @@ package wblut.math;
  */
 public class WB_Epsilon {
 	/** General precision. */
-	static public double	EPSILON			= 1e-6;
+	static public double	EPSILON			= 1e-9;
 	/** General precision when square is used > EPSILON*EPSILON. */
-	static public double	SQEPSILON		= 1e-12;
+	static public double	SCALE=1e9;
+	static public double	SQEPSILON		= 1e-18;
 	static public double	EPSILONANGLE	= 1e-5 * Math.PI / 180.0;
 
 	/**

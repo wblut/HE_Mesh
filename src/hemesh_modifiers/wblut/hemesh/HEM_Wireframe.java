@@ -72,6 +72,11 @@ public class HEM_Wireframe extends HEM_Modifier {
 		connectionRadius = new WB_ConstantScalarParameter(r);
 		return this;
 	}
+	
+	public HEM_Wireframe setStrutRadius(final double r) {
+		connectionRadius = new WB_ConstantScalarParameter(r);
+		return this;
+	}
 
 	/**
 	 *
@@ -80,6 +85,11 @@ public class HEM_Wireframe extends HEM_Modifier {
 	 * @return
 	 */
 	public HEM_Wireframe setConnectionRadius(final WB_ScalarParameter r) {
+		connectionRadius = r;
+		return this;
+	}
+	
+	public HEM_Wireframe setStrutRadius(final WB_ScalarParameter r) {
 		connectionRadius = r;
 		return this;
 	}
@@ -94,6 +104,11 @@ public class HEM_Wireframe extends HEM_Modifier {
 		maxConnectionOffset = new WB_ConstantScalarParameter(r);
 		return this;
 	}
+	
+	public HEM_Wireframe setMaximumStrutOffset(final double r) {
+		maxConnectionOffset = new WB_ConstantScalarParameter(r);
+		return this;
+	}
 
 	/**
 	 *
@@ -105,6 +120,11 @@ public class HEM_Wireframe extends HEM_Modifier {
 		maxConnectionOffset = r;
 		return this;
 	}
+	
+	public HEM_Wireframe setMaximumStrutOffset(final WB_ScalarParameter r) {
+		maxConnectionOffset = r;
+		return this;
+	}
 
 	/**
 	 *
@@ -113,6 +133,11 @@ public class HEM_Wireframe extends HEM_Modifier {
 	 * @return
 	 */
 	public HEM_Wireframe setConnectionFacets(final int N) {
+		facetN = N;
+		return this;
+	}
+	
+	public HEM_Wireframe setStrutFacets(final int N) {
 		facetN = N;
 		return this;
 	}

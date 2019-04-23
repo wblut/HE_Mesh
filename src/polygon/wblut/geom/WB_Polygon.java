@@ -18,6 +18,9 @@ import wblut.math.WB_Epsilon;
  *
  */
 public class WB_Polygon extends WB_Ring implements WB_TriangleGenerator {
+	static boolean USE_JTS=true;
+	static boolean OPTIMIZE_DEFAULT=true;
+	
 	/**
 	 *
 	 */
@@ -324,7 +327,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleGenerator {
 	 */
 	@Override
 	public int[] getTriangles() {
-		return getTriangles(true);
+		return getTriangles(OPTIMIZE_DEFAULT);
 	}
 
 	/**
@@ -346,10 +349,14 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleGenerator {
 						points.get(0), points.get(1), points.get(2),
 						points.get(3));
 			} else {
+				if(USE_JTS) {
 				final WB_Triangulation2D triangulation = new WB_JTS.PolygonTriangulatorJTS()
 						.triangulatePolygon2D(this.toPolygon2DOrtho(),
 								optimize);
 				triangles = triangulation.getTriangles();
+				}else {
+				triangles=WB_Poly2Tri.triangulatePolygon(this);
+				}
 			}
 		}
 		return triangles;

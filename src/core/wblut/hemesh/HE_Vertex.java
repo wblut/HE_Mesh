@@ -11,9 +11,12 @@ import java.util.List;
 import org.eclipse.collections.impl.list.mutable.FastList;
 
 import wblut.core.WB_HashCode;
+import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
+import wblut.geom.WB_CoordinateSystem;
 import wblut.geom.WB_MutableCoord;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
 /**
@@ -369,6 +372,15 @@ public class HE_Vertex extends HE_MeshElement implements WB_MutableCoord {
 
 	public boolean isIsolated() {
 		return _halfedge == null;
+	}
+	
+	public WB_Coord getVertexNormal() {
+		return HE_MeshOp.getVertexNormal(this);
+	}
+	
+	public double getVertexArea() {
+		return HE_MeshOp.getVertexArea(this);
+	
 	}
 
 	/*
@@ -892,5 +904,185 @@ public class HE_Vertex extends HE_MeshElement implements WB_MutableCoord {
 
 	@Override
 	public void clearPrecomputed() {
+	}
+
+	/**
+	 * Computes the angle defect at a vertex (= 2PI minus the sum of incident
+	 * angles at an interior vertex or PI minus the sum of incident angles at a
+	 * boundary vertex).
+	 *
+	 * @return
+	 */
+	public double getAngleDefect() {
+		
+		return HE_MeshOp.getAngleDefect(this);
+	}
+
+	/**
+	 * Get the barycentric dual area. Triangles only.
+	 *
+	 * @return
+	 */
+	public double getBarycentricDualVertexArea() {
+		return HE_MeshOp.getBarycentricDualVertexArea(this);
+		
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_CoordinateSystem getCurvatureDirections() {
+		return HE_MeshOp.getCurvatureDirections(this);
+	}
+
+	/**
+	 * Returns the discrete Gaussian curvature. These discrete operators are
+	 * described in "Discrete Differential-Geometry Operators for Triangulated
+	 * 2-Manifolds", Mark Meyer, Mathieu Desbrun, Peter Schr?der, and Alan H.
+	 * Barr. http://www.cs.caltech.edu/~mmeyer/Publications/diffGeomOps.pdf
+	 * http://www.cs.caltech.edu/~mmeyer/Publications/diffGeomOps.pdf Note: on a
+	 * sphere, the Gaussian curvature is very accurate, but not the mean
+	 * curvature. Guoliang Xu suggests improvements in his papers
+	 * http://lsec.cc.ac.cn/~xuguo/xuguo3.htm
+	 *
+	 *
+	 * @return
+	 */
+	public double getGaussianCurvature() {
+		return HE_MeshOp.getGaussianCurvature(this);
+	}
+
+	/**
+	 * Returns the discrete Gaussian curvature and the mean normal. These
+	 * discrete operators are described in "Discrete Differential-Geometry
+	 * Operators for Triangulated 2-Manifolds", Mark Meyer, Mathieu Desbrun,
+	 * Peter Schr???der, and Alan H. Barr.
+	 * http://www.cs.caltech.edu/~mmeyer/Publications/diffGeomOps.pdf
+	 * http://www.cs.caltech.edu/~mmeyer/Publications/diffGeomOps.pdf Note: on a
+	 * sphere, the Gaussian curvature is very accurate, but not the mean
+	 * curvature. Guoliang Xu suggests improvements in his papers
+	 * http://lsec.cc.ac.cn/~xuguo/xuguo3.htm
+	 *
+	 * @param vertex
+	 * @param meanCurvatureVector
+	 * @return
+	 */
+	public double getGaussianCurvature(final WB_Vector meanCurvatureVector) {
+		return HE_MeshOp.getGaussianCurvature(this,  meanCurvatureVector);
+	}
+
+	
+	public double[] getPrincipalCurvatures() {
+		return HE_MeshOp.getPrincipalCurvatures(this);
+	}
+
+	/**
+	 * Computes the (integrated) scalar gauss curvature at a vertex.
+	 *
+	 * @param v
+	 * @return
+	 */
+	public double getScalarGaussianCurvature() {
+		return getAngleDefect();
+	}
+
+	/**
+	 * Computes the (integrated) scalar mean curvature at a vertex.
+	 *
+	 * @param v
+	 * @return
+	 */
+	public double getScalarMeanCurvature() {
+		return HE_MeshOp.getScalarMeanCurvature(this);
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public double getUmbrellaAngle() {
+		return HE_MeshOp.getUmbrellaAngle(this);
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_CoordinateSystem getVertexCS() {
+		return HE_MeshOp.getVertexCS(this);
+	}
+
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
+	public  WB_Point getNormalOffsetPosition(double d) {
+		return HE_MeshOp.getNormalOffsetPosition(this,d);
+	}
+	
+	/**
+	 * Computes the normal at a vertex using the "tip angle weights" method.
+	 *
+	 * @return
+	 */
+	public WB_Coord getVertexNormalAngle() {
+		return HE_MeshOp.getVertexNormal(this);
+	}
+
+	/**
+	 * Computes the normal at a vertex using the "face area weights" method.
+	 *
+	 * @return
+	 */
+	public WB_Coord getVertexNormalArea() {
+		return HE_MeshOp.getVertexNormalArea(this);
+	}
+
+	/**
+	 * Computes the normal at a vertex using the "equally weighted" method.
+	 *
+	 * @return
+	 */
+	public WB_Coord getVertexNormalAverage() {
+		return HE_MeshOp.getVertexNormalAverage(this);
+	}
+
+	/**
+	 * Computes the normal at a vertex using the "gauss curvature" method.
+	 *
+	 * @return
+	 */
+	public WB_Coord getVertexNormalGaussianCurvature() {
+		return HE_MeshOp.getVertexNormalGaussianCurvature(this);
+	}
+
+	/**
+	 * Computes the normal at a vertex using the "mean curvature" method.
+	 * Triangles only.
+	 *
+	 * @return
+	 */
+	public WB_Coord getVertexNormalMeanCurvature() {
+		return HE_MeshOp.getVertexNormalMeanCurvature(this);
+	}
+
+	/**
+	 * Computes the normal at a vertex using the "inscribed sphere" method.
+	 * Triangles only.
+	 *
+	 * @return
+	 */
+	public WB_Coord getVertexNormalSphereInscribed() {
+		return HE_MeshOp.getVertexNormalSphereInscribed(this);
+	}
+
+	public WB_Classification getVertexType() {
+		return HE_MeshOp.getVertexType(this);
 	}
 }

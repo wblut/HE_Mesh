@@ -30,6 +30,7 @@ import wblut.geom.WB_AABB;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordCollection;
+import wblut.geom.WB_Frame;
 import wblut.geom.WB_Geometry3D;
 import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_GeometryOp3D;
@@ -1758,6 +1759,23 @@ public class HE_Mesh extends HE_MeshElement
 		while (eItr.hasNext()) {
 			e = eItr.next();
 			frame.addConnection(map.get(e.getVertex().getKey()),
+					map.get(e.getEndVertex().getKey()));
+		}
+		return frame;
+	}
+	
+	public WB_Frame getFrame() {
+		final WB_Frame frame = new WB_Frame(getVerticesAsCoord());
+		final LongIntHashMap map = new LongIntHashMap();
+		Map<Long, Integer> indexMap = getVertexKeyToIndexMap();
+		for (Entry<Long, Integer> entry : indexMap.entrySet()) {
+			map.put(entry.getKey(), entry.getValue());
+		}
+		final Iterator<HE_Halfedge> eItr = eItr();
+		HE_Halfedge e;
+		while (eItr.hasNext()) {
+			e = eItr.next();
+			frame.addStrut(map.get(e.getVertex().getKey()),
 					map.get(e.getEndVertex().getKey()));
 		}
 		return frame;
@@ -3902,7 +3920,7 @@ public class HE_Mesh extends HE_MeshElement
 	 * @param name
 	 * @param label
 	 */
-	public HE_Selection selectEdgeWithInternalLabel(final int label) {
+	public HE_Selection selectEdgesWithInternalLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge e;
 		final Iterator<HE_Halfedge> eItr = this.eItr();
@@ -3920,7 +3938,7 @@ public class HE_Mesh extends HE_MeshElement
 	 * @param name
 	 * @param label
 	 */
-	public HE_Selection selectEdgeWithInternalLabel(final String name,
+	public HE_Selection selectEdgesWithInternalLabel(final String name,
 			final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge e;
@@ -5857,5 +5875,16 @@ public class HE_Mesh extends HE_MeshElement
 				+ this.halfedges.size() + "/" + this.unpairedHalfedges.size());
 		System.out.println("Number of boundary halfedges: "
 				+ this.getAllBoundaryHalfedges().size());
+	}
+	
+	public WB_AABB getAABB() {
+		return HE_MeshOp.getAABB(this);
+		
+	}
+	
+	
+	public void triangulate() {
+	HE_MeshOp.triangulate(this);	
+
 	}
 }

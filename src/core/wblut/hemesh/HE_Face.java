@@ -11,12 +11,16 @@ import java.util.List;
 import org.eclipse.collections.impl.list.mutable.FastList;
 
 import wblut.geom.WB_AABB;
+import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordCollection;
+import wblut.geom.WB_CoordinateSystem;
 import wblut.geom.WB_GeometryOp3D;
 import wblut.geom.WB_JTS;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Polygon;
+import wblut.geom.WB_Triangle;
 import wblut.geom.WB_TriangleGenerator;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
@@ -108,6 +112,22 @@ public class HE_Face extends HE_MeshElement
 		return null;
 	}
 
+	
+	public WB_Coord getFaceCenter() {
+		return HE_MeshOp.getFaceCenter(this);
+	}
+	
+	public WB_Coord getFaceNormal() {
+		return HE_MeshOp.getFaceNormal(this);
+	}
+	
+	public double getFaceArea() {
+		return HE_MeshOp.getFaceArea(this);
+	
+	}
+	
+
+	
 	/**
 	 *
 	 *
@@ -447,19 +467,9 @@ public class HE_Face extends HE_MeshElement
 				.getTriangles();
 	}
 
-	/**
-	 *
-	 *
-	 * @return
-	 */
 	public WB_AABB getAABB() {
-		WB_AABB aabb = new WB_AABB();
-		HE_Halfedge he = getHalfedge();
-		do {
-			aabb.expandToInclude(he.getVertex());
-			he = he.getNextInFace();
-		} while (he != getHalfedge());
-		return aabb;
+		return HE_MeshOp.getAABB(this);
+		
 	}
 
 	/*
@@ -587,5 +597,89 @@ public class HE_Face extends HE_MeshElement
 	@Override
 	public void clearPrecomputed() {
 		triangles = null;
+	}
+
+	public WB_CoordinateSystem getFaceCS() {
+		return HE_MeshOp.getFaceCS(this);
+	}
+
+	public WB_Coord getFaceNormalNotNormalized() {
+		return HE_MeshOp.getFaceNormalNotNormalized(this);
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_Classification getFaceType() {
+		return HE_MeshOp.getFaceType(this);
+	}
+
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
+	public WB_Coord getNormalOffsetFaceCenter(
+			final double d) {
+		return HE_MeshOp.getNormalOffsetFaceCenter(this,d);
+	}
+
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
+	public WB_Plane getNormalOffsetPlane(final double d) {
+		return HE_MeshOp.getNormalOffsetPlane(this,d);
+	}
+
+	
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_Polygon getOrthoPolygon() {
+		return HE_MeshOp.getOrthoPolygon(this);
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_Polygon getPlanarPolygon() {
+		return HE_MeshOp.getPlanarPolygon(this);
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_Plane getPlane() {
+		return HE_MeshOp.getPlane(this);
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_Polygon getPolygon() {
+		return HE_MeshOp.getPolygon(this);
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_Triangle getTriangle() {
+		return HE_MeshOp.getTriangle(this);
 	}
 }

@@ -12,7 +12,7 @@ package wblut.geom;
  * @author frederikvanhoutte
  *
  */
-public interface WB_RandomGenerator extends WB_PointGenerator, WB_VectorGenerator {
+public interface WB_RandomGenerator extends WB_RandomPoint, WB_RandomVector {
 	/**
 	 * Set the seed for the RNG.
 	 *

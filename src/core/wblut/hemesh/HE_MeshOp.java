@@ -3210,7 +3210,7 @@ public class HE_MeshOp {
 	 *
 	 * @return
 	 */
-	public static WB_Coord getVertexNormalGaussCurvature(final HE_Vertex v) {
+	public static WB_Coord getVertexNormalGaussianCurvature(final HE_Vertex v) {
 		HE_Halfedge he = v.getHalfedge();
 		WB_Vector n = new WB_Vector();
 		do {
@@ -3318,7 +3318,7 @@ public class HE_MeshOp {
 	 * @param v
 	 * @return
 	 */
-	public static double getScalarGaussCurvature(final HE_Vertex v) {
+	public static double getScalarGaussianCurvature(final HE_Vertex v) {
 		return getAngleDefect(v);
 	}
 
@@ -3502,7 +3502,7 @@ public class HE_MeshOp {
 	 *
 	 * @return
 	 */
-	public static double getGaussCurvature(final HE_Vertex vertex) {
+	public static double getGaussianCurvature(final HE_Vertex vertex) {
 		final WB_Vector meanCurvatureVector = new WB_Vector(0, 0, 0);
 		if (vertex.isBoundary()) {
 			return 0.0;

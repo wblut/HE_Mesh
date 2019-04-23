@@ -12,7 +12,9 @@ import java.util.List;
 
 import org.eclipse.collections.impl.list.mutable.FastList;
 
+import wblut.geom.WB_Coord;
 import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_Plane;
 
 /**
  * Collection of mesh elements. Contains methods to manipulate selections
@@ -1794,5 +1796,797 @@ public class HE_Selection extends HE_MeshElement
 		System.out.println("Number of faces: " + this.getNumberOfFaces());
 		System.out
 				.println("Number of halfedges: " + this.getNumberOfHalfedges());
+	}
+
+	/**
+	 * Select all mesh elements. Unnamed selections are not stored in the mesh
+	 * and are not updated.
+	 *
+	 * @return current selection
+	 */
+	public static HE_Selection selectAll(HE_Mesh mesh) {
+		return mesh.selectAll();
+	}
+
+	/**
+	 * Select all mesh elements.
+	 *
+	 * @return current selection
+	 */
+	public static HE_Selection selectAll(HE_Mesh mesh,final String name) {
+		return mesh.selectAll(name);
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectAllEdges(HE_Mesh mesh) {
+		return mesh.selectAllEdges();
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectAllEdges(HE_Mesh mesh,final String name) {
+		return mesh.selectAllEdges(name);
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectAllFaces(HE_Mesh mesh) {
+		return mesh.selectAllFaces();
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectAllFaces(HE_Mesh mesh,final String name) {
+		return mesh.selectAllFaces(name);
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectAllHalfedges(HE_Mesh mesh) {
+		return mesh.selectAllHalfedges();
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectAllHalfedges(HE_Mesh mesh,final String name) {
+		return mesh.selectAllHalfedges(name);
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectAllInnerBoundaryHalfedges(HE_Mesh mesh) {
+		return mesh.selectAllInnerBoundaryHalfedges();
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectAllInnerBoundaryHalfedges(HE_Mesh mesh,final String name) {
+		return mesh.selectAllInnerBoundaryHalfedges(name);
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectAllOuterBoundaryHalfedges(HE_Mesh mesh) {
+		return mesh.selectAllOuterBoundaryHalfedges();
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectAllOuterBoundaryHalfedges(HE_Mesh mesh,final String name) {
+		return mesh.selectAllOuterBoundaryHalfedges(name);
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectAllVertices(HE_Mesh mesh) {
+		return mesh.selectAllVertices();
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectAllVertices(HE_Mesh mesh,final String name) {
+		return mesh.selectAllVertices(name);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectBackEdges(HE_Mesh mesh,final String name, final WB_Plane P) {
+		return mesh.selectBackEdges(name,P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectBackEdges(HE_Mesh mesh,final WB_Plane P) {
+		return mesh.selectBackEdges(P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectBackFaces(HE_Mesh mesh,final String name, final WB_Plane P) {
+		return mesh.selectBackFaces(name,P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectBackFaces(HE_Mesh mesh,final WB_Plane P) {
+		return mesh.selectBackFaces(P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectBackVertices(HE_Mesh mesh,final String name,
+			final WB_Plane P) {
+		return mesh.selectBackVertices(name,P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectBackVertices(HE_Mesh mesh,final WB_Plane P) {
+		return mesh.selectBackVertices(P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectBoundaryEdges(HE_Mesh mesh) {
+		return mesh.selectBoundaryEdges();
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectBoundaryEdges(HE_Mesh mesh,final String name) {
+		return mesh.selectBoundaryEdges(name);
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectBoundaryFaces(HE_Mesh mesh) {
+		return mesh.selectBoundaryFaces();
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectBoundaryFaces(HE_Mesh mesh,final String name) {
+		return mesh.selectBoundaryFaces(name);
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectBoundaryVertices(HE_Mesh mesh) {
+		return mesh.selectBoundaryVertices();
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public static HE_Selection selectBoundaryVertices(HE_Mesh mesh,final String name) {
+		return mesh.selectBoundaryVertices(name);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectCrossingEdges(HE_Mesh mesh,final String name,
+			final WB_Plane P) {
+		return mesh.selectCrossingEdges(name, P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectCrossingEdges(HE_Mesh mesh,final WB_Plane P) {
+		return mesh.selectCrossingEdges(P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectCrossingFaces(HE_Mesh mesh,final String name,
+			final WB_Plane P) {
+		return mesh.selectCrossingFaces(name, P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectCrossingFaces(HE_Mesh mesh,final WB_Plane P) {
+		return mesh.selectCrossingFaces(P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectEdgesWithLabel(HE_Mesh mesh,final int label) {
+		return mesh.selectEdgesWithLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectEdgesWithLabel(HE_Mesh mesh,final String name,
+			final int label) {
+		return mesh.selectEdgesWithLabel(name, label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectEdgesWithOtherInternalLabel(HE_Mesh mesh,final int label) {
+		return mesh.selectEdgesWithOtherInternalLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectEdgesWithOtherInternalLabel(HE_Mesh mesh,final String name,
+			final int label) {
+		return mesh.selectEdgesWithOtherInternalLabel(name, label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectEdgesWithOtherLabel(HE_Mesh mesh,final int label) {
+		return mesh.selectEdgesWithOtherLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectEdgesWithOtherLabel(HE_Mesh mesh,final String name,
+			final int label) {
+		return mesh.selectEdgesWithOtherLabel(name, label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectEdgesWithInternalLabel(HE_Mesh mesh,final int label) {
+		return mesh.selectEdgesWithInternalLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectEdgesWithInternalLabel(HE_Mesh mesh,final String name,
+			final int label) {
+		return mesh.selectEdgesWithInternalLabel(name, label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectFacesWithInternalLabel(HE_Mesh mesh,final int label) {
+		return mesh.selectFacesWithInternalLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectFacesWithInternalLabel(HE_Mesh mesh,final String name,
+			final int label) {
+		return mesh.selectFacesWithInternalLabel(name,label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectFacesWithLabel(HE_Mesh mesh,final int label) {
+		return mesh.selectFacesWithLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectFacesWithLabel(HE_Mesh mesh, final String name,
+			final int label) {
+		return mesh.selectFacesWithLabel(name,label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param v
+	 */
+	public static HE_Selection selectFacesWithNormal(HE_Mesh mesh, final String name,
+			final WB_Coord v) {
+		return mesh.selectFacesWithNormal(name,v);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param n
+	 * @param ta
+	 */
+	public static HE_Selection selectFacesWithNormal(HE_Mesh mesh, final String name,
+			final WB_Coord n, final double ta) {
+		return mesh.selectFacesWithNormal(name, n, ta);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param v
+	 */
+	public static HE_Selection selectFacesWithNormal(HE_Mesh mesh, final WB_Coord v) {
+		return mesh.selectFacesWithNormal(v);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param n
+	 * @param ta
+	 */
+	public static HE_Selection selectFacesWithNormal(HE_Mesh mesh, final WB_Coord n,
+			final double ta) {
+		return mesh.selectFacesWithNormal(n,ta);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectFacesWithOtherInternalLabel(HE_Mesh mesh, final int label) {
+		return mesh.selectFacesWithOtherInternalLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectFacesWithOtherInternalLabel(HE_Mesh mesh, final String name,
+			final int label) {
+		return mesh.selectFacesWithOtherInternalLabel(name,label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectFacesWithOtherLabel(HE_Mesh mesh, final int label) {
+		return mesh.selectFacesWithOtherLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectFacesWithOtherLabel(HE_Mesh mesh, final String name,
+			final int label) {
+		return mesh.selectFacesWithOtherLabel(name,label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectFrontEdges(HE_Mesh mesh, final String name, final WB_Plane P) {
+		return mesh.selectFrontEdges(name,P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectFrontEdges(HE_Mesh mesh, final WB_Plane P) {
+		return mesh.selectFrontEdges(P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectFrontFaces(HE_Mesh mesh, final String name, final WB_Plane P) {
+		return mesh.selectFrontFaces(name,P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectFrontFaces(HE_Mesh mesh, final WB_Plane P) {
+		return mesh.selectFrontFaces(P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectFrontVertices(HE_Mesh mesh, final String name,
+			final WB_Plane P) {
+		return mesh.selectFrontVertices(name,P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectFrontVertices(HE_Mesh mesh, final WB_Plane P) {
+		return mesh.selectFrontVertices(P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectHalfedgesWithLabel(HE_Mesh mesh, final int label) {
+		return mesh.selectHalfedgesWithLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectHalfedgesWithLabel(HE_Mesh mesh, final String name,
+			final int label) {
+		return mesh.selectHalfedgesWithLabel(name,label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectHalfedgesWithOtherInternalLabel(HE_Mesh mesh, final int label) {
+		return mesh.selectHalfedgesWithOtherInternalLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectHalfedgesWithOtherInternalLabel(HE_Mesh mesh, final String name,
+			final int label) {
+		return mesh.selectHalfedgesWithOtherInternalLabel(name,label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectHalfedgesWithOtherLabel(HE_Mesh mesh, final int label) {
+		return mesh.selectHalfedgesWithOtherLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectHalfedgesWithOtherLabel(HE_Mesh mesh, final String name,
+			final int label) {
+		return mesh.selectHalfedgesWithOtherLabel(name,label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectHalfedgeWithInternalLabel(HE_Mesh mesh, final int label) {
+		return mesh.selectHalfedgeWithInternalLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectHalfedgeWithInternalLabel(HE_Mesh mesh, final String name,
+			final int label) {
+		return mesh.selectHalfedgeWithInternalLabel(name,label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectOnVertices(HE_Mesh mesh, final String name, final WB_Plane P) {
+		return mesh.selectOnVertices(name,P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param P
+	 */
+	public static HE_Selection selectOnVertices(HE_Mesh mesh, final WB_Plane P) {
+		return mesh.selectOnVertices(P);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param r
+	 */
+	public static HE_Selection selectRandomEdges(HE_Mesh mesh, final double r) {
+		return mesh.selectRandomEdges(r);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param r
+	 * @param seed
+	 */
+	public static HE_Selection selectRandomEdges(HE_Mesh mesh, final double r, final long seed) {
+		return mesh.selectRandomEdges(r,seed);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param r
+	 */
+	public static HE_Selection selectRandomEdges(HE_Mesh mesh, final String name, final double r) {
+		return mesh.selectRandomEdges(name,r);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param r
+	 * @param seed
+	 */
+	public static HE_Selection selectRandomEdges(HE_Mesh mesh, final String name, final double r,
+			final long seed) {
+		return mesh.selectRandomEdges(name,r,seed);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param r
+	 */
+	public static HE_Selection selectRandomFaces(HE_Mesh mesh, final double r) {
+		return mesh.selectRandomFaces(r);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param r
+	 * @param seed
+	 */
+	public static HE_Selection selectRandomFaces(HE_Mesh mesh, final double r, final long seed) {
+		return mesh.selectRandomFaces(r,seed);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param r
+	 */
+	public static HE_Selection selectRandomFaces(HE_Mesh mesh, final String name, final double r) {
+		return mesh.selectRandomFaces(r);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param r
+	 * @param seed
+	 */
+	public static HE_Selection selectRandomFaces(HE_Mesh mesh, final String name, final double r,
+			final long seed) {
+		return mesh.selectRandomFaces(name,r,seed);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param r
+	 */
+	public static HE_Selection selectRandomVertices(HE_Mesh mesh, final double r) {
+		return mesh.selectRandomVertices(r);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param r
+	 * @param seed
+	 */
+	public static HE_Selection selectRandomVertices(HE_Mesh mesh, final double r, final long seed) {
+		return mesh.selectRandomVertices(r,seed);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param r
+	 */
+	public static HE_Selection selectRandomVertices(HE_Mesh mesh, final String name,
+			final double r) {
+		return mesh.selectRandomVertices(name,r);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param r
+	 * @param seed
+	 */
+	public static HE_Selection selectRandomVertices(HE_Mesh mesh, final String name, final double r,
+			final long seed) {
+		return mesh.selectRandomVertices(name,r,seed);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectVerticesWithInternalLabel(HE_Mesh mesh, final int label) {
+		return mesh.selectVerticesWithInternalLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectVerticesWithInternalLabel(HE_Mesh mesh, final String name,
+			final int label) {
+		return mesh.selectVerticesWithInternalLabel(name,label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectVerticesWithLabel(HE_Mesh mesh, final int label) {
+		return mesh.selectVerticesWithLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectVerticesWithLabel(HE_Mesh mesh, final String name,
+			final int label) {
+		return mesh.selectVerticesWithLabel(name,label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectVerticesWithOtherInternalLabel(HE_Mesh mesh, final int label) {
+		return mesh.selectVerticesWithOtherInternalLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectVerticesWithOtherInternalLabel(HE_Mesh mesh, final String name,
+			final int label) {
+		return mesh.selectVerticesWithOtherInternalLabel(name,label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectVerticesWithOtherLabel(HE_Mesh mesh, final int label) {
+		return mesh.selectVerticesWithOtherLabel(label);
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param label
+	 */
+	public static HE_Selection selectVerticesWithOtherLabel(HE_Mesh mesh, final String name,
+			final int label) {
+		return mesh.selectVerticesWithOtherLabel(name,label);
 	}
 }

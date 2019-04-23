@@ -7,7 +7,9 @@
 package wblut.hemesh;
 
 import wblut.core.WB_HashCode;
+import wblut.geom.WB_AABB;
 import wblut.geom.WB_Coord;
+import wblut.geom.WB_CoordOp3D;
 import wblut.geom.WB_Point;
 
 /**
@@ -272,6 +274,49 @@ public class HE_Halfedge extends HE_MeshElement
 			return _next._vertex.getPosition();
 		}
 		return null;
+	}
+	
+	public WB_Coord getCenter() {
+		return HE_MeshOp.getEdgeCenter(this);
+	}
+	
+	public WB_Coord getEdgeNormal() {
+		return HE_MeshOp.getEdgeNormal(this);
+	}
+	
+	public WB_Coord getEdgeDirection() {
+		return HE_MeshOp.getEdgeTangent(this);
+	}
+	
+	public WB_Coord getHalfedgeNormal() {
+		return HE_MeshOp.getHalfedgeNormal(this);
+	}
+	
+	public WB_Coord getHalfedgeDirection() {
+		return HE_MeshOp.getHalfedgeTangent(this);
+	}
+	
+	public WB_AABB getAABB() {
+		return HE_MeshOp.getAABB(this);
+		
+	}
+	
+	public double getEdgeArea() {
+		return HE_MeshOp.getEdgeArea(this);
+	
+	}
+	
+	public double getHalfedgeArea() {
+		return HE_MeshOp.getHalfedgeArea(this);
+	
+	}
+	
+	public double getSqLength() {
+		return HE_MeshOp.getSqLength(this);
+	}
+	
+	public double getLength() {
+		return HE_MeshOp.getLength(this);
 	}
 
 	/**
@@ -560,5 +605,53 @@ public class HE_Halfedge extends HE_MeshElement
 
 	@Override
 	public void clearPrecomputed() {
+	}
+
+	public double getCotan() {
+		return HE_MeshOp.getCotan(this);
+	}
+
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
+	public WB_Coord getEdgeCenter(final double f) {
+		
+				return HE_MeshOp.getEdgeCenter(this,f);
+	}
+
+	public double getEdgeCosDihedralAngle() {
+			return HE_MeshOp.getEdgeCosDihedralAngle(this);
+	}
+
+	/**
+	 * Return angle between adjacent faces.
+	 *
+	 * @return angle
+	 */
+	public double getEdgeDihedralAngle() {
+		return HE_MeshOp.getEdgeDihedralAngle(this);
+	}
+
+	/**
+	 * Get offset center of halfedge.
+	 *
+	 * @param f
+	 * @return center
+	 */
+	public WB_Coord getHalfedgeCenter(final double f) {
+		return HE_MeshOp.getHalfedgeCenter(this,f);
+	}
+
+	/**
+	 * Get angle between adjacent faces.
+	 *
+	 * @return angle
+	 */
+	public double getHalfedgeDihedralAngle() {
+		
+		return HE_MeshOp.getHalfedgeDihedralAngle(this);
 	}
 }

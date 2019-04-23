@@ -164,7 +164,7 @@ public class HET_Texture {
 		final double idenom = 0.5 * palette.length / Math.PI;
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			color = (int) (idenom * (HE_MeshOp.getGaussCurvature(v) - minrange)
+			color = (int) (idenom * (HE_MeshOp.getGaussianCurvature(v) - minrange)
 					/ (maxrange - minrange));
 			color = Math.max(0, Math.min(color, palette.length - 1));
 			v.setColor(palette[color]);
