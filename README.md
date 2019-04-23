@@ -15,14 +15,14 @@ You need to add some other external *.jar files to the properties of your Eclips
 * `hemesh-data-3_0_0.jar`: Data for HE_Mesh.
 
 
-## Current release 
+## Current release: 2019.0.0 - Phoenix
 
-Download the current release here: http://www.wblut.com/hemesh/hemesh.zip.
+Download the current release here: https://www.wblut.com/hemesh/hemesh.zip.
 
 
-## Build-of-the-day HE_Mesh (2018/05/16)
+## Build-of-the-day HE_Mesh (2019/04/23)
 
-Download a recent built here: http://www.wblut.com/hemesh/hemesh20180516.zip.
+Download a recent built here: https://www.wblut.com/hemesh/hemesh20190423.zip.
 
 ## Examples
 
