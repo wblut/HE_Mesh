@@ -8,10 +8,18 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import processing.core.PApplet;
 import processing.opengl.PGraphics3D;
 import wblut.geom.WB_Coord;
+import wblut.geom.WB_CoordinateSystem;
+import wblut.geom.WB_DefaultMap3D;
+import wblut.geom.WB_Map;
+import wblut.geom.WB_ModelViewMap;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Transform3D;
+import wblut.geom.WB_TransformMap;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
@@ -24,7 +32,6 @@ import wblut.math.WB_Math;
  *
  */
 public abstract class HEC_Creator extends HE_Machine {
-	
 
 	public HEC_Creator() {
 		super();
@@ -33,73 +40,70 @@ public abstract class HEC_Creator extends HE_Machine {
 		parameters.set("verticalaxis", new WB_Vector(WB_Vector.Z()));
 		parameters.set("rotationangle", 0.0);
 		parameters.set("scale", 1.0);
-		parameters.set("modelview",false);
-		parameters.set("manifoldcheck",false);
-		parameters.set("override",false);	
+		parameters.set("modelview", false);
+		parameters.set("manifoldcheck", false);
+		parameters.set("override", false);
 	}
-	
+
 	public WB_Point getCenter() {
-		return (WB_Point)parameters.get("center",new WB_Point());	
+		return (WB_Point) parameters.get("center", new WB_Point());
 	}
-	
+
 	public WB_Vector getZAxis() {
-		return (WB_Vector)parameters.get("zaxis",new WB_Vector());
+		return (WB_Vector) parameters.get("zaxis", new WB_Vector());
 	}
-	
+
 	protected WB_Vector getVerticalAxis() {
-		return (WB_Vector)parameters.get("verticalaxis",new WB_Vector());
+		return (WB_Vector) parameters.get("verticalaxis", new WB_Vector());
 	}
-	
+
 	protected double getRotationAngle() {
-		return parameters.get("rotationangle",0.0);
+		return parameters.get("rotationangle", 0.0);
 	}
-	
+
 	protected double getScale() {
-		return parameters.get("scale",0.0);
+		return parameters.get("scale", 0.0);
 	}
-	
+
 	protected boolean getModelView() {
-		return parameters.get("modelView",false);
+		return parameters.get("modelView", false);
 	}
-	
+
 	protected PApplet getHome() {
-		return (PApplet)parameters.get("home",null);
+		return (PApplet) parameters.get("home", null);
 	}
-	
+
 	protected boolean getManifoldCheck() {
-		return parameters.get("manifoldcheck",false);
+		return parameters.get("manifoldcheck", false);
 	}
-	
+
 	protected boolean getOverride() {
-		return parameters.get("override",false);
+		return parameters.get("override", false);
 	}
 
 	/**
-	 * Set center of mesh.
+	 * Set center of mesh. After creation the mesh is moved so that its center of
+	 * gravity equals center.
 	 *
-	 * @param x
-	 *            x-coordinate of center
-	 * @param y
-	 *            y-coordinate of center
-	 * @param z
-	 *            z-coordinate of center
+	 * @param x x-coordinate of center
+	 * @param y y-coordinate of center
+	 * @param z z-coordinate of center
 	 * @return self
 	 */
-	public HEC_Creator setCenter(final double x, final double y,
-			final double z) {
-		parameters.set("center",new WB_Point(x, y, z));
+	public HEC_Creator setCenter(final double x, final double y, final double z) {
+		parameters.set("center", new WB_Point(x, y, z));
 		return this;
 	}
 
 	/**
-	 * Set center of mesh.
+	 * Set center of mesh. After creation the mesh is moved so that its center of
+	 * gravity equals center.
 	 *
-	 * @param c
-	 *            center
+	 * @param c center
 	 * @return self
 	 */
 	public HEC_Creator setCenter(final WB_Coord c) {
-		parameters.set("center",c);
+		parameters.set("center", c);
 		return this;
 	}
 
@@ -110,15 +114,14 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @return
 	 */
 	public HEC_Creator setScale(final double s) {
-		parameters.set("scale",s);
+		parameters.set("scale", s);
 		return this;
 	}
 
 	/**
 	 * Rotation of mesh about local Z-axis.
 	 *
-	 * @param a
-	 *            angle
+	 * @param a angle
 	 * @return self
 	 */
 	public HEC_Creator setZAngle(final double a) {
@@ -129,119 +132,116 @@ public abstract class HEC_Creator extends HE_Machine {
 	/**
 	 * Orientation of local Z-axis of mesh.
 	 *
-	 * @param x
-	 *            x-coordinate of axis vector
-	 * @param y
-	 *            y-coordinate of axis vector
-	 * @param z
-	 *            z-coordinate of axis vector
+	 * @param x x-coordinate of axis vector
+	 * @param y y-coordinate of axis vector
+	 * @param z z-coordinate of axis vector
 	 * @return self
 	 */
-	public HEC_Creator setZAxis(final double x, final double y,
-			final double z) {
-		WB_Vector zaxis= new WB_Vector(x, y, z);
+	public HEC_Creator setZAxis(final double x, final double y, final double z) {
+		WB_Vector zaxis = new WB_Vector(x, y, z);
 		zaxis.normalizeSelf();
-		parameters.set("zaxis",zaxis);
+		parameters.set("zaxis", zaxis);
 		return this;
 	}
-	
+
 	/**
 	 * Local Z-axis of mesh.
 	 *
-	 * @param p0x
-	 *            x-coordinate of first point on axis
-	 * @param p0y
-	 *            y-coordinate of first point on axis
-	 * @param p0z
-	 *            z-coordinate of first point on axis
-	 * @param p1x
-	 *            x-coordinate of second point on axis
-	 * @param p1y
-	 *            y-coordinate of second point on axis
-	 * @param p1z
-	 *            z-coordinate of second point on axis
+	 * @param p0x x-coordinate of first point on axis
+	 * @param p0y y-coordinate of first point on axis
+	 * @param p0z z-coordinate of first point on axis
+	 * @param p1x x-coordinate of second point on axis
+	 * @param p1y y-coordinate of second point on axis
+	 * @param p1z z-coordinate of second point on axis
 	 * @return self
 	 */
-	public HEC_Creator setZAxis(final double p0x, final double p0y,
-			final double p0z, final double p1x, final double p1y,
-			final double p1z) {
-		WB_Vector zaxis= new WB_Vector(p1x - p0x, p1y - p0y, p1z - p0z);
+	public HEC_Creator setZAxis(final double p0x, final double p0y, final double p0z, final double p1x,
+			final double p1y, final double p1z) {
+		WB_Vector zaxis = new WB_Vector(p1x - p0x, p1y - p0y, p1z - p0z);
 		zaxis.normalizeSelf();
-		parameters.set("zaxis",zaxis);
+		parameters.set("zaxis", zaxis);
 		return this;
 	}
 
 	/**
 	 * Orientation of local Z-axis of mesh.
 	 *
-	 * @param p
-	 *            axis vector
+	 * @param p axis vector
 	 * @return self
 	 */
 	public HEC_Creator setZAxis(final WB_Coord p) {
-		WB_Vector zaxis= new WB_Vector(p);
+		WB_Vector zaxis = new WB_Vector(p);
 		zaxis.normalizeSelf();
-		parameters.set("zaxis",zaxis);
+		parameters.set("zaxis", zaxis);
 		return this;
 	}
 
 	/**
 	 * Local Z-axis of mesh.
 	 *
-	 * @param p0
-	 *            first point on axis
-	 * @param p1
-	 *            second point on axis
+	 * @param p0 first point on axis
+	 * @param p1 second point on axis
 	 * @return self
 	 */
 	public HEC_Creator setZAxis(final WB_Coord p0, final WB_Coord p1) {
-		WB_Vector zaxis= WB_Vector.sub(p0, p1);
+		WB_Vector zaxis = WB_Vector.sub(p0, p1);
 		zaxis.normalizeSelf();
-		parameters.set("zaxis",zaxis);
+		parameters.set("zaxis", zaxis);
 		return this;
 	}
 
-	protected HEC_Creator setVerticalAxis(final double x, final double y,
-			final double z) {
-		WB_Vector verticalaxis= new WB_Vector(x, y, z);
+	protected HEC_Creator setVerticalAxis(final double x, final double y, final double z) {
+		WB_Vector verticalaxis = new WB_Vector(x, y, z);
 		verticalaxis.normalizeSelf();
-		parameters.set("verticalaxis",verticalaxis);
+		parameters.set("verticalaxis", verticalaxis);
 		return this;
 	}
-	
-	protected HEC_Creator setVerticalAxis(final double p0x, final double p0y,
-			final double p0z, final double p1x, final double p1y,
-			final double p1z) {
-		WB_Vector verticalaxis= new WB_Vector(p1x - p0x, p1y - p0y, p1z - p0z);
+
+	protected HEC_Creator setVerticalAxis(final double p0x, final double p0y, final double p0z, final double p1x,
+			final double p1y, final double p1z) {
+		WB_Vector verticalaxis = new WB_Vector(p1x - p0x, p1y - p0y, p1z - p0z);
 		verticalaxis.normalizeSelf();
-		parameters.set("verticalaxis",verticalaxis);
+		parameters.set("verticalaxis", verticalaxis);
 		return this;
 	}
-	
+
 	protected HEC_Creator setVerticalAxis(WB_Coord axis) {
-		WB_Vector verticalaxis= new WB_Vector(axis);
+		WB_Vector verticalaxis = new WB_Vector(axis);
 		verticalaxis.normalizeSelf();
-		parameters.set("verticalaxis",verticalaxis);
+		parameters.set("verticalaxis", verticalaxis);
 		return this;
 	}
-	
+
 	protected HEC_Creator setVerticalAxis(final WB_Coord p0, final WB_Coord p1) {
-		WB_Vector verticalaxis= WB_Vector.sub(p0, p1);
+		WB_Vector verticalaxis = WB_Vector.sub(p0, p1);
 		verticalaxis.normalizeSelf();
-		parameters.set("verticalaxis",verticalaxis);
+		parameters.set("verticalaxis", verticalaxis);
 		return this;
 	}
 
 	/**
 	 * Use the applet's modelview coordinates.
 	 *
-	 * @param home
-	 *            calling applet, typically "this"
+	 * @param home calling applet, typically "this"
 	 * @return self
 	 */
 	public HEC_Creator setToModelview(final PApplet home) {
-		parameters.set("home", home);
-		parameters.set("modelview",true);
+		parameters.set("map", new WB_ModelViewMap(home));
+		parameters.set("modelview", true);
+		return this;
+	}
+
+	public HEC_Creator setToModelview(final WB_Transform3D T) {
+		parameters.set("map", new WB_TransformMap(T));
+		parameters.set("modelview", true);
+		return this;
+	}
+
+	public HEC_Creator setToModelview(final WB_CoordinateSystem CS) {
+		WB_Transform3D T = new WB_Transform3D();
+		T.addFromCSToWorld(CS);
+		parameters.set("map", new WB_TransformMap(T));
+		parameters.set("modelview", true);
 		return this;
 	}
 
@@ -251,8 +251,8 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @return self
 	 */
 	public HEC_Creator setToWorldview() {
-		parameters.remove("home");
-		parameters.set("modelview",false);
+		parameters.remove("map");
+		parameters.set("modelview", false);
 		return this;
 	}
 
@@ -263,7 +263,7 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @return
 	 */
 	public HEC_Creator setManifoldCheck(final boolean b) {
-		parameters.set("manifoldcheck" , b);
+		parameters.set("manifoldcheck", b);
 		return this;
 	}
 
@@ -274,7 +274,7 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @return
 	 */
 	public HEC_Creator setOverride(final boolean b) {
-		parameters.set("override" , b);
+		parameters.set("override", b);
 		return this;
 	}
 
@@ -299,47 +299,44 @@ public abstract class HEC_Creator extends HE_Machine {
 		if (!getOverride()) {
 			base.scaleSelf(getScale());
 			if (getRotationAngle() != 0) {
-				base.rotateAboutAxis2PSelf(getRotationAngle(), ctr.xd(), ctr.yd(), ctr.zd(),
-						ctr.xd(), ctr.yd(), ctr.zd() + 1);
+				base.rotateAboutAxis2PSelf(getRotationAngle(), ctr.xd(), ctr.yd(), ctr.zd(), ctr.xd(), ctr.yd(),
+						ctr.zd() + 1);
 			}
 			final WB_Vector tmp = getZAxis().cross(getVerticalAxis());
 			if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
-				base.rotateAboutAxis2PSelf(
-						-Math.acos(WB_Math.clamp(getZAxis().dot(getVerticalAxis()), -1, 1)),
-						ctr.xd(), ctr.yd(), ctr.zd(), ctr.xd() + tmp.xd(),
-						ctr.yd() + tmp.yd(), ctr.zd() + tmp.zd());
+				base.rotateAboutAxis2PSelf(-Math.acos(WB_Math.clamp(getZAxis().dot(getVerticalAxis()), -1, 1)),
+						ctr.xd(), ctr.yd(), ctr.zd(), ctr.xd() + tmp.xd(), ctr.yd() + tmp.yd(), ctr.zd() + tmp.zd());
 			} else if (getZAxis().dot(getVerticalAxis()) < -1 + WB_Epsilon.EPSILON) {
 				base.scaleSelf(1, 1, -1);
 			}
 			base.moveToSelf(getCenter());
 		}
-		float cx, cy, cz;
+		tracker.setStopStatus(this, "Mesh transformed.");
+
 		HE_Vertex v;
 		if (getModelView()) {
-			PApplet home=getHome();
-			if (home.g instanceof PGraphics3D) {
-				final Iterator<HE_Vertex> vItr = base.vItr();
-				while (vItr.hasNext()) {
-					v = vItr.next();
-					cx = v.xf();
-					cy = v.yf();
-					cz = v.zf();
-					v.set(home.modelX(cx, cy, cz), home.modelY(cx, cy, cz),
-							home.modelZ(cx, cy, cz));
-				}
+			tracker.setStartStatus(this, "Transforming mesh from model view to world view.");
+			WB_Map map = (WB_Map) parameters.get("map", new WB_DefaultMap3D());
+			final Iterator<HE_Vertex> vItr = base.vItr();
+			while (vItr.hasNext()) {
+				v = vItr.next();
+				map.mapPoint3D(v);
 			}
 		}
+		tracker.setStopStatus(this, "Mesh transformed.");
+
 		if (getManifoldCheck()) {
 			tracker.setStartStatus(this, "Checking and fixing manifold.");
 			HET_Fixer.fixNonManifoldVertices(base);
 			tracker.setStopStatus(this, "Manifold checked.");
 		}
-		tracker.setStopStatus(this, "Base mesh transformed.");
+
 		return base;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see wblut.hemesh.HE_Machine#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -350,6 +347,7 @@ public abstract class HEC_Creator extends HE_Machine {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see wblut.hemesh.HE_Machine#apply(wblut.hemesh.HE_Selection)
 	 */
 	@Override
