@@ -164,6 +164,65 @@ public class HE_MeshOp {
 		}
 	}
 
+	/**
+	 *
+	 */
+	public static class HET_SelfIntersectionResult {
+		/**
+		 *
+		 */
+		HE_Face		f1;
+		/**
+		 *
+		 */
+		HE_Face		f2;
+		/**
+		 *
+		 */
+		WB_Segment	segment;
+	
+		/**
+		 *
+		 *
+		 * @param f1
+		 * @param f2
+		 * @param seg
+		 */
+		public HET_SelfIntersectionResult(final HE_Face f1, final HE_Face f2,
+				final WB_Segment seg) {
+			this.f1 = f1;
+			this.f2 = f2;
+			segment = seg;
+		}
+	
+		/**
+		 *
+		 *
+		 * @return
+		 */
+		public HE_Face getFace1() {
+			return f1;
+		}
+	
+		/**
+		 *
+		 *
+		 * @return
+		 */
+		public HE_Face getFace2() {
+			return f2;
+		}
+	
+		/**
+		 *
+		 *
+		 * @return
+		 */
+		public WB_Segment getSegment() {
+			return segment;
+		}
+	}
+
 	protected HE_MeshOp() {
 	}
 
@@ -2301,6 +2360,7 @@ public class HE_MeshOp {
 		return p;
 	}
 
+<<<<<<< HEAD
 	public static List<HET_SelfIntersectionResult> getSelfIntersection(final HE_Mesh mesh) {
 		final List<HET_SelfIntersectionResult> selfints = new FastList<HET_SelfIntersectionResult>();
 		HE_MeshOp.triangulate(mesh);
@@ -2338,6 +2398,8 @@ public class HE_MeshOp {
 		return selfints;
 	}
 
+=======
+	of https://github.com/wblut/HE_Mesh.git
 	public static boolean isInside(final HE_Mesh mesh, final WB_Coord p) {
 		return isInside(new WB_AABBTree(mesh, 1), p);
 	}
@@ -4673,6 +4735,8 @@ public class HE_MeshOp {
 		return result / n;
 	}
 
+	
+
 	/**
 	 * Return angle between adjacent faces.
 	 *
@@ -5212,5 +5276,10 @@ public class HE_MeshOp {
 		tracker.setStopStatus("HE_MeshOp", "Processed unpaired halfedges.");
 		return mismatchedHalfedges;
 	}
+<<<<<<< HEAD
 
+=======
+	
+	
+>>>>>>> branch 'master' of https://github.com/wblut/HE_Mesh.git
 }
