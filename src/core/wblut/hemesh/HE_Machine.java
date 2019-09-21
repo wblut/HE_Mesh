@@ -60,4 +60,20 @@ public abstract class HE_Machine {
 		this.parameters=parameters;
 	}
 
+	public void set(String name, Object value) {
+		parameters.set(name, value);
+	}
+	
+	public void set(String name, int value) {
+		parameters.set(name, value);
+	}
+	
+	public void set(String name, double value) {
+		parameters.set(name, value);
+	}
+	
+	public Object get(String name) {
+		return parameters.get(name, null);
+	}
+	
 }

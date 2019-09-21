@@ -4,7 +4,7 @@ import wblut.hemesh.*;
 import wblut.geom.*;
 import wblut.math.*;
 
-WB_GeometryFactory gf=new WB_GeometryFactory();
+WB_GeometryFactory3D gf=new WB_GeometryFactory3D();
 WB_Render2D render;
 WB_Circle C;
 

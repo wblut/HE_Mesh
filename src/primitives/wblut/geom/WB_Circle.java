@@ -13,7 +13,7 @@ public class WB_Circle implements WB_Geometry3D {
 	private WB_Point			center;
 	private WB_Vector			normal;
 	private double				radius, r2;
-	private WB_GeometryFactory	geometryfactory	= new WB_GeometryFactory();
+	private WB_GeometryFactory3D	geometryfactory	= new WB_GeometryFactory3D();
 
 	/**
 	 *

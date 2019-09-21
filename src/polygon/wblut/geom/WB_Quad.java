@@ -6,19 +6,24 @@
  */
 package wblut.geom;
 
-/**
- * Placeholder for quad.
- */
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Data
+@ToString(includeFieldNames=true)
 public class WB_Quad implements WB_Geometry3D {
-	private WB_GeometryFactory	geometryfactory	= new WB_GeometryFactory();
+	@Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) private WB_GeometryFactory3D	geometryfactory	= new WB_GeometryFactory3D();
 	/** First point. */
-	public WB_Point				p1;
+	@Setter(AccessLevel.NONE) private WB_Point				p1;
 	/** Second point. */
-	public WB_Point				p2;
+	@Setter(AccessLevel.NONE) private WB_Point				p2;
 	/** Third point. */
-	public WB_Point				p3;
+	@Setter(AccessLevel.NONE) private  WB_Point				p3;
 	/** Fourth point. */
-	public WB_Point				p4;
+	@Setter(AccessLevel.NONE) private WB_Point				p4;
 
 	/**
 	 * Instantiates a new WB_Quad. No copies are made.

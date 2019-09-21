@@ -21,7 +21,7 @@ import org.eclipse.collections.impl.map.mutable.UnifiedMap;
  * corresponding circumcircle radii.
  *
  */
-public class WB_AlphaTriangulation2D implements WB_TriangleGenerator {
+public class WB_AlphaTriangulation2D implements WB_TriangleFactory {
 
 	/**
 	 *

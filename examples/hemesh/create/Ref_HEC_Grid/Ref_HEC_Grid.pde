@@ -26,11 +26,16 @@ void setup() {
   creator.setV(10);// number of cells in V direction
   creator.setUSize(300);// size of grid in U direction
   creator.setVSize(500);// size of grid in V direction
-  creator.setWValues(values);// displacement of grid points (W value)
+  creator.setValues(values);// displacement of grid points (W value)
   // alternatively this can be left out (flat grid). values can also be double[][]
-  // or and implementation of the WB_Function2D<Double> interface.
+  // or and implementation of the WB_ScalarParameter interface.
   mesh=new HE_Mesh(creator);
-  mesh.stats();
+  mesh.modify(new HEM_Shell().setThickness(50));
+  /*
+  mesh.getSelection("inner").subdivide(new HES_CatmullClark(),2);
+  mesh.getSelection("outer").subdivide(new HES_CatmullClark(),2);
+  HE_MeshOp.triangulate(mesh.getSelection("walls"));
+  */
   render=new WB_Render(this);
 }
 

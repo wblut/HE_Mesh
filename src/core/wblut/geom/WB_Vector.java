@@ -16,8 +16,7 @@ import wblut.math.WB_Math;
  *
  */
 public class WB_Vector extends WB_MutableCoordinate
-		implements WB_MutableCoord, WB_MutableCoordMath3D,
-		WB_MutableCoordTransform3D, WB_CoordMetric3D, WB_Geometry3D {
+		implements WB_MutableCoord, WB_MutableCoordMath3D, WB_Geometry3D {
 	private static final WB_Coord	X		= new WB_MutableCoordinate(1, 0, 0);
 	private static final WB_Coord	Y		= new WB_MutableCoordinate(0, 1, 0);
 	private static final WB_Coord	Z		= new WB_MutableCoordinate(0, 0, 1);

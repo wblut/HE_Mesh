@@ -19,7 +19,7 @@ import wblut.math.WB_MTRandom;
  * @author Frederik Vanhoutte, W:Blut
  *
  */
-public class WB_RandomOnCylinder implements WB_RandomGenerator {
+public class WB_RandomOnCylinder extends WB_RandomGenerator {
 	/**
 	 *
 	 */

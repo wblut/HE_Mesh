@@ -27,8 +27,8 @@ class WB_GeodesicI {
 	public WB_Point[]					PPTpoints;
 	private WB_Plane					P;
 	private final int					v;
-	private WB_Mesh						mesh;
-	private static WB_GeometryFactory	gf			= new WB_GeometryFactory();
+	private WB_SimpleMesh						mesh;
+	private static WB_GeometryFactory3D	gf			= new WB_GeometryFactory3D();
 	private final double				radius;
 	private final WB_Geodesic.Type		type;
 	private final int					div;
@@ -74,7 +74,7 @@ class WB_GeodesicI {
 	 *
 	 * @return
 	 */
-	public WB_Mesh getMesh() {
+	public WB_SimpleMesh getMesh() {
 		createMesh();
 		return mesh;
 	}

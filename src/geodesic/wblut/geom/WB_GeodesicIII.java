@@ -40,9 +40,9 @@ class WB_GeodesicIII {
 
 	private final Type type;
 
-	private WB_Mesh mesh;
+	private WB_SimpleMesh mesh;
 
-	private static WB_GeometryFactory gf = new WB_GeometryFactory();
+	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
 
 	public List<WB_Point> points;
 
@@ -105,7 +105,7 @@ class WB_GeodesicIII {
 	 *
 	 * @return
 	 */
-	public WB_Mesh getMesh() {
+	public WB_SimpleMesh getMesh() {
 		createMesh();
 		return mesh;
 	}

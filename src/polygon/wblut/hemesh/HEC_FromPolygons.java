@@ -147,7 +147,8 @@ public class HEC_FromPolygons extends HEC_Creator {
 				}
 
 				final HEC_FromFacelist ffl = new HEC_FromFacelist().setVertices(vertices).setFaces(faces)
-						.setDuplicate(true).setCheckNormals(checkNormals);
+						.setCheckDuplicateVertices(true);
+				ffl.setCheckNormals(checkNormals);
 
 				return ffl.createBase();
 			}

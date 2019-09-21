@@ -5,17 +5,24 @@
  * Public Domain: http://creativecommons.org/publicdomain/zero/1.0/
  */
 package wblut.geom;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+@Data
+@ToString(includeFieldNames=true)
 public class WB_Octagon implements WB_Geometry3D {
-	private WB_GeometryFactory	geometryfactory	= new WB_GeometryFactory();
-	public WB_Point				p1;
-	public WB_Point				p2;
-	public WB_Point				p3;
-	public WB_Point				p4;
-	public WB_Point				p5;
-	public WB_Point				p6;
-	public WB_Point				p7;
-	public WB_Point				p8;
+	@Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) private WB_GeometryFactory3D	geometryfactory	= new WB_GeometryFactory3D();
+	@Setter(AccessLevel.NONE) private WB_Point				p1;
+	@Setter(AccessLevel.NONE) private WB_Point				p2;
+	@Setter(AccessLevel.NONE) private WB_Point				p3;
+	@Setter(AccessLevel.NONE) private WB_Point				p4;
+	@Setter(AccessLevel.NONE) private WB_Point				p5;
+	@Setter(AccessLevel.NONE) private WB_Point				p6;
+	@Setter(AccessLevel.NONE) private WB_Point				p7;
+	@Setter(AccessLevel.NONE) private WB_Point				p8;
 
 	public WB_Octagon(final WB_Coord p1, final WB_Coord p2, final WB_Coord p3,
 			final WB_Coord p4, final WB_Coord p5, final WB_Coord p6,

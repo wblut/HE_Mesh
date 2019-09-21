@@ -13,11 +13,15 @@ import wblut.math.WB_ScalarParameter;
 public class HEC_Interpolate extends HEC_Creator {
 	private HE_Mesh				meshA;
 	private HE_Mesh				meshB;
-	private WB_ScalarParameter	factor;
+	
 
 	public HEC_Interpolate() {
 		super();
 		setOverride(true);
+	}
+	
+	protected WB_ScalarParameter getFactor() {
+		return (WB_ScalarParameter)parameters.get("factor", new WB_ConstantScalarParameter(0.0));
 	}
 
 	public HEC_Interpolate setMeshA(final HE_Mesh mesh) {
@@ -31,12 +35,12 @@ public class HEC_Interpolate extends HEC_Creator {
 	}
 
 	public HEC_Interpolate setFactor(final double f) {
-		factor = new WB_ConstantScalarParameter(f);
+		parameters.get("factor", new WB_ConstantScalarParameter(f));
 		return this;
 	}
 
 	public HEC_Interpolate setFactor(final WB_ScalarParameter f) {
-		factor = f;
+		parameters.get("factor", f);
 		return this;
 	}
 
@@ -46,9 +50,10 @@ public class HEC_Interpolate extends HEC_Creator {
 	 */
 	@Override
 	protected HE_Mesh createBase() {
-		if (meshA.getNumberOfVertices() != meshB.getNumberOfVertices()) {
+		if (meshA==null||meshB==null||meshA.getNumberOfVertices() != meshB.getNumberOfVertices()) {
 			return new HE_Mesh();
 		}
+		WB_ScalarParameter factor=getFactor();
 		HE_Mesh result = meshA.get();
 		HE_Vertex vA;
 		HE_Vertex vB;

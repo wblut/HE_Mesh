@@ -14,31 +14,18 @@ import wblut.geom.WB_Sphere;
  *
  */
 public class HEC_Geodesic extends HEC_Creator {
-	/**
-	 *
-	 */
-	private double	rx, ry, rz;
-	/**
-	 *
-	 */
-	private Type	type;
-	/**
-	 *
-	 */
-	private int		b;
-	/**
-	 *
-	 */
-	private int		c;
 
 	/**
 	 *
 	 */
 	public HEC_Geodesic() {
 		super();
-		rx = ry = rz = 100;
-		type = Type.ICOSAHEDRON;
-		b = c = 4;
+		parameters.set("rx", 100.0);
+		parameters.set("ry", 100.0);
+		parameters.set("rz", 100.0);
+		parameters.set("type", Type.ICOSAHEDRON);
+		parameters.set("b", 8);
+		parameters.set("c", 0);
 	}
 
 	/**
@@ -48,9 +35,39 @@ public class HEC_Geodesic extends HEC_Creator {
 	 */
 	public HEC_Geodesic(final double R) {
 		this();
-		rx = ry = rz = R;
-		b = c = 4;
+		parameters.set("rx", (double)R);
+		parameters.set("ry", (double)R);
+		parameters.set("rz", (double)R);
+		parameters.set("type", Type.ICOSAHEDRON);
+		parameters.set("b", 8);
+		parameters.set("c", 0);
 	}
+	
+	protected double getRx() {
+		return parameters.get("rx", 100.0);
+	}
+	
+	protected double getRy() {
+		return parameters.get("ry", 100.0);
+	}
+	
+	protected double getRz() {
+		return parameters.get("rz", 100.0);
+	}
+	
+	protected Type getType() {
+		return (Type)parameters.get("type", Type.ICOSAHEDRON);
+		
+	}
+	
+	protected int getB() {
+		return parameters.get("b", 8);
+	}
+	
+	protected int getC() {
+		return parameters.get("c", 0);
+	}
+
 
 	/**
 	 *
@@ -59,13 +76,19 @@ public class HEC_Geodesic extends HEC_Creator {
 	 * @return
 	 */
 	public HEC_Geodesic setRadius(final double R) {
-		rx = ry = rz = R;
+		parameters.set("rx", (double)R);
+		parameters.set("ry", (double)R);
+		parameters.set("rz", (double)R);
 		return this;
 	}
 
 	public HEC_Geodesic setSphere(final WB_Sphere S) {
-		rx = ry = rz = S.getRadius();
-		setCenter(S.getCenter());
+		double R = S.getRadius();
+		parameters.set("center",S.getCenter());
+		parameters.set("rx", (double)R);
+		parameters.set("ry", (double)R);
+		parameters.set("rz", (double)R);
+		
 		return this;
 	}
 
@@ -79,9 +102,9 @@ public class HEC_Geodesic extends HEC_Creator {
 	 */
 	public HEC_Geodesic setRadius(final double rx, final double ry,
 			final double rz) {
-		this.rx = rx;
-		this.ry = ry;
-		this.rz = rz;
+		parameters.set("rx", (double)rx);
+		parameters.set("ry", (double)ry);
+		parameters.set("rz", (double)rz);
 		return this;
 	}
 
@@ -92,7 +115,7 @@ public class HEC_Geodesic extends HEC_Creator {
 	 * @return
 	 */
 	public HEC_Geodesic setB(final int b) {
-		this.b = b;
+		parameters.set("b", b);
 		return this;
 	}
 
@@ -103,10 +126,21 @@ public class HEC_Geodesic extends HEC_Creator {
 	 * @return
 	 */
 	public HEC_Geodesic setC(final int c) {
-		this.c = c;
+		parameters.set("c", c);
 		return this;
 	}
-
+	
+	public HEC_Geodesic setDivisions(final int div) {
+		parameters.set("b", div);
+		parameters.set("c", 0);
+		return this;
+	}
+	
+	public HEC_Geodesic setLevel(final int level) {
+		parameters.set("b", (int)Math.pow(2, level));
+		parameters.set("c", 0);
+		return this;
+	}
 	/**
 	 *
 	 *
@@ -114,7 +148,7 @@ public class HEC_Geodesic extends HEC_Creator {
 	 * @return
 	 */
 	public HEC_Geodesic setType(final Type t) {
-		type = t;
+		parameters.set("type", t);
 		return this;
 	}
 
@@ -124,11 +158,11 @@ public class HEC_Geodesic extends HEC_Creator {
 	 */
 	@Override
 	protected HE_Mesh createBase() {
-		final WB_Geodesic geo = new WB_Geodesic(1.0, b, c, type);
+		final WB_Geodesic geo = new WB_Geodesic(1.0, getB(), getC(), getType());
 		final HE_Mesh mesh = new HE_Mesh(
-				new HEC_FromWBMesh(geo).setNormalsCheck(false)
-						.setUniformityCheck(false).setManifoldCheck(false));
-		mesh.scaleSelf(rx, ry, rz);
+				new HEC_FromSimpleMesh(geo)
+						.setCheckUniformNormals(false).setCheckManifold(false).setCheckNormals(false));
+		mesh.scaleSelf(getRx(), getRy(), getRz());
 		return mesh;
 	}
 }

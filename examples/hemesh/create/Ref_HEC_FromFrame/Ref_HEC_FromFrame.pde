@@ -1,3 +1,9 @@
+/*
+WB_Frame and HEC_FromFrame have been renamed WB_Network and HEC_FromNetwork. 
+*/
+
+
+
 import wblut.math.*;
 import wblut.processing.*;
 import wblut.core.*;
@@ -5,7 +11,6 @@ import wblut.hemesh.*;
 import wblut.geom.*;
 
 
-import processing.opengl.*;
 
 
 HE_Mesh mesh;

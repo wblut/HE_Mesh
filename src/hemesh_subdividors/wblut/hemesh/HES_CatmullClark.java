@@ -15,7 +15,7 @@ import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_GeometryOp3D;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
@@ -33,7 +33,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 	/**
 	 *
 	 */
-	private static WB_GeometryFactory	gf				= new WB_GeometryFactory();
+	private static WB_GeometryFactory3D	gf				= new WB_GeometryFactory3D();
 	/** Keep edges?. */
 	private boolean						keepEdges;
 	/** Keep boundary?. */

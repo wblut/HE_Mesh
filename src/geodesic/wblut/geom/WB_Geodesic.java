@@ -10,8 +10,8 @@ import java.security.InvalidParameterException;
 
 import wblut.math.WB_Epsilon;
 
-public class WB_Geodesic implements WB_MeshCreator {
-	private static WB_GeometryFactory gf = new WB_GeometryFactory();
+public class WB_Geodesic implements WB_SimpleMeshCreator {
+	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
 
 	public static enum Type {
 		TETRAHEDRON(0), OCTAHEDRON(1), CUBE(2), DODECAHEDRON(3), ICOSAHEDRON(4);
@@ -26,7 +26,7 @@ public class WB_Geodesic implements WB_MeshCreator {
 		}
 	};
 
-	private WB_Mesh			mesh;
+	private WB_SimpleMesh			mesh;
 	private final double	radius;
 	private final Type		type;
 	private final int		b;
@@ -67,7 +67,7 @@ public class WB_Geodesic implements WB_MeshCreator {
 	 * @see wblut.geom.WB_MeshCreator#getMesh()
 	 */
 	@Override
-	public WB_Mesh create() {
+	public WB_SimpleMesh create() {
 		createMesh();
 		return mesh;
 	}

@@ -121,7 +121,7 @@ public class HEM_CapHoles extends HEM_Modifier {
 				counter.increment(newHalfedges.size());
 			}
 		}
-		mesh.cleanUnusedElementsByFace();
+		mesh.removeUnconnectedElements();
 		HE_MeshOp.capHalfedges(mesh);
 		mesh.addSelection("caps", this, caps);
 		tracker.setStopStatus(this, "Exiting HEM_CapHoles.");

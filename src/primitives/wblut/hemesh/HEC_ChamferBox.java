@@ -568,7 +568,7 @@ public class HEC_ChamferBox extends HEC_Creator {
 		idf++;
 
 		final HEC_FromFacelist fl = new HEC_FromFacelist();
-		fl.setVertices(vertices).setFaces(faces).setDuplicate(true).setVertexUVW(uvws)
+		fl.setVertices(vertices).setFaces(faces).setCheckDuplicateVertices(true).setVertexUVW(uvws)
 				.setFaceTextureIds(faceTextureIds);
 		return fl.createBase();
 	}

@@ -219,7 +219,7 @@ public class HEC_IsoSurface extends HEC_Creator {
 		boundary = Double.NaN;
 		valueFactor = WB_ScalarParameter.ONE;
 		valueShift = WB_ScalarParameter.ZERO;
-		setManifoldCheck(true);
+		setCheckManifold(true);
 	}
 
 	/**
@@ -473,7 +473,7 @@ public class HEC_IsoSurface extends HEC_Creator {
 		}
 		HE_MeshOp.pairHalfedges(mesh);
 		HE_MeshOp.capHalfedges(mesh);
-		HE_MeshOp.cleanUnusedElementsByFace(mesh);
+		HE_MeshOp.removeUnconnectedElements(mesh);
 		return mesh;
 	}
 

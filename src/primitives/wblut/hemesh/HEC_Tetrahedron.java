@@ -11,6 +11,7 @@ package wblut.hemesh;
 
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Tetrahedron;
 
 /**
  * Tetrahedron.
@@ -102,6 +103,15 @@ public class HEC_Tetrahedron extends HEC_Creator {
 		points[1] = new WB_Point(p1);
 		points[2] = new WB_Point(p2);
 		points[3] = new WB_Point(p3);
+		return this;
+	}
+	
+	public HEC_Tetrahedron setPoints(WB_Tetrahedron tetra) {
+		points = new WB_Coord[4];
+		points[0] = new WB_Point(tetra.p1());
+		points[1] = new WB_Point(tetra.p2());
+		points[2] = new WB_Point(tetra.p3());
+		points[3] = new WB_Point(tetra.p4());
 		return this;
 	}
 

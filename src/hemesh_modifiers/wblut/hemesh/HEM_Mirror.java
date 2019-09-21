@@ -140,7 +140,7 @@ public class HEM_Mirror extends HEM_Modifier {
 		}
 		HE_MeshOp.flipFaces(mirrormesh);
 		mesh.add(mirrormesh);
-		mesh.cleanUnusedElementsByFace();
+		mesh.removeUnconnectedElements();
 		mesh.uncapBoundaryHalfedges();
 		HE_MeshOp.pairHalfedges(mesh);
 		HE_MeshOp.capHalfedges(mesh);

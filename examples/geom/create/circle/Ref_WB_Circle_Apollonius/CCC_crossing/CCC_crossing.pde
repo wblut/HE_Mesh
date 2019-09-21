@@ -3,7 +3,7 @@ import wblut.geom.*;
 import wblut.math.*;
 import java.util.List;
 
-WB_GeometryFactory factory;
+WB_GeometryFactory3D factory;
 WB_Render2D render;
 
 
@@ -14,7 +14,7 @@ List<WB_Circle> circles;
 
 void setup() {
   size(800, 800);
-  factory=new WB_GeometryFactory();
+  factory=new WB_GeometryFactory3D();
   render=new WB_Render2D(this);
 }
 

@@ -51,7 +51,7 @@ public class HEM_Dual extends HEM_Modifier {
 	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
-		HE_Mesh result = new HE_Mesh(new HEC_Dual(mesh).setFixNonPlanarFaces(fixNonPlanarFaces).setKeepBoundary(keepBoundary));
+		HE_Mesh result = new HE_Mesh(new HEC_Dual(mesh).setFixNonPlanarFaces(fixNonPlanarFaces).setPreserveBoundaries(keepBoundary));
 		mesh.set(result);
 		return mesh;
 	}

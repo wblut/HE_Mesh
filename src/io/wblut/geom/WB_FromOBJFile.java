@@ -18,9 +18,9 @@ public class WB_FromOBJFile {
 	private WB_FromOBJFile() {
 	}
 
-	public static WB_Mesh readMesh(String path, double scale) {
+	public static WB_SimpleMesh readMesh(String path, double scale) {
 		if (path == null) {
-			return new WB_Mesh();
+			return new WB_SimpleMesh();
 		}
 		final File file = new File(path);
 		final List<WB_Point> vertexList = new FastList<WB_Point>();
@@ -30,7 +30,7 @@ public class WB_FromOBJFile {
 				final BufferedReader reader = new BufferedReader(
 						new InputStreamReader(is, "UTF-8"));) {
 			if (is == null) {
-				return new WB_Mesh();
+				return new WB_SimpleMesh();
 			}
 			String line;
 			while ((line = reader.readLine()) != null) {
@@ -59,11 +59,11 @@ public class WB_FromOBJFile {
 				final int[] tempFace = faceList.get(i);
 				faces[i] = tempFace;
 			}
-			return new WB_Mesh(vertexList, faces);
+			return new WB_SimpleMesh(vertexList, faces);
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-		return new WB_Mesh();
+		return new WB_SimpleMesh();
 	}
 
 	// Code excerpts from processing.core

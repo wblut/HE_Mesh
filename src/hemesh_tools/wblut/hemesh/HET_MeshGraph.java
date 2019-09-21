@@ -24,9 +24,9 @@ import org.eclipse.collections.impl.list.mutable.FastList;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_Geodesic;
 import wblut.geom.WB_CoordOp3D;
-import wblut.geom.WB_Mesh;
 import wblut.geom.WB_Network;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_SimpleMesh;
 import wblut.geom.WB_Triangulation2D;
 import wblut.geom.WB_Triangulation3D;
 
@@ -48,7 +48,7 @@ public class HET_MeshGraph {
 	 *
 	 * @param mesh
 	 */
-	public HET_MeshGraph(final WB_Mesh mesh) {
+	public HET_MeshGraph(final WB_SimpleMesh mesh) {
 		nodes = new Node[mesh.getNumberOfVertices()];
 		for (int i = 0; i < mesh.getNumberOfVertices(); i++) {
 			nodes[i] = new Node(i, mesh.getVertex(i));
@@ -73,37 +73,7 @@ public class HET_MeshGraph {
 		lastSource = -1;
 	}
 
-	/**
-	 *
-	 *
-	 * @param mesh
-	 * @param offset
-	 */
-	public HET_MeshGraph(final WB_Mesh mesh, final double offset) {
-		nodes = new Node[mesh.getNumberOfVertices()];
-		for (int i = 0; i < mesh.getNumberOfVertices(); i++) {
-			nodes[i] = new Node(i,
-					new WB_Point(mesh.getVertex(i)).addMulSelf(offset, mesh.getVertexNormal(i)));
-		}
-		final int[][] meshedges = mesh.getEdgesAsInt();
-		WB_Coord p0;
-		WB_Coord p1;
-		Node v0;
-		Node v1;
-		double d;
-		for (int i = 0; i < meshedges.length; i++) {
-			if (meshedges[i][0] != meshedges[i][1]) {
-				p0 = mesh.getVertex(meshedges[i][0]);
-				p1 = mesh.getVertex(meshedges[i][1]);
-				d = WB_CoordOp3D.getDistance3D(p0, p1);
-				v0 = nodes[meshedges[i][0]];
-				v1 = nodes[meshedges[i][1]];
-				v0.neighbors.add(new Edge(v1, d));
-				v1.neighbors.add(new Edge(v0, d));
-			}
-		}
-		lastSource = -1;
-	}
+
 
 	/**
 	 *

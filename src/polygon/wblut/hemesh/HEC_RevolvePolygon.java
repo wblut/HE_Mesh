@@ -130,7 +130,7 @@ public class HEC_RevolvePolygon extends HEC_Creator {
 			}
 		}
 		final HEC_FromFacelist fl = new HEC_FromFacelist();
-		fl.setVertices(points).setFaces(faces).setDuplicate(false).setCheckNormals(false);
+		fl.setVertices(points).setFaces(faces).setCheckDuplicateVertices(false).setCheckNormals(false);
 		return fl.createBase();
 	}
 }

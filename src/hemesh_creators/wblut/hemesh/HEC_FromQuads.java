@@ -97,17 +97,17 @@ public class HEC_FromQuads extends HEC_Creator {
 			final WB_Point[] vertices = new WB_Point[nq * 4];
 			final int[][] faces = new int[nq][4];
 			for (int i = 0; i < nq; i++) {
-				vertices[4 * i] = quads[i].p1;
-				vertices[4 * i + 1] = quads[i].p2;
-				vertices[4 * i + 2] = quads[i].p3;
-				vertices[4 * i + 3] = quads[i].p4;
+				vertices[4 * i] = quads[i].getP1();
+				vertices[4 * i + 1] = quads[i].getP2();
+				vertices[4 * i + 2] = quads[i].getP3();
+				vertices[4 * i + 3] = quads[i].getP4();
 				faces[i][0] = 4 * i;
 				faces[i][1] = 4 * i + 1;
 				faces[i][2] = 4 * i + 2;
 				faces[i][3] = 4 * i + 3;
 			}
 			final HEC_FromFacelist ffl = new HEC_FromFacelist().setVertices(vertices).setFaces(faces)
-					.setDuplicate(true);
+					.setCheckDuplicateVertices(true);
 			return ffl.createBase();
 		}
 		return null;

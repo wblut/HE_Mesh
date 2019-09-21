@@ -6,7 +6,7 @@ List<WB_Point> points;
 List<WB_VoronoiCell2D> voronoiXY;
 
 WB_Render3D render;
-WB_GeometryFactory gf=new WB_GeometryFactory();
+WB_GeometryFactory3D gf=new WB_GeometryFactory3D();
 
 void setup() {
   size(1000, 1000, P3D);

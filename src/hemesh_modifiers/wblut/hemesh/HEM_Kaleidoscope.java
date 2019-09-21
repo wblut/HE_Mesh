@@ -151,7 +151,7 @@ public class HEM_Kaleidoscope extends HEM_Modifier {
 		for (int i = 0; i < n - 1; i++) {
 			mesh.add(copies[i + 1]);
 		}
-		mesh.cleanUnusedElementsByFace();
+		mesh.removeUnconnectedElements();
 		mesh.uncapBoundaryHalfedges();
 		HE_MeshOp.pairHalfedges(mesh);
 		HE_MeshOp.capHalfedges(mesh);

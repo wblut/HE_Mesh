@@ -10,7 +10,7 @@
 package wblut.hemesh;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
@@ -29,7 +29,7 @@ public class HEC_Prism extends HEC_Creator {
 	/**
 	 *
 	 */
-	private static WB_GeometryFactory gf = new WB_GeometryFactory();
+	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
 	/** The facets. */
 	private int facets;
 	/** The thickness. */
@@ -147,7 +147,7 @@ public class HEC_Prism extends HEC_Creator {
 			}
 		}
 		final HEC_FromFacelist fl = new HEC_FromFacelist();
-		fl.setVertices(points).setFaces(faces).setDuplicate(false);
+		fl.setVertices(points).setFaces(faces).setCheckDuplicateVertices(false);
 		return HE_MeshOp.flipFaces(fl.createBase());
 	}
 }

@@ -28,13 +28,13 @@ import wblut.geom.WB_CoordCollection;
 import wblut.geom.WB_Curve;
 import wblut.geom.WB_Danzer3D;
 import wblut.geom.WB_Danzer3D.WB_DanzerTile3D;
-import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_GeometryOp3D;
 import wblut.geom.WB_Hexagon;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Map;
 import wblut.geom.WB_Map2D;
-import wblut.geom.WB_Mesh;
+
 import wblut.geom.WB_Network;
 import wblut.geom.WB_Network.Connection;
 import wblut.geom.WB_Network.Node;
@@ -50,10 +50,11 @@ import wblut.geom.WB_QuadtreeInteger;
 import wblut.geom.WB_Ray;
 import wblut.geom.WB_Ring;
 import wblut.geom.WB_Segment;
+import wblut.geom.WB_SimpleMesh;
 import wblut.geom.WB_Tetrahedron;
 import wblut.geom.WB_Transform3D;
 import wblut.geom.WB_Triangle;
-import wblut.geom.WB_TriangleGenerator;
+import wblut.geom.WB_TriangleFactory;
 import wblut.geom.WB_Triangulation2D;
 import wblut.geom.WB_Triangulation3D;
 import wblut.geom.WB_Vector;
@@ -82,7 +83,7 @@ public class WB_Render3D extends WB_Render2D {
 	/**
 	 *
 	 */
-	private WB_GeometryFactory				geometryfactory	= new WB_GeometryFactory();
+	private WB_GeometryFactory3D				geometryfactory	= new WB_GeometryFactory3D();
 	public static final WB_ProgressTracker	tracker			= WB_ProgressTracker
 			.instance();
 	/**
@@ -2202,7 +2203,7 @@ public class WB_Render3D extends WB_Render2D {
 	 *
 	 * @param mesh
 	 */
-	public void drawMesh(final WB_Mesh mesh) {
+	public void drawMesh(final WB_SimpleMesh mesh) {
 		if (mesh == null) {
 			return;
 		}
@@ -2219,7 +2220,7 @@ public class WB_Render3D extends WB_Render2D {
 	 *
 	 * @param mesh
 	 */
-	public void drawMeshEdges(final WB_Mesh mesh) {
+	public void drawMeshEdges(final WB_SimpleMesh mesh) {
 		if (mesh == null) {
 			return;
 		}
@@ -2236,7 +2237,7 @@ public class WB_Render3D extends WB_Render2D {
 	 *
 	 * @param mesh
 	 */
-	public void drawMeshFaces(final WB_Mesh mesh) {
+	public void drawMeshFaces(final WB_SimpleMesh mesh) {
 		if (mesh == null) {
 			return;
 		}
@@ -5048,10 +5049,10 @@ public class WB_Render3D extends WB_Render2D {
 
 	public void drawQuad(final WB_Quad quad) {
 		home.beginShape();
-		vertex(quad.p1);
-		vertex(quad.p2);
-		vertex(quad.p3);
-		vertex(quad.p4);
+		vertex(quad.getP1());
+		vertex(quad.getP2());
+		vertex(quad.getP3());
+		vertex(quad.getP4());
 		home.endShape(PConstants.CLOSE);
 	}
 
@@ -5064,11 +5065,11 @@ public class WB_Render3D extends WB_Render2D {
 
 	public void drawPentagon(final WB_Pentagon pentagon) {
 		home.beginShape();
-		vertex(pentagon.p1);
-		vertex(pentagon.p2);
-		vertex(pentagon.p3);
-		vertex(pentagon.p4);
-		vertex(pentagon.p5);
+		vertex(pentagon.getP1());
+		vertex(pentagon.getP2());
+		vertex(pentagon.getP3());
+		vertex(pentagon.getP4());
+		vertex(pentagon.getP5());
 		home.endShape(PConstants.CLOSE);
 	}
 
@@ -5082,12 +5083,12 @@ public class WB_Render3D extends WB_Render2D {
 
 	public void drawHexagon(final WB_Hexagon hexagon) {
 		home.beginShape();
-		vertex(hexagon.p1);
-		vertex(hexagon.p2);
-		vertex(hexagon.p3);
-		vertex(hexagon.p4);
-		vertex(hexagon.p5);
-		vertex(hexagon.p6);
+		vertex(hexagon.getP1());
+		vertex(hexagon.getP2());
+		vertex(hexagon.getP3());
+		vertex(hexagon.getP4());
+		vertex(hexagon.getP5());
+		vertex(hexagon.getP6());
 		home.endShape(PConstants.CLOSE);
 	}
 
@@ -5100,14 +5101,14 @@ public class WB_Render3D extends WB_Render2D {
 
 	public void drawOctagon(final WB_Octagon octagon) {
 		home.beginShape();
-		vertex(octagon.p1);
-		vertex(octagon.p2);
-		vertex(octagon.p3);
-		vertex(octagon.p4);
-		vertex(octagon.p5);
-		vertex(octagon.p6);
-		vertex(octagon.p7);
-		vertex(octagon.p8);
+		vertex(octagon.getP1());
+		vertex(octagon.getP2());
+		vertex(octagon.getP3());
+		vertex(octagon.getP4());
+		vertex(octagon.getP5());
+		vertex(octagon.getP6());
+		vertex(octagon.getP7());
+		vertex(octagon.getP8());
 		home.endShape(PConstants.CLOSE);
 	}
 
@@ -5131,7 +5132,7 @@ public class WB_Render3D extends WB_Render2D {
 		home.popStyle();
 	}
 
-	public void drawTriangle(final WB_TriangleGenerator triangleGenerator) {
+	public void drawTriangle(final WB_TriangleFactory triangleGenerator) {
 		int[] tri = triangleGenerator.getTriangles();
 		WB_CoordCollection points = triangleGenerator.getPoints();
 		for (int i = 0; i < tri.length; i += 3) {
@@ -5256,7 +5257,6 @@ public class WB_Render3D extends WB_Render2D {
 					valm0 = grid.get(i - 1, j, k) ? 1 : 0;
 					valmm = grid.get(i - 1, j, k - 1) ? 1 : 0;
 					val0m = grid.get(i, j, k - 1) ? 1 : 0;
-					sum = val00 + valm0 + valmm + val0m;
 					sum = val00 + valm0 + valmm + val0m;
 					if (sum == 1 || sum == 3) {
 						line(x, y, z, x, y + grid.getDY(), z);

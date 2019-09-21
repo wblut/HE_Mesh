@@ -15,7 +15,7 @@ import processing.core.PGraphics;
 import processing.opengl.PGraphicsOpenGL;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_Point;
 import wblut.hemesh.HE_Face;
 import wblut.hemesh.HE_Halfedge;
@@ -35,7 +35,7 @@ public class WB_DebugRender3D {
 	/**
 	 *
 	 */
-	private WB_GeometryFactory	geometryfactory	= new WB_GeometryFactory();
+	private WB_GeometryFactory3D	geometryfactory	= new WB_GeometryFactory3D();
 
 	/**
 	 *

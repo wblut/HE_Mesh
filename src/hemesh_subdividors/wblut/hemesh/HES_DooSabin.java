@@ -203,7 +203,7 @@ public class HES_DooSabin extends HES_Subdividor {
 			currentFace++;
 		}
 		final HEC_FromFacelist fl = new HEC_FromFacelist().setFaces(faces)
-				.setVertices(newVertices).setDuplicate(false);
+				.setVertices(newVertices).setCheckDuplicateVertices(false);
 		mesh.setNoCopy(fl.create());
 		fItr = mesh.fItr();
 		currentFace = 0;

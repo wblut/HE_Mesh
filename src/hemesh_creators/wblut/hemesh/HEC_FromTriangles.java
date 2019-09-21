@@ -10,6 +10,7 @@
 package wblut.hemesh;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.collections.impl.list.mutable.FastList;
 import wblut.geom.WB_Coord;
@@ -25,7 +26,7 @@ import wblut.geom.WB_Triangle;
  */
 public class HEC_FromTriangles extends HEC_Creator {
 	/** Source triangles. */
-	FastList<WB_Triangle> triangles;
+	List<WB_Triangle> triangles;
 
 	/**
 	 * Instantiates a new HEC_FromTriangles.
@@ -86,7 +87,7 @@ public class HEC_FromTriangles extends HEC_Creator {
 			// triangles.size()
 			// + " triangles as faces.");
 			final HEC_FromFacelist ffl = new HEC_FromFacelist().setVertices(vertices).setFaces(faces)
-					.setDuplicate(true);
+					.setCheckDuplicateVertices(true);
 			return ffl.createBase();
 		}
 		return null;

@@ -33,7 +33,7 @@ import wblut.math.WB_Epsilon;
 public class WB_PolygonSplitter {
 	List<PolyEdge> splitPoly;
 	List<PolyEdge> edgesOnLine;
-	WB_GeometryFactory gf = new WB_GeometryFactory();
+	WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
 
 	// Split a convex or concave polygon without holes with a given line
 	public List<WB_Polygon> splitSimplePolygon2D(final WB_Polygon polygon, final WB_Line L) {

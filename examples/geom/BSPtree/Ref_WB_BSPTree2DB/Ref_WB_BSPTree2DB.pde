@@ -13,7 +13,7 @@ WB_Polygon poly,star;
 WB_BSPTree2D tree;
 List<WB_Polygon> pos= new ArrayList<WB_Polygon>();
 List<WB_Polygon> neg= new ArrayList<WB_Polygon>();
-WB_GeometryFactory gf=new WB_GeometryFactory();
+WB_GeometryFactory3D gf=new WB_GeometryFactory3D();
 WB_Render3D render;
 void setup() {
 

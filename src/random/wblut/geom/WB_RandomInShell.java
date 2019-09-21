@@ -19,7 +19,7 @@ import wblut.math.WB_MTRandom;
  * @author Frederik Vanhoutte, W:Blut
  *
  */
-public class WB_RandomInShell implements WB_RandomGenerator {
+public class WB_RandomInShell extends WB_RandomGenerator {
 	private final WB_MTRandom randomGen;
 	private double innerRadius;
 	private double outerRadius;

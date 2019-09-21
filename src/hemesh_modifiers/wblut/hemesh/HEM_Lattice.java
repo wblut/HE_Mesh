@@ -15,7 +15,7 @@ import org.eclipse.collections.impl.map.mutable.primitive.LongLongHashMap;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
@@ -30,7 +30,7 @@ public class HEM_Lattice extends HEM_Modifier {
 	/**
 	 *
 	 */
-	private static final WB_GeometryFactory	gf	= new WB_GeometryFactory();
+	private static final WB_GeometryFactory3D	gf	= new WB_GeometryFactory3D();
 	/**
 	 *
 	 */
@@ -220,10 +220,11 @@ public class HEM_Lattice extends HEM_Modifier {
 				.setHardEdgeChamfer(hew).setFuseAngle(fuseAngle)
 				.setThresholdAngle(thresholdAngle);
 		mesh.modify(extm);
+
 		tracker.setDuringStatus(this, "Creating inner mesh.");
 		HEC_Copy cc = new HEC_Copy().setMesh(mesh);
 		final HE_Mesh innerMesh = cc.create();
-		LongLongHashMap allheCorrelation = cc.halfedgeCorrelation;
+		Map<Long,Long> allheCorrelation = cc.halfedgeCorrelation;
 		WB_ProgressCounter counter = new WB_ProgressCounter(
 				mesh.getNumberOfFaces(), 10);
 		tracker.setCounterStatus(this, "Creating face correlations.", counter);
@@ -244,12 +245,12 @@ public class HEM_Lattice extends HEM_Modifier {
 		final HashMap<Long, Long> heCorrelation = new HashMap<Long, Long>();
 		HE_Halfedge he1;
 		HE_Halfedge he2;
-		long[] keys = allheCorrelation.keySet().toArray();
-		long[] values = allheCorrelation.values().toArray();
+		Object[] keys = allheCorrelation.keySet().toArray();
+		Object[] values =allheCorrelation.values().toArray();
 		for (int i = 0; i < keys.length; i++) {
-			he1 = mesh.getHalfedgeWithKey(keys[i]);
+			he1 = mesh.getHalfedgeWithKey((Long)keys[i]);
 			if (he1.getFace() == null) {
-				he2 = innerMesh.getHalfedgeWithKey(values[i]);
+				he2 = innerMesh.getHalfedgeWithKey((Long)values[i]);
 				heCorrelation.put(he1.getKey(), he2.getKey());
 			}
 			counter.increment();
@@ -261,8 +262,8 @@ public class HEM_Lattice extends HEM_Modifier {
 		ff.applySelf(innerMesh);
 		final int nf = mesh.getNumberOfFaces();
 		final HE_Face[] origFaces = mesh.getFacesAsArray();
-		mesh.selectAllFaces();
-		innerMesh.selectAllFaces();
+		mesh.selectAllFaces("outer");
+		innerMesh.selectAllFaces("inner");
 		mesh.add(innerMesh);
 		HE_Face fo;
 		HE_Face fi;
@@ -400,9 +401,10 @@ public class HEM_Lattice extends HEM_Modifier {
 				.setThresholdAngle(thresholdAngle);
 		selection.modify(extm);
 		tracker.setDuringStatus(this, "Creating inner mesh.");
+		
 		HEC_Copy cc = new HEC_Copy().setMesh(selection.getParent());
 		final HE_Mesh innerMesh = cc.create();
-		LongLongHashMap allheCorrelation = cc.halfedgeCorrelation;
+		Map<Long,Long> allheCorrelation = cc.halfedgeCorrelation;
 		WB_ProgressCounter counter = new WB_ProgressCounter(
 				selection.getParent().getNumberOfFaces(), 10);
 		tracker.setCounterStatus(this, "Creating face correlations.", counter);
@@ -424,12 +426,12 @@ public class HEM_Lattice extends HEM_Modifier {
 		final HashMap<Long, Long> heCorrelation = new HashMap<Long, Long>();
 		HE_Halfedge he1;
 		HE_Halfedge he2;
-		long[] keys = allheCorrelation.keySet().toArray();
-		long[] values = allheCorrelation.values().toArray();
+		Object[] keys = allheCorrelation.keySet().toArray();
+		Object[] values =allheCorrelation.values().toArray();
 		for (int i = 0; i < keys.length; i++) {
-			he1 = selection.getParent().getHalfedgeWithKey(keys[i]);
+			he1 = selection.getParent().getHalfedgeWithKey((Long)keys[i]);
 			if (he1.getFace() == null) {
-				he2 = innerMesh.getHalfedgeWithKey(values[i]);
+				he2 = innerMesh.getHalfedgeWithKey((Long)values[i]);
 				heCorrelation.put(he1.getKey(), he2.getKey());
 			}
 			counter.increment();
@@ -441,8 +443,8 @@ public class HEM_Lattice extends HEM_Modifier {
 		ff.applySelf(innerMesh);
 		final int nf = selection.getParent().getNumberOfFaces();
 		final HE_Face[] origFaces = selection.getParent().getFacesAsArray();
-		selection.getParent().selectAllFaces();
-		innerMesh.selectAllFaces();
+		selection.getParent().selectAllFaces("outer");
+		innerMesh.selectAllFaces("inner");
 		selection.getParent().add(innerMesh);
 		HE_Face fo;
 		HE_Face fi;
@@ -541,7 +543,7 @@ public class HEM_Lattice extends HEM_Modifier {
 			selection.getParent().setNext(he2, heoi);
 			selection.getParent().setNext(heoi, he1);
 			fNew = new HE_Face();
-			boundary.add(boundary);
+			boundary.add(fNew);
 			selection.getParent().add(fNew);
 			selection.getParent().setHalfedge(fNew, he1);
 			selection.getParent().setFace(he1, fNew);

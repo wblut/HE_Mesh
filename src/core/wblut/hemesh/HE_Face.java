@@ -21,7 +21,7 @@ import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Triangle;
-import wblut.geom.WB_TriangleGenerator;
+import wblut.geom.WB_TriangleFactory;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
@@ -32,7 +32,7 @@ import wblut.math.WB_Epsilon;
  *
  */
 public class HE_Face extends HE_MeshElement
-		implements Comparable<HE_Face>, WB_TriangleGenerator {
+		implements Comparable<HE_Face>, WB_TriangleFactory {
 	/** Halfedge associated with this face. */
 	private HE_Halfedge	_halfedge;
 	private int			textureId;

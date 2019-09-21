@@ -71,7 +71,7 @@ public class HEC_FromTriangulation extends HEC_Creator {
 	protected HE_Mesh createBase() {
 
 		final HEC_FromFacelist ffl = new HEC_FromFacelist().setVertices(points).setFaces(tri.getTriangles())
-				.setDuplicate(false);
+				.setCheckDuplicateVertices(false);
 		return ffl.createBase();
 
 	}

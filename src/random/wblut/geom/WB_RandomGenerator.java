@@ -6,41 +6,30 @@
  */
 package wblut.geom;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Interface for random vector/point generators
  *
  * @author frederikvanhoutte
  *
  */
-public interface WB_RandomGenerator extends WB_RandomPoint, WB_RandomVector {
+public abstract class WB_RandomGenerator implements WB_RandomPoint, WB_RandomVector {
 	/**
 	 * Set the seed for the RNG.
 	 *
 	 * @param seed
 	 * @return this
 	 */
-	public WB_RandomGenerator setSeed(final long seed);
+	abstract public WB_RandomGenerator setSeed(final long seed);
 
-	/**
-	 * Get the next random point.
-	 *
-	 * @return
-	 */
-	@Override
-	public WB_Point nextPoint();
 
-	/**
-	 * Get the next random vector.
-	 *
-	 * @return
-	 */
-	@Override
-	public WB_Vector nextVector();
 
 	/**
 	 * Reset the RNG.
 	 */
-	public void reset();
+	abstract public void reset();
 
 	/**
 	 * Set point offset.
@@ -48,7 +37,7 @@ public interface WB_RandomGenerator extends WB_RandomPoint, WB_RandomVector {
 	 * @param offset
 	 * @return
 	 */
-	public WB_RandomGenerator setOffset(WB_Coord offset);
+	abstract public WB_RandomGenerator setOffset(WB_Coord offset);
 
 	/**
 	 * Set point offset.
@@ -57,7 +46,7 @@ public interface WB_RandomGenerator extends WB_RandomPoint, WB_RandomVector {
 	 * @param y
 	 * @return
 	 */
-	public WB_RandomGenerator setOffset(double x, double y);
+	abstract public WB_RandomGenerator setOffset(double x, double y);
 
 	/**
 	 * Set point offset.
@@ -67,5 +56,22 @@ public interface WB_RandomGenerator extends WB_RandomPoint, WB_RandomVector {
 	 * @param z
 	 * @return
 	 */
-	public WB_RandomGenerator setOffset(double x, double y, double z);
+	abstract public WB_RandomGenerator setOffset(double x, double y, double z);
+	
+	
+	public WB_PointCollection getPoints(int N) {
+		List<WB_Point> points=new ArrayList<WB_Point>();
+		for(int i=0;i<N;i++) {
+			points.add(nextPoint());
+		}
+		return WB_PointCollection.getCollection(points);
+	}
+	
+	public WB_VectorCollection getVectors(int N) {
+		List<WB_Vector> points=new ArrayList<WB_Vector>();
+		for(int i=0;i<N;i++) {
+			points.add(nextVector());
+		}
+		return WB_VectorCollection.getCollection(points);
+	}
 }

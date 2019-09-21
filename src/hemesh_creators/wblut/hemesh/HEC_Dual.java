@@ -24,9 +24,6 @@ import wblut.geom.WB_Point;
 public class HEC_Dual extends HEC_Creator {
 	/** Source mesh. */
 	private HE_Mesh	source;
-	private boolean	fixNonPlanarFaces;
-	private boolean	setCenter;
-	private boolean	keepBoundary;
 
 	/**
 	 * Instantiates a new HEC_Dual.
@@ -35,6 +32,10 @@ public class HEC_Dual extends HEC_Creator {
 	public HEC_Dual() {
 		super();
 		setOverride(true);
+		setModelViewOverride(true);
+		parameters.set("fixnonplanarfaces", true);
+		parameters.set("resetcenter", false);
+		parameters.set("preserveboundary", false);
 	}
 
 	/**
@@ -46,7 +47,18 @@ public class HEC_Dual extends HEC_Creator {
 	public HEC_Dual(final HE_Mesh mesh) {
 		this();
 		source = mesh;
-		fixNonPlanarFaces = true;
+	}
+	
+	protected boolean getFixNonPlanarFaces() {
+		return parameters.get("fixnonplanarfaces", true);
+	}
+
+	protected boolean getResetCenter() {
+		return parameters.get("resetcenter", false);
+	}
+	
+	protected boolean getPreserveBoundaries() {
+		return parameters.get("preserveboundaries", false);
 	}
 
 	/**
@@ -67,8 +79,8 @@ public class HEC_Dual extends HEC_Creator {
 	 * @param b
 	 * @return
 	 */
-	public HEC_Dual resetCenter(final boolean b) {
-		setCenter = b;
+	public HEC_Dual setResetCenter(final boolean b) {
+		parameters.set("resetcenter",  b);
 		return this;
 	}
 
@@ -78,8 +90,8 @@ public class HEC_Dual extends HEC_Creator {
 	 * @param b
 	 * @return
 	 */
-	public HEC_Dual setKeepBoundary(final boolean b) {
-		keepBoundary = b;
+	public HEC_Dual setPreserveBoundaries(final boolean b) {
+		parameters.set("preserveboundaries",  b);
 		return this;
 	}
 
@@ -90,7 +102,7 @@ public class HEC_Dual extends HEC_Creator {
 	 * @return
 	 */
 	public HEC_Dual setFixNonPlanarFaces(final boolean b) {
-		fixNonPlanarFaces = b;
+		parameters.set("fixnonplanarfaces",b);
 		return this;
 	}
 
@@ -114,7 +126,7 @@ public class HEC_Dual extends HEC_Creator {
 			result.add(cv);
 		}
 		HE_Halfedge he;
-		if (keepBoundary) {
+		if (getPreserveBoundaries()) {
 			final Iterator<HE_Halfedge> heItr = source.heItr();
 			while (heItr.hasNext()) {
 				he = heItr.next();
@@ -162,7 +174,7 @@ public class HEC_Dual extends HEC_Creator {
 				HE_MeshOp.cycleHalfedges(result, faceHalfedges);
 				result.addHalfedges(faceHalfedges);
 				result.add(nf);
-			} else if (keepBoundary) {
+			} else if (getPreserveBoundaries()) {
 				he = v.getHalfedge();
 				while (!he.isOuterBoundary()) {
 					he = he.getNextInVertex();
@@ -218,12 +230,13 @@ public class HEC_Dual extends HEC_Creator {
 		}
 		HE_MeshOp.pairHalfedges(result);
 		HE_MeshOp.capHalfedges(result);
-		if (setCenter) {
+		if (getResetCenter()) {
 			result.moveToSelf(HE_MeshOp.getCenter(source));
 		}
 		HE_MeshOp.flipFaces(result);
 		final List<HE_Face> faces = result.getFaces();
 		final int fs = faces.size();
+		boolean fixNonPlanarFaces=getFixNonPlanarFaces();
 		for (int i = 0; i < fs; i++) {
 			if (!faces.get(i).isPlanar() && fixNonPlanarFaces) {
 				HEM_TriSplit.splitFaceTri(result, faces.get(i), centers.get(i));

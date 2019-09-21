@@ -9,13 +9,15 @@ HE_MeshCollection meshes;
 WB_Render render;
 
 void setup() {
-  size(1000, 1000, P3D);
+ fullScreen(P3D);
   smooth(8);
   HEMC_WeairePhelan wp=new HEMC_WeairePhelan();
-  wp.setOrigin(new WB_Point(-200, -200, -200));
-  wp.setExtents(new WB_Vector(400, 400, 400));
-  wp.setNumberOfUnits(2, 2, 2);
+  wp.setOrigin(new WB_Point(0, 0, 0));
+  wp.setExtents(new WB_Vector(800,500, 300));
+  wp.setNumberOfUnits(7,2,3);
   wp.setScale(150, 150, 150);
+  wp.setSpacing(0.1);
+  //wp.setCrop(true);
   meshes=wp.create();
   render=new WB_Render(this);
 }
@@ -31,6 +33,6 @@ void draw() {
   rotateX(TWO_PI/height*mouseY-PI);
   noStroke();
   render.drawFaces(meshes);
-  stroke(0);
+  stroke(255,0,0);
   render.drawEdges(meshes);
 }

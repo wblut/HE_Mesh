@@ -35,7 +35,7 @@ void draw() {
   noStroke();
   render.drawFaces(mesh);
 
-
+noLights();
   fill(255, 0, 0);
   render.drawFaces(mesh.getSelection("picked"));
   fill(0, 255, 0);

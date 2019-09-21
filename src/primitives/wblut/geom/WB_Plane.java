@@ -95,6 +95,8 @@ public class WB_Plane implements WB_Geometry3D {
 		this.n.normalizeSelf();
 		setAxes();
 	}
+	
+
 
 	/**
 	 *

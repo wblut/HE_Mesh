@@ -2,7 +2,7 @@ import wblut.processing.*;
 import wblut.geom.*;
 import java.util.List;
 
-WB_GeometryFactory gf;
+WB_GeometryFactory3D gf;
 WB_Render2D render;
 
 WB_Triangle T;
@@ -12,7 +12,7 @@ WB_RandomPoint generator;
 
 void setup() {
   size(800, 800);
-  gf=new WB_GeometryFactory();
+  gf=new WB_GeometryFactory3D();
   render=new WB_Render2D(this);
   generator=new WB_RandomRectangle().setSize(800, 800);
   create();

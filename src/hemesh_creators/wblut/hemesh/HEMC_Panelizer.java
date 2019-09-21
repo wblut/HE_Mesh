@@ -19,32 +19,38 @@ import wblut.math.WB_ScalarParameter;
 public class HEMC_Panelizer extends HEMC_MultiCreator {
 	/** Source mesh. */
 	private HE_Mesh				mesh;
-	private WB_ScalarParameter	thickness;
-	private WB_ScalarParameter	offset;
 
 	public HEMC_Panelizer() {
 		super();
-		thickness = new WB_ConstantScalarParameter(0);
-		offset = new WB_ConstantScalarParameter(0);
+		setThickness(0);
+		setOffset(0);
+	}
+	
+	protected WB_ScalarParameter getThickness() {
+		return (WB_ScalarParameter)parameters.get("thickness", new WB_ConstantScalarParameter(0.0));
+	}
+	
+	protected WB_ScalarParameter getOffset() {
+		return (WB_ScalarParameter)parameters.get("offset", new WB_ConstantScalarParameter(0.0));
 	}
 
 	public HEMC_Panelizer setThickness(final double d) {
-		thickness = new WB_ConstantScalarParameter(d);
+		parameters.set("thickness", new WB_ConstantScalarParameter(d));
 		return this;
 	}
 
-	public HEMC_Panelizer setOffset(final double d) {
-		offset = new WB_ConstantScalarParameter(d);
+	public HEMC_Panelizer setOffset(final double o) {
+		parameters.get("offset", new WB_ConstantScalarParameter(o));
 		return this;
 	}
 
 	public HEMC_Panelizer setThickness(final WB_ScalarParameter d) {
-		thickness = d;
+		parameters.set("thickness", d);
 		return this;
 	}
 
-	public HEMC_Panelizer setOffset(final WB_ScalarParameter d) {
-		offset = d;
+	public HEMC_Panelizer setOffset(final WB_ScalarParameter o) {
+		parameters.get("offset", o);
 		return this;
 	}
 
@@ -69,6 +75,8 @@ public class HEMC_Panelizer extends HEMC_MultiCreator {
 		int id = 0;
 		final HEC_Polygon pc = new HEC_Polygon();
 		WB_Coord fc;
+		WB_ScalarParameter thickness=getThickness();
+		WB_ScalarParameter offset=getOffset();
 		for (final HE_Face f : mesh.getFaces()) {
 			fc = HE_MeshOp.getFaceCenter(f);
 			pc.setThickness(-thickness.evaluate(fc.xd(), fc.yd(), fc.zd()));

@@ -6,6 +6,8 @@
  */
 package wblut.hemesh;
 
+import java.util.Map;
+
 import org.eclipse.collections.impl.map.mutable.primitive.LongLongHashMap;
 
 import wblut.math.WB_ConstantScalarParameter;
@@ -64,9 +66,11 @@ public class HEM_Shell extends HEM_Modifier {
 		if (d == WB_ScalarParameter.ZERO) {
 			return mesh;
 		}
+		
 		HEC_Copy cc = new HEC_Copy().setMesh(mesh);
 		final HE_Mesh innerMesh = cc.create();
-		LongLongHashMap heCorrelation = cc.halfedgeCorrelation;
+		
+		Map<Long,Long> heCorrelation = cc.halfedgeCorrelation;
 		final HEM_VertexExpand expm = new HEM_VertexExpand()
 				.setDistance(new WB_FactorScalarParameter(-1.0, d));
 		innerMesh.modify(expm);
@@ -76,13 +80,13 @@ public class HEM_Shell extends HEM_Modifier {
 		mesh.add(innerMesh);
 		HE_Halfedge he1, he2, heio, heoi;
 		HE_Face fNew;
-		long[] keys = heCorrelation.keySet().toArray();
-		long[] values = heCorrelation.values().toArray();
-		HE_Selection sel = mesh.getNewSelection("walls");
+		Object[] keys = heCorrelation.keySet().toArray();
+		Object[] values =heCorrelation.values().toArray();
+		HE_Selection sel = mesh.getNewSelection("boundary");
 		for (int i = 0; i < keys.length; i++) {
-			he1 = mesh.getHalfedgeWithKey(keys[i]);
+			he1 = mesh.getHalfedgeWithKey((Long)keys[i]);
 			if (he1.isOuterBoundary()) {
-				he2 = mesh.getHalfedgeWithKey(values[i]);
+				he2 = mesh.getHalfedgeWithKey((Long)values[i]);
 				heio = new HE_Halfedge();
 				heoi = new HE_Halfedge();
 				mesh.setVertex(heio, he1.getPair().getVertex());

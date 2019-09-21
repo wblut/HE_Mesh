@@ -4,7 +4,7 @@ import wblut.geom.*;
 import wblut.math.*;
 import java.util.List;
 
-WB_GeometryFactory gf=new WB_GeometryFactory();
+WB_GeometryFactory3D gf=new WB_GeometryFactory3D();
 WB_Render2D render;
 List<WB_Polygon> text;
 WB_AABB AABB;

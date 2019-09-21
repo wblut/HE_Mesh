@@ -19,6 +19,7 @@ import java.util.zip.GZIPInputStream;
 import org.eclipse.collections.impl.list.mutable.FastList;
 
 import wblut.geom.WB_KDTreeInteger.WB_KDEntryInteger;
+import wblut.hemesh.HE_Mesh;
 import wblut.math.WB_Epsilon;
 
 /**
@@ -28,8 +29,7 @@ import wblut.math.WB_Epsilon;
  *
  */
 public abstract class WB_CoordCollection {
-	private WB_CoordCollection() {
-	}
+	
 
 	public static WB_CoordCollection getCollection(final WB_Coord[] coords) {
 		return new WB_CoordCollectionArray(coords);
@@ -45,15 +45,33 @@ public abstract class WB_CoordCollection {
 	}
 
 	public static WB_CoordCollection getCollection(
-			final WB_PointGenerator generator, final int n) {
-		WB_Coord[] coords = new WB_Point[n];
-		for (int i = 0; i < n; i++) {
-			coords[i] = generator.nextPoint();
-		}
-		return new WB_CoordCollectionArray(coords);
+			final Collection<? extends WB_Coord> coords) {
+		return new WB_CoordCollectionList(coords);
 	}
+	
+	public static WB_CoordCollection getCollection(WB_PointFactory generator, int numberOfPoints) { 
+	return new WB_CoordCollectionFactory(generator, numberOfPoints);
+	}
+	
+	public static WB_CoordCollection getCollection(double[][] coords) {
+		return new WB_CoordCollectionRaw(coords);
+	}
+	
+	public static WB_CoordCollection getCollection(float[][] coords) {
+		return new WB_CoordCollectionRaw(coords);
+	}
+	
+	public static WB_CoordCollection getCollection(int[][] coords) {
+		return new WB_CoordCollectionRaw(coords);
+	}
+	
+	public static WB_CoordCollection getCollection(HE_Mesh mesh) {
+		return getCollection(mesh.getVerticesAsCoord());
+	}
+	
 
-	public WB_CoordCollection noise(final WB_VectorGenerator generator) {
+
+	public WB_CoordCollection noise(final WB_VectorFactory generator) {
 		return new WB_CoordCollectionNoise(this, generator);
 	}
 
@@ -67,11 +85,6 @@ public abstract class WB_CoordCollection {
 
 	public WB_CoordCollection unique() {
 		return new WB_CoordCollectionUnique(this);
-	}
-
-	public static WB_CoordCollection getCollection(
-			final Collection<? extends WB_Coord> coords) {
-		return new WB_CoordCollectionList(coords);
 	}
 
 	abstract public WB_Coord get(final int i);
@@ -151,7 +164,93 @@ public abstract class WB_CoordCollection {
 			return list;
 		}
 	}
+	
+	static class WB_CoordCollectionRaw extends WB_CoordCollection {
+		WB_Coord[] array;
 
+		WB_CoordCollectionRaw(final double[][] coords) {
+			this.array = new WB_Point[coords.length];
+			int id=0;
+			for(double[] coord:coords) {
+				array[id++]=new WB_Point(coord[0],coord[1],coord[2]);
+			}
+		}
+		WB_CoordCollectionRaw(final float[][] coords) {
+			this.array = new WB_Point[coords.length];
+			int id=0;
+			for(float[] coord:coords) {
+				array[id++]=new WB_Point(coord[0],coord[1],coord[2]);
+			}
+		}
+		
+		WB_CoordCollectionRaw(final int[][] coords) {
+			this.array = new WB_Point[coords.length];
+			int id=0;
+			for(int[] coord:coords) {
+				array[id++]=new WB_Point(coord[0],coord[1],coord[2]);
+			}
+		}
+
+		@Override
+		public WB_Coord get(final int i) {
+			return array[i];
+		}
+
+		@Override
+		public int size() {
+			return array.length;
+		}
+
+		@Override
+		public WB_Coord[] toArray() {
+			return array;
+		}
+
+		@Override
+		public List<WB_Coord> toList() {
+			List<WB_Coord> list = new FastList<WB_Coord>();
+			for (WB_Coord c : array) {
+				list.add(c);
+			}
+			return list;
+		}
+	}
+
+	static class WB_CoordCollectionFactory extends WB_CoordCollection {
+		WB_Coord[] array;
+
+		WB_CoordCollectionFactory(final WB_PointFactory generator, int numberOfPoints) {
+			this.array = new WB_Point[numberOfPoints] ;
+			for(int i=0;i<numberOfPoints;i++) {
+				array[i]=generator.nextPoint();
+			}
+		}
+
+		@Override
+		public WB_Coord get(final int i) {
+			return array[i];
+		}
+
+		@Override
+		public int size() {
+			return array.length;
+		}
+
+		@Override
+		public WB_Coord[] toArray() {
+			return array;
+		}
+
+		@Override
+		public List<WB_Coord> toList() {
+			List<WB_Coord> list = new FastList<WB_Coord>();
+			for (WB_Coord c : array) {
+				list.add(c);
+			}
+			return list;
+		}
+	}
+	
 	static class WB_CoordCollectionPolygon extends WB_CoordCollection {
 		WB_Polygon polygon;
 
@@ -193,7 +292,7 @@ public abstract class WB_CoordCollection {
 		WB_Coord[]			noise;
 
 		WB_CoordCollectionNoise(final WB_CoordCollection source,
-				final WB_VectorGenerator generator) {
+				final WB_VectorFactory generator) {
 			this.source = source;
 			noise = new WB_Coord[source.size()];
 			for (int i = 0; i < source.size(); i++) {
@@ -355,7 +454,7 @@ public abstract class WB_CoordCollection {
 				final double d) {
 			this.source = source;
 			noise = new WB_Coord[source.size()];
-			WB_VectorGenerator generator = new WB_RandomOnSphere();
+			WB_VectorFactory generator = new WB_RandomOnSphere();
 			for (int i = 0; i < source.size(); i++) {
 				noise[i] = generator.nextVector().mulSelf(d);
 			}

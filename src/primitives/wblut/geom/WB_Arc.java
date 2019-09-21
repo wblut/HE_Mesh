@@ -14,7 +14,7 @@ public class WB_Arc implements WB_Curve {
 	private WB_Point			center;
 	private WB_Vector			normal;
 	private double				radius;
-	private WB_GeometryFactory	geometryfactory	= new WB_GeometryFactory();
+	private WB_GeometryFactory3D	geometryfactory	= new WB_GeometryFactory3D();
 
 	/**
 	 *

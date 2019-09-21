@@ -35,11 +35,12 @@ public class HEM_Clean extends HEM_Modifier {
 		mesh.getFaceVisibility();
 
 		final HEC_FromFacelist ffl = new HEC_FromFacelist().setVertices(mesh.getPoints()).setFaces(mesh.getFacesAsInt())
-				.setDuplicate(true).setCheckNormals(true).setUseFaceInformation(true)
+				.setCheckDuplicateVertices(true).setUseFaceInformation(true)
 				.setFaceInformation(mesh.getFaceColors(), mesh.getFaceUserLabels(), mesh.getFaceVisibility(),
 						mesh.getFaceInternalLabels(), mesh.getFaceTextureIds())
 				.setUseVertexInformation(true).setVertexInformation(mesh.getVertexColors(), mesh.getVertexVisibility(),
 						mesh.getVertexUserLabels(), mesh.getVertexInternalLabels());
+		ffl.setCheckNormals(true);
 
 		mesh.setNoCopy(ffl.create());
 		return mesh;

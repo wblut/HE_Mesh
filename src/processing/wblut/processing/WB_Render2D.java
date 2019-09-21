@@ -36,7 +36,7 @@ import wblut.geom.WB_Ray;
 import wblut.geom.WB_Ring;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Triangle;
-import wblut.geom.WB_TriangleGenerator;
+import wblut.geom.WB_TriangleFactory;
 import wblut.geom.WB_Triangulation2D;
 import wblut.geom.WB_Triangulation2DWithPoints;
 
@@ -1207,7 +1207,7 @@ public class WB_Render2D extends WB_Processing {
 		home.popStyle();
 	}
 
-	public void drawTriangle2D(final WB_TriangleGenerator triangleGenerator) {
+	public void drawTriangle2D(final WB_TriangleFactory triangleGenerator) {
 		int[] tri = triangleGenerator.getTriangles();
 		WB_CoordCollection points = triangleGenerator.getPoints();
 		for (int i = 0; i < tri.length; i += 3) {
@@ -1293,10 +1293,10 @@ public class WB_Render2D extends WB_Processing {
 
 	public void drawQuad2D(final WB_Quad quad) {
 		home.beginShape();
-		vertex2D(quad.p1);
-		vertex2D(quad.p2);
-		vertex2D(quad.p3);
-		vertex2D(quad.p4);
+		vertex2D(quad.getP1());
+		vertex2D(quad.getP2());
+		vertex2D(quad.getP3());
+		vertex2D(quad.getP4());
 		home.endShape(PConstants.CLOSE);
 	}
 
@@ -1309,11 +1309,11 @@ public class WB_Render2D extends WB_Processing {
 
 	public void drawPentagon2D(final WB_Pentagon pentagon) {
 		home.beginShape();
-		vertex2D(pentagon.p1);
-		vertex2D(pentagon.p2);
-		vertex2D(pentagon.p3);
-		vertex2D(pentagon.p4);
-		vertex2D(pentagon.p5);
+		vertex2D(pentagon.getP1());
+		vertex2D(pentagon.getP2());
+		vertex2D(pentagon.getP3());
+		vertex2D(pentagon.getP4());
+		vertex2D(pentagon.getP5());
 		home.endShape(PConstants.CLOSE);
 	}
 
@@ -1327,12 +1327,12 @@ public class WB_Render2D extends WB_Processing {
 
 	public void drawHexagon2D(final WB_Hexagon hexagon) {
 		home.beginShape();
-		vertex2D(hexagon.p1);
-		vertex2D(hexagon.p2);
-		vertex2D(hexagon.p3);
-		vertex2D(hexagon.p4);
-		vertex2D(hexagon.p5);
-		vertex2D(hexagon.p6);
+		vertex2D(hexagon.getP1());
+		vertex2D(hexagon.getP2());
+		vertex2D(hexagon.getP3());
+		vertex2D(hexagon.getP4());
+		vertex2D(hexagon.getP5());
+		vertex2D(hexagon.getP6());
 		home.endShape(PConstants.CLOSE);
 	}
 
@@ -1345,14 +1345,14 @@ public class WB_Render2D extends WB_Processing {
 
 	public void drawOctagon2D(final WB_Octagon octagon) {
 		home.beginShape();
-		vertex2D(octagon.p1);
-		vertex2D(octagon.p2);
-		vertex2D(octagon.p3);
-		vertex2D(octagon.p4);
-		vertex2D(octagon.p5);
-		vertex2D(octagon.p6);
-		vertex2D(octagon.p7);
-		vertex2D(octagon.p8);
+		vertex2D(octagon.getP1());
+		vertex2D(octagon.getP2());
+		vertex2D(octagon.getP3());
+		vertex2D(octagon.getP4());
+		vertex2D(octagon.getP5());
+		vertex2D(octagon.getP6());
+		vertex2D(octagon.getP7());
+		vertex2D(octagon.getP8());
 		home.endShape(PConstants.CLOSE);
 	}
 

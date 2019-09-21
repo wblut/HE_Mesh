@@ -27,7 +27,7 @@ import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordOp3D;
 import wblut.geom.WB_CoordinateSystem;
-import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_GeometryOp3D;
 import wblut.geom.WB_IntersectionResult;
@@ -106,69 +106,10 @@ public class HE_MeshOp {
 		}
 	}
 
-	/**
-	 *
-	 */
-	public static class HET_SelfIntersectionResult {
-		/**
-		 *
-		 */
-		HE_Face f1;
-		/**
-		 *
-		 */
-		HE_Face f2;
-		/**
-		 *
-		 */
-		WB_Segment segment;
-
-		/**
-		 *
-		 *
-		 * @param f1
-		 * @param f2
-		 * @param seg
-		 */
-		public HET_SelfIntersectionResult(final HE_Face f1, final HE_Face f2, final WB_Segment seg) {
-			this.f1 = f1;
-			this.f2 = f2;
-			segment = seg;
-		}
-
-		/**
-		 *
-		 *
-		 * @return
-		 */
-		public HE_Face getFace1() {
-			return f1;
-		}
-
-		/**
-		 *
-		 *
-		 * @return
-		 */
-		public HE_Face getFace2() {
-			return f2;
-		}
-
-		/**
-		 *
-		 *
-		 * @return
-		 */
-		public WB_Segment getSegment() {
-			return segment;
-		}
-	}
-
-	
 	protected HE_MeshOp() {
 	}
 
-	private static WB_GeometryFactory gf = new WB_GeometryFactory();
+	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
 	public static final WB_ProgressTracker tracker = WB_ProgressTracker.instance();
 
 	/**
@@ -2117,8 +2058,20 @@ public class HE_MeshOp {
 	 *
 	 * @param mesh
 	 * @return self
+	 * @deprecated Use {@link #removeUnconnectedElements(HE_Mesh)} instead
 	 */
 	public static HE_Mesh cleanUnusedElementsByFace(final HE_Mesh mesh) {
+		return removeUnconnectedElements(mesh);
+	}
+
+	/**
+	 * Clean all mesh elements not used by any faces. Will leave boundary halfedges
+	 * uncapped!
+	 *
+	 * @param mesh
+	 * @return self
+	 */
+	public static HE_Mesh removeUnconnectedElements(final HE_Mesh mesh) {
 		final HE_RAS<HE_Vertex> cleanedVertices = new HE_RAS<HE_Vertex>();
 		final HE_RAS<HE_Halfedge> cleanedHalfedges = new HE_RAS<HE_Halfedge>();
 		tracker.setStartStatusStr("HET_MeshOp", "Cleaning unused elements.");
@@ -2960,7 +2913,7 @@ public class HE_MeshOp {
 		}
 		t1.mulSelf(1.0 / n);
 		t2 = normal.cross(t1);
-		return gf.createCSFromOXYZ(v, t1, t2, normal);
+		return gf.createCSFromOriginAndXYZ(v, t1, t2, normal);
 	}
 
 	// Common area-weighted mean normal
@@ -3433,7 +3386,7 @@ public class HE_MeshOp {
 		final WB_Vector t2 = tangent.getY();
 		final WB_Vector X = t1.mulAddMul(e1, e2, t2);
 		final WB_Vector Y = t1.mulAddMul(-e2, e1, t2);
-		return gf.createCSFromOXYZ(v, X, Y, tangent.getZ());
+		return gf.createCSFromOriginAndXYZ(v, X, Y, tangent.getZ());
 	}
 
 	/**

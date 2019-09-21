@@ -141,6 +141,17 @@ public class HET_Diagnosis {
 		HE_Vertex v;
 		while (vitr.hasNext()) {
 			v = vitr.next();
+			if(Double.isNaN(v.xd())||Double.isNaN(v.yd())||Double.isNaN(v.zd()))  {
+				if (verbose == true) {
+					System.out.println(
+							"NaN position in vertex  " + v.getKey() + ".");
+				}
+				if (force == true) {
+					result = false;
+				} else {
+					return false;
+				}
+			}
 			if (v.getHalfedge() == null) {
 				if (verbose == true) {
 					System.out.println(

@@ -1,5 +1,5 @@
 package wblut.geom;
 
-public interface WB_RandomPoint extends WB_PointGenerator{
+public interface WB_RandomPoint extends WB_PointFactory{
 
 }

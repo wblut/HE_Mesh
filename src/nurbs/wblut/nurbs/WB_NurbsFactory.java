@@ -35,6 +35,7 @@ public class WB_NurbsFactory {
 	 */
 	public static WB_RBSplineSurface getSurfaceOfRevolution(final WB_BSpline C, final WB_Coord p, final WB_Coord axis,
 			double theta) {
+		boolean full=(theta==2*Math.PI);
 		final WB_Vector v = new WB_Vector(axis);
 		v.normalizeSelf();
 		if (theta < 0) {
@@ -86,7 +87,7 @@ public class WB_NurbsFactory {
 		final double[] cosines = new double[narcs + 1];
 		final double[] sines = new double[narcs + 1];
 		for (i = 1; i <= narcs; i++) {
-			angle = angle + dtheta;
+			angle = (i==narcs&& full)?0:angle + dtheta;
 			cosines[i] = Math.cos(angle);
 			sines[i] = Math.sin(angle);
 		}
@@ -120,6 +121,9 @@ public class WB_NurbsFactory {
 					P0.set(P2);
 					T0.set(T2);
 				}
+			}
+			if(full) {
+				points[narcs][j] = points[0][j];		
 			}
 		}
 		final WB_NurbsKnot UKnot = new WB_NurbsKnot(2, U);

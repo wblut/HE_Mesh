@@ -29,6 +29,11 @@ public class HEM_HideEdges extends HEM_Modifier {
 		threshold = t;
 		return this;
 	}
+	
+	public HEM_HideEdges setThresholdAngle(final double a) {
+		threshold = 1.0-Math.cos(a);
+		return this;
+	}
 
 	/*
 	 * (non-Javadoc)

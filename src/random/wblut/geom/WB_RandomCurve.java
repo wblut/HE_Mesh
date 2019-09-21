@@ -19,7 +19,7 @@ import wblut.math.WB_MTRandom;
  * @author Frederik Vanhoutte, W:Blut
  *
  */
-public class WB_RandomCurve implements WB_RandomGenerator {
+public class WB_RandomCurve extends WB_RandomGenerator {
 	private final WB_MTRandom randomGen;
 	private WB_Curve curve;
 	private double start, end;

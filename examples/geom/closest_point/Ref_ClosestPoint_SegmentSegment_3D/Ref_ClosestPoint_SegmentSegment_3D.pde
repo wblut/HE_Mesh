@@ -1,4 +1,4 @@
-import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.*;
 import wblut.hemesh.*;
 import wblut.processing.*;

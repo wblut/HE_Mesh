@@ -20,7 +20,7 @@ import org.eclipse.collections.impl.list.mutable.FastList;
  *
  */
 public class WB_PolygonDecomposer {
-	private static WB_GeometryFactory gf = new WB_GeometryFactory();
+	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
 
 	/**
 	 * Decompose the given polygon into a reasonably small number of convex

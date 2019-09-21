@@ -27,7 +27,7 @@ class WB_Triangulate3D extends WB_Triangulate2D {
 	/**
 	 *
 	 */
-	private static WB_GeometryFactory geometryfactory = new WB_GeometryFactory();
+	private static WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
 	/**
 	 *

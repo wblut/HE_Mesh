@@ -4,7 +4,6 @@ import wblut.core.*;
 import wblut.hemesh.*;
 import wblut.geom.*;
 
-
 HE_Mesh mesh;
 WB_Render render;
 WB_ProgressReporter pr;
@@ -15,7 +14,7 @@ void setup() {
   //Reporting to console is limited to 2 levels.
   pr.start();
   createMesh();
-
+  mesh.smooth(2);
   render=new WB_Render(this);
 }
 
@@ -33,7 +32,6 @@ void draw() {
   render.drawEdges(mesh);
 }
 
-
 void createMesh(){
   HEC_Geodesic creator=new HEC_Geodesic().setC(2).setB(2).setRadius(300);
   mesh=new HE_Mesh(creator); 
@@ -41,12 +39,10 @@ void createMesh(){
   HEM_Lattice modifier=new HEM_Lattice();
   modifier.setWidth(10);// desired width of struts
   modifier.setDepth(10);// depth of struts
-  modifier.setThresholdAngle(1.5*HALF_PI);// treat edges sharper than this angle as hard edges
-  modifier.setFuse(true);// try to fuse planar adjacent planar faces created by the extrude
-  modifier.setFuseAngle(0.1*HALF_PI);// threshold angle to be considered coplanar
+  modifier.setFuse(true);
   HE_Selection sel=mesh.selectRandomFaces("random",0.4);
-  sel.modify(modifier);
-  mesh.smooth(2);
+sel.modify(modifier);
+ // mesh.smooth(2);
 }
 
 void stop(){

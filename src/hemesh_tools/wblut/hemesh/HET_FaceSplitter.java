@@ -19,7 +19,7 @@ import org.eclipse.collections.impl.list.mutable.FastList;
 
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_GeometryOp3D;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_Line;
@@ -39,7 +39,7 @@ import wblut.math.WB_Epsilon;
 class HET_FaceSplitter {
 	List<PolyEdge>				splitPoly;
 	List<PolyEdge>				edgesOnLine;
-	private WB_GeometryFactory	gf	= new WB_GeometryFactory();
+	private WB_GeometryFactory3D	gf	= new WB_GeometryFactory3D();
 
 	HET_FaceSplitter() {
 	}

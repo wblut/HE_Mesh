@@ -24,7 +24,7 @@ public class WB_Transform3D {
 	/**
 	 *
 	 */
-	private WB_GeometryFactory geometryfactory = new WB_GeometryFactory();
+	private WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
 	/** Transform matrix. */
 	private WB_M44 T;
@@ -111,6 +111,12 @@ public class WB_Transform3D {
 	 */
 	public WB_Transform3D get() {
 		return new WB_Transform3D(this);
+	}
+	
+	public WB_Transform3D addTransform(final WB_Transform3D transform) {
+		T = transform.T.mult(T);
+		invT = invT.mult(transform.T);
+		return this;
 	}
 
 	/**

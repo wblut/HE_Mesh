@@ -22,6 +22,7 @@ void setup() {
   modifier.setPlanes(planes);// Cut plane 
   //planes can also be any Collection<WB_Plane>
   modifier.setOffset(0);// shift cut plane along normal
+  mesh.smooth(2);
   mesh.modify(modifier);
 
   render=new WB_Render(this);

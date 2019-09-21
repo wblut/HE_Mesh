@@ -172,10 +172,10 @@ public class HEC_FromOBJFile extends HEC_Creator {
 				creator.setFaceVertexUVW(UVWList);
 			}
 			if (noCheck) {
-				creator.setDuplicate(false);
+				creator.setCheckDuplicateVertices(false);
 				creator.setCheckManifold(false);
 				creator.setCheckNormals(false);
-				creator.setCleanUnused(false);
+				creator.setRemoveUnconnectedElements(false);
 			}
 			reader.close();
 			return new HE_Mesh(creator);

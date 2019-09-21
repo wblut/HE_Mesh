@@ -184,8 +184,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 				tracers[i].addSelf(points.get(cellIndex));
 			}
 			grow(tracers, cellIndex, offset);
-			final HEC_ConvexHull ch = new HEC_ConvexHull().setPoints(tracers)
-					.setN(numTracers);
+			final HEC_ConvexHull ch = new HEC_ConvexHull().setPoints(tracers);
 			result = new HE_Mesh(ch);
 		} else {
 			final HEC_Geodesic gc = new HEC_Geodesic().setB(level).setC(0);

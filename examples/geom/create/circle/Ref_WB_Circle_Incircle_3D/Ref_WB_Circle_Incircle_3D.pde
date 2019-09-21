@@ -8,13 +8,13 @@ import java.util.List;
 HE_Mesh mesh;
 WB_Render3D render;
 List<WB_Circle> circles;
-WB_GeometryFactory gf;
+WB_GeometryFactory3D gf;
 
 void setup() {
   size(800,800, P3D);  
   smooth(8);
   render=new WB_Render3D(this);
-  gf=new WB_GeometryFactory();
+  gf=new WB_GeometryFactory3D();
 
   mesh=new HE_Mesh(new HEC_Beethoven());
   mesh.scaleSelf(8);

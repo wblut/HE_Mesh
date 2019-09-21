@@ -33,12 +33,12 @@ public class WB_VoronoiCell3D {
 	/**
 	 *
 	 */
-	WB_Mesh cell;
+	WB_SimpleMesh cell;
 
 	/**
 	 *
 	 */
-	WB_Mesh untrimmedCell;
+	WB_SimpleMesh untrimmedCell;
 
 	/**
 	 *
@@ -63,7 +63,7 @@ public class WB_VoronoiCell3D {
 	/**
 	 *
 	 */
-	private WB_GeometryFactory geometryfactory = new WB_GeometryFactory();
+	private WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
 	/**
 	 *
@@ -109,7 +109,7 @@ public class WB_VoronoiCell3D {
 	 * @param generator
 	 * @param index
 	 */
-	public WB_VoronoiCell3D(final WB_Mesh cell, final WB_Point generator, final int index) {
+	public WB_VoronoiCell3D(final WB_SimpleMesh cell, final WB_Point generator, final int index) {
 		this.generator = generator;
 		this.index = index;
 		this.cell = cell;
@@ -278,7 +278,7 @@ public class WB_VoronoiCell3D {
 	 *
 	 * @return
 	 */
-	public WB_Mesh getMesh() {
+	public WB_SimpleMesh getMesh() {
 		return cell;
 	}
 
@@ -287,7 +287,7 @@ public class WB_VoronoiCell3D {
 	 *
 	 * @return
 	 */
-	public WB_Mesh getUntrimmedMesh() {
+	public WB_SimpleMesh getUntrimmedMesh() {
 		return untrimmedCell;
 	}
 

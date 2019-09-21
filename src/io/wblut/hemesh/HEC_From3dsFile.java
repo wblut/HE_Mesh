@@ -103,7 +103,7 @@ public class HEC_From3dsFile extends HEC_Creator {
 			final HEC_FromFacelist creator = new HEC_FromFacelist();
 			creator.setVertices(mesh3d.mVertex);
 			creator.setFaces(mesh3d.mFace);
-			creator.setDuplicate(true);
+			creator.setCheckDuplicateVertices(true);
 			mesh.add(new HE_Mesh(creator));
 		}
 		return mesh;

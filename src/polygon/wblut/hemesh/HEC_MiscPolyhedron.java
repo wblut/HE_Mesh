@@ -7,7 +7,7 @@
 package wblut.hemesh;
 
 import wblut.data.WB_PolyhedraData;
-import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_Point;
 
 /**
@@ -130,43 +130,43 @@ public class HEC_MiscPolyhedron extends HEC_Creator {
 			result.scaleSelf(R);
 			return result;
 		} else if (type <= 149) {
-			final HE_Mesh result = new HE_Mesh(WB_GeometryFactory.instance()
+			final HE_Mesh result = new HE_Mesh(WB_GeometryFactory3D.instance()
 					.createPolyhedronFromWRL(name.replaceAll(" ", "_"), R));
 			try {
 				HET_Fixer.fixNonManifoldVertices(result);
 				return result;
 			} catch (Exception e) {
-				return new HE_Mesh(WB_GeometryFactory.instance()
+				return new HE_Mesh(WB_GeometryFactory3D.instance()
 						.createPolyhedronFromWRL(name.replaceAll(" ", "_"), R));
 			}
 		} else if (type <= 186) {
-			final HE_Mesh result = new HE_Mesh(WB_GeometryFactory.instance()
+			final HE_Mesh result = new HE_Mesh(WB_GeometryFactory3D.instance()
 					.createPolyhedronFromWRL("srtc_" + (type - 149), R));
 			try {
 				HET_Fixer.fixNonManifoldVertices(result);
 				return result;
 			} catch (Exception e) {
-				return new HE_Mesh(WB_GeometryFactory.instance()
+				return new HE_Mesh(WB_GeometryFactory3D.instance()
 						.createPolyhedronFromWRL("srtc_" + (type - 149), R));
 			}
 		} else if (type <= 218) {
-			final HE_Mesh result = new HE_Mesh(WB_GeometryFactory.instance()
+			final HE_Mesh result = new HE_Mesh(WB_GeometryFactory3D.instance()
 					.createPolyhedronFromWRL("tsi" + (type - 186), R));
 			try {
 				HET_Fixer.fixNonManifoldVertices(result);
 				return result;
 			} catch (Exception e) {
-				return new HE_Mesh(WB_GeometryFactory.instance()
+				return new HE_Mesh(WB_GeometryFactory3D.instance()
 						.createPolyhedronFromWRL("tsi" + (type - 186), R));
 			}
 		} else if (type <= 239) {
-			final HE_Mesh result = new HE_Mesh(WB_GeometryFactory.instance()
+			final HE_Mesh result = new HE_Mesh(WB_GeometryFactory3D.instance()
 					.createPolyhedronFromWRL("stt" + (type - 218), R));
 			try {
 				HET_Fixer.fixNonManifoldVertices(result);
 				return result;
 			} catch (Exception e) {
-				return new HE_Mesh(WB_GeometryFactory.instance()
+				return new HE_Mesh(WB_GeometryFactory3D.instance()
 						.createPolyhedronFromWRL("stt" + (type - 218), R));
 			}
 		}

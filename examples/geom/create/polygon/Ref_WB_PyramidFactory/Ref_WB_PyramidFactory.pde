@@ -5,7 +5,7 @@ import wblut.math.*;
 import wblut.nurbs.*;
 import wblut.processing.*;
 WB_PyramidFactory pf;
-WB_GeometryFactory gf=new WB_GeometryFactory();
+WB_GeometryFactory3D gf=new WB_GeometryFactory3D();
 WB_Render3D render;
 ArrayList<WB_Point> shell;
 double[] offsets;

@@ -15,8 +15,7 @@ import wblut.math.WB_Math;
  *
  */
 public class WB_Vector2D extends WB_MutableCoordinate2D
-		implements WB_MutableCoord, WB_MutableCoordMath2D,
-		WB_MutableCoordTransform2D, WB_CoordMetric2D, WB_Geometry2D {
+		implements WB_MutableCoord, WB_MutableCoordMath2D, WB_Geometry2D {
 	private static final WB_Coord	X		= new WB_MutableCoordinate2D(1, 0);
 	private static final WB_Coord	Y		= new WB_MutableCoordinate2D(0, 1);
 	private static final WB_Coord	ORIGIN	= new WB_MutableCoordinate2D(0, 0);

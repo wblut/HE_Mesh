@@ -19,7 +19,7 @@ public class WB_Ring extends WB_PolyLine {
 	/**
 	 *
 	 */
-	private WB_GeometryFactory geometryfactory = new WB_GeometryFactory();
+	private WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
 	/**
 	 * Get direction.

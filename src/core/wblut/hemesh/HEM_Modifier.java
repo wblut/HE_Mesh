@@ -31,6 +31,7 @@ abstract public class HEM_Modifier extends HE_Machine {
 		try {
 			HE_Mesh result = applySelf(mesh);
 			tracker.setStopStatus(this, "Mesh modified.");
+			result.cleanSelections();
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -52,6 +53,7 @@ abstract public class HEM_Modifier extends HE_Machine {
 		HE_Mesh copy = selection.getParent().get();
 		try {
 			HE_Mesh result = applySelf(selection);
+			result.cleanSelections();
 			tracker.setStopStatus(this, "Mesh modified.");
 
 			return result;

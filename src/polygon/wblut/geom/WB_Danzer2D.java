@@ -16,9 +16,9 @@ import org.eclipse.collections.impl.list.mutable.FastList;
 
 import wblut.math.WB_MTRandom;
 
-public class WB_Danzer2D implements WB_TriangleGenerator {
+public class WB_Danzer2D implements WB_TriangleFactory {
 
-	private WB_GeometryFactory geometryfactory = new WB_GeometryFactory();
+	private WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
 	public static enum Type {
 		A, B, C

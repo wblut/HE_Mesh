@@ -192,7 +192,7 @@ public class HEC_FromVoronoiCells extends HEC_Creator {
 			}
 		}
 		final HEC_FromFacelist ffl = new HEC_FromFacelist()
-				.setVertices(vertices).setFaces(faces).setDuplicate(true);
+				.setVertices(vertices).setFaces(faces).setCheckDuplicateVertices(true);
 		final HE_Mesh result = ffl.createBase();
 		final Iterator<HE_Face> fItr = result.fItr();
 		int i = 0;
@@ -211,7 +211,7 @@ public class HEC_FromVoronoiCells extends HEC_Creator {
 			while (fitr.hasNext()) {
 				result.deleteFace(fitr.next());
 			}
-			result.cleanUnusedElementsByFace();
+			result.removeUnconnectedElements();
 			HE_MeshOp.capHalfedges(result);
 		} else {
 			result.uncapBoundaryHalfedges();

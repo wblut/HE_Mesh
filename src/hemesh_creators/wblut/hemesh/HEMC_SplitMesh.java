@@ -18,14 +18,28 @@ import wblut.geom.WB_Plane;
  *
  */
 public class HEMC_SplitMesh extends HEMC_MultiCreator {
-	/** Cutting plane. */
-	private WB_Plane P;
 	/** Source mesh. */
 	private HE_Mesh mesh;
-	/** Cap holes?. */
-	private boolean cap = true;;
-	/** The offset. */
-	private double offset;
+
+	/**
+	 * Instantiates a new HEMC_SplitMesh.
+	 *
+	 */
+	public HEMC_SplitMesh() {
+		super();
+	}
+	
+	protected double getOffset() {
+		return parameters.get("offset", 0.0);
+	}
+	
+	protected WB_Plane getPlane() {
+		return (WB_Plane)parameters.get("plane", null);
+	}
+	
+	protected boolean getCap() {
+		return parameters.get("cap", true);
+	}
 
 	/**
 	 * Set offset.
@@ -35,16 +49,8 @@ public class HEMC_SplitMesh extends HEMC_MultiCreator {
 	 * @return self
 	 */
 	public HEMC_SplitMesh setOffset(final double d) {
-		offset = d;
+		parameters.set("offset", d);
 		return this;
-	}
-
-	/**
-	 * Instantiates a new HEMC_SplitMesh.
-	 *
-	 */
-	public HEMC_SplitMesh() {
-		super();
 	}
 
 	/**
@@ -55,7 +61,7 @@ public class HEMC_SplitMesh extends HEMC_MultiCreator {
 	 * @return self
 	 */
 	public HEMC_SplitMesh setPlane(final WB_Plane P) {
-		this.P = P;
+		parameters.set("plane", P.get());
 		return this;
 	}
 
@@ -79,13 +85,13 @@ public class HEMC_SplitMesh extends HEMC_MultiCreator {
 	 * @return self
 	 */
 	public HEMC_SplitMesh setCap(final Boolean b) {
-		cap = b;
+		parameters.set("cap", b);
 		return this;
 	}
 
 	@Override
 	void create(final HE_MeshCollection result) {
-
+		WB_Plane P=getPlane();
 		if (mesh == null) {
 			_numberOfMeshes = 0;
 			return;
@@ -98,7 +104,7 @@ public class HEMC_SplitMesh extends HEMC_MultiCreator {
 		}
 		final HEM_Slice sm = new HEM_Slice();
 		HE_Mesh tmp = mesh.copy();
-		sm.setPlane(P).setReverse(false).setCap(cap).setOffset(offset);
+		sm.setPlane(P).setReverse(false).setCap(getCap()).setOffset(getOffset());
 		sm.applySelf(tmp);
 		tmp.resetFaceInternalLabels();
 		HE_FaceIterator fItr = tmp.getSelection("caps").fItr();
@@ -107,7 +113,7 @@ public class HEMC_SplitMesh extends HEMC_MultiCreator {
 		}
 		result.add(tmp);
 		P.flipNormal();
-		sm.setPlane(P).setReverse(false).setCap(cap).setOffset(offset);
+		sm.setPlane(P).setReverse(false).setCap(getCap()).setOffset(getOffset());
 		tmp = mesh.copy();
 		sm.applySelf(tmp);
 		tmp.resetFaceInternalLabels();

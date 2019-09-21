@@ -17,7 +17,7 @@ import wblut.math.WB_Epsilon;
 /**
  *
  */
-public class WB_Polygon extends WB_Ring implements WB_TriangleGenerator {
+public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 	static boolean USE_JTS=true;
 	static boolean OPTIMIZE_DEFAULT=true;
 	
@@ -40,7 +40,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleGenerator {
 	/**
 	 *
 	 */
-	private static final WB_GeometryFactory	gf	= new WB_GeometryFactory();
+	private static final WB_GeometryFactory3D	gf	= new WB_GeometryFactory3D();
 
 	/**
 	 *

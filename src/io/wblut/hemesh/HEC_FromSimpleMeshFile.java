@@ -116,7 +116,7 @@ public class HEC_FromSimpleMeshFile extends HEC_Creator {
 				faces[i][j] = Integer.parseInt(subresult[j + 1]);
 			}
 		}
-		final HEC_FromFacelist ffl = new HEC_FromFacelist().setVertices(vertices).setFaces(faces).setDuplicate(false);
+		final HEC_FromFacelist ffl = new HEC_FromFacelist().setVertices(vertices).setFaces(faces).setCheckDuplicateVertices(false);
 		return ffl.createBase();
 	}
 }

@@ -19,7 +19,7 @@ import wblut.math.WB_MTRandom;
  * @author Frederik Vanhoutte, W:Blut
  *
  */
-public class WB_RandomRing implements WB_RandomGenerator {
+public class WB_RandomRing extends WB_RandomGenerator {
 	/**
 	 *
 	 */

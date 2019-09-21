@@ -125,7 +125,7 @@ public class HEM_PolyLineInversion extends HEM_Modifier {
 				mesh.deleteFace(fi.face);
 			}
 		}
-		mesh.cleanUnusedElementsByFace();
+		mesh.removeUnconnectedElements();
 		HE_MeshOp.capHalfedges(mesh);
 		final Iterator<HE_Vertex> vItr = mesh.vItr();
 		HE_Vertex v;
@@ -180,7 +180,7 @@ public class HEM_PolyLineInversion extends HEM_Modifier {
 				}
 			}
 		}
-		selection.getParent().cleanUnusedElementsByFace();
+		selection.getParent().removeUnconnectedElements();
 		HE_MeshOp.capHalfedges(selection.getParent());
 		selection.cleanSelection();
 		final Iterator<HE_Vertex> vItr = selection.vItr();

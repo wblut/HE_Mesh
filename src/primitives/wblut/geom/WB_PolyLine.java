@@ -40,7 +40,7 @@ public class WB_PolyLine implements WB_Geometry3D {
 	/**
 	 *
 	 */
-	private WB_GeometryFactory	geometryfactory	= new WB_GeometryFactory();
+	private WB_GeometryFactory3D	geometryfactory	= new WB_GeometryFactory3D();
 
 	/**
 	 *

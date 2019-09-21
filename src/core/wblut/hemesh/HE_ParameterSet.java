@@ -34,11 +34,11 @@ public class HE_ParameterSet {
 		Object value = values.get(name.toLowerCase());
 		if (value == null)
 			return ifEmpty;
-		return (Integer) value;
+		return ((Integer) value).intValue();
 	}
 
 	public HE_ParameterSet set(String name, double value) {
-		values.put(name.toLowerCase(), value);
+		values.put(name.toLowerCase(), (double)value);
 		return this;
 	}
 
@@ -46,7 +46,7 @@ public class HE_ParameterSet {
 		Object value = values.get(name.toLowerCase());
 		if (value == null)
 			return ifEmpty;
-		return (Double) value;
+		return ((Double) value).doubleValue();
 	}
 	
 	public HE_ParameterSet set(String name, boolean value) {
@@ -58,7 +58,7 @@ public class HE_ParameterSet {
 		Object value = values.get(name.toLowerCase());
 		if (value == null)
 			return ifEmpty;
-		return (Boolean) value;
+		return ((Boolean) value).booleanValue();
 	}
 	
 	public String[] getNames(){

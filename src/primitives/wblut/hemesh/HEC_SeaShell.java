@@ -400,7 +400,7 @@ public class HEC_SeaShell extends HEC_Creator {
 			}
 		}
 		final HEC_FromFacelist fl = new HEC_FromFacelist();
-		fl.setVertices(vertices).setFaces(faces).setCheckNormals(true).setDuplicate(false);
+		fl.setVertices(vertices).setFaces(faces).setCheckDuplicateVertices(false).setCheckNormals(true);
 		return fl.createBase();
 	}
 

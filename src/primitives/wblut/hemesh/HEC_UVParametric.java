@@ -154,7 +154,7 @@ public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
 					index++;
 				} // for iu
 			} // for iv
-			this.setVertices(vertices).setFaces(faces).setVertexUVW(uvws).setDuplicate(fixDuplicatedVertices);
+			this.setVertices(vertices).setFaces(faces).setVertexUVW(uvws).setCheckDuplicateVertices(fixDuplicatedVertices);
 			return super.createBase();
 		}
 		return null;

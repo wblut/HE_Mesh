@@ -24,7 +24,7 @@ public class WB_Segment extends WB_Line implements Comparable<WB_Segment> {
 	 *
 	 */
 	protected WB_Point			endpoint;
-	private WB_GeometryFactory	geometryfactory	= new WB_GeometryFactory();
+	private WB_GeometryFactory3D	geometryfactory	= new WB_GeometryFactory3D();
 
 	/**
 	 *
@@ -283,6 +283,7 @@ public class WB_Segment extends WB_Line implements Comparable<WB_Segment> {
 		length = Math.sqrt(WB_CoordOp3D.getSqDistance3D(origin, endpoint));
 		return this;
 	}
+
 
 	/*
 	 * (non-Javadoc)

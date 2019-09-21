@@ -129,4 +129,89 @@ public interface WB_MutableCoordMath2D extends WB_CoordMath2D {
 	 * @return this
 	 */
 	public WB_Coord trimSelf(final double d);
+
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return this
+	 */
+	public WB_Coord applyAsPoint2DSelf(final WB_Transform2D T);
+
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return this
+	 */
+	public WB_Coord applyAsVector2DSelf(final WB_Transform2D T);
+
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return this
+	 */
+	public WB_Coord applyAsNormal2DSelf(final WB_Transform2D T);
+
+	/**
+	 * 
+	 * @param angle
+	 * @param p
+	 * @return
+	 */
+	public WB_Coord rotateAboutPoint2DSelf(final double angle, final WB_Coord p);
+
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param px
+	 * @param py
+	 * @return this
+	 */
+	public WB_Coord rotateAboutPoint2DSelf(final double angle, final double px, final double py);
+
+	/**
+	 *
+	 *
+	 * @param angle
+	 *
+	 * @return this
+	 */
+	public WB_Coord rotateAboutOrigin2DSelf(final double angle);
+
+	/**
+	 * 2D translate.
+	 *
+	 * @param px
+	 * @param py
+	 * @return this
+	 */
+	public WB_Coord translate2DSelf(final double px, final double py);
+
+	/**
+	 * 2D translate.
+	 *
+	 * @param p
+	 * @return this
+	 */
+	public WB_Coord translate2DSelf(final WB_Coord p);
+
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return this
+	 */
+	public WB_Coord scale2DSelf(final double f);
+
+	/**
+	 *
+	 *
+	 * @param fx
+	 * @param fy
+	 * @return this
+	 */
+	public WB_Coord scale2DSelf(final double fx, final double fy);
 }

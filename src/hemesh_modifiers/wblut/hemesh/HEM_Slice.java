@@ -173,7 +173,7 @@ public class HEM_Slice extends HEM_Modifier {
 			counter.increment();
 		}
 		mesh.removeFaces(facesToRemove.getFaces());
-		mesh.cleanUnusedElementsByFace();
+		mesh.removeUnconnectedElements();
 		if (capHoles) {
 			tracker.setDuringStatus(this, "Capping holes.");
 			final List<HE_Path> cutpaths = ss.getPaths();

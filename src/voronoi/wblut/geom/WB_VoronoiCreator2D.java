@@ -23,7 +23,7 @@ class WB_VoronoiCreator2D {
 	/**
 	 *
 	 */
-	private static WB_GeometryFactory	geometryfactory	= new WB_GeometryFactory();
+	private static WB_GeometryFactory3D	geometryfactory	= new WB_GeometryFactory3D();
 	final static WB_Map2D				XY				= geometryfactory
 			.createEmbeddedPlane();
 

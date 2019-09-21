@@ -53,7 +53,7 @@ public class WB_Danzer3D {
 		/**
 		 *
 		 */
-		private WB_GeometryFactory geometryfactory = new WB_GeometryFactory();
+		private WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
 		public WB_DanzerTile3D(final Type type, final double scale, final WB_Coord offset) {
 			this(type, scale, offset, 0);
@@ -335,6 +335,23 @@ public class WB_Danzer3D {
 
 		public Type getType() {
 			return type;
+		}
+		
+		public int getTypeAsInt() {
+			switch(type) {
+			case A:
+				return 0;
+			case B:
+				return 1;
+			case C:
+				return 2;
+			case K:
+				return 3;
+			default:
+				return 0;
+			
+			}
+
 		}
 
 		@Override
@@ -714,6 +731,15 @@ public class WB_Danzer3D {
 	 */
 	public List<WB_DanzerTile3D> getTiles() {
 		return tiles;
+	}
+	
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public int getNumberOfTiles() {
+		return tiles.size();
 	}
 
 }

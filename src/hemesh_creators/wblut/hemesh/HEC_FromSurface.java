@@ -13,30 +13,7 @@ import wblut.geom.WB_Surface;
  *
  */
 public class HEC_FromSurface extends HEC_Creator {
-	/**
-	 * 
-	 */
-	private int			U;
-	/**
-	 * 
-	 */
-	private int			V;
-	/**
-	 * 
-	 */
-	private WB_Surface	surf;
-	/**
-	 * 
-	 */
-	private boolean		uWrap;
-	/**
-	 * 
-	 */
-	private boolean		vWrap;
-	private double		lowerU;
-	private double		upperU;
-	private double		lowerV;
-	private double		upperV;
+
 
 	/**
 	 * 
@@ -55,50 +32,77 @@ public class HEC_FromSurface extends HEC_Creator {
 	 * @param uWrap
 	 * @param vWrap
 	 */
-	public HEC_FromSurface(final WB_Surface surf, final int U, final int V,
-			final boolean uWrap, final boolean vWrap) {
+	public HEC_FromSurface(final WB_Surface surf, final int U, final int V, final boolean uWrap, final boolean vWrap) {
 		this();
-		this.U = U;
-		this.V = V;
-		this.uWrap = uWrap;
-		this.vWrap = vWrap;
-		this.surf = surf;
-		lowerU = surf.getLowerU();
-		upperU = surf.getUpperU();
-		lowerV = surf.getLowerV();
-		upperV = surf.getUpperV();
+		parameters.set("u", U);
+		parameters.set("v", V);
+		parameters.set("uwrap",uWrap);
+		parameters.set("vwrap",vWrap);
+		parameters.set("surf", surf);
+		parameters.set("loweru", surf.getLowerU());
+		parameters.set("upperu", surf.getUpperU());
+		parameters.set("lowerv", surf.getLowerV());
+		parameters.set("upperv", surf.getUpperV());
+	}
+	
+	protected int getU() {
+		return parameters.get("u", 1);
 	}
 
-	/**
-	 * 
-	 *
-	 * @param U
-	 * @return
-	 */
+	protected int getV() {
+		return parameters.get("v", 1);
+	}
+	
+	protected boolean getUWrap() {
+		return parameters.get("uwrap", false);
+	}
+
+	protected boolean getVWrap() {
+		return parameters.get("vwrap", false);
+	}
+	
+	protected double getLowerU() {
+		return parameters.get("loweru", 0.0);
+	}
+	
+	protected double getUpperU() {
+		return parameters.get("upperu", 1.0);
+	}
+	
+	protected double getLowerV() {
+		return parameters.get("lowerv", 0.0);
+	}
+	
+	protected double getUpperV() {
+		return parameters.get("upperv", 1.0);
+	}
+	
+	protected WB_Surface getSurface() {
+		return (WB_Surface)parameters.get("surf", null);
+	}
+	
+	
+	
 	public HEC_FromSurface setU(final int U) {
-		this.U = U;
+		parameters.set("u", U);
 		return this;
 	}
-
-	public HEC_FromSurface setRange(final double lowerU, double upperU,
-			double lowerV, double upperV) {
-		this.lowerU = Math.max(lowerU, surf.getLowerU());
-		this.upperU = Math.min(upperU, surf.getUpperU());
-		this.lowerV = Math.max(lowerV, surf.getLowerV());
-		this.upperV = Math.min(upperV, surf.getUpperV());
-		return this;
-	}
-
-	/**
-	 * 
-	 *
-	 * @param V
-	 * @return
-	 */
+	
 	public HEC_FromSurface setV(final int V) {
-		this.V = V;
+		parameters.set("v", V);
 		return this;
 	}
+
+	public HEC_FromSurface setRange(final double lowerU, double upperU, double lowerV, double upperV) {
+		WB_Surface surf=getSurface();
+		parameters.set("loweru", Math.max(lowerU, (surf==null)?Double.NEGATIVE_INFINITY:surf.getLowerU()));
+		parameters.set("upperu", Math.min(upperU, (surf==null)?Double.POSITIVE_INFINITY:surf.getUpperU()));
+		parameters.set("lowerv", Math.max(lowerV, (surf==null)?Double.NEGATIVE_INFINITY:surf.getLowerV()));
+		parameters.set("upperv", Math.min(upperV, (surf==null)?Double.POSITIVE_INFINITY:surf.getUpperV()));
+		return this;
+	}
+
+	
 
 	/**
 	 * 
@@ -107,7 +111,7 @@ public class HEC_FromSurface extends HEC_Creator {
 	 * @return
 	 */
 	public HEC_FromSurface setUWrap(final boolean b) {
-		uWrap = b;
+		parameters.set("uwrap",b);
 		return this;
 	}
 
@@ -118,7 +122,7 @@ public class HEC_FromSurface extends HEC_Creator {
 	 * @return
 	 */
 	public HEC_FromSurface setVWrap(final boolean b) {
-		vWrap = b;
+		parameters.set("vwrap",b);
 		return this;
 	}
 
@@ -129,20 +133,31 @@ public class HEC_FromSurface extends HEC_Creator {
 	 * @return
 	 */
 	public HEC_FromSurface setSurface(final WB_Surface surf) {
-		this.surf = surf;
-		lowerU = surf.getLowerU();
-		upperU = surf.getUpperU();
-		lowerV = surf.getLowerV();
-		upperV = surf.getUpperV();
+		parameters.set("surf", surf);
+		parameters.set("loweru", surf.getLowerU());
+		parameters.set("upperu", surf.getUpperU());
+		parameters.set("lowerv", surf.getLowerV());
+		parameters.set("upperv", surf.getUpperV());
 		return this;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see wblut.nurbs.WB_Surface#toHemesh(PApplet, double, double)
 	 */
 	@Override
 	public HE_Mesh createBase() {
+		int U=getU();
+		int V=getV();
+		double lowerU=getLowerU();
+		double upperU=getUpperU();
+		double lowerV=getLowerV();
+		double upperV=getUpperV();
+		WB_Surface surf=getSurface();
+		boolean uWrap=getUWrap();
+		boolean vWrap=getVWrap();
+		if(surf==null) return new HE_Mesh();
 		final WB_Point[] points = new WB_Point[(U + 1) * (V + 1)];
 		final double iU = 1.0 / U;
 		final double iV = 1.0 / V;
@@ -168,8 +183,7 @@ public class HEC_FromSurface extends HEC_Creator {
 			}
 		}
 		final HEC_FromFacelist fl = new HEC_FromFacelist();
-		fl.setFaces(faces).setVertices(points).setDuplicate(false)
-				.setCheckNormals(false);
+		fl.setFaces(faces).setVertices(points).setCheckDuplicateVertices(true).setCheckNormals(false);
 		return new HE_Mesh(fl);
 	}
 }

@@ -19,12 +19,13 @@ void setup() {
     }
   }
 
-  HEC_StepGrid creator=new HEC_StepGrid();
+  HEC_Grid creator=new HEC_Grid();
+  creator.setStepped(true);
   creator.setU(40);// number of cells in U direction
   creator.setV(40);// number of cells in V direction
   creator.setUSize(1000);// size of grid in U direction
   creator.setVSize(1000);// size of grid in V direction
-  creator.setValues(values);// displacement of grid cells
+  creator.setValues(values);// displacement of grid cells  
   mesh=new HE_Mesh(creator);
   mesh.modify(new HEM_HideEdges());
   mesh.stats();

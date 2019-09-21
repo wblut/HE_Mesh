@@ -11,7 +11,7 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
-import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Sphere;
 
@@ -33,7 +33,7 @@ public class HEM_Spherify extends HEM_Modifier {
 	/**
 	 *
 	 */
-	private final WB_GeometryFactory gf = new WB_GeometryFactory();
+	private final WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
 
 	/**
 	 *

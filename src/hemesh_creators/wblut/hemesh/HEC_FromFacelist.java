@@ -45,14 +45,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 	/** Face indices. */
 	private int[][]		faces;
 	private int[][]		faceuvws;
-	/** Duplicate vertices?. */
-	private boolean		duplicate;
-	/** Check face normal consistency?. */
-	private boolean		normalcheck;
-	private boolean		manifoldcheck;
-	private boolean		cleanunused;
-	private boolean		useFaceInfo;
-	private boolean		useVertexInfo;
+
 
 	/**
 	 * Instantiates a new HEC_Facelist.
@@ -61,9 +54,20 @@ public class HEC_FromFacelist extends HEC_Creator {
 	public HEC_FromFacelist() {
 		super();
 		setOverride(true);
-		duplicate = true;
-		normalcheck = false;
-		cleanunused = true;
+		setCheckDuplicateVertices(true);
+		
+		setRemoveUnconnectedElements(true);
+	}
+	
+	protected boolean getCheckDuplicateVertices() {
+		return parameters.get("duplicate", true);
+	}
+	
+	protected boolean getUseFaceInfo() {
+		return parameters.get("usefaceinfo", false);
+	}
+	protected boolean getUseVertexInfo() {
+		return parameters.get("usevertexinfo", false);
 	}
 
 	/**
@@ -354,40 +358,19 @@ public class HEC_FromFacelist extends HEC_Creator {
 	 *            true/false
 	 * @return self
 	 */
-	public HEC_FromFacelist setDuplicate(final boolean b) {
-		duplicate = b;
+	public HEC_FromFacelist setCheckDuplicateVertices(final boolean b) {
+		parameters.set("duplicate", b);
 		return this;
 	}
 
-	/**
-	 * Check face normals?.
-	 *
-	 * @param b
-	 *            true/false
-	 * @return self
-	 */
-	public HEC_FromFacelist setCheckNormals(final boolean b) {
-		normalcheck = b;
-		return this;
-	}
-
-	public HEC_FromFacelist setCheckManifold(final boolean b) {
-		manifoldcheck = b;
-		return this;
-	}
-
-	public HEC_FromFacelist setCleanUnused(final boolean b) {
-		cleanunused = b;
-		return this;
-	}
 
 	public HEC_FromFacelist setUseFaceInformation(final boolean b) {
-		this.useFaceInfo = b;
+		parameters.set("usefaceinfo",b);
 		return this;
 	}
 
 	public HEC_FromFacelist setUseVertexInformation(final boolean b) {
-		this.useVertexInfo = b;
+		parameters.set("usevertexinfo",b);
 		return this;
 	}
 
@@ -429,7 +412,9 @@ public class HEC_FromFacelist extends HEC_Creator {
 					&& faceuvws.length == faces.length;
 			final HE_Vertex[] uniqueVertices = new HE_Vertex[vertices.length];
 			final boolean[] duplicated = new boolean[vertices.length];
-			if (duplicate) {
+			boolean useVertexInfo=getUseVertexInfo();
+			boolean useFaceInfo=getUseFaceInfo();
+			if (getCheckDuplicateVertices()) {
 				final WB_KDTreeInteger<WB_Coord> kdtree = new WB_KDTreeInteger<WB_Coord>();
 				WB_KDEntryInteger<WB_Coord>[] neighbors;
 				HE_Vertex v = new HE_Vertex(vertices[0]);
@@ -448,6 +433,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 				uniqueVertices[0] = v;
 				duplicated[0] = false;
 				mesh.add(v);
+				
 				for (int i = 1; i < vertices.length; i++) {
 					v = new HE_Vertex(vertices[i]);
 					if (useVertexInfo) {
@@ -496,7 +482,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 			int id = 0;
 			HE_Halfedge he;
 			final List<Long> nmedges = new ArrayList<Long>();
-			if (normalcheck) {
+			if (getCheckNormals()) {
 				// Create adjacency table
 				final UnifiedMap<Long, int[]> edges = new UnifiedMap<Long, int[]>();
 				for (int i = 0; i < faces.length; i++) {
@@ -658,31 +644,8 @@ public class HEC_FromFacelist extends HEC_Creator {
 				faceid++;
 			}
 			HE_MeshOp.pairHalfedges(mesh);
-			if (cleanunused) {
-				mesh.cleanUnusedElementsByFace();
-				HE_MeshOp.capHalfedges(mesh);
-			}
-			if (manifoldcheck) {
-				HET_Fixer.fixNonManifoldVertices(mesh);
-			}
-			if (normalcheck) {
-				final HE_FaceIterator fitr = mesh.fItr();
-				HE_Face f;
-				HE_Face left = null;
-				WB_Coord fcleft = new WB_Point(Double.MAX_VALUE,
-						Double.MAX_VALUE, Double.MAX_VALUE);
-				while (fitr.hasNext()) {
-					f = fitr.next();
-					if (HE_MeshOp.getFaceCenter(f).xd() < fcleft.xd()) {
-						left = f;
-						fcleft = HE_MeshOp.getFaceCenter(left);
-					}
-				}
-				final WB_Coord leftn = HE_MeshOp.getFaceNormal(left);
-				if (leftn.xd() > 0) {
-					HE_MeshOp.flipFaces(mesh);
-				}
-			}
+			HE_MeshOp.capHalfedges(mesh);
+			
 		}
 		return mesh;
 	}

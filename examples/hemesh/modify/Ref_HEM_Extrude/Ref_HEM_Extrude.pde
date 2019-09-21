@@ -57,6 +57,6 @@ void draw() {
 
 
 void createMesh() {
-  HEC_Cube creator=new HEC_Cube(300, 5, 5, 5);
+  HEC_Creator creator=new HEC_Cube(300, 5, 5, 5);
   mesh=new HE_Mesh(creator);
 }

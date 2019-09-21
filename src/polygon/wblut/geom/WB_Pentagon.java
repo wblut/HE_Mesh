@@ -6,13 +6,21 @@
  */
 package wblut.geom;
 
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Data
+@ToString(includeFieldNames=true)
 public class WB_Pentagon implements WB_Geometry3D {
-	private WB_GeometryFactory	geometryfactory	= new WB_GeometryFactory();
-	public WB_Point				p1;
-	public WB_Point				p2;
-	public WB_Point				p3;
-	public WB_Point				p4;
-	public WB_Point				p5;
+	@Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) private WB_GeometryFactory3D	geometryfactory	= new WB_GeometryFactory3D();
+	@Setter(AccessLevel.NONE) private  WB_Point				p1;
+	@Setter(AccessLevel.NONE) private WB_Point				p2;
+	@Setter(AccessLevel.NONE) private WB_Point				p3;
+	@Setter(AccessLevel.NONE) private  WB_Point				p4;
+	@Setter(AccessLevel.NONE) private  WB_Point				p5;
 
 	public WB_Pentagon(final WB_Coord p1, final WB_Coord p2, final WB_Coord p3,
 			final WB_Coord p4, final WB_Coord p5) {

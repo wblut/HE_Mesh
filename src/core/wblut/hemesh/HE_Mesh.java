@@ -30,21 +30,20 @@ import wblut.geom.WB_AABB;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordCollection;
-import wblut.geom.WB_Frame;
 import wblut.geom.WB_Geometry3D;
-import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_GeometryOp3D;
 import wblut.geom.WB_KDTree;
-import wblut.geom.WB_Mesh;
-import wblut.geom.WB_MeshCreator;
 import wblut.geom.WB_Network;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
+import wblut.geom.WB_SimpleMesh;
+import wblut.geom.WB_SimpleMeshCreator;
 import wblut.geom.WB_Transform3D;
 import wblut.geom.WB_Transform2D;
-import wblut.geom.WB_TriangleGenerator;
+import wblut.geom.WB_TriangleFactory;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_MTRandom;
@@ -56,10 +55,10 @@ import wblut.math.WB_MTRandom;
  *
  */
 public class HE_Mesh extends HE_MeshElement
-		implements WB_TriangleGenerator, HE_HalfedgeStructure, WB_Geometry3D {
+		implements WB_TriangleFactory, HE_HalfedgeStructure, WB_Geometry3D {
 	protected final static WB_ProgressTracker	tracker	= WB_ProgressTracker
 			.instance();
-	protected WB_GeometryFactory				gf		= new WB_GeometryFactory();
+	protected WB_GeometryFactory3D				gf		= new WB_GeometryFactory3D();
 
 	/**
 	 *
@@ -220,8 +219,8 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 * @param mesh
 	 */
-	public HE_Mesh(final WB_Mesh mesh) {
-		this(new HEC_FromWBMesh(mesh));
+	public HE_Mesh(final WB_SimpleMesh mesh) {
+		this(new HEC_FromSimpleMesh(mesh));
 		triangles = null;
 	}
 
@@ -230,8 +229,8 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 * @param mesh
 	 */
-	public HE_Mesh(final WB_MeshCreator mesh) {
-		this(new HEC_FromWBMesh(mesh.create()));
+	public HE_Mesh(final WB_SimpleMeshCreator mesh) {
+		this(new HEC_FromSimpleMesh(mesh.create()));
 		triangles = null;
 	}
 
@@ -490,13 +489,7 @@ public class HE_Mesh extends HE_MeshElement
 			HE_Selection sourceSel = mesh.getSelection(name);
 			HE_Selection currentSel = getSelection(name);
 			HE_Selection sel = sourceSel.get();
-			if (currentSel == null) {
-				currentSel = new HE_Selection(this);
-				currentSel.add(sel);
-				addSelection(name, currentSel);
-			} else {
-				currentSel.add(sel);
-			}
+		    currentSel.add(sel);
 		}
 	}
 
@@ -582,8 +575,16 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 */
 	public void cleanSelections() {
-		for (HE_Selection sel : selections.values()) {
+		List<String> selToDel=new FastList<String>();
+		for (Entry<String,HE_Selection> entry : selections.entrySet()) {
+			HE_Selection sel=entry.getValue();
 			sel.cleanSelection();
+			if(sel.getNumberOfFaces()==0&&sel.getNumberOfVertices()==0&&sel.getNumberOfHalfedges()==0) {
+				selToDel.add(entry.getKey());
+			}
+		}
+		for(String name:selToDel) {
+			selections.remove(name);
 		}
 	}
 
@@ -591,9 +592,19 @@ public class HE_Mesh extends HE_MeshElement
 	 * Clean all mesh elements not used by any faces.
 	 *
 	 * @return self
+	 * @deprecated Use {@link #removeUnconnectedElements()} instead
 	 */
 	public HE_Mesh cleanUnusedElementsByFace() {
-		return HE_MeshOp.cleanUnusedElementsByFace(this);
+		return removeUnconnectedElements();
+	}
+
+	/**
+	 * Clean all mesh elements not used by any faces.
+	 *
+	 * @return self
+	 */
+	public HE_Mesh removeUnconnectedElements() {
+		return HE_MeshOp.removeUnconnectedElements(this);
 	}
 
 	/**
@@ -757,6 +768,7 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 */
 	public void clearSelections() {
+		selections = new UnifiedMap<String, HE_Selection>();
 	}
 
 	/**
@@ -974,8 +986,11 @@ public class HE_Mesh extends HE_MeshElement
 		setNext(he1p, he2n);
 		setNext(he2p, he1n);
 		if (he1.getFace() != null && he2.getFace() != null) {
+			
 			f = new HE_Face();
 			f.copyProperties(e.getPair().getFace());
+			remove(he2.getFace());
+			remove(he1.getFace());
 			addDerivedElement(f, e.getPair().getFace());
 			setHalfedge(f, he1p);
 			HE_Halfedge he = he1p;
@@ -984,12 +999,7 @@ public class HE_Mesh extends HE_MeshElement
 				he = he.getNextInFace();
 			} while (he != he1p);
 		}
-		if (he1.getFace() != null) {
-			remove(he1.getFace());
-		}
-		if (he2.getFace() != null) {
-			remove(he2.getFace());
-		}
+	
 		remove(he1);
 		remove(he2);
 		return f;
@@ -1024,7 +1034,7 @@ public class HE_Mesh extends HE_MeshElement
 			f = fItr.next();
 			remove(f);
 		}
-		cleanUnusedElementsByFace();
+		removeUnconnectedElements();
 		HE_MeshOp.capHalfedges(this);
 	}
 
@@ -1764,22 +1774,6 @@ public class HE_Mesh extends HE_MeshElement
 		return frame;
 	}
 	
-	public WB_Frame getFrame() {
-		final WB_Frame frame = new WB_Frame(getVerticesAsCoord());
-		final LongIntHashMap map = new LongIntHashMap();
-		Map<Long, Integer> indexMap = getVertexKeyToIndexMap();
-		for (Entry<Long, Integer> entry : indexMap.entrySet()) {
-			map.put(entry.getKey(), entry.getValue());
-		}
-		final Iterator<HE_Halfedge> eItr = eItr();
-		HE_Halfedge e;
-		while (eItr.hasNext()) {
-			e = eItr.next();
-			frame.addStrut(map.get(e.getVertex().getKey()),
-					map.get(e.getEndVertex().getKey()));
-		}
-		return frame;
-	}
 
 	/**
 	 * Number of edges.
@@ -1890,7 +1884,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Selection sel = selections.get(name);
 		if (sel == null) {
 			tracker.setDuringStatus(this, "Selection " + name + " not found.");
-			return new HE_Selection(this);
+			return getNewSelection(name);
 		}
 		return sel;
 	}
@@ -1901,6 +1895,27 @@ public class HE_Mesh extends HE_MeshElement
 	 */
 	public Set<String> getSelectionNames() {
 		return selections.keySet();
+	}
+	
+	public void selectionCheck() {
+		for(Map.Entry<String,HE_Selection> entry:selections.entrySet()) {
+			HE_Selection sel=entry.getValue();
+			String name=entry.getKey();
+			HE_VertexIterator vItr =sel.vItr();
+			while (vItr.hasNext()) {
+				if(!contains(vItr.next())) System.out.println("External vertex in selection "+name+".");
+			}
+			HE_HalfedgeIterator heItr =sel.heItr();
+			while (heItr.hasNext()) {
+				if(!contains(heItr.next())) System.out.println("External halfedge in selection "+name+".");
+			}
+			HE_FaceIterator fItr =sel.fItr();
+			while (fItr.hasNext()) {
+				if(!contains(fItr.next())) System.out.println("External face in selection "+name+".");
+			}
+		}
+		
+		
 	}
 
 	/**
@@ -1932,14 +1947,16 @@ public class HE_Mesh extends HE_MeshElement
 	public int[] getTriangles() {
 		if (triangles == null) {
 			final HE_Mesh trimesh = this.copy();
-			HE_MeshOp.triangulate(this);
-			triangles = new int[trimesh.getNumberOfFaces()];
+			HE_MeshOp.triangulate(trimesh);
+			triangles = new int[3*trimesh.getNumberOfFaces()];
 			final Iterator<HE_Face> fItr = trimesh.fItr();
 			HE_Face f;
 			int id = 0;
 			while (fItr.hasNext()) {
 				f = fItr.next();
 				triangles[id++] = trimesh.getIndex(f.getHalfedge().getVertex());
+				triangles[id++] = trimesh.getIndex(f.getHalfedge().getNextInFace().getVertex());
+				triangles[id++] = trimesh.getIndex(f.getHalfedge().getNextInFace().getNextInFace().getVertex());
 			}
 		}
 		return triangles;
@@ -5754,7 +5771,7 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 * @return
 	 */
-	public WB_Mesh toFacelistMesh() {
+	public WB_SimpleMesh toSimpleMesh() {
 		return gf.createMesh(getVerticesAsCoord(), getFacesAsInt());
 	}
 

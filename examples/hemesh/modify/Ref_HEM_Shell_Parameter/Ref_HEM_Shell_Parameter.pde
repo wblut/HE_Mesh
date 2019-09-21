@@ -35,7 +35,10 @@ void draw() {
   stroke(0);
   render.drawEdges(mesh);
   noStroke();
+  fill(255);
   render.drawFaces(mesh);
+  fill(255,0,0);
+  render.drawFaces(mesh.getSelection("boundary"));
 }
 
 void createMesh() {

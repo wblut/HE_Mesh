@@ -9,8 +9,8 @@ import wblut.math.*;
 import wblut.nurbs.*;
 import wblut.processing.*;
 
-//WB_GeometryFactory is a special class that can be used to create basic geometry such as points, lines and circles.
-WB_GeometryFactory gf=new WB_GeometryFactory();
+//WB_GeometryFactory3D is a special class that can be used to create basic geometry such as points, lines and circles.
+WB_GeometryFactory3D gf=new WB_GeometryFactory3D();
 
 //https://docs.oracle.com/javase/tutorial/java/concepts/interface.html
 //A JAVA interface is a collection of methods common for several classes. These classes are said

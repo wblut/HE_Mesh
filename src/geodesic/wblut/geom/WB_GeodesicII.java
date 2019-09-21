@@ -33,9 +33,9 @@ class WB_GeodesicII {
 
 	private final int v, hv;
 
-	private WB_Mesh mesh;
+	private WB_SimpleMesh mesh;
 
-	private static WB_GeometryFactory gf = new WB_GeometryFactory();
+	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
 
 	private final double radius;
 
@@ -105,7 +105,7 @@ class WB_GeodesicII {
 	 *
 	 * @return
 	 */
-	public WB_Mesh getMesh() {
+	public WB_SimpleMesh getMesh() {
 		createMesh();
 		return mesh;
 	}

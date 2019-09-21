@@ -21,8 +21,10 @@ void setup() {
     translate(200, 0,-260+20*i);
     scale(i*0.06);
     meshes[i]=new HE_Mesh(creator); 
+    if(i>10) meshes[i].modify(new HEM_Lattice().setWidth(8).setDepth(8));
     popMatrix();
   }
+
   render=new WB_Render(this);
 }
 

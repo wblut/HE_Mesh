@@ -43,6 +43,8 @@ public abstract class HEC_Creator extends HE_Machine {
 		parameters.set("modelview", false);
 		parameters.set("manifoldcheck", false);
 		parameters.set("override", false);
+		parameters.set("mvoverride", false);
+		setCheckNormals(false);
 	}
 
 	public WB_Point getCenter() {
@@ -66,19 +68,38 @@ public abstract class HEC_Creator extends HE_Machine {
 	}
 
 	protected boolean getModelView() {
-		return parameters.get("modelView", false);
+		return parameters.get("modelview", false);
 	}
 
 	protected PApplet getHome() {
 		return (PApplet) parameters.get("home", null);
 	}
 
-	protected boolean getManifoldCheck() {
+	protected boolean getCheckManifold() {
 		return parameters.get("manifoldcheck", false);
 	}
 
 	protected boolean getOverride() {
 		return parameters.get("override", false);
+	}
+	
+	protected boolean getModelViewOverride() {
+		return parameters.get("mvoverride", false);
+	}
+	
+	protected boolean getCheckNormals() {
+		return parameters.get("normalcheck", false);
+	}
+	
+	/**
+	 * @deprecated Use {@link #getRemoveUnconnectedElements()} instead
+	 */
+	protected boolean getCleanUnconnectedElements() {
+		return getRemoveUnconnectedElements();
+	}
+
+	protected boolean getRemoveUnconnectedElements() {
+		return parameters.get("removeunconnected", false);
 	}
 
 	/**
@@ -114,7 +135,7 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @return
 	 */
 	public HEC_Creator setScale(final double s) {
-		parameters.set("scale", s);
+		parameters.set("scale", (double)s);
 		return this;
 	}
 
@@ -125,7 +146,7 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @return self
 	 */
 	public HEC_Creator setZAngle(final double a) {
-		parameters.set("rotationangle", a);
+		parameters.set("rotationangle", (double)a);
 		return this;
 	}
 
@@ -262,7 +283,7 @@ public abstract class HEC_Creator extends HE_Machine {
 	 * @param b
 	 * @return
 	 */
-	public HEC_Creator setManifoldCheck(final boolean b) {
+	public HEC_Creator setCheckManifold(final boolean b) {
 		parameters.set("manifoldcheck", b);
 		return this;
 	}
@@ -277,6 +298,29 @@ public abstract class HEC_Creator extends HE_Machine {
 		parameters.set("override", b);
 		return this;
 	}
+	
+	public HEC_Creator setModelViewOverride(final boolean b) {
+		parameters.set("mvoverride", b);
+		return this;
+	}
+	/**
+	 * Check face normals?.
+	 *
+	 * @param b
+	 *            true/false
+	 * @return self
+	 */
+	public HEC_Creator setCheckNormals(final boolean b) {
+		parameters.set("normalcheck" ,b);
+		return this;
+	}
+	
+	
+	public HEC_Creator setRemoveUnconnectedElements(final boolean b) {
+		parameters.set("removeunconnected",b);
+		return this;
+	}
+
 
 	/**
 	 * Creates the base.
@@ -294,6 +338,39 @@ public abstract class HEC_Creator extends HE_Machine {
 		tracker.setStartStatus(this, "Creating base mesh.");
 		final HE_Mesh base = createBase();
 		tracker.setStopStatus(this, "Base mesh created.");
+		
+		
+		
+		if (getRemoveUnconnectedElements()) {
+			base.removeUnconnectedElements();
+			HE_MeshOp.capHalfedges(base);
+		}
+		
+		if (getCheckManifold()) {
+			tracker.setStartStatus(this, "Checking and fixing manifold.");
+			HET_Fixer.fixNonManifoldVertices(base);
+			tracker.setStopStatus(this, "Manifold checked.");
+		}
+		
+		if (getCheckNormals()) {
+			final HE_FaceIterator fitr = base.fItr();
+			HE_Face f;
+			HE_Face left = null;
+			WB_Coord fcleft = new WB_Point(Double.MAX_VALUE,
+					Double.MAX_VALUE, Double.MAX_VALUE);
+			while (fitr.hasNext()) {
+				f = fitr.next();
+				if (HE_MeshOp.getFaceCenter(f).xd() < fcleft.xd()) {
+					left = f;
+					fcleft = HE_MeshOp.getFaceCenter(left);
+				}
+			}
+			final WB_Coord leftn = HE_MeshOp.getFaceNormal(left);
+			if (leftn.xd() > 0) {
+				HE_MeshOp.flipFaces(base);
+			}
+		}
+		
 		tracker.setStartStatus(this, "Transforming base mesh.");
 		WB_Coord ctr = HE_MeshOp.getCenter(base);
 		if (!getOverride()) {
@@ -314,22 +391,16 @@ public abstract class HEC_Creator extends HE_Machine {
 		tracker.setStopStatus(this, "Mesh transformed.");
 
 		HE_Vertex v;
-		if (getModelView()) {
+		if (getModelView() && !getModelViewOverride()) {
 			tracker.setStartStatus(this, "Transforming mesh from model view to world view.");
 			WB_Map map = (WB_Map) parameters.get("map", new WB_DefaultMap3D());
 			final Iterator<HE_Vertex> vItr = base.vItr();
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				map.mapPoint3D(v);
+				map.mapPoint3D(v,v);
 			}
 		}
 		tracker.setStopStatus(this, "Mesh transformed.");
-
-		if (getManifoldCheck()) {
-			tracker.setStartStatus(this, "Checking and fixing manifold.");
-			HET_Fixer.fixNonManifoldVertices(base);
-			tracker.setStopStatus(this, "Manifold checked.");
-		}
 
 		return base;
 	}
@@ -352,6 +423,6 @@ public abstract class HEC_Creator extends HE_Machine {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection sel) {
-		return create();
+		throw new UnsupportedOperationException("The operation apply(HE_Selection) is not available for a HEC_Creator.");
 	}
 }

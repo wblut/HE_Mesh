@@ -15,7 +15,7 @@ void setup() {
   HEM_Noise modifier=new HEM_Noise();
   modifier.setDistance(20);
   copymesh.modify(modifier);
-
+copymesh.smooth();
   render=new WB_Render(this);
 }
 
@@ -30,7 +30,6 @@ void draw() {
   modifier.setDistance(mouseY/5);
   modifier.setSeed(125);
   copymesh.modify(modifier);
-  
   fill(255);
   noStroke();
   render.drawFaces(copymesh);

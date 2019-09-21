@@ -126,7 +126,7 @@ public class HEC_Ellipsoid extends HEC_Creator {
 			faces[u + uFacets * (vFacets - 1)][2] = index(u + 1, vFacets);
 		}
 		final HEC_FromFacelist fl = new HEC_FromFacelist();
-		fl.setVertices(vertices).setFaces(faces).setDuplicate(false).setCheckNormals(false);
+		fl.setVertices(vertices).setFaces(faces).setCheckDuplicateVertices(false).setCheckNormals(false);
 		return fl.createBase();
 	}
 

@@ -26,8 +26,8 @@ smooth(8);
   }
   
   P=new WB_RBSpline(points,4);
-  WB_RBSplineSurface surface=WB_NurbsFactory.getSurfaceOfRevolution(P, new WB_Point(0,0,0),new WB_Vector(0,0,1),TWO_PI/3.0);
- //WB_RBSplineSurface surface=WB_NurbsFactory.getFullSurfaceOfRevolution(P, new WB_Point(0,0,0),new WB_Vector(0,0,1));
+ //WB_RBSplineSurface surface=WB_NurbsFactory.getSurfaceOfRevolution(P, new WB_Point(0,0,0),new WB_Vector(0,0,1),PI);
+ WB_RBSplineSurface surface=WB_NurbsFactory.getFullSurfaceOfRevolution(P, new WB_Point(0,0,0),new WB_Vector(0,0,1));
  //WB_RBSplineSurface surface=WB_NurbsFactory.getLineSweep(P, new WB_Point(0,1,0),200);
   HEC_FromSurface creator=new HEC_FromSurface();
   creator.setSurface(surface);//surface can be any implementation of the WB_Surface interface
@@ -36,7 +36,9 @@ smooth(8);
   creator.setUWrap(false);// wrap around in U direction
   creator.setVWrap(false);// wrap around in V direction
   mesh=new HE_Mesh(creator); 
-  HET_Diagnosis.validate(mesh);
+  mesh.stats();
+  //mesh.modify(new HEM_Shell().setThickness(20));
+  //mesh.subdivide(new HES_CatmullClark(),2);
   render=new WB_Render(this);
 }
 

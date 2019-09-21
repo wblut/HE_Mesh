@@ -7,7 +7,7 @@ import wblut.processing.*;
 import java.util.List;
 
 WB_Render3D render;
-WB_GeometryFactory gf=new WB_GeometryFactory();
+WB_GeometryFactory3D gf=new WB_GeometryFactory3D();
 WB_Triangulation2DWithPoints triangulation;
 List<WB_Coord> points;
 

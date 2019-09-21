@@ -7,8 +7,10 @@
 package wblut.hemesh;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 import org.eclipse.collections.impl.map.mutable.primitive.LongLongHashMap;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
@@ -23,10 +25,10 @@ public class HEC_Copy extends HEC_Creator {
 	/**
 	 *
 	 */
-	HE_HalfedgeStructure	source;
-	public LongLongHashMap	vertexCorrelation;
-	public LongLongHashMap	faceCorrelation;
-	public LongLongHashMap	halfedgeCorrelation;
+	private HE_HalfedgeStructure	source;
+	public Map<Long,Long>	vertexCorrelation;
+	public Map<Long,Long>	faceCorrelation;
+	public Map<Long,Long>	halfedgeCorrelation;
 
 	/**
 	 *
@@ -34,6 +36,7 @@ public class HEC_Copy extends HEC_Creator {
 	public HEC_Copy() {
 		super();
 		setOverride(true);
+		setModelViewOverride(true);
 	}
 
 	/**
@@ -42,9 +45,8 @@ public class HEC_Copy extends HEC_Creator {
 	 * @param source
 	 */
 	public HEC_Copy(final HE_HalfedgeStructure source) {
-		super();
+		this();
 		setMesh(source);
-		setOverride(true);
 	}
 
 	/**
@@ -57,6 +59,12 @@ public class HEC_Copy extends HEC_Creator {
 		this.source = source;
 		return this;
 	}
+	
+	public HEC_Copy setSource(final HE_HalfedgeStructure source) {
+		this.source = source;
+		return this;
+	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -73,9 +81,9 @@ public class HEC_Copy extends HEC_Creator {
 		if (source instanceof HE_Mesh) {
 			final HE_Mesh mesh = (HE_Mesh) source;
 			result.copyProperties(mesh);
-			vertexCorrelation = new LongLongHashMap();
-			faceCorrelation = new LongLongHashMap();
-			halfedgeCorrelation = new LongLongHashMap();
+			vertexCorrelation = new UnifiedMap<Long,Long>();
+			faceCorrelation = new UnifiedMap<Long,Long>();
+			halfedgeCorrelation = new UnifiedMap<Long,Long>();
 			HE_Vertex rv;
 			HE_Vertex v;
 			WB_ProgressCounter counter = new WB_ProgressCounter(
@@ -195,24 +203,26 @@ public class HEC_Copy extends HEC_Creator {
 			}
 			Set<String> names = mesh.getSelectionNames();
 			for (String name : names) {
-				HE_Selection source = mesh.getSelection(name);
+				
+				HE_Selection sourcesel = mesh.getSelection(name);
 				HE_Selection target = HE_Selection.getSelection(result);
-				svItr = source.vItr();
+				svItr = sourcesel.vItr();
 				while (svItr.hasNext()) {
 					sv = svItr.next();
 					key = vertexCorrelation.get(sv.getKey());
 					target.add(result.getVertexWithKey(key));
 				}
-				sheItr = source.heItr();
+				sheItr = sourcesel.heItr();
 				while (sheItr.hasNext()) {
 					she = sheItr.next();
 					key = halfedgeCorrelation.get(she.getKey());
 					target.add(result.getHalfedgeWithKey(key));
 				}
-				sfItr = source.fItr();
+				sfItr = sourcesel.fItr();
 				while (sfItr.hasNext()) {
 					sf = sfItr.next();
 					key = faceCorrelation.get(sf.getKey());
+				
 					target.add(result.getFaceWithKey(key));
 				}
 				result.addSelection(name, target);
@@ -222,9 +232,9 @@ public class HEC_Copy extends HEC_Creator {
 			final HE_Selection sel = ((HE_Selection) source).get();
 			result.copyProperties(sel);
 			sel.completeFromFaces();
-			vertexCorrelation = new LongLongHashMap();
-			faceCorrelation = new LongLongHashMap();
-			halfedgeCorrelation = new LongLongHashMap();
+			vertexCorrelation = new UnifiedMap<Long,Long>();;
+			faceCorrelation = new UnifiedMap<Long,Long>();
+			halfedgeCorrelation = new UnifiedMap<Long,Long>();
 			HE_Vertex rv;
 			HE_Vertex v;
 			WB_ProgressCounter counter = new WB_ProgressCounter(

@@ -29,7 +29,7 @@ class WB_VoronoiCreator3D extends WB_VoronoiCreator2D {
 	/**
 	 *
 	 */
-	private static WB_GeometryFactory	geometryfactory	= new WB_GeometryFactory();
+	private static WB_GeometryFactory3D	geometryfactory	= new WB_GeometryFactory3D();
 	final static WB_Map2D				XY				= geometryfactory
 			.createEmbeddedPlane();
 
@@ -364,7 +364,7 @@ class WB_VoronoiCreator3D extends WB_VoronoiCreator2D {
 			final ArrayList<WB_Plane> cutPlanes = new ArrayList<WB_Plane>();
 			final WB_Point O = new WB_Point();
 			WB_Plane P;
-			final WB_Mesh cell = geometryfactory.createMesh(aabb);
+			final WB_SimpleMesh cell = geometryfactory.createMesh(aabb);
 			for (int j = 0; j < n; j++) {
 				if (j != i) {
 					final WB_Vector N = new WB_Vector(points.get(i));
@@ -496,7 +496,7 @@ class WB_VoronoiCreator3D extends WB_VoronoiCreator2D {
 			final ArrayList<WB_Plane> cutPlanes = new ArrayList<WB_Plane>();
 			final WB_Point O = new WB_Point();
 			WB_Plane P;
-			final WB_Mesh cell = geometryfactory.createMesh(aabb);
+			final WB_SimpleMesh cell = geometryfactory.createMesh(aabb);
 			for (int j = 0; j < n; j++) {
 				if (j != i) {
 					final WB_Vector N = new WB_Vector(points[i]);
@@ -760,7 +760,7 @@ class WB_VoronoiCreator3D extends WB_VoronoiCreator2D {
 			final ArrayList<WB_Plane> cutPlanes = new ArrayList<WB_Plane>();
 			final WB_Point O = new WB_Point();
 			WB_Plane P;
-			final WB_Mesh cell = geometryfactory.createMesh(aabb);
+			final WB_SimpleMesh cell = geometryfactory.createMesh(aabb);
 			for (int j = 0; j < n; j++) {
 				if (j != i) {
 					final WB_Vector N = new WB_Vector(points.get(i));
