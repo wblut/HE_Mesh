@@ -4,17 +4,17 @@ import java.util.*;
 
 WB_RandomPoint source;
 WB_Render3D render;
-WB_KDTreeInteger<WB_Point> tree;
+WB_KDTreeInteger3D<WB_Point> tree;
 
 List<WB_Point> points;
-WB_KDTreeInteger.WB_KDEntryInteger<WB_Point>[] inRange;
+WB_KDTreeInteger3D.WB_KDEntryInteger<WB_Point>[] inRange;
 WB_Point center;
 double range;
 void setup() {
   size(800, 800, P3D);
   source=new WB_RandomInSphere().setRadius(250);
   render=new WB_Render3D(this);
-  tree= new WB_KDTreeInteger<WB_Point>(8);
+  tree= new WB_KDTreeInteger3D<WB_Point>(8);
   points=new ArrayList<WB_Point>();
   for (int i=0; i<100000; i++) {
     points.add(source.nextPoint());
@@ -38,9 +38,9 @@ void draw() {
   noStroke();
   fill(255,0,0);
    //Moving the query range is quite fast.
-  for(WB_KDTreeInteger.WB_KDEntryInteger<WB_Point> entry:inRange){
+  for(WB_KDTreeInteger3D.WB_KDEntryInteger<WB_Point> entry:inRange){
    render.drawPoint(points.get(entry.value),3); 
   }
  
-  center.addSelf(random(-5.0,5.0),random(-5.0,5.0),random(-5.0,5.0));
+  center.addSelf(random(-15.0,15.0),random(-15.0,15.0),random(-15.0,15.0));
 }

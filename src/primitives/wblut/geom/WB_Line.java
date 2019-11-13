@@ -16,7 +16,7 @@ import wblut.math.WB_Math;
 /**
  *
  */
-public class WB_Line implements WB_Curve, WB_Geometry3D {
+public class WB_Line implements WB_Curve, WB_Geometry {
 	protected WB_Point	origin;
 	protected WB_Vector	direction;
 
@@ -123,7 +123,7 @@ public class WB_Line implements WB_Curve, WB_Geometry3D {
 	 */
 	public double getT(final WB_Coord p) {
 		double t = Double.NaN;
-		final WB_Coord proj = WB_GeometryOp3D.getClosestPoint2D(p, this);
+		final WB_Coord proj = WB_GeometryOp.getClosestPoint2D(p, this);
 		final double x = WB_Math.fastAbs(direction.xd());
 		final double y = WB_Math.fastAbs(direction.yd());
 		if (x >= y) {
@@ -329,12 +329,12 @@ public class WB_Line implements WB_Curve, WB_Geometry3D {
 	}
 
 	@Override
-	public WB_Line apply(WB_Transform3D T) {
+	public WB_Line apply(WB_Transform T) {
 		return new WB_Line(origin.apply(T), direction.apply(T));
 	}
 
 	@Override
-	public WB_Line applySelf(WB_Transform3D T) {
+	public WB_Line applySelf(WB_Transform T) {
 		origin.applySelf(T);
 		direction.applySelf(T);
 		return this;

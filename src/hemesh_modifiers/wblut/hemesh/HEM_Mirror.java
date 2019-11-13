@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.eclipse.collections.impl.list.mutable.FastList;
 
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Plane;
 import wblut.math.WB_Epsilon;
 
@@ -125,7 +125,7 @@ public class HEM_Mirror extends HEM_Modifier {
 		for (int i = 0; i < mirrormesh.getNumberOfVertices(); i++) {
 			v = mirrormesh.getVertexWithIndex(i);
 			origv = mesh.getVertexWithIndex(i);
-			if (WB_Epsilon.isZero(WB_GeometryOp3D.getDistance3D(v, P))) {
+			if (WB_Epsilon.isZero(WB_GeometryOp.getDistance3D(v, P))) {
 				List<HE_Halfedge> star = v.getHalfedgeStar();
 				for (HE_Halfedge he : star) {
 					mirrormesh.setVertex(he, origv);

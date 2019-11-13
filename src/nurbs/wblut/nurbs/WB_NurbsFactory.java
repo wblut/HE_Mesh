@@ -10,7 +10,7 @@
 package wblut.nurbs;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Point;
@@ -92,7 +92,7 @@ public class WB_NurbsFactory {
 			sines[i] = Math.sin(angle);
 		}
 		for (j = 0; j <= C.n(); j++) {
-			final WB_Point O = WB_GeometryOp3D.getClosestPoint3D(C.points()[j], L);
+			final WB_Point O = WB_GeometryOp.getClosestPoint3D(C.points()[j], L);
 			final WB_Vector X = WB_Vector.subToVector3D(C.points()[j], O);
 			final double r = X.normalizeSelf();
 			final WB_Vector Y = new WB_Vector(v).crossSelf(X);
@@ -112,7 +112,7 @@ public class WB_NurbsFactory {
 				T2.addMulSelf(-sines[i], X);
 				final WB_Line L1 = new WB_Line(P0, T0);
 				final WB_Line L2 = new WB_Line(P2, T2);
-				final WB_IntersectionResult is = WB_GeometryOp3D.getClosestPoint3D(L1, L2);
+				final WB_IntersectionResult is = WB_GeometryOp.getClosestPoint3D(L1, L2);
 				final WB_Coord p1 = is.dimension == 0 ? (WB_Point) is.object : ((WB_Segment) is.object).getOrigin();
 				points[index + 1][j] = p1;
 				weights[index + 1][j] = wm;
@@ -202,7 +202,7 @@ public class WB_NurbsFactory {
 			sines[i] = Math.sin(angle);
 		}
 		for (j = 0; j <= C.n(); j++) {
-			final WB_Point O = WB_GeometryOp3D.getClosestPoint3D(C.points()[j], L);
+			final WB_Point O = WB_GeometryOp.getClosestPoint3D(C.points()[j], L);
 			final WB_Vector X = WB_Vector.subToVector3D(C.points()[j], O);
 			final double r = X.normalizeSelf();
 			final WB_Vector Y = new WB_Vector(v).crossSelf(X);
@@ -222,7 +222,7 @@ public class WB_NurbsFactory {
 				T2.addMulSelf(-sines[i], X);
 				final WB_Line L1 = new WB_Line(P0, T0);
 				final WB_Line L2 = new WB_Line(P2, T2);
-				final WB_IntersectionResult is = WB_GeometryOp3D.getClosestPoint3D(L1, L2);
+				final WB_IntersectionResult is = WB_GeometryOp.getClosestPoint3D(L1, L2);
 				final WB_Coord p1 = is.dimension == 0 ? (WB_Point) is.object : ((WB_Segment) is.object).getOrigin();
 				points[index + 1][j] = p1;
 				weights[index + 1][j] = wm * C.wpoints()[j].wd();

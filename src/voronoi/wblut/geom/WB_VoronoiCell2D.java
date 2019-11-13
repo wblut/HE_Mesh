@@ -44,7 +44,7 @@ public class WB_VoronoiCell2D {
 	/**
 	 *
 	 */
-	private WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
+	private WB_GeometryFactory geometryfactory = new WB_GeometryFactory();
 
 	/**
 	 *

@@ -8,17 +8,16 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import processing.core.PApplet;
-import processing.opengl.PGraphics3D;
+
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordinateSystem;
 import wblut.geom.WB_DefaultMap3D;
 import wblut.geom.WB_Map;
 import wblut.geom.WB_ModelViewMap;
 import wblut.geom.WB_Point;
-import wblut.geom.WB_Transform3D;
+import wblut.geom.WB_Transform;
 import wblut.geom.WB_TransformMap;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
@@ -99,6 +98,7 @@ public abstract class HEC_Creator extends HE_Machine {
 	}
 
 	protected boolean getRemoveUnconnectedElements() {
+		
 		return parameters.get("removeunconnected", false);
 	}
 
@@ -252,14 +252,14 @@ public abstract class HEC_Creator extends HE_Machine {
 		return this;
 	}
 
-	public HEC_Creator setToModelview(final WB_Transform3D T) {
+	public HEC_Creator setToModelview(final WB_Transform T) {
 		parameters.set("map", new WB_TransformMap(T));
 		parameters.set("modelview", true);
 		return this;
 	}
 
 	public HEC_Creator setToModelview(final WB_CoordinateSystem CS) {
-		WB_Transform3D T = new WB_Transform3D();
+		WB_Transform T = new WB_Transform();
 		T.addFromCSToWorld(CS);
 		parameters.set("map", new WB_TransformMap(T));
 		parameters.set("modelview", true);
@@ -342,6 +342,7 @@ public abstract class HEC_Creator extends HE_Machine {
 		
 		
 		if (getRemoveUnconnectedElements()) {
+			
 			base.removeUnconnectedElements();
 			HE_MeshOp.capHalfedges(base);
 		}
@@ -388,8 +389,7 @@ public abstract class HEC_Creator extends HE_Machine {
 			}
 			base.moveToSelf(getCenter());
 		}
-		tracker.setStopStatus(this, "Mesh transformed.");
-
+		tracker.setStopStatus(this, "Base mesh transformed.");
 		HE_Vertex v;
 		if (getModelView() && !getModelViewOverride()) {
 			tracker.setStartStatus(this, "Transforming mesh from model view to world view.");
@@ -399,8 +399,9 @@ public abstract class HEC_Creator extends HE_Machine {
 				v = vItr.next();
 				map.mapPoint3D(v,v);
 			}
+			tracker.setStopStatus(this, "Mesh transformed to world view.");
 		}
-		tracker.setStopStatus(this, "Mesh transformed.");
+		
 
 		return base;
 	}

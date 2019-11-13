@@ -15,7 +15,7 @@ import wblut.math.WB_Epsilon;
  * @author FVH
  *
  */
-public class WB_GeometryOp4D extends WB_GeometryOp3D {
+public class WB_GeometryOp4D extends WB_GeometryOp {
 
 	/**
 	 *

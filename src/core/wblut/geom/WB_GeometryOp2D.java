@@ -14,7 +14,7 @@ import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
 public class WB_GeometryOp2D extends WB_GeometryOpGLU {
-	private static final WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	private static final WB_GeometryFactory gf = new WB_GeometryFactory();
 
 	/**
 	 *
@@ -39,12 +39,12 @@ public class WB_GeometryOp2D extends WB_GeometryOpGLU {
 	 */
 	public static final WB_IntersectionResult getIntersection2D(
 			final WB_Segment S1, final WB_Segment S2) {
-		final double a1 = WB_GeometryOp3D.twiceSignedTriArea2D(S1.getOrigin(),
+		final double a1 = WB_GeometryOp.twiceSignedTriArea2D(S1.getOrigin(),
 				S1.getEndpoint(), S2.getEndpoint());
-		final double a2 = WB_GeometryOp3D.twiceSignedTriArea2D(S1.getOrigin(),
+		final double a2 = WB_GeometryOp.twiceSignedTriArea2D(S1.getOrigin(),
 				S1.getEndpoint(), S2.getOrigin());
 		if (!WB_Epsilon.isZero(a1) && !WB_Epsilon.isZero(a2) && a1 * a2 < 0) {
-			final double a3 = WB_GeometryOp3D.twiceSignedTriArea2D(
+			final double a3 = WB_GeometryOp.twiceSignedTriArea2D(
 					S2.getOrigin(), S2.getEndpoint(), S1.getOrigin());
 			final double a4 = a3 + a2 - a1;
 			if (a3 * a4 < 0) {
@@ -72,12 +72,12 @@ public class WB_GeometryOp2D extends WB_GeometryOpGLU {
 	 */
 	public static final void getIntersection2DInto(final WB_Segment S1,
 			final WB_Segment S2, final WB_IntersectionResult i) {
-		final double a1 = WB_GeometryOp3D.twiceSignedTriArea2D(S1.getOrigin(),
+		final double a1 = WB_GeometryOp.twiceSignedTriArea2D(S1.getOrigin(),
 				S1.getEndpoint(), S2.getEndpoint());
-		final double a2 = WB_GeometryOp3D.twiceSignedTriArea2D(S1.getOrigin(),
+		final double a2 = WB_GeometryOp.twiceSignedTriArea2D(S1.getOrigin(),
 				S1.getEndpoint(), S2.getOrigin());
 		if (!WB_Epsilon.isZero(a1) && !WB_Epsilon.isZero(a2) && a1 * a2 < 0) {
-			final double a3 = WB_GeometryOp3D.twiceSignedTriArea2D(
+			final double a3 = WB_GeometryOp.twiceSignedTriArea2D(
 					S2.getOrigin(), S2.getEndpoint(), S1.getOrigin());
 			final double a4 = a3 + a2 - a1;
 			if (a3 * a4 < 0) {
@@ -115,13 +115,13 @@ public class WB_GeometryOp2D extends WB_GeometryOpGLU {
 		}
 		if (ir2D.dimension == 0) {
 			result = new WB_Segment[2];
-			if (WB_GeometryOp3D.classifyPointToLine2D(S.getOrigin(),
+			if (WB_GeometryOp.classifyPointToLine2D(S.getOrigin(),
 					L) == WB_Classification.FRONT) {
 				result[0] = new WB_Segment(S.getOrigin(),
 						(WB_Point) ir2D.object);
 				result[1] = new WB_Segment((WB_Point) ir2D.object,
 						S.getEndpoint());
-			} else if (WB_GeometryOp3D.classifyPointToLine2D(S.getOrigin(),
+			} else if (WB_GeometryOp.classifyPointToLine2D(S.getOrigin(),
 					L) == WB_Classification.BACK) {
 				result[1] = new WB_Segment(S.getOrigin(),
 						(WB_Point) ir2D.object);
@@ -146,14 +146,14 @@ public class WB_GeometryOp2D extends WB_GeometryOpGLU {
 		final int numVerts = poly.numberOfShellPoints;
 		if (numVerts > 0) {
 			WB_Coord a = poly.getPoint(numVerts - 1);
-			WB_Classification aSide = WB_GeometryOp3D.classifyPointToLine2D(a,
+			WB_Classification aSide = WB_GeometryOp.classifyPointToLine2D(a,
 					L);
 			WB_Coord b;
 			WB_Classification bSide;
 			for (int n = 0; n < numVerts; n++) {
 				WB_IntersectionResult i = new WB_IntersectionResult();
 				b = poly.getPoint(n);
-				bSide = WB_GeometryOp3D.classifyPointToLine2D(b, L);
+				bSide = WB_GeometryOp.classifyPointToLine2D(b, L);
 				if (bSide == WB_Classification.FRONT) {
 					if (aSide == WB_Classification.BACK) {
 						i = getClosestPoint2D(L, new WB_Segment(a, b));
@@ -1201,7 +1201,7 @@ public class WB_GeometryOp2D extends WB_GeometryOpGLU {
 		double d2min = Double.POSITIVE_INFINITY;
 		double d2;
 		for (int s = 0; s < PL.getNumberSegments(); s++) {
-			d2 = WB_GeometryOp3D.getSqDistance2D(p, PL.getSegment(s));
+			d2 = WB_GeometryOp.getSqDistance2D(p, PL.getSegment(s));
 			if (d2 < d2min) {
 				d2min = d2;
 			}
@@ -1446,7 +1446,7 @@ public class WB_GeometryOp2D extends WB_GeometryOpGLU {
 	 */
 	public static final WB_Classification classifyPointToCircle2D(
 			final WB_Coord p, final WB_Circle C) {
-		final double dist = WB_GeometryOp3D.getDistanceToPoint2D(p,
+		final double dist = WB_GeometryOp.getDistanceToPoint2D(p,
 				C.getCenter());
 		if (WB_Epsilon.isZero(dist - C.getRadius())) {
 			return WB_Classification.ON;
@@ -1469,7 +1469,7 @@ public class WB_GeometryOp2D extends WB_GeometryOpGLU {
 		if (C1.equals(C2)) {
 			return WB_Classification.ON;
 		}
-		final double dist = WB_GeometryOp3D.getDistanceToPoint2D(C1.getCenter(),
+		final double dist = WB_GeometryOp.getDistanceToPoint2D(C1.getCenter(),
 				C2.getCenter());
 		final double rsum = C1.getRadius() + C2.getRadius();
 		final double rdiff = Math.abs(C1.getRadius() - C2.getRadius());
@@ -2074,7 +2074,7 @@ public class WB_GeometryOp2D extends WB_GeometryOpGLU {
 	public static final boolean pointInTriangle2D(final WB_Coord p,
 			final WB_Coord A, final WB_Coord B, final WB_Coord C) {
 		if (WB_Epsilon
-				.isZeroSq(WB_GeometryOp3D.getSqDistanceToLine2D(A, B, C))) {
+				.isZeroSq(WB_GeometryOp.getSqDistanceToLine2D(A, B, C))) {
 			return false;
 		}
 		if (sameSide2D(p, A, B, C) && sameSide2D(p, B, A, C)
@@ -2114,7 +2114,7 @@ public class WB_GeometryOp2D extends WB_GeometryOpGLU {
 			return false;
 		}
 		if (WB_Epsilon
-				.isZeroSq(WB_GeometryOp3D.getSqDistanceToLine2D(A, B, C))) {
+				.isZeroSq(WB_GeometryOp.getSqDistanceToLine2D(A, B, C))) {
 			return false;
 		}
 		// Compute vectors

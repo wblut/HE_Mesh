@@ -13,9 +13,9 @@ import java.util.List;
 import org.eclipse.collections.impl.list.mutable.FastList;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_CoordOp3D;
-import wblut.geom.WB_KDTreeInteger;
-import wblut.geom.WB_KDTreeInteger.WB_KDEntryInteger;
+import wblut.geom.WB_CoordOp;
+import wblut.geom.WB_KDTreeInteger3D;
+import wblut.geom.WB_KDTreeInteger3D.WB_KDEntryInteger;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_RandomOnSphere;
@@ -226,7 +226,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 	 */
 	private void grow(final WB_Point[] tracers, final int index,
 			final double offset) {
-		final WB_KDTreeInteger<WB_Coord> kdtree = new WB_KDTreeInteger<WB_Coord>();
+		final WB_KDTreeInteger3D<WB_Coord> kdtree = new WB_KDTreeInteger3D<WB_Coord>();
 		for (int i = 0; i < numberOfPoints; i++) {
 			kdtree.add(points.get(i), i);
 		}
@@ -244,7 +244,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 				while (j == index && d2self < cutoff * cutoff) {
 					p.addSelf(stepSize * r.xd(), stepSize * r.yd(),
 							stepSize * r.zd());
-					d2self = WB_CoordOp3D.getSqDistance3D(p, c);
+					d2self = WB_CoordOp.getSqDistance3D(p, c);
 					final WB_KDEntryInteger<WB_Coord>[] closest = kdtree
 							.getNearestNeighbors(p, 1);
 					j = closest[0].value;

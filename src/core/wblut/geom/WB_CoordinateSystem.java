@@ -640,8 +640,8 @@ public class WB_CoordinateSystem {
 	 *
 	 * @return
 	 */
-	public WB_Transform3D getTransformFromParent() {
-		final WB_Transform3D result = new WB_Transform3D();
+	public WB_Transform getTransformFromParent() {
+		final WB_Transform result = new WB_Transform();
 		result.addFromParentToCS(this);
 		return result;
 	}
@@ -651,8 +651,8 @@ public class WB_CoordinateSystem {
 	 *
 	 * @return
 	 */
-	public WB_Transform3D getTransformToParent() {
-		final WB_Transform3D result = new WB_Transform3D();
+	public WB_Transform getTransformToParent() {
+		final WB_Transform result = new WB_Transform();
 		result.addFromCSToParent(this);
 		return result;
 	}
@@ -662,8 +662,8 @@ public class WB_CoordinateSystem {
 	 *
 	 * @return
 	 */
-	public WB_Transform3D getTransformFromWorld() {
-		final WB_Transform3D result = new WB_Transform3D();
+	public WB_Transform getTransformFromWorld() {
+		final WB_Transform result = new WB_Transform();
 		result.addFromWorldToCS(this);
 		return result;
 	}
@@ -673,8 +673,8 @@ public class WB_CoordinateSystem {
 	 *
 	 * @return
 	 */
-	public WB_Transform3D getTransformToWorld() {
-		final WB_Transform3D result = new WB_Transform3D();
+	public WB_Transform getTransformToWorld() {
+		final WB_Transform result = new WB_Transform();
 		result.addFromCSToWorld(this);
 		return result;
 	}
@@ -685,8 +685,8 @@ public class WB_CoordinateSystem {
 	 * @param CS
 	 * @return
 	 */
-	public WB_Transform3D getTransformFrom(final WB_CoordinateSystem CS) {
-		final WB_Transform3D result = new WB_Transform3D();
+	public WB_Transform getTransformFrom(final WB_CoordinateSystem CS) {
+		final WB_Transform result = new WB_Transform();
 		result.addFromCSToCS(CS, this);
 		return result;
 	}
@@ -697,8 +697,8 @@ public class WB_CoordinateSystem {
 	 * @param CS
 	 * @return
 	 */
-	public WB_Transform3D getTransformTo(final WB_CoordinateSystem CS) {
-		final WB_Transform3D result = new WB_Transform3D();
+	public WB_Transform getTransformTo(final WB_CoordinateSystem CS) {
+		final WB_Transform result = new WB_Transform();
 		result.addFromCSToCS(this, CS);
 		return result;
 	}
@@ -803,7 +803,7 @@ public class WB_CoordinateSystem {
 	 * @param T
 	 * @return
 	 */
-	WB_CoordinateSystem apply(final WB_Transform3D T) {
+	WB_CoordinateSystem apply(final WB_Transform T) {
 		return new WB_CoordinateSystem(T.applyAsPoint(_origin), T.applyAsVector(_X), T.applyAsVector(_Y),
 				T.applyAsVector(_Z), _parent == null ? WORLD() : _parent);
 	}
@@ -815,7 +815,7 @@ public class WB_CoordinateSystem {
 	 * @param parent
 	 * @return
 	 */
-	WB_CoordinateSystem apply(final WB_Transform3D T, final WB_CoordinateSystem parent) {
+	WB_CoordinateSystem apply(final WB_Transform T, final WB_CoordinateSystem parent) {
 		return new WB_CoordinateSystem(T.applyAsPoint(_origin), T.applyAsVector(_X), T.applyAsVector(_Y),
 				T.applyAsVector(_Z), _parent);
 	}

@@ -14,16 +14,10 @@ import org.eclipse.collections.impl.map.mutable.primitive.LongObjectHashMap;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.core.WB_ProgressReporter.WB_ProgressTracker;
-import wblut.geom.WB_AABBTree;
-import wblut.geom.WB_AABBTree.WB_AABBNode;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_CoordOp3D;
+import wblut.geom.WB_CoordOp;
 import wblut.geom.WB_GeometryOp;
-import wblut.geom.WB_GeometryOp3D;
-import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_Point;
-import wblut.geom.WB_Segment;
-import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
@@ -171,7 +165,7 @@ public class HET_Fixer {
 		HE_Halfedge e;
 		while (eItr.hasNext()) {
 			e = eItr.next();
-			if (WB_Epsilon.isZeroSq(WB_CoordOp3D.getSqDistance3D(e.getVertex(),
+			if (WB_Epsilon.isZeroSq(WB_CoordOp.getSqDistance3D(e.getVertex(),
 					e.getEndVertex()))) {
 				edgesToRemove.add(e);
 			}
@@ -194,7 +188,7 @@ public class HET_Fixer {
 		final double d2 = d * d;
 		while (eItr.hasNext()) {
 			e = eItr.next();
-			if (WB_CoordOp3D.getSqDistance3D(e.getVertex(),
+			if (WB_CoordOp.getSqDistance3D(e.getVertex(),
 					e.getEndVertex()) < d2) {
 				edgesToRemove.add(e);
 			}
@@ -489,9 +483,9 @@ public class HET_Fixer {
 					dse2 = WB_GeometryOp.getDistanceToSegment3D(v,
 							check.getStartVertex(), check.getEndVertex());
 					if (WB_Epsilon.isZeroSq(dse2)) {
-						ds2 = WB_CoordOp3D.getSqDistance3D(v,
+						ds2 = WB_CoordOp.getSqDistance3D(v,
 								check.getStartVertex());
-						de2 = WB_CoordOp3D.getSqDistance3D(v,
+						de2 = WB_CoordOp.getSqDistance3D(v,
 								check.getEndVertex());
 						if (!WB_Epsilon.isZeroSq(ds2)
 								&& !WB_Epsilon.isZeroSq(de2)) {
@@ -520,9 +514,9 @@ public class HET_Fixer {
 					dse2 = WB_GeometryOp.getDistanceToSegment3D(v,
 							check.getStartVertex(), check.getEndVertex());
 					if (WB_Epsilon.isZeroSq(dse2)) {
-						ds2 = WB_CoordOp3D.getSqDistance3D(v,
+						ds2 = WB_CoordOp.getSqDistance3D(v,
 								check.getStartVertex());
-						de2 = WB_CoordOp3D.getSqDistance3D(v,
+						de2 = WB_CoordOp.getSqDistance3D(v,
 								check.getEndVertex());
 						if (!WB_Epsilon.isZeroSq(ds2)
 								&& !WB_Epsilon.isZeroSq(de2)) {

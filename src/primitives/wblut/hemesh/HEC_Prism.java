@@ -10,7 +10,7 @@
 package wblut.hemesh;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryFactory3D;
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
@@ -29,7 +29,7 @@ public class HEC_Prism extends HEC_Creator {
 	/**
 	 *
 	 */
-	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	private static WB_GeometryFactory gf = new WB_GeometryFactory();
 	/** The facets. */
 	private int facets;
 	/** The thickness. */

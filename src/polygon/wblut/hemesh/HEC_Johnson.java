@@ -13,7 +13,6 @@ import wblut.data.WB_JohnsonPolyhedraData01;
 import wblut.data.WB_JohnsonPolyhedraData02;
 import wblut.data.WB_JohnsonPolyhedraData03;
 import wblut.data.WB_JohnsonPolyhedraData04;
-import wblut.geom.WB_Point;
 
 /**
  * Johnson polyhedra.

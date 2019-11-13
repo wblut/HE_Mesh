@@ -83,9 +83,7 @@ public class HEC_FromTriangles extends HEC_Creator {
 				faces[i][1] = 3 * i + 1;
 				faces[i][2] = 3 * i + 2;
 			}
-			// System.out.println("HEC_FromTriangles: passing " +
-			// triangles.size()
-			// + " triangles as faces.");
+
 			final HEC_FromFacelist ffl = new HEC_FromFacelist().setVertices(vertices).setFaces(faces)
 					.setCheckDuplicateVertices(true);
 			return ffl.createBase();

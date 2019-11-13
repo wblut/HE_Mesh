@@ -40,7 +40,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 	/**
 	 *
 	 */
-	private static final WB_GeometryFactory3D	gf	= new WB_GeometryFactory3D();
+	private static final WB_GeometryFactory	gf	= new WB_GeometryFactory();
 
 	/**
 	 *
@@ -586,14 +586,14 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 		final WB_Plane P = getPlane(0);
 		for (int i = 0; i < numberOfShellPoints; i++) {
 			if (!WB_Epsilon
-					.isZero(WB_GeometryOp3D.getDistance3D(points.get(i), P))) {
+					.isZero(WB_GeometryOp.getDistance3D(points.get(i), P))) {
 				return false;
 			}
 		}
 		int index = numberOfShellPoints;
 		for (int i = 0; i < numberOfContours - 1; i++) {
 			for (int j = 0; j < numberOfPointsPerContour[i + 1]; j++) {
-				if (!WB_Epsilon.isZero(WB_GeometryOp3D
+				if (!WB_Epsilon.isZero(WB_GeometryOp
 						.getDistance3D(points.get(index++), P))) {
 					return false;
 				}
@@ -695,7 +695,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 	 * @return
 	 */
 	public WB_Polygon[] splitPolygon(final WB_Plane P) {
-		return WB_GeometryOp3D.splitPolygon(this, P);
+		return WB_GeometryOp.splitPolygon(this, P);
 	}
 
 	/**
@@ -705,7 +705,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 	 * @return
 	 */
 	public WB_Polygon trimConvexPolygon(final double d) {
-		return WB_GeometryOp3D.trimConvexPolygon(this, d);
+		return WB_GeometryOp.trimConvexPolygon(this, d);
 	}
 
 	/**
@@ -715,7 +715,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 	 * @return
 	 */
 	public WB_Polygon trimConvexPolygon(final double[] d) {
-		return WB_GeometryOp3D.trimConvexPolygon(this, d);
+		return WB_GeometryOp.trimConvexPolygon(this, d);
 	}
 
 	/**
@@ -738,7 +738,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 		double d = Double.POSITIVE_INFINITY;
 		int id = -1;
 		for (int i = 0; i < this.numberOfShellPoints; i++) {
-			final double cd = WB_CoordOp3D.getSqDistance3D(p, getPoint(i));
+			final double cd = WB_CoordOp.getSqDistance3D(p, getPoint(i));
 			if (cd < d) {
 				id = i;
 				d = cd;
@@ -757,7 +757,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 		double d = Double.POSITIVE_INFINITY;
 		int id = -1;
 		for (int i = 0; i < this.numberOfShellPoints; i++) {
-			final double cd = WB_CoordOp3D.getSqDistance3D(p, getPoint(i));
+			final double cd = WB_CoordOp.getSqDistance3D(p, getPoint(i));
 			if (cd < d) {
 				id = i;
 				d = cd;
@@ -809,7 +809,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 		double area = 0;
 		for (int i = 1; i < n - 1; i++) {
 			p3 = getPoint(i + 1);
-			area += WB_GeometryOp3D.getSignedArea(p1, p2, p3);
+			area += WB_GeometryOp.getSignedArea(p1, p2, p3);
 			p2 = p3;
 		}
 		int nh = getNumberOfHoles();
@@ -824,7 +824,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 			p2 = getPoint(offset + 1);
 			for (int j = 1; j < npc[i + 1] - 1; j++) {
 				p3 = getPoint(offset + j + 1);
-				area += WB_GeometryOp3D.getSignedArea(p1, p2, p3);
+				area += WB_GeometryOp.getSignedArea(p1, p2, p3);
 				p2 = p3;
 			}
 		}
@@ -859,7 +859,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 	}
 
 	@Override
-	public WB_Polygon apply(final WB_Transform3D T) {
+	public WB_Polygon apply(final WB_Transform T) {
 		WB_Polygon poly = new WB_Polygon(this);
 		poly.applySelf(T);
 		return poly;
@@ -882,7 +882,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 	}
 
 	@Override
-	public WB_Polygon applySelf(WB_Transform3D T) {
+	public WB_Polygon applySelf(WB_Transform T) {
 		for (WB_Point p : points) {
 			p.applyAsPointSelf(T);
 		}

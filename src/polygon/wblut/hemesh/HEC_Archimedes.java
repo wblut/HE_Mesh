@@ -10,7 +10,6 @@
 package wblut.hemesh;
 
 import wblut.data.WB_PolyhedraData;
-import wblut.geom.WB_Point;
 
 /**
  * Archimedean polyhedra.

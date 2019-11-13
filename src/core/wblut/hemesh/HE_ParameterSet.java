@@ -1,6 +1,7 @@
 package wblut.hemesh;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 
@@ -62,7 +63,13 @@ public class HE_ParameterSet {
 	}
 	
 	public String[] getNames(){
-		return (String[])values.keySet().toArray();
+		Set<String> set=values.keySet();
+		String[] result=new String[set.size()];
+		int n=0;
+		for(String name:set) {
+			result[n++]=name;
+		}
+		return result;
 		
 	}
 	

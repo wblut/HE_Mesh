@@ -16,8 +16,8 @@ import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordCollection;
-import wblut.geom.WB_KDTreeInteger;
-import wblut.geom.WB_KDTreeInteger.WB_KDEntryInteger;
+import wblut.geom.WB_KDTreeInteger3D;
+import wblut.geom.WB_KDTreeInteger3D.WB_KDEntryInteger;
 import wblut.geom.WB_Point;
 import wblut.math.WB_Epsilon;
 
@@ -415,7 +415,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 			boolean useVertexInfo=getUseVertexInfo();
 			boolean useFaceInfo=getUseFaceInfo();
 			if (getCheckDuplicateVertices()) {
-				final WB_KDTreeInteger<WB_Coord> kdtree = new WB_KDTreeInteger<WB_Coord>();
+				final WB_KDTreeInteger3D<WB_Coord> kdtree = new WB_KDTreeInteger3D<WB_Coord>();
 				WB_KDEntryInteger<WB_Coord>[] neighbors;
 				HE_Vertex v = new HE_Vertex(vertices[0]);
 				if (useVertexInfo) {

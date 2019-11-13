@@ -1,4 +1,4 @@
-import wblut.geom.WB_GeometryFactory3D;
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.*;
 import wblut.hemesh.*;
 import wblut.processing.*;
@@ -24,7 +24,7 @@ void setup() {
 
 void create() {
   WB_RandomPoint pointGenerator=new WB_RandomRectangle().setSize(800,800);
-  WB_RandomPoint vectorGenerator=new WB_RandomCircle();
+  WB_RandomVector vectorGenerator=new WB_RandomCircle();
   for (int i=0; i<n; i++) {
     S[i]=new WB_Segment(pointGenerator.nextPoint(),pointGenerator.nextPoint());
     V[2*i]=vectorGenerator.nextVector();

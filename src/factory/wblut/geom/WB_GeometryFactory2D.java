@@ -140,7 +140,7 @@ public class WB_GeometryFactory2D {
 	 * @return
 	 */
 	public WB_CoordinateSystem createTransformedCS(
-			final WB_CoordinateSystem CS, final WB_Transform3D T,
+			final WB_CoordinateSystem CS, final WB_Transform T,
 			final WB_CoordinateSystem parent) {
 		return CS.apply(T, parent);
 	}
@@ -153,7 +153,7 @@ public class WB_GeometryFactory2D {
 	 * @return
 	 */
 	public WB_CoordinateSystem createTransformedCS(
-			final WB_CoordinateSystem CS, final WB_Transform3D T) {
+			final WB_CoordinateSystem CS, final WB_Transform T) {
 		return CS.apply(T);
 	}
 
@@ -2348,7 +2348,7 @@ public class WB_GeometryFactory2D {
 		final double y0 = inversionCircle.getCenter().yd();
 		final double k = inversionCircle.getRadius();
 		final double k2 = k * k;
-		final double s = k2 / (WB_CoordOp3D.getSqDistance3D(C.getCenter(),
+		final double s = k2 / (WB_CoordOp.getSqDistance3D(C.getCenter(),
 				inversionCircle.getCenter()) - C.getRadius() * C.getRadius());
 		return createCircleWithRadius(x0 + s * (C.getCenter().xd() - x0),
 				y0 + s * (C.getCenter().yd() - y0),
@@ -2752,7 +2752,7 @@ public class WB_GeometryFactory2D {
 				}
 			}
 			for (final WB_Circle circle : iresult) {
-				final double s = k2 / (WB_CoordOp3D
+				final double s = k2 / (WB_CoordOp
 						.getSqDistance3D(circle.getCenter(), iC.getCenter())
 						- circle.getRadius() * circle.getRadius());
 				result.add(createCircleWithRadius(iC.getCenter().xd()

@@ -317,7 +317,7 @@ public class WB_IsoSurface {
 	 * @param values
 	 * @return
 	 */
-	public WB_IsoSurface setValues(final WB_HashGridDouble values) {
+	public WB_IsoSurface setValues(final WB_HashGridDouble3D values) {
 		this.values = new WB_IsoValues3D.HashGrid3D(values);
 		resx = values.getSizeI() - 1;
 		resy = values.getSizeJ() - 1;

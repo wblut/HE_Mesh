@@ -20,7 +20,7 @@ import org.eclipse.collections.impl.list.mutable.FastList;
  *
  */
 public class WB_PolygonDecomposer {
-	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	private static WB_GeometryFactory gf = new WB_GeometryFactory();
 
 	/**
 	 * Decompose the given polygon into a reasonably small number of convex
@@ -70,17 +70,17 @@ public class WB_PolygonDecomposer {
 			WB_Coord iVertex = pointlist.get(i);
 			WB_Coord iVertexPrev = pointlist.get(i == 0 ? n - 1 : i - 1);
 			WB_Coord iVertexNext = pointlist.get(i + 1 == n ? 0 : i + 1);
-			if (WB_GeometryOp3D.isReflex2D(iVertexPrev, iVertex, iVertexNext)) {
+			if (WB_GeometryOp.isReflex2D(iVertexPrev, iVertex, iVertexNext)) {
 				for (int j = 0; j < n; j++) {
 					WB_Coord jVertex = pointlist.get(j);
 					WB_Coord jVertexPrev = pointlist.get(j == 0 ? n - 1 : j - 1);
 					WB_Coord jVertexNext = pointlist.get(j + 1 == n ? 0 : j + 1);
 					WB_Point intersection = gf.createPoint();
-					if (WB_GeometryOp3D.isLeftStrict2D(iVertexPrev, iVertex, jVertex)
-							&& WB_GeometryOp3D.isRight2D(iVertexPrev, iVertex, jVertexPrev)) {
-						if (WB_GeometryOp3D.getLineIntersectionInto2D(iVertexPrev, iVertex, jVertex, jVertexPrev,
+					if (WB_GeometryOp.isLeftStrict2D(iVertexPrev, iVertex, jVertex)
+							&& WB_GeometryOp.isRight2D(iVertexPrev, iVertex, jVertexPrev)) {
+						if (WB_GeometryOp.getLineIntersectionInto2D(iVertexPrev, iVertex, jVertex, jVertexPrev,
 								intersection)) {
-							if (WB_GeometryOp3D.isRightStrict2D(iVertexNext, iVertex, intersection)) {
+							if (WB_GeometryOp.isRightStrict2D(iVertexNext, iVertex, intersection)) {
 								double dist = WB_Point.getSqDistance2D(iVertex, intersection);
 								if (dist < lowerDistance) {
 									lowerDistance = dist;
@@ -90,11 +90,11 @@ public class WB_PolygonDecomposer {
 							}
 						}
 					}
-					if (WB_GeometryOp3D.isLeftStrict2D(iVertexNext, iVertex, jVertexNext)
-							&& WB_GeometryOp3D.isRight2D(iVertexNext, iVertex, jVertex)) {
-						if (WB_GeometryOp3D.getLineIntersectionInto2D(iVertexNext, iVertex, jVertex, jVertexNext,
+					if (WB_GeometryOp.isLeftStrict2D(iVertexNext, iVertex, jVertexNext)
+							&& WB_GeometryOp.isRight2D(iVertexNext, iVertex, jVertex)) {
+						if (WB_GeometryOp.getLineIntersectionInto2D(iVertexNext, iVertex, jVertex, jVertexNext,
 								intersection)) {
-							if (WB_GeometryOp3D.isLeftStrict2D(iVertexPrev, iVertex, intersection)) {
+							if (WB_GeometryOp.isLeftStrict2D(iVertexPrev, iVertex, intersection)) {
 								double dist = WB_Point.getSqDistance2D(iVertex, intersection);
 								if (dist < upperDistance) {
 									upperDistance = dist;
@@ -186,25 +186,25 @@ public class WB_PolygonDecomposer {
 		jVertexPrev = pointlist.get(j == 0 ? n - 1 : j - 1);
 		jVertexNext = pointlist.get(j + 1 == n ? 0 : j + 1);
 
-		if (WB_GeometryOp3D.isReflex2D(iVertexPrev, iVertex, iVertexNext)) {
-			if (WB_GeometryOp3D.isLeft2D(iVertex, iVertexPrev, jVertex)
-					&& WB_GeometryOp3D.isRight2D(iVertex, iVertexNext, jVertex)) {
+		if (WB_GeometryOp.isReflex2D(iVertexPrev, iVertex, iVertexNext)) {
+			if (WB_GeometryOp.isLeft2D(iVertex, iVertexPrev, jVertex)
+					&& WB_GeometryOp.isRight2D(iVertex, iVertexNext, jVertex)) {
 				return false;
 			}
 		} else {
-			if (WB_GeometryOp3D.isRight2D(iVertex, iVertexNext, jVertex)
-					|| WB_GeometryOp3D.isLeft2D(iVertex, iVertexPrev, jVertex)) {
+			if (WB_GeometryOp.isRight2D(iVertex, iVertexNext, jVertex)
+					|| WB_GeometryOp.isLeft2D(iVertex, iVertexPrev, jVertex)) {
 				return false;
 			}
 		}
-		if (WB_GeometryOp3D.isReflex2D(jVertexPrev, jVertex, jVertexNext)) {
-			if (WB_GeometryOp3D.isLeft2D(jVertex, jVertexPrev, iVertex)
-					&& WB_GeometryOp3D.isRight2D(jVertex, jVertexNext, iVertex)) {
+		if (WB_GeometryOp.isReflex2D(jVertexPrev, jVertex, jVertexNext)) {
+			if (WB_GeometryOp.isLeft2D(jVertex, jVertexPrev, iVertex)
+					&& WB_GeometryOp.isRight2D(jVertex, jVertexNext, iVertex)) {
 				return false;
 			}
 		} else {
-			if (WB_GeometryOp3D.isRight2D(jVertex, jVertexNext, iVertex)
-					|| WB_GeometryOp3D.isLeft2D(jVertex, jVertexPrev, iVertex)) {
+			if (WB_GeometryOp.isRight2D(jVertex, jVertexNext, iVertex)
+					|| WB_GeometryOp.isLeft2D(jVertex, jVertexPrev, iVertex)) {
 				return false;
 			}
 		}
@@ -216,7 +216,7 @@ public class WB_PolygonDecomposer {
 			WB_Coord kVertex = pointlist.get(k);
 			WB_Coord kVertexNext = pointlist.get(knext);
 
-			WB_Coord in = WB_GeometryOp3D.getSegmentIntersection2D(iVertex, jVertex, kVertex, kVertexNext);
+			WB_Coord in = WB_GeometryOp.getSegmentIntersection2D(iVertex, jVertex, kVertex, kVertexNext);
 			if (in != null) {
 				return false;
 			}

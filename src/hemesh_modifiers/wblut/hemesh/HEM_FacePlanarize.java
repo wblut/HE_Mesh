@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 
@@ -58,7 +58,7 @@ public class HEM_FacePlanarize extends HEM_Modifier {
 				while (fvCrc.hasNext()) {
 					v = fvCrc.next();
 					v.getPosition().mulAddMulSelf(0.9, 0.1,
-							WB_GeometryOp3D.projectOnPlane(v, P));
+							WB_GeometryOp.projectOnPlane(v, P));
 				}
 			}
 		}
@@ -90,7 +90,7 @@ public class HEM_FacePlanarize extends HEM_Modifier {
 			faces = v.getFaceStar();
 			target = new WB_Point();
 			for (HE_Face f : faces) {
-				target.addSelf(WB_GeometryOp3D.projectOnPlane(v,
+				target.addSelf(WB_GeometryOp.projectOnPlane(v,
 						planes[f.getInternalLabel()]));
 			}
 			target.divSelf(faces.size());

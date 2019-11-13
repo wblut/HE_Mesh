@@ -11,15 +11,15 @@ package wblut.geom;
 
 public class WB_TransformMap implements WB_Map {
 
-	private WB_Transform3D T;
-	private WB_Transform3D invT;
+	private WB_Transform T;
+	private WB_Transform invT;
 
 	/**
 	 *
 	 *
 	 * @param transform
 	 */
-	public WB_TransformMap(final WB_Transform3D transform) {
+	public WB_TransformMap(final WB_Transform transform) {
 		T = transform.get();
 		invT = transform.get();
 		invT.inverse();

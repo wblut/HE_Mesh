@@ -358,6 +358,7 @@ public class HES_TriDec extends HES_Simplifier {
 		if (Double.isNaN(result)) {
 			return Double.POSITIVE_INFINITY;
 		}
+		System.out.println(v.getKey()+" "+result);
 		return result;
 	}
 

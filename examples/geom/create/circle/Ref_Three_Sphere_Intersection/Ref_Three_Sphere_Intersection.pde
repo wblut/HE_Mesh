@@ -66,12 +66,13 @@ void draw() {
   strokeWeight(2);
   stroke(255, 0, 0);
   for (WB_Coord p : points) {
-    render.drawPoint(p, 4);
+    render.drawPoint(p, 8);
   }
   strokeWeight(1);
   for (WB_Segment seg : segments) {
     render.drawSegment(seg);
   }
+  stroke(255);
   for (WB_Circle C : circles) {
     render.drawCircle(C);
   }

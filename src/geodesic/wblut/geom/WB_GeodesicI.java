@@ -28,7 +28,7 @@ class WB_GeodesicI {
 	private WB_Plane					P;
 	private final int					v;
 	private WB_SimpleMesh						mesh;
-	private static WB_GeometryFactory3D	gf			= new WB_GeometryFactory3D();
+	private static WB_GeometryFactory	gf			= new WB_GeometryFactory();
 	private final double				radius;
 	private final WB_Geodesic.Type		type;
 	private final int					div;
@@ -213,18 +213,18 @@ class WB_GeodesicI {
 		}
 		final double threshold = apices[0].getDistance(apices[1]) / (10 * v);
 		zeropoints.addAll(points);
-		WB_Transform3D T = new WB_Transform3D();
+		WB_Transform T = new WB_Transform();
 		switch (type) {
 			case TETRAHEDRON:
-				T = new WB_Transform3D().addRotateZ(Math.PI / 180.0 * 120.0);
+				T = new WB_Transform().addRotateZ(Math.PI / 180.0 * 120.0);
 				for (final WB_Point p : zeropoints) {
 					points.add(T.applyAsPoint(p));
 				}
-				T = new WB_Transform3D().addRotateZ(Math.PI / 180.0 * 240.0);
+				T = new WB_Transform().addRotateZ(Math.PI / 180.0 * 240.0);
 				for (final WB_Point p : zeropoints) {
 					points.add(T.applyAsPoint(p));
 				}
-				T = new WB_Transform3D().addRotateZ(Math.PI)
+				T = new WB_Transform().addRotateZ(Math.PI)
 						.addRotateY(Math.PI / 180.0 * 250.5288);
 				for (final WB_Point p : zeropoints) {
 					points.add(T.applyAsPoint(p));
@@ -232,33 +232,33 @@ class WB_GeodesicI {
 				break;
 			case OCTAHEDRON:
 				final List<WB_Point> points4 = new FastList<WB_Point>();
-				T = new WB_Transform3D().addRotateZ(Math.PI).addRotateY(Math.PI);
+				T = new WB_Transform().addRotateZ(Math.PI).addRotateY(Math.PI);
 				for (final WB_Point p : zeropoints) {
 					points4.add(T.applyAsPoint(p));
 				}
 				points.addAll(points4);
-				T = new WB_Transform3D().addRotateZ(Math.PI / 2.0);
+				T = new WB_Transform().addRotateZ(Math.PI / 2.0);
 				for (final WB_Point p : zeropoints) {
 					points.add(T.applyAsPoint(p));
 				}
 				for (final WB_Point p : points4) {
 					points.add(T.applyAsPoint(p));
 				}
-				T = new WB_Transform3D().addRotateZ(Math.PI / 2.0);
+				T = new WB_Transform().addRotateZ(Math.PI / 2.0);
 				for (final WB_Point p : zeropoints) {
 					points.add(T.applyAsPoint(p));
 				}
 				for (final WB_Point p : points4) {
 					points.add(T.applyAsPoint(p));
 				}
-				T = new WB_Transform3D().addRotateZ(Math.PI);
+				T = new WB_Transform().addRotateZ(Math.PI);
 				for (final WB_Point p : zeropoints) {
 					points.add(T.applyAsPoint(p));
 				}
 				for (final WB_Point p : points4) {
 					points.add(T.applyAsPoint(p));
 				}
-				T = new WB_Transform3D().addRotateZ(1.5 * Math.PI);
+				T = new WB_Transform().addRotateZ(1.5 * Math.PI);
 				for (final WB_Point p : zeropoints) {
 					points.add(T.applyAsPoint(p));
 				}
@@ -268,28 +268,28 @@ class WB_GeodesicI {
 				break;
 			case ICOSAHEDRON:
 			default:
-				T = new WB_Transform3D().addRotateZ(Math.PI)
+				T = new WB_Transform().addRotateZ(Math.PI)
 						.addRotateY(Math.PI / 180 * 116.5651);
 				final List<WB_Point> points5 = new FastList<WB_Point>();
 				for (final WB_Point p : zeropoints) {
 					points5.add(T.applyAsPoint(p));
 				}
 				points.addAll(points5);
-				T = new WB_Transform3D().addRotateY(Math.PI / 180 * 63.43495)
+				T = new WB_Transform().addRotateY(Math.PI / 180 * 63.43495)
 						.addRotateZ(Math.PI / 180 * 36);
 				final List<WB_Point> points6 = new FastList<WB_Point>();
 				for (final WB_Point p : zeropoints) {
 					points6.add(T.applyAsPoint(p));
 				}
 				points.addAll(points6);
-				T = new WB_Transform3D().addRotateY(-Math.PI)
+				T = new WB_Transform().addRotateY(-Math.PI)
 						.addRotateZ(-Math.PI / 180 * 144);
 				final List<WB_Point> points15 = new FastList<WB_Point>();
 				for (final WB_Point p : zeropoints) {
 					points15.add(T.applyAsPoint(p));
 				}
 				points.addAll(points15);
-				T = new WB_Transform3D().addRotateZ(Math.PI / 180.0 * 72.0);
+				T = new WB_Transform().addRotateZ(Math.PI / 180.0 * 72.0);
 				for (final WB_Point p : zeropoints) {
 					points.add(T.applyAsPoint(p));
 				}
@@ -302,7 +302,7 @@ class WB_GeodesicI {
 				for (final WB_Point p : points15) {
 					points.add(T.applyAsPoint(p));
 				}
-				T = new WB_Transform3D().addRotateZ(Math.PI / 180.0 * 144);
+				T = new WB_Transform().addRotateZ(Math.PI / 180.0 * 144);
 				for (final WB_Point p : zeropoints) {
 					points.add(T.applyAsPoint(p));
 				}
@@ -315,7 +315,7 @@ class WB_GeodesicI {
 				for (final WB_Point p : points15) {
 					points.add(T.applyAsPoint(p));
 				}
-				T = new WB_Transform3D().addRotateZ(Math.PI / 180.0 * 216);
+				T = new WB_Transform().addRotateZ(Math.PI / 180.0 * 216);
 				for (final WB_Point p : zeropoints) {
 					points.add(T.applyAsPoint(p));
 				}
@@ -328,7 +328,7 @@ class WB_GeodesicI {
 				for (final WB_Point p : points15) {
 					points.add(T.applyAsPoint(p));
 				}
-				T = new WB_Transform3D().addRotateZ(Math.PI / 180.0 * 288);
+				T = new WB_Transform().addRotateZ(Math.PI / 180.0 * 288);
 				for (final WB_Point p : zeropoints) {
 					points.add(T.applyAsPoint(p));
 				}
@@ -356,8 +356,8 @@ class WB_GeodesicI {
 	private WB_Point selectPoint(final WB_GreatCircleIntersection gci,
 			final WB_Point[] apices, final Type type) {
 		if (type == Type.TETRAHEDRON) {
-			return Math.abs(WB_GeometryOp3D.getDistance3D(gci.p0, P)) < Math
-					.abs(WB_GeometryOp3D.getDistance3D(gci.p1, P))
+			return Math.abs(WB_GeometryOp.getDistance3D(gci.p0, P)) < Math
+					.abs(WB_GeometryOp.getDistance3D(gci.p1, P))
 							? gf.createPoint(gci.p0)
 							: gf.createPoint(gci.p1);
 		}

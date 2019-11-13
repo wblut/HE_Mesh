@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.collections.impl.map.mutable.UnifiedMap;
-import org.eclipse.collections.impl.map.mutable.primitive.LongLongHashMap;
-
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 
 /**
@@ -26,9 +24,10 @@ public class HEC_Copy extends HEC_Creator {
 	 *
 	 */
 	private HE_HalfedgeStructure	source;
-	public Map<Long,Long>	vertexCorrelation;
-	public Map<Long,Long>	faceCorrelation;
-	public Map<Long,Long>	halfedgeCorrelation;
+	 Map<Long,Long>	vertexCorrelation;
+	
+	Map<Long,Long>	faceCorrelation;
+	 Map<Long,Long>	halfedgeCorrelation;
 
 	/**
 	 *
@@ -65,6 +64,18 @@ public class HEC_Copy extends HEC_Creator {
 		return this;
 	}
 
+
+	public Map<Long, Long> getVertexCorrelation() {
+		return vertexCorrelation;
+	}
+
+	public Map<Long, Long> getFaceCorrelation() {
+		return faceCorrelation;
+	}
+
+	public Map<Long, Long> getHalfedgeCorrelation() {
+		return halfedgeCorrelation;
+	}
 
 	/*
 	 * (non-Javadoc)

@@ -15,7 +15,7 @@ import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordCollection;
 import wblut.geom.WB_CoordinateSystem;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_JTS;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
@@ -113,11 +113,11 @@ public class HE_Face extends HE_MeshElement
 	}
 
 	
-	public WB_Coord getFaceCenter() {
+	public WB_Point getFaceCenter() {
 		return HE_MeshOp.getFaceCenter(this);
 	}
 	
-	public WB_Coord getFaceNormal() {
+	public WB_Vector getFaceNormal() {
 		return HE_MeshOp.getFaceNormal(this);
 	}
 	
@@ -500,7 +500,7 @@ public class HE_Face extends HE_MeshElement
 		HE_Halfedge he = getHalfedge();
 		do {
 			if (!WB_Epsilon
-					.isZero(WB_GeometryOp3D.getDistance3D(he.getVertex(), P))) {
+					.isZero(WB_GeometryOp.getDistance3D(he.getVertex(), P))) {
 				return false;
 			}
 			he = he.getNextInFace();
@@ -603,7 +603,7 @@ public class HE_Face extends HE_MeshElement
 		return HE_MeshOp.getFaceCS(this);
 	}
 
-	public WB_Coord getFaceNormalNotNormalized() {
+	public WB_Vector getFaceNormalNotNormalized() {
 		return HE_MeshOp.getFaceNormalNotNormalized(this);
 	}
 
@@ -622,7 +622,7 @@ public class HE_Face extends HE_MeshElement
 	 * @param d
 	 * @return
 	 */
-	public WB_Coord getNormalOffsetFaceCenter(
+	public WB_Vector getNormalOffsetFaceCenter(
 			final double d) {
 		return HE_MeshOp.getNormalOffsetFaceCenter(this,d);
 	}

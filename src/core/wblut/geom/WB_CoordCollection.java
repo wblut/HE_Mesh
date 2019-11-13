@@ -18,7 +18,7 @@ import java.util.zip.GZIPInputStream;
 
 import org.eclipse.collections.impl.list.mutable.FastList;
 
-import wblut.geom.WB_KDTreeInteger.WB_KDEntryInteger;
+import wblut.geom.WB_KDTreeInteger3D.WB_KDEntryInteger;
 import wblut.hemesh.HE_Mesh;
 import wblut.math.WB_Epsilon;
 
@@ -88,6 +88,13 @@ public abstract class WB_CoordCollection {
 	}
 
 	abstract public WB_Coord get(final int i);
+	
+	abstract public double getX(final int i);
+
+	abstract public double getY(final int i);
+
+	abstract public double getZ(final int i);
+
 
 	public List<WB_Coord> subList(final int fromInc, final int toExcl) {
 		return toList().subList(fromInc, toExcl);
@@ -111,6 +118,20 @@ public abstract class WB_CoordCollection {
 			return array[i];
 		}
 
+		@Override
+		public double getX(final int i) {
+			return array[i].xd();
+		}
+		@Override
+		public double getY(final int i) {
+			return array[i].yd();
+		}
+		@Override
+		public double getZ(final int i) {
+			return array[i].zd();
+		}
+		
+		
 		@Override
 		public int size() {
 			return array.length;
@@ -145,6 +166,20 @@ public abstract class WB_CoordCollection {
 		}
 
 		@Override
+		public double getX(final int i) {
+			return list.get(i).xd();
+		}
+		@Override
+		public double getY(final int i) {
+			return list.get(i).yd();
+		}
+		@Override
+		public double getZ(final int i) {
+			return list.get(i).zd();
+		}
+		
+		
+		@Override
 		public int size() {
 			return list.size();
 		}
@@ -164,6 +199,8 @@ public abstract class WB_CoordCollection {
 			return list;
 		}
 	}
+	
+	
 	
 	static class WB_CoordCollectionRaw extends WB_CoordCollection {
 		WB_Coord[] array;
@@ -195,6 +232,19 @@ public abstract class WB_CoordCollection {
 		public WB_Coord get(final int i) {
 			return array[i];
 		}
+		
+		@Override
+		public double getX(final int i) {
+			return array[i].xd();
+		}
+		@Override
+		public double getY(final int i) {
+			return array[i].yd();
+		}
+		@Override
+		public double getZ(final int i) {
+			return array[i].zd();
+		}
 
 		@Override
 		public int size() {
@@ -216,6 +266,58 @@ public abstract class WB_CoordCollection {
 		}
 	}
 
+	static class WB_CoordCollectionFlat extends WB_CoordCollection {
+		double[] array;
+
+		WB_CoordCollectionFlat(final double[] coords) {
+			this.array = coords;
+			
+		}
+		
+
+		@Override
+		public WB_Coord get(final int i) {
+			return new WB_Point(array[3*i],array[3*i+1],array[3*i+2]);
+		}
+		
+		@Override
+		public double getX(final int i) {
+			return array[3*i];
+		}
+		@Override
+		public double getY(final int i) {
+			return array[3*i+1];
+		}
+		@Override
+		public double getZ(final int i) {
+			return array[3*i+2];
+		}
+
+		@Override
+		public int size() {
+			return array.length/3;
+		}
+
+		@Override
+		public WB_Coord[] toArray() {
+			WB_Coord[] out = new WB_Coord[array.length/3];
+			for(int i = 0;i<array.length;i+=3){
+				out[i/3] = new WB_Point(array[i],array[i+1],array[i+2]);
+			}
+			return out;
+		}
+
+		@Override
+		public List<WB_Coord> toList() {
+			List<WB_Coord> list = new FastList<WB_Coord>();
+			for(int i = 0;i<array.length;i+=3){
+				list.add(new WB_Point(array[i],array[i+1],array[i+2]));
+			}
+			return list;
+		}
+	}
+
+	
 	static class WB_CoordCollectionFactory extends WB_CoordCollection {
 		WB_Coord[] array;
 
@@ -229,6 +331,19 @@ public abstract class WB_CoordCollection {
 		@Override
 		public WB_Coord get(final int i) {
 			return array[i];
+		}
+		
+		@Override
+		public double getX(final int i) {
+			return array[i].xd();
+		}
+		@Override
+		public double getY(final int i) {
+			return array[i].yd();
+		}
+		@Override
+		public double getZ(final int i) {
+			return array[i].zd();
 		}
 
 		@Override
@@ -261,6 +376,19 @@ public abstract class WB_CoordCollection {
 		@Override
 		public WB_Coord get(final int i) {
 			return polygon.getPoint(i);
+		}
+		
+		@Override
+		public double getX(final int i) {
+			return polygon.getPoint(i).xd();
+		}
+		@Override
+		public double getY(final int i) {
+			return polygon.getPoint(i).yd();
+		}
+		@Override
+		public double getZ(final int i) {
+			return polygon.getPoint(i).zd();
 		}
 
 		@Override
@@ -303,6 +431,23 @@ public abstract class WB_CoordCollection {
 		@Override
 		public WB_Coord get(final int i) {
 			return WB_Point.add(source.get(i), noise[i]);
+		}
+		
+		
+		@Override
+		public double getX(final int i) {
+			return source.getX(i)+noise[i].xd();
+		}
+		
+		@Override
+		public double getY(final int i) {
+			return source.getY(i)+noise[i].yd();
+		}
+		
+		
+		@Override
+		public double getZ(final int i) {
+			return source.getZ(i)+noise[i].xd();
 		}
 
 		@Override
@@ -366,6 +511,23 @@ public abstract class WB_CoordCollection {
 			}
 			return list;
 		}
+
+		@Override
+		public double getX(int i) {
+			
+			return map.mapPoint3D(source.get(i)).xd();
+		}
+
+		@Override
+		public double getY(int i) {
+			
+			return map.mapPoint3D(source.get(i)).yd();
+		}
+
+		@Override
+		public double getZ(int i) {
+			return map.mapPoint3D(source.get(i)).zd();
+		}
 	}
 
 	static class WB_CoordCollectionUnmap3D extends WB_CoordCollection {
@@ -405,6 +567,21 @@ public abstract class WB_CoordCollection {
 			}
 			return list;
 		}
+
+		@Override
+		public double getX(int i) {
+			return map.unmapPoint3D(source.get(i)).xd();
+		}
+
+		@Override
+		public double getY(int i) {
+			return map.unmapPoint3D(source.get(i)).yd();
+		}
+
+		@Override
+		public double getZ(int i) {
+			return map.unmapPoint3D(source.get(i)).zd();
+		}
 	}
 
 	static class WB_CoordCollectionUnmap2D extends WB_CoordCollection {
@@ -443,6 +620,21 @@ public abstract class WB_CoordCollection {
 				list.add(map.unmapPoint2D(source.get(i)));
 			}
 			return list;
+		}
+
+		@Override
+		public double getX(int i) {
+			return map.unmapPoint2D(source.get(i)).xd();
+		}
+
+		@Override
+		public double getY(int i) {
+			return map.unmapPoint2D(source.get(i)).yd();
+		}
+
+		@Override
+		public double getZ(int i) {
+			return map.unmapPoint2D(source.get(i)).zd();
 		}
 	}
 
@@ -487,6 +679,22 @@ public abstract class WB_CoordCollection {
 			}
 			return list;
 		}
+
+		@Override
+		public double getX(final int i) {
+			return source.getX(i)+noise[i].xd();
+		}
+		
+		@Override
+		public double getY(final int i) {
+			return source.getY(i)+noise[i].yd();
+		}
+		
+		
+		@Override
+		public double getZ(final int i) {
+			return source.getZ(i)+noise[i].xd();
+		}
 	}
 
 	static class WB_CoordCollectionUnique extends WB_CoordCollection {
@@ -494,7 +702,7 @@ public abstract class WB_CoordCollection {
 
 		WB_CoordCollectionUnique(final WB_CoordCollection source) {
 			this.list = new FastList<WB_Coord>();
-			WB_KDTreeInteger<WB_Coord> tree = new WB_KDTreeInteger<WB_Coord>();
+			WB_KDTreeInteger3D<WB_Coord> tree = new WB_KDTreeInteger3D<WB_Coord>();
 			WB_Coord c;
 			WB_KDEntryInteger<WB_Coord>[] neighbors;
 			for (int i = 0; i < source.size(); i++) {
@@ -530,6 +738,19 @@ public abstract class WB_CoordCollection {
 		@Override
 		public List<WB_Coord> toList() {
 			return list;
+		}
+
+		@Override
+		public double getX(final int i) {
+			return list.get(i).xd();
+		}
+		@Override
+		public double getY(final int i) {
+			return list.get(i).yd();
+		}
+		@Override
+		public double getZ(final int i) {
+			return list.get(i).zd();
 		}
 	}
 
@@ -602,6 +823,19 @@ public abstract class WB_CoordCollection {
 		@Override
 		public List<WB_Coord> toList() {
 			return list;
+		}
+
+		@Override
+		public double getX(final int i) {
+			return list.get(i).xd();
+		}
+		@Override
+		public double getY(final int i) {
+			return list.get(i).yd();
+		}
+		@Override
+		public double getZ(final int i) {
+			return list.get(i).zd();
 		}
 	}
 }

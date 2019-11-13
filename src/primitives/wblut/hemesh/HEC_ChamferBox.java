@@ -570,7 +570,16 @@ public class HEC_ChamferBox extends HEC_Creator {
 		final HEC_FromFacelist fl = new HEC_FromFacelist();
 		fl.setVertices(vertices).setFaces(faces).setCheckDuplicateVertices(true).setVertexUVW(uvws)
 				.setFaceTextureIds(faceTextureIds);
-		return fl.createBase();
+		HE_Mesh mesh=fl.createBase();
+		HE_Selection sel=mesh.getNewSelection("edges");
+		for(idf= 2 * LMf + 2 * LNf + 2 * MNf;idf<mesh.getNumberOfFaces()-8;idf++) {
+			sel.add(mesh.getFaceWithIndex(idf));
+		}
+		sel=mesh.getNewSelection("corners");
+		for(;idf<mesh.getNumberOfFaces();idf++) {
+			sel.add(mesh.getFaceWithIndex(idf));
+		}
+		return mesh;
 	}
 
 	public static void main(final String[] args) {

@@ -8,7 +8,7 @@ import java.util.List;
 HE_Mesh mesh;
 WB_Render3D render;
 
-WB_AABBTree tree;
+WB_AABBTree3D tree;
 List<WB_Point> points;
 
 void setup() {
@@ -17,8 +17,8 @@ void setup() {
   render=new WB_Render3D(this);
   mesh=new HE_Mesh(new HEC_Beethoven().setScale(10).setZAxis(0, 1, 0).setZAngle(PI));
   mesh.smooth();
-  tree=new WB_AABBTree(mesh, 1);
-  WB_PointGenerator rp=new WB_RandomInCylinder().setHeight(700).setRadius(320);
+  tree=new WB_AABBTree3D(mesh, 1);
+  WB_PointFactory rp=new WB_RandomInCylinder().setHeight(700).setRadius(200);
   points=new ArrayList<WB_Point>();
   for (int i=0; i<500; i++) {
     points.add(rp.nextPoint().rotateAboutAxisSelf(HALF_PI, 0, 0, 0, 1, 0, 0));
@@ -34,6 +34,8 @@ void draw() {
   noFill();
   stroke(0);
   render.drawEdges(mesh);
+  fill(200);
+  render.drawFaces(mesh);
   stroke(255, 0, 0);
   WB_Coord q;
   for (WB_Point p : points) {
@@ -45,7 +47,7 @@ void draw() {
     stroke(255, 0, 0, 2);
     render.vertex(q);
     endShape();
-    stroke(255, 0, 0,2);
+    stroke(255, 0, 0,80);
     render.drawPoint(q, 4);
     p.rotateAboutAxisSelf(0.01, 0, 0, 0, 0, 1, 0);
   }

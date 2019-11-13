@@ -7,7 +7,7 @@
 // http://extremelearning.com.au/evenly-distributing-points-on-a-sphere/
 package wblut.hemesh;
 
-import wblut.geom.WB_GeometryFactory3D;
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Point;
 import wblut.math.WB_Epsilon;
 
@@ -21,7 +21,7 @@ public class HEC_FibonacciSphere extends HEC_Creator {
 	/** Outer Radius. */
 	private double				R;
 	private int					N;
-	private static final double	PHI	= 0.5 * (1.0 + Math.sqrt(5.0));
+	//private static final double	PHI	= 0.5 * (1.0 + Math.sqrt(5.0));
 
 	/**
 	 * Instantiates a new dodecahedron.
@@ -49,7 +49,7 @@ public class HEC_FibonacciSphere extends HEC_Creator {
 	 */
 	@Override
 	public HE_Mesh createBase() {
-		WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+		WB_GeometryFactory gf = new WB_GeometryFactory();
 		if (N < 4) {
 			return new HE_Mesh();
 		}

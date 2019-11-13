@@ -18,27 +18,13 @@ import wblut.geom.WB_Point;
  *
  */
 public class HEM_AntiSmooth extends HEM_Modifier {
-	/**
-	 *
-	 */
-	private boolean	autoRescale;
-	/**
-	 *
-	 */
-	private boolean	keepBoundary;
-	private double	lambda;
-	/**
-	 *
-	 */
-	private int		iter;
 
-	/**
-	 *
-	 */
+
 	public HEM_AntiSmooth() {
-		lambda = 0.5;
-		iter = 1;
-		keepBoundary = false;
+		parameters.set("autorescale", false);
+		parameters.set("lambda", 0.5);
+		parameters.set("preserveboundary", false);
+		parameters.set("iter", 1);
 	}
 
 	/**
@@ -48,7 +34,7 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 	 * @return
 	 */
 	public HEM_AntiSmooth setAutoRescale(final boolean b) {
-		autoRescale = b;
+		parameters.set("autorescale", b);
 		return this;
 	}
 
@@ -59,7 +45,7 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 	 * @return
 	 */
 	public HEM_AntiSmooth setIterations(final int r) {
-		iter = r;
+		parameters.set("iter", r);
 		return this;
 	}
 
@@ -69,8 +55,8 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 	 * @param b
 	 * @return
 	 */
-	public HEM_AntiSmooth setKeepBoundary(final boolean b) {
-		keepBoundary = b;
+	public HEM_AntiSmooth setPreserveBoundary(final boolean b) {
+		parameters.set("preserveboundary", b);
 		return this;
 	}
 
@@ -81,8 +67,25 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 	 * @return
 	 */
 	public HEM_AntiSmooth setLambda(final double lambda) {
-		this.lambda = lambda;
+		parameters.set("lambda", lambda);
 		return this;
+	}
+	
+
+	protected boolean getAutoRescale() {
+		return parameters.get("autorescale", false);
+	}
+
+	protected int getIterations() {
+		return parameters.get("iter", 1);
+	}
+	
+	protected boolean getPreserveBoundary() {
+		return parameters.get("preserveboundary", false);
+	}
+
+	protected double getLambda() {
+		return parameters.get("lambda", 0.5);
 	}
 
 	/*
@@ -91,8 +94,13 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
-		tracker.setStartStatus(this, "Starting HEM_Smooth.");
+		tracker.setStartStatus(this, "Starting HEM_AntiSmooth.");
 		WB_AABB box = new WB_AABB();
+		int iter=getIterations() ;
+		boolean autoRescale=getAutoRescale();
+		boolean preserveBoundary=getPreserveBoundary();
+		double lambda=getLambda();
+		
 		if (autoRescale) {
 			box = HE_MeshOp.getAABB(mesh);
 		}
@@ -103,7 +111,7 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 		}
 		WB_ProgressCounter counter = new WB_ProgressCounter(
 				iter * mesh.getNumberOfVertices(), 10);
-		tracker.setCounterStatus(this, "Smoothing vertices.", counter);
+		tracker.setCounterStatus(this, "Anti smoothing vertices.", counter);
 		for (int r = 0; r < iter; r++) {
 			Iterator<HE_Vertex> vItr = mesh.vItr();
 			HE_Vertex v;
@@ -112,16 +120,16 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 			WB_Point p;
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				if (v.isBoundary() && keepBoundary) {
+				if (v.isBoundary() && preserveBoundary) {
 					newPositions[id] = v;
 				} else {
-					p = new WB_Point(v).mulSelf(-1.0 + lambda);
+					p = new WB_Point(v).mulSelf(1.0 - lambda);
 					neighbors = v.getNeighborVertices();
 					for (int i = 0; i < neighbors.size(); i++) {
-						p.addMulSelf(-lambda / neighbors.size(),
+						p.addMulSelf(lambda / neighbors.size(),
 								neighbors.get(i));
 					}
-					newPositions[id] = p;
+					newPositions[id] = new WB_Point(v).mulSelf(2.0).subSelf(p);
 				}
 				id++;
 			}
@@ -136,7 +144,7 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 		if (autoRescale) {
 			mesh.fitInAABB(box);
 		}
-		tracker.setStopStatus(this, "Exiting HEM_Smooth.");
+		tracker.setStopStatus(this, "Exiting HEM_AntiSmooth.");
 		return mesh;
 	}
 
@@ -147,9 +155,13 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
-		tracker.setStartStatus(this, "Starting HEM_Smooth.");
+		tracker.setStartStatus(this, "Starting HEM_AntiSmooth.");
 		selection.collectVertices();
 		WB_AABB box = new WB_AABB();
+		int iter=getIterations() ;
+		boolean autoRescale=getAutoRescale();
+		boolean preserveBoundary=getPreserveBoundary();
+		double lambda=getLambda();
 		if (autoRescale) {
 			box = HE_MeshOp.getAABB(selection.getParent());
 		}
@@ -160,7 +172,7 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 		}
 		WB_ProgressCounter counter = new WB_ProgressCounter(
 				iter * selection.getNumberOfVertices(), 10);
-		tracker.setCounterStatus(this, "Smoothing vertices.", counter);
+		tracker.setCounterStatus(this, "Anti smoothing vertices.", counter);
 		for (int r = 0; r < iter; r++) {
 			Iterator<HE_Vertex> vItr = selection.vItr();
 			HE_Vertex v;
@@ -170,7 +182,7 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 			while (vItr.hasNext()) {
 				v = vItr.next();
 				final WB_Point p = new WB_Point();
-				if (v.isBoundary() && keepBoundary) {
+				if (v.isBoundary() && preserveBoundary) {
 					newPositions[id] = v;
 				} else {
 					neighbors = v.getNeighborVertices();
@@ -182,10 +194,11 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 						}
 					}
 					for (int i = 0; i < neighbors.size(); i++) {
-						p.addMulSelf(-lambda / neighbors.size(),
+						p.addMulSelf(lambda / neighbors.size(),
 								neighbors.get(i));
 					}
-					newPositions[id] = p.addMulSelf(-1.0 + lambda, v);
+					 p.addMulSelf(1.0 - lambda, v);
+					 newPositions[id] = new WB_Point(v).mulSelf(2.0).subSelf(p);
 				}
 				id++;
 			}
@@ -200,7 +213,7 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 		if (autoRescale) {
 			selection.getParent().fitInAABB(box);
 		}
-		tracker.setStopStatus(this, "Exiting HEM_Smooth.");
+		tracker.setStopStatus(this, "Exiting HEM_AntiSmooth.");
 		return selection.getParent();
 	}
 }

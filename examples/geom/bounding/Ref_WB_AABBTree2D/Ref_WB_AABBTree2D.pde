@@ -34,7 +34,6 @@ void draw() {
   strokeWeight(1.4);
   stroke(0);
   render.drawTriangle2D(danzerC);
-
   WB_Triangle closest=tree.getClosestFace(new WB_Point(mouseX, mouseY));
   fill(255, 0, 0);
   render.drawTriangle2D(closest);

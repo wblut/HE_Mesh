@@ -11,11 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.collections.impl.map.mutable.primitive.LongLongHashMap;
-
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryFactory3D;
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
@@ -30,7 +28,7 @@ public class HEM_Lattice extends HEM_Modifier {
 	/**
 	 *
 	 */
-	private static final WB_GeometryFactory3D	gf	= new WB_GeometryFactory3D();
+	private static final WB_GeometryFactory	gf	= new WB_GeometryFactory();
 	/**
 	 *
 	 */

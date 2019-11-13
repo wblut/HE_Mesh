@@ -7,7 +7,7 @@ WB_Polygon boundary;
 List<WB_VoronoiCell2D> voronoiXY;
 
 WB_Render3D render;
-WB_GeometryFactory3D gf=new WB_GeometryFactory3D();
+WB_GeometryFactory gf=new WB_GeometryFactory();
 
 void setup() {
   size(1000, 1000, P3D);

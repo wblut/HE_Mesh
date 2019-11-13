@@ -9,8 +9,6 @@
 
 package wblut.hemesh;
 
-import wblut.geom.WB_Point;
-
 /**
  * Dodecahedron.
  *

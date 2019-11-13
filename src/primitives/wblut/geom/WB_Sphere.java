@@ -24,7 +24,7 @@ public class WB_Sphere {
 	/**
 	 *
 	 */
-	private WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
+	private WB_GeometryFactory geometryfactory = new WB_GeometryFactory();
 
 	/**
 	 *
@@ -84,7 +84,7 @@ public class WB_Sphere {
 		return (int) (tmp ^ tmp >>> 32);
 	}
 
-	public WB_Sphere apply(final WB_Transform3D T) {
+	public WB_Sphere apply(final WB_Transform T) {
 		return geometryfactory.createSphereWithRadius(center.applyAsPoint(T), radius);
 	}
 

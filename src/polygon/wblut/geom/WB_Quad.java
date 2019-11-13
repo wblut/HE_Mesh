@@ -14,8 +14,8 @@ import lombok.ToString;
 
 @Data
 @ToString(includeFieldNames=true)
-public class WB_Quad implements WB_Geometry3D {
-	@Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) private WB_GeometryFactory3D	geometryfactory	= new WB_GeometryFactory3D();
+public class WB_Quad implements WB_Geometry {
+	@Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) private WB_GeometryFactory	geometryfactory	= new WB_GeometryFactory();
 	/** First point. */
 	@Setter(AccessLevel.NONE) private WB_Point				p1;
 	/** Second point. */
@@ -56,9 +56,9 @@ public class WB_Quad implements WB_Geometry3D {
 	 */
 	public static int[] triangulateQuad(final WB_Coord p0, final WB_Coord p1,
 			final WB_Coord p2, final WB_Coord p3) {
-		final boolean p0inside = WB_GeometryOp3D.pointInTriangleBary3D(p0, p1,
+		final boolean p0inside = WB_GeometryOp.pointInTriangleBary3D(p0, p1,
 				p2, p3);
-		final boolean p2inside = WB_GeometryOp3D.pointInTriangleBary3D(p2, p0,
+		final boolean p2inside = WB_GeometryOp.pointInTriangleBary3D(p2, p0,
 				p1, p3);
 		if (p0inside || p2inside) {
 			return new int[] { 0, 1, 2, 0, 2, 3 };
@@ -70,16 +70,16 @@ public class WB_Quad implements WB_Geometry3D {
 	public boolean isConvex() {
 		// return WB_GeometryOp.getIntersection3D(new WB_Segment(p1, p3), new
 		// WB_Segment(p2, p4)).intersection;
-		if (WB_GeometryOp3D.pointInTriangleBary3D(p1, p2, p3, p4)) {
+		if (WB_GeometryOp.pointInTriangleBary3D(p1, p2, p3, p4)) {
 			return false;
 		}
-		if (WB_GeometryOp3D.pointInTriangleBary3D(p2, p1, p3, p4)) {
+		if (WB_GeometryOp.pointInTriangleBary3D(p2, p1, p3, p4)) {
 			return false;
 		}
-		if (WB_GeometryOp3D.pointInTriangleBary3D(p3, p1, p2, p4)) {
+		if (WB_GeometryOp.pointInTriangleBary3D(p3, p1, p2, p4)) {
 			return false;
 		}
-		if (WB_GeometryOp3D.pointInTriangleBary3D(p4, p1, p2, p3)) {
+		if (WB_GeometryOp.pointInTriangleBary3D(p4, p1, p2, p3)) {
 			return false;
 		}
 		return true;
@@ -121,12 +121,12 @@ public class WB_Quad implements WB_Geometry3D {
 	}
 
 	@Override
-	public WB_Quad apply(WB_Transform3D T) {
+	public WB_Quad apply(WB_Transform T) {
 		return new WB_Quad(p1.apply(T), p2.apply(T), p3.apply(T), p4.apply(T));
 	}
 
 	@Override
-	public WB_Quad applySelf(WB_Transform3D T) {
+	public WB_Quad applySelf(WB_Transform T) {
 		p1.applySelf(T);
 		p2.applySelf(T);
 		p3.applySelf(T);

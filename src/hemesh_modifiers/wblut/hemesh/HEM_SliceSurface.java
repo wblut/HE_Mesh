@@ -16,9 +16,9 @@ import org.eclipse.collections.impl.list.mutable.FastList;
 import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
-import wblut.geom.WB_AABBTree;
+import wblut.geom.WB_AABBTree3D;
 import wblut.geom.WB_Classification;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Plane;
 import wblut.math.WB_Epsilon;
 
@@ -121,13 +121,13 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		}
 		// check if plane intersects mesh
 		final WB_Plane lP = new WB_Plane(P.getNormal(), -P.d() + offset);
-		if (!WB_GeometryOp3D.checkIntersection3D(HE_MeshOp.getAABB(mesh), lP)) {
+		if (!WB_GeometryOp.checkIntersection3D(HE_MeshOp.getAABB(mesh), lP)) {
 			tracker.setStopStatus(this,
 					"Plane doesn't intersect bounding box. Exiting HEM_SliceSurface.");
 			return mesh;
 		}
 		tracker.setDuringStatus(this, "Creating bounding box tree.");
-		final WB_AABBTree tree = new WB_AABBTree(mesh,
+		final WB_AABBTree3D tree = new WB_AABBTree3D(mesh,
 				Math.max(64, (int) Math.sqrt(mesh.getNumberOfFaces())));
 		final HE_Selection faces = HE_Selection.getSelection(mesh);
 		tracker.setDuringStatus(this, "Retrieving intersection candidates.");
@@ -143,7 +143,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		final Iterator<HE_Vertex> vItr = faces.vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			tmp = WB_GeometryOp3D.classifyPointToPlane3D(v, lP);
+			tmp = WB_GeometryOp.classifyPointToPlane3D(v, lP);
 			if (tmp == WB_Classification.ON) {
 				v.setInternalLabel(ON);
 			} else if (tmp == WB_Classification.BACK) {
@@ -266,7 +266,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		}
 		final WB_Plane lP = new WB_Plane(P.getNormal(), -P.d() + offset);
 		tracker.setDuringStatus(this, "Creating bounding box tree.");
-		final WB_AABBTree tree = new WB_AABBTree(selection.getParent(), 64);
+		final WB_AABBTree3D tree = new WB_AABBTree3D(selection.getParent(), 64);
 		final HE_Selection faces = HE_Selection
 				.getSelection(selection.getParent());
 		tracker.setDuringStatus(this, "Retrieving intersection candidates.");
@@ -293,7 +293,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		final Iterator<HE_Vertex> vItr = lsel.vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			tmp = WB_GeometryOp3D.classifyPointToPlane3D(v, lP);
+			tmp = WB_GeometryOp.classifyPointToPlane3D(v, lP);
 			vertexClass.put(v.getKey(), tmp);
 			if (tmp == WB_Classification.FRONT) {
 				positiveVertexExists = true;
@@ -406,7 +406,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		for (final HE_Halfedge he : cutEdges.getEdges()) {
 			final HE_Face f = he.getFace();
 			if (f != null) {
-				if (WB_GeometryOp3D.classifyPointToPlane3D(
+				if (WB_GeometryOp.classifyPointToPlane3D(
 						HE_MeshOp.getFaceCenter(f),
 						P) == WB_Classification.FRONT) {
 					edges.add(he.getPair());
@@ -478,17 +478,17 @@ public class HEM_SliceSurface extends HEM_Modifier {
 					&& e.getEndVertex().getInternalLabel() == BACK
 					|| e.getVertex().getInternalLabel() == BACK
 							&& e.getEndVertex().getInternalLabel() == FRONT) {
-				double e0 = WB_GeometryOp3D.getDistanceToPlane3D(e.getVertex(),
+				double e0 = WB_GeometryOp.getDistanceToPlane3D(e.getVertex(),
 						P);
-				double e1 = WB_GeometryOp3D
+				double e1 = WB_GeometryOp
 						.getDistanceToPlane3D(e.getEndVertex(), P);
 				if (e0 < e1) {
 					e.getVertex().setInternalLabel(ON);
 					e.getVertex().set(
-							WB_GeometryOp3D.projectOnPlane(e.getVertex(), P));
+							WB_GeometryOp.projectOnPlane(e.getVertex(), P));
 				} else {
 					e.getEndVertex().setInternalLabel(ON);
-					e.getEndVertex().set(WB_GeometryOp3D
+					e.getEndVertex().set(WB_GeometryOp
 							.projectOnPlane(e.getEndVertex(), P));
 				}
 			}

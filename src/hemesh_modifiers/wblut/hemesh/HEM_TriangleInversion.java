@@ -12,7 +12,7 @@ package wblut.hemesh;
 import java.util.Iterator;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Vector;
@@ -134,7 +134,7 @@ public class HEM_TriangleInversion extends HEM_Modifier {
 		double ri, rf;
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			q = WB_GeometryOp3D.getClosestPoint3D(v, triangle);
+			q = WB_GeometryOp.getClosestPoint3D(v, triangle);
 			if (linear) {
 
 				d = WB_Vector.subToVector3D(v, q);
@@ -177,7 +177,7 @@ public class HEM_TriangleInversion extends HEM_Modifier {
 		double ri, rf;
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			q = WB_GeometryOp3D.getClosestPoint3D(v, triangle);
+			q = WB_GeometryOp.getClosestPoint3D(v, triangle);
 			if (linear) {
 
 				d = WB_Vector.subToVector3D(v, q);

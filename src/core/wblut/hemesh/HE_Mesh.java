@@ -30,10 +30,10 @@ import wblut.geom.WB_AABB;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordCollection;
-import wblut.geom.WB_Geometry3D;
-import wblut.geom.WB_GeometryFactory3D;
-import wblut.geom.WB_GeometryOp3D;
-import wblut.geom.WB_KDTree;
+import wblut.geom.WB_Geometry;
+import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryOp;
+import wblut.geom.WB_KDTree3D;
 import wblut.geom.WB_Network;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
@@ -41,7 +41,7 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_SimpleMesh;
 import wblut.geom.WB_SimpleMeshCreator;
-import wblut.geom.WB_Transform3D;
+import wblut.geom.WB_Transform;
 import wblut.geom.WB_Transform2D;
 import wblut.geom.WB_TriangleFactory;
 import wblut.geom.WB_Vector;
@@ -55,10 +55,10 @@ import wblut.math.WB_MTRandom;
  *
  */
 public class HE_Mesh extends HE_MeshElement
-		implements WB_TriangleFactory, HE_HalfedgeStructure, WB_Geometry3D {
+		implements WB_TriangleFactory, HE_HalfedgeStructure, WB_Geometry {
 	protected final static WB_ProgressTracker	tracker	= WB_ProgressTracker
 			.instance();
-	protected WB_GeometryFactory3D				gf		= new WB_GeometryFactory3D();
+	protected WB_GeometryFactory				gf		= new WB_GeometryFactory();
 
 	/**
 	 *
@@ -535,7 +535,7 @@ public class HE_Mesh extends HE_MeshElement
 	}
 
 	@Override
-	public HE_Mesh apply(final WB_Transform3D T) {
+	public HE_Mesh apply(final WB_Transform T) {
 		return new HEC_Transform(this, T).create();
 	}
 
@@ -545,7 +545,7 @@ public class HE_Mesh extends HE_MeshElement
 	 * @return
 	 */
 	@Override
-	public HE_Mesh applySelf(final WB_Transform3D T) {
+	public HE_Mesh applySelf(final WB_Transform T) {
 		return modify(new HEM_Transform(T));
 	}
 
@@ -1130,6 +1130,11 @@ public class HE_Mesh extends HE_MeshElement
 		return new HE_Mesh(new HEC_Copy(this));
 	}
 
+	
+	public WB_Point getCenter() {
+		return HE_MeshOp.getCenter(this);
+	}
+	
 	/**
 	 * Collect all boundary halfedges.
 	 *
@@ -1169,10 +1174,10 @@ public class HE_Mesh extends HE_MeshElement
 	/**
 	 * Return all edge centers.
 	 *
-	 * @return array of WB_Coordinate.
+	 * @return array of WB_Point.
 	 */
-	public WB_Coord[] getEdgeCenters() {
-		final WB_Coord[] result = new WB_Coord[getNumberOfEdges()];
+	public WB_Point[] getEdgeCenters() {
+		final WB_Point[] result = new WB_Point[getNumberOfEdges()];
 		int i = 0;
 		HE_Halfedge e;
 		final Iterator<HE_Halfedge> eItr = eItr();
@@ -1187,10 +1192,10 @@ public class HE_Mesh extends HE_MeshElement
 	/**
 	 * Return all edge normals.
 	 *
-	 * @return array of WB_Coordinate.
+	 * @return array of WB_Vectore.
 	 */
-	public WB_Coord[] getEdgeNormals() {
-		final WB_Coord[] result = new WB_Coord[getNumberOfEdges()];
+	public WB_Vector[] getEdgeNormals() {
+		final WB_Vector[] result = new WB_Vector[getNumberOfEdges()];
 		int i = 0;
 		HE_Halfedge e;
 		final Iterator<HE_Halfedge> eItr = eItr();
@@ -1297,17 +1302,17 @@ public class HE_Mesh extends HE_MeshElement
 		return getNumberOfVertices() - getNumberOfEdges() + getNumberOfFaces();
 	}
 
-	public WB_Coord getFaceCenter(final int id) {
+	public WB_Point getFaceCenter(final int id) {
 		return HE_MeshOp.getFaceCenter(getFaceWithIndex(id));
 	}
 
 	/**
 	 * Return all face centers.
 	 *
-	 * @return array of WB_Coordinate.
+	 * @return array of WB_Point.
 	 */
-	public WB_Coord[] getFaceCenters() {
-		final WB_Coord[] result = new WB_Coord[getNumberOfFaces()];
+	public WB_Point[] getFaceCenters() {
+		final WB_Point[] result = new WB_Point[getNumberOfFaces()];
 		int i = 0;
 		HE_Face f;
 		final Iterator<HE_Face> fItr = fItr();
@@ -1345,7 +1350,7 @@ public class HE_Mesh extends HE_MeshElement
 		return result;
 	}
 
-	public WB_Coord getFaceNormal(final int id) {
+	public WB_Vector getFaceNormal(final int id) {
 		return HE_MeshOp.getFaceNormal(getFaceWithIndex(id));
 	}
 
@@ -1354,8 +1359,8 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 * @return array of WB_Coordinate.
 	 */
-	public WB_Coord[] getFaceNormals() {
-		final WB_Coord[] result = new WB_Coord[getNumberOfFaces()];
+	public WB_Vector[] getFaceNormals() {
+		final WB_Vector[] result = new WB_Vector[getNumberOfFaces()];
 		int i = 0;
 		HE_Face f;
 		final Iterator<HE_Face> fItr = fItr();
@@ -1453,8 +1458,8 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 * @return WB_KDTree
 	 */
-	public WB_KDTree<WB_Coord, Long> getFaceTree() {
-		final WB_KDTree<WB_Coord, Long> tree = new WB_KDTree<WB_Coord, Long>();
+	public WB_KDTree3D<WB_Point, Long> getFaceTree() {
+		final WB_KDTree3D<WB_Point, Long> tree = new WB_KDTree3D<WB_Point, Long>();
 		HE_Face f;
 		final Iterator<HE_Face> fItr = fItr();
 		while (fItr.hasNext()) {
@@ -1652,8 +1657,8 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 * @return UnifiedMap of WB_Coordinate.
 	 */
-	public Map<Long, WB_Coord> getKeyedEdgeCenters() {
-		final Map<Long, WB_Coord> result = new UnifiedMap<Long, WB_Coord>();
+	public Map<Long, WB_Point> getKeyedEdgeCenters() {
+		final Map<Long, WB_Point> result = new UnifiedMap<Long, WB_Point>();
 		HE_Halfedge e;
 		final Iterator<HE_Halfedge> eItr = eItr();
 		while (eItr.hasNext()) {
@@ -1668,8 +1673,8 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 * @return UnifiedMap of WB_Coordinate.
 	 */
-	public Map<Long, WB_Coord> getKeyedEdgeNormals() {
-		final Map<Long, WB_Coord> result = new UnifiedMap<Long, WB_Coord>();
+	public Map<Long, WB_Vector> getKeyedEdgeNormals() {
+		final Map<Long, WB_Vector> result = new UnifiedMap<Long, WB_Vector>();
 		HE_Halfedge e;
 		final Iterator<HE_Halfedge> eItr = eItr();
 		while (eItr.hasNext()) {
@@ -1684,8 +1689,8 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 * @return UnifiedMap of WB_Coordinate.
 	 */
-	public Map<Long, WB_Coord> getKeyedFaceCenters() {
-		final Map<Long, WB_Coord> result = new UnifiedMap<Long, WB_Coord>();
+	public Map<Long, WB_Point> getKeyedFaceCenters() {
+		final Map<Long, WB_Point> result = new UnifiedMap<Long, WB_Point>();
 		HE_Face f;
 		final Iterator<HE_Face> fItr = fItr();
 		while (fItr.hasNext()) {
@@ -1700,8 +1705,8 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 * @return UnifiedMap of WB_Coordinate.
 	 */
-	public Map<Long, WB_Coord> getKeyedFaceNormals() {
-		final Map<Long, WB_Coord> result = new UnifiedMap<Long, WB_Coord>();
+	public Map<Long, WB_Vector> getKeyedFaceNormals() {
+		final Map<Long, WB_Vector> result = new UnifiedMap<Long, WB_Vector>();
 		HE_Face f;
 		final Iterator<HE_Face> fItr = fItr();
 		while (fItr.hasNext()) {
@@ -1717,8 +1722,8 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 * @return
 	 */
-	public Map<Long, WB_Coord> getKeyedVertexNormals() {
-		final Map<Long, WB_Coord> result = new UnifiedMap<Long, WB_Coord>();
+	public Map<Long, WB_Vector> getKeyedVertexNormals() {
+		final Map<Long, WB_Vector> result = new UnifiedMap<Long, WB_Vector>();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
@@ -2019,7 +2024,7 @@ public class HE_Mesh extends HE_MeshElement
 		return map;
 	}
 
-	public WB_Coord getVertexNormal(final int i) {
+	public WB_Vector getVertexNormal(final int i) {
 		return HE_MeshOp.getVertexNormal(getVertexWithIndex(i));
 	}
 
@@ -2028,8 +2033,8 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 * @return array of WB_Coordinate.
 	 */
-	public WB_Coord[] getVertexNormals() {
-		final WB_Coord[] result = new WB_Coord[getNumberOfVertices()];
+	public WB_Vector[] getVertexNormals() {
+		final WB_Vector[] result = new WB_Vector[getNumberOfVertices()];
 		int i = 0;
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
@@ -2046,8 +2051,8 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 * @return WB_KDTree
 	 */
-	public WB_KDTree<WB_Coord, Long> getVertexTree() {
-		final WB_KDTree<WB_Coord, Long> tree = new WB_KDTree<WB_Coord, Long>();
+	public WB_KDTree3D<WB_Coord, Long> getVertexTree() {
+		final WB_KDTree3D<WB_Coord, Long> tree = new WB_KDTree3D<WB_Coord, Long>();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
@@ -2807,7 +2812,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Mesh result = copy();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = result.vItr();
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, new WB_Point(px, py, pz),
 				new WB_Vector(ax, ay, az));
 		while (vItr.hasNext()) {
@@ -2835,7 +2840,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Mesh result = copy();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = result.vItr();
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, p, a);
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -2870,7 +2875,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Mesh result = copy();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = result.vItr();
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, new WB_Point(p1x, p1y, p1z),
 				new WB_Vector(p2x - p1x, p2y - p1y, p2z - p1z));
 		while (vItr.hasNext()) {
@@ -2897,7 +2902,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Mesh result = copy();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = result.vItr();
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, p1, new WB_Vector(p1, p2));
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -2931,7 +2936,7 @@ public class HE_Mesh extends HE_MeshElement
 			final double p2y, final double p2z) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, new WB_Point(p1x, p1y, p1z),
 				new WB_Vector(p2x - p1x, p2y - p1y, p2z - p1z));
 		while (vItr.hasNext()) {
@@ -2957,7 +2962,7 @@ public class HE_Mesh extends HE_MeshElement
 			final WB_Coord p2) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, p1, new WB_Vector(p1, p2));
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -2985,7 +2990,7 @@ public class HE_Mesh extends HE_MeshElement
 			final double az) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, new WB_Point(px, py, pz),
 				new WB_Vector(ax, ay, az));
 		while (vItr.hasNext()) {
@@ -3012,7 +3017,7 @@ public class HE_Mesh extends HE_MeshElement
 			final WB_Coord a) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, p, a);
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -3093,7 +3098,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Mesh result = copy();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = result.vItr();
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutOrigin(angle, new WB_Vector(ax, ay, az));
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -3116,7 +3121,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Mesh result = copy();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = result.vItr();
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutOrigin(angle, a);
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -3140,7 +3145,7 @@ public class HE_Mesh extends HE_MeshElement
 			final double ay, final double az) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutOrigin(angle, new WB_Vector(ax, ay, az));
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -3162,7 +3167,7 @@ public class HE_Mesh extends HE_MeshElement
 	public HE_Mesh rotateAboutOriginSelf(final double angle, final WB_Coord a) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutOrigin(angle, a);
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -3398,6 +3403,33 @@ public class HE_Mesh extends HE_MeshElement
 		selections.put(name, sel);
 		return sel;
 	}
+	
+	/**
+	 *
+	 * @param name
+	 */
+	public HE_Selection selectFaces(int start, int stop) {
+		HE_Selection sel = HE_Selection.getSelection(this);
+		
+		for(int i=start;i<stop;i++) {
+		sel.add(getFaceWithIndex(i));
+		}
+		return sel;
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	public HE_Selection selectFaces(final String name, int start, int stop) {
+HE_Selection sel = HE_Selection.getSelection(this);
+		
+		for(int i=start;i<stop;i++) {
+		sel.add(getFaceWithIndex(i));
+		}
+		selections.put(name, sel);
+		return sel;
+	}
 
 	/**
 	 *
@@ -3605,7 +3637,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Vertex v;
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			if (WB_GeometryOp3D.classifyPointToPlane3D(v,
+			if (WB_GeometryOp.classifyPointToPlane3D(v,
 					P) == WB_Classification.BACK) {
 				sel.add(v);
 			}
@@ -3625,7 +3657,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Vertex v;
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			if (WB_GeometryOp3D.classifyPointToPlane3D(v,
+			if (WB_GeometryOp.classifyPointToPlane3D(v,
 					P) == WB_Classification.BACK) {
 				sel.add(v);
 			}
@@ -4303,7 +4335,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Vertex v;
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			if (WB_GeometryOp3D.classifyPointToPlane3D(v,
+			if (WB_GeometryOp.classifyPointToPlane3D(v,
 					P) == WB_Classification.FRONT) {
 				sel.add(v);
 			}
@@ -4323,7 +4355,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Vertex v;
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			if (WB_GeometryOp3D.classifyPointToPlane3D(v,
+			if (WB_GeometryOp.classifyPointToPlane3D(v,
 					P) == WB_Classification.FRONT) {
 				sel.add(v);
 			}
@@ -4494,7 +4526,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Vertex v;
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			if (WB_GeometryOp3D.classifyPointToPlane3D(v,
+			if (WB_GeometryOp.classifyPointToPlane3D(v,
 					P) == WB_Classification.ON) {
 				sel.add(v);
 			}
@@ -4514,7 +4546,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Vertex v;
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			if (WB_GeometryOp3D.classifyPointToPlane3D(v,
+			if (WB_GeometryOp.classifyPointToPlane3D(v,
 					P) == WB_Classification.ON) {
 				sel.add(v);
 			}
@@ -5794,7 +5826,7 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 * @return copy
 	 */
-	public HE_Mesh transform(final WB_Transform3D T) {
+	public HE_Mesh transform(final WB_Transform T) {
 		return copy().modify(new HEM_Transform(T));
 	}
 
@@ -5806,7 +5838,7 @@ public class HE_Mesh extends HE_MeshElement
 	 *
 	 * @return self
 	 */
-	public HE_Mesh transformSelf(final WB_Transform3D T) {
+	public HE_Mesh transformSelf(final WB_Transform T) {
 		return modify(new HEM_Transform(T));
 	}
 

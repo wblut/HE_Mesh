@@ -217,9 +217,9 @@ public abstract class WB_IsoValues3D {
 	}
 
 	public static class HashGrid3D extends WB_IsoValues3D {
-		private WB_HashGridDouble values;
+		private WB_HashGridDouble3D values;
 
-		public HashGrid3D(final WB_HashGridDouble values) {
+		public HashGrid3D(final WB_HashGridDouble3D values) {
 			this.values = values;
 		}
 

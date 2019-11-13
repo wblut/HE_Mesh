@@ -18,7 +18,7 @@ import java.util.zip.GZIPInputStream;
 
 import org.eclipse.collections.impl.list.mutable.FastList;
 
-import wblut.geom.WB_KDTreeInteger.WB_KDEntryInteger;
+import wblut.geom.WB_KDTreeInteger3D.WB_KDEntryInteger;
 import wblut.hemesh.HE_Mesh;
 import wblut.math.WB_Epsilon;
 
@@ -49,8 +49,8 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 		return new WB_VectorCollectionList(coords);
 	}
 	
-	public static WB_VectorCollection getCollection(WB_VectorFactory generator, int numberOfPoints) { 
-	return new WB_VectorCollectionGenerator(generator, numberOfPoints);
+	public static WB_VectorCollection getCollection(WB_VectorFactory factory, int numberOfPoints) { 
+	return new WB_VectorCollectionFactory(factory, numberOfPoints);
 	}
 	
 	public static WB_VectorCollection getCollection(double[][] coords) {
@@ -74,8 +74,8 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 	}
 
 
-	public WB_VectorCollection noise(final WB_VectorFactory generator) {
-		return new WB_VectorCollectionNoise(this, generator);
+	public WB_VectorCollection noise(final WB_VectorFactory factory) {
+		return new WB_VectorCollectionNoise(this, factory);
 	}
 
 	public WB_VectorCollection jitter(final double d) {
@@ -91,7 +91,14 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 	}
 
 	abstract public WB_Vector get(final int i);
+	
+	abstract public double getX(final int i);
 
+	abstract public double getY(final int i);
+
+	abstract public double getZ(final int i);
+	
+	
 	public List<WB_Coord> subList(final int fromInc, final int toExcl) {
 		return toList().subList(fromInc, toExcl);
 	}
@@ -116,6 +123,21 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 		public WB_Vector get(final int i) {
 			return array[i];
 		}
+
+		@Override
+		public double getX(final int i) {
+			return array[i].xd();
+		}
+		@Override
+		public double getY(final int i) {
+			return array[i].yd();
+		}
+		@Override
+		public double getZ(final int i) {
+			return array[i].zd();
+		}
+		
+		
 
 		@Override
 		public int size() {
@@ -150,6 +172,19 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 		@Override
 		public WB_Vector get(final int i) {
 			return list.get(i);
+		}
+		
+		@Override
+		public double getX(final int i) {
+			return list.get(i).xd();
+		}
+		@Override
+		public double getY(final int i) {
+			return list.get(i).yd();
+		}
+		@Override
+		public double getZ(final int i) {
+			return list.get(i).zd();
 		}
 
 		@Override
@@ -207,6 +242,19 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 		public WB_Vector get(final int i) {
 			return array[i];
 		}
+		
+		@Override
+		public double getX(final int i) {
+			return array[i].xd();
+		}
+		@Override
+		public double getY(final int i) {
+			return array[i].yd();
+		}
+		@Override
+		public double getZ(final int i) {
+			return array[i].zd();
+		}
 
 		@Override
 		public int size() {
@@ -227,14 +275,65 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 			return list;
 		}
 	}
+	
+	static class WB_VectorCollectionFlat extends WB_VectorCollection {
+		double[] array;
 
-	static class WB_VectorCollectionGenerator extends WB_VectorCollection {
+		WB_VectorCollectionFlat(final double[] coords) {
+			this.array = coords;
+			
+		}
+		
+
+		@Override
+		public WB_Vector get(final int i) {
+			return new WB_Vector(array[3*i],array[3*i+1],array[3*i+2]);
+		}
+		
+		@Override
+		public double getX(final int i) {
+			return array[3*i];
+		}
+		@Override
+		public double getY(final int i) {
+			return array[3*i+1];
+		}
+		@Override
+		public double getZ(final int i) {
+			return array[3*i+2];
+		}
+
+		@Override
+		public int size() {
+			return array.length/3;
+		}
+
+		@Override
+		public WB_Vector[] toArray() {
+			WB_Vector[] out = new WB_Vector[array.length/3];
+			for(int i = 0;i<array.length;i+=3){
+				out[i/3] = new WB_Vector(array[i],array[i+1],array[i+2]);
+			}
+			return out;
+		}
+
+		@Override
+		public List<WB_Coord> toList() {
+			List<WB_Coord> list = new FastList<WB_Coord>();
+			for(int i = 0;i<array.length;i+=3){
+				list.add(new WB_Point(array[i],array[i+1],array[i+2]));
+			}
+			return list;
+		}
+	}
+
+	static class WB_VectorCollectionFactory extends WB_VectorCollection {
 		WB_Vector[] array;
 
-		WB_VectorCollectionGenerator(final WB_VectorFactory generator, int numberOfPoints) {
+		WB_VectorCollectionFactory(final WB_VectorFactory factory, int numberOfPoints) {
 			this.array = new WB_Vector[numberOfPoints] ;
 			for(int i=0;i<numberOfPoints;i++) {
-				array[i]=generator.nextVector();
+				array[i]=factory.nextVector();
 			}
 		}
 
@@ -243,6 +342,19 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 			return array[i];
 		}
 
+		@Override
+		public double getX(final int i) {
+			return array[i].xd();
+		}
+		@Override
+		public double getY(final int i) {
+			return array[i].yd();
+		}
+		@Override
+		public double getZ(final int i) {
+			return array[i].zd();
+		}
+		
 		@Override
 		public int size() {
 			return array.length;
@@ -274,6 +386,19 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 		public WB_Vector get(final int i) {
 			return polygon.getPoint(i);
 		}
+		
+		@Override
+		public double getX(final int i) {
+			return polygon.getPoint(i).xd();
+		}
+		@Override
+		public double getY(final int i) {
+			return polygon.getPoint(i).yd();
+		}
+		@Override
+		public double getZ(final int i) {
+			return polygon.getPoint(i).zd();
+		}
 
 		@Override
 		public int size() {
@@ -304,17 +429,33 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 		WB_Vector[]			noise;
 
 		WB_VectorCollectionNoise(final WB_VectorCollection source,
-				final WB_VectorFactory generator) {
+				final WB_VectorFactory factory) {
 			this.source = source;
 			noise = new WB_Vector[source.size()];
 			for (int i = 0; i < source.size(); i++) {
-				noise[i] = generator.nextVector();
+				noise[i] = factory.nextVector();
 			}
 		}
 
 		@Override
 		public WB_Vector get(final int i) {
 			return WB_Vector.add(source.get(i), noise[i]);
+		}
+		
+		@Override
+		public double getX(final int i) {
+			return source.getX(i)+noise[i].xd();
+		}
+		
+		@Override
+		public double getY(final int i) {
+			return source.getY(i)+noise[i].yd();
+		}
+		
+		
+		@Override
+		public double getZ(final int i) {
+			return source.getZ(i)+noise[i].xd();
 		}
 
 		@Override
@@ -355,6 +496,23 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 		public WB_Vector get(final int i) {
 			return map.mapPoint3D(source.get(i));
 		}
+		
+		@Override
+		public double getX(int i) {
+			
+			return map.mapPoint3D(source.get(i)).xd();
+		}
+
+		@Override
+		public double getY(int i) {
+			
+			return map.mapPoint3D(source.get(i)).yd();
+		}
+
+		@Override
+		public double getZ(int i) {
+			return map.mapPoint3D(source.get(i)).zd();
+		}
 
 		@Override
 		public int size() {
@@ -393,6 +551,21 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 		@Override
 		public WB_Vector get(final int i) {
 			return map.unmapPoint3D(source.get(i));
+		}
+		
+		@Override
+		public double getX(int i) {
+			return map.unmapPoint3D(source.get(i)).xd();
+		}
+
+		@Override
+		public double getY(int i) {
+			return map.unmapPoint3D(source.get(i)).yd();
+		}
+
+		@Override
+		public double getZ(int i) {
+			return map.unmapPoint3D(source.get(i)).zd();
 		}
 
 		@Override
@@ -433,6 +606,22 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 		public WB_Vector get(final int i) {
 			return map.unmapPoint2D(source.get(i));
 		}
+		
+
+		@Override
+		public double getX(int i) {
+			return map.unmapPoint2D(source.get(i)).xd();
+		}
+
+		@Override
+		public double getY(int i) {
+			return map.unmapPoint2D(source.get(i)).yd();
+		}
+
+		@Override
+		public double getZ(int i) {
+			return map.unmapPoint2D(source.get(i)).zd();
+		}
 
 		@Override
 		public int size() {
@@ -466,15 +655,30 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 				final double d) {
 			this.source = source;
 			noise = new WB_Vector[source.size()];
-			WB_VectorFactory generator = new WB_RandomOnSphere();
+			WB_VectorFactory factory = new WB_RandomOnSphere();
 			for (int i = 0; i < source.size(); i++) {
-				noise[i] = generator.nextVector().mulSelf(d);
+				noise[i] = factory.nextVector().mulSelf(d);
 			}
 		}
 
 		@Override
 		public WB_Vector get(final int i) {
 			return WB_Vector.add(source.get(i), noise[i]);
+		}
+		@Override
+		public double getX(final int i) {
+			return source.getX(i)+noise[i].xd();
+		}
+		
+		@Override
+		public double getY(final int i) {
+			return source.getY(i)+noise[i].yd();
+		}
+		
+		
+		@Override
+		public double getZ(final int i) {
+			return source.getZ(i)+noise[i].xd();
 		}
 
 		@Override
@@ -506,7 +710,7 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 
 		WB_VectorCollectionUnique(final WB_VectorCollection source) {
 			this.list = new FastList<WB_Vector>();
-			WB_KDTreeInteger<WB_Vector> tree = new WB_KDTreeInteger<WB_Vector>();
+			WB_KDTreeInteger3D<WB_Vector> tree = new WB_KDTreeInteger3D<WB_Vector>();
 			WB_Vector c;
 			WB_KDEntryInteger<WB_Vector>[] neighbors;
 			for (int i = 0; i < source.size(); i++) {
@@ -522,6 +726,19 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 		@Override
 		public WB_Vector get(final int i) {
 			return list.get(i);
+		}
+		
+		@Override
+		public double getX(final int i) {
+			return list.get(i).xd();
+		}
+		@Override
+		public double getY(final int i) {
+			return list.get(i).yd();
+		}
+		@Override
+		public double getZ(final int i) {
+			return list.get(i).zd();
 		}
 
 		@Override
@@ -598,6 +815,19 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 		@Override
 		public WB_Vector get(final int i) {
 			return list.get(i);
+		}
+		
+		@Override
+		public double getX(final int i) {
+			return list.get(i).xd();
+		}
+		@Override
+		public double getY(final int i) {
+			return list.get(i).yd();
+		}
+		@Override
+		public double getZ(final int i) {
+			return list.get(i).zd();
 		}
 
 		@Override

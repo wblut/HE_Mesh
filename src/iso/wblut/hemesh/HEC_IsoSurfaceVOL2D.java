@@ -17,7 +17,7 @@ import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
 import processing.core.PApplet;
 import processing.core.PImage;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_HashGridDouble2D;
 import wblut.geom.WB_IsoValues2D;
 import wblut.geom.WB_Point;
@@ -726,7 +726,7 @@ public class HEC_IsoSurfaceVOL2D extends HEC_Creator {
 		for (int i = 0; i < resx + 1; i++) {
 			for (int j = 0; j < resy + 1; j++) {
 				for (int s = 0; s < num; s++) {
-					r = WB_GeometryOp3D.getSqDistance3D(new WB_Point(i, j),
+					r = WB_GeometryOp.getSqDistance3D(new WB_Point(i, j),
 							segs[s]) / (radius * radius);
 					values[i][j] = Math.max(1f / (float) r, values[i][j]);//
 					// values[i][j][k]+=(r>=1.0)?0: 1-r * r * r * (r * (r * 6 -

@@ -18,7 +18,7 @@ import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
 import processing.core.PApplet;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_GeometryOp;
-import wblut.geom.WB_HashGridDouble;
+import wblut.geom.WB_HashGridDouble3D;
 import wblut.geom.WB_IsoValues3D;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_RandomCircle;
@@ -349,7 +349,7 @@ public class HEC_IsoSurface extends HEC_Creator {
 	 * @param values
 	 * @return
 	 */
-	public HEC_IsoSurface setValues(final WB_HashGridDouble values) {
+	public HEC_IsoSurface setValues(final WB_HashGridDouble3D values) {
 		this.values = new WB_IsoValues3D.HashGrid3D(values);
 		resx = values.getSizeI() - 1;
 		resy = values.getSizeJ() - 1;

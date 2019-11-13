@@ -9,7 +9,7 @@ import wblut.hemesh.*;
 import wblut.geom.*;
 import wblut.math.*;
 
-WB_GeometryFactory3D gf=new WB_GeometryFactory3D();
+WB_GeometryFactory gf=new WB_GeometryFactory();
 WB_Render3D render;
 WB_Polygon polygon;
 

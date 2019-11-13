@@ -8,8 +8,6 @@ package wblut.hemesh;
 
 import java.util.Map;
 
-import org.eclipse.collections.impl.map.mutable.primitive.LongLongHashMap;
-
 import wblut.math.WB_ConstantScalarParameter;
 import wblut.math.WB_FactorScalarParameter;
 import wblut.math.WB_ScalarParameter;
@@ -25,6 +23,7 @@ public class HEM_Shell extends HEM_Modifier {
 	 *
 	 */
 	private WB_ScalarParameter d;
+	private boolean twosided;
 
 	/**
 	 *
@@ -32,6 +31,7 @@ public class HEM_Shell extends HEM_Modifier {
 	public HEM_Shell() {
 		super();
 		d = WB_ScalarParameter.ZERO;
+		twosided=false;
 	}
 
 	/**
@@ -56,6 +56,12 @@ public class HEM_Shell extends HEM_Modifier {
 		this.d = d;
 		return this;
 	}
+	
+	public HEM_Shell setTwoSided(final boolean b) {
+		twosided=b;
+		return this;
+	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -71,10 +77,21 @@ public class HEM_Shell extends HEM_Modifier {
 		final HE_Mesh innerMesh = cc.create();
 		
 		Map<Long,Long> heCorrelation = cc.halfedgeCorrelation;
-		final HEM_VertexExpand expm = new HEM_VertexExpand()
+		HEM_VertexExpand expm;
+		if(twosided) {
+			expm= new HEM_VertexExpand()
+					.setDistance(new WB_FactorScalarParameter(-0.5, d));
+		}else{
+		 expm= new HEM_VertexExpand()
 				.setDistance(new WB_FactorScalarParameter(-1.0, d));
+		}
 		innerMesh.modify(expm);
 		mesh.selectAllFaces("outer");
+		if(twosided) {
+			expm= new HEM_VertexExpand()
+					.setDistance(new WB_FactorScalarParameter(0.5, d));
+			mesh.modify(expm);
+		}
 		HE_MeshOp.flipFaces(innerMesh);
 		innerMesh.selectAllFaces("inner");
 		mesh.add(innerMesh);

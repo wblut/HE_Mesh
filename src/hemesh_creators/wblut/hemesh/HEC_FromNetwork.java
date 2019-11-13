@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import wblut.geom.WB_GeometryFactory3D;
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Network;
 import wblut.geom.WB_Network.Connection;
 import wblut.geom.WB_Network.Node;
@@ -26,7 +26,7 @@ import wblut.math.WB_ScalarParameter;
  */
 public class HEC_FromNetwork extends HEC_Creator {
 
-	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	private static WB_GeometryFactory gf = new WB_GeometryFactory();
 	private WB_Network network;
 	private int numberOfNodes, numberOfConnections;
 	private NodeType[] nodeTypes;

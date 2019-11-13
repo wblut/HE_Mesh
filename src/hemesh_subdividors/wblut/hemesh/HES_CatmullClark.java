@@ -15,8 +15,8 @@ import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryFactory3D;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.math.WB_ConstantScalarParameter;
@@ -33,7 +33,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 	/**
 	 *
 	 */
-	private static WB_GeometryFactory3D	gf				= new WB_GeometryFactory3D();
+	private static WB_GeometryFactory	gf				= new WB_GeometryFactory();
 	/** Keep edges?. */
 	private boolean						keepEdges;
 	/** Keep boundary?. */
@@ -351,7 +351,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 						P = HE_MeshOp.getPlane(f);
 						boolean unique = true;
 						for (int j = 0; j < planes.size(); j++) {
-							if (WB_GeometryOp3D.isEqual(planes.get(j), P)) {
+							if (WB_GeometryOp.isEqual(planes.get(j), P)) {
 								unique = false;
 								break;
 							}
@@ -386,7 +386,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 				if (nc > 1) {
 					p.scaleSelf(1.0 / c);
 					if (planes.size() == 1) {
-						p = WB_GeometryOp3D.getClosestPoint3D(p, planes.get(0));
+						p = WB_GeometryOp.getClosestPoint3D(p, planes.get(0));
 					}
 					/*
 					 * else if (planes.size() == 2) { final WB_Line L =

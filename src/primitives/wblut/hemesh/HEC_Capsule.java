@@ -7,7 +7,7 @@
 package wblut.hemesh;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_CoordOp3D;
+import wblut.geom.WB_CoordOp;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
@@ -167,7 +167,7 @@ public class HEC_Capsule extends HEC_Creator {
 	 * @return
 	 */
 	public HEC_Capsule align(final WB_Coord origin, final WB_Coord endpoint) {
-		setHeight(WB_CoordOp3D.getDistance3D(origin, endpoint));
+		setHeight(WB_CoordOp.getDistance3D(origin, endpoint));
 		setCenter(WB_Point.mulAddMul(0.5, origin, 0.5, endpoint));
 		setZAxis(new WB_Vector(origin, endpoint));
 		return this;
@@ -352,7 +352,7 @@ public class HEC_Capsule extends HEC_Creator {
 		}
 		final HEC_FromFacelist fl = new HEC_FromFacelist();
 		fl.setVertices(vertices).setFaces(faces).setVertexUVW(uvw)
-				.setFaceTextureIds(faceTextureIds);
+				.setFaceTextureIds(faceTextureIds).setCheckDuplicateVertices(true).setRemoveUnconnectedElements(true);
 		return fl.createBase();
 	}
 }

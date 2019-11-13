@@ -17,7 +17,7 @@ import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_Point;
-import wblut.geom.WB_VoronoiCreator;
+import wblut.geom.WB_VoronoiFactory;
 import wblut.geom.WB_VoronoiCell3D;
 import wblut.math.WB_ConstantScalarParameter;
 import wblut.math.WB_ScalarParameter;
@@ -172,8 +172,8 @@ public class HEMC_VoronoiBox extends HEMC_MultiCreator {
 		numberOfPoints = points.size();
 		tracker.setDuringStatus(this, "Calculating Voronoi cells.");
 		List<WB_VoronoiCell3D> voronoi = bruteForce
-				? WB_VoronoiCreator.getVoronoi3DBruteForce(points, numberOfPoints, aabb, offset).getCells()
-				: WB_VoronoiCreator.getVoronoi3D(points, numberOfPoints, aabb, offset).getCells();
+				? WB_VoronoiFactory.getVoronoi3DBruteForce(points, numberOfPoints, aabb, offset).getCells()
+				: WB_VoronoiFactory.getVoronoi3D(points, numberOfPoints, aabb, offset).getCells();
 
 		WB_ProgressCounter counter = new WB_ProgressCounter(voronoi.size(), 10);
 		tracker.setCounterStatus(this, "Creating cell mesh.", counter);

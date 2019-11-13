@@ -16,8 +16,8 @@ import org.eclipse.collections.impl.map.mutable.primitive.LongObjectHashMap;
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_CoordOp3D;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_CoordOp;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
@@ -51,13 +51,13 @@ public class HEM_Extrude extends HEM_Modifier {
 	/** Limit angle for face fusion. */
 	private double						fuseAngle;
 	/** Vertex normals. */
-	private Map<Long, WB_Coord>			_faceNormals;
+	private Map<Long, WB_Vector>			_faceNormals;
 	/** Halfedge normals. */
-	private LongObjectHashMap<WB_Coord>	_halfedgeNormals;
+	private LongObjectHashMap<WB_Vector>	_halfedgeNormals;
 	/** Extrusion widths. */
 	private LongDoubleHashMap			_halfedgeEWs;
 	/** Face centers. */
-	private Map<Long, WB_Coord>			_faceCenters;
+	private Map<Long, WB_Point>			_faceCenters;
 	/**
 	 *
 	 */
@@ -274,7 +274,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		WB_ProgressCounter counter = new WB_ProgressCounter(nf, 10);
 		tracker.setCounterStatus(this,
 				"Collecting halfedge information per face.", counter);
-		_halfedgeNormals = new LongObjectHashMap<WB_Coord>();
+		_halfedgeNormals = new LongObjectHashMap<WB_Vector>();
 		_halfedgeEWs = new LongDoubleHashMap();
 		for (int i = 0; i < nf; i++) {
 			f = faces.get(i);
@@ -386,7 +386,7 @@ public class HEM_Extrude extends HEM_Modifier {
 			tracker.setStopStatus(this, "Exiting HEM_Extrude.");
 			return selection.getParent();
 		}
-		_halfedgeNormals = new LongObjectHashMap<WB_Coord>();
+		_halfedgeNormals = new LongObjectHashMap<WB_Vector>();
 		_halfedgeEWs = new LongDoubleHashMap();
 		if (chamfer == null && isFlat && heights == null) {
 			return selection.getParent();
@@ -1017,7 +1017,7 @@ public class HEM_Extrude extends HEM_Modifier {
 					final WB_Segment S2 = new WB_Segment(
 							WB_Point.addMul(v2, d[i], n2),
 							WB_Point.addMul(v3, d[i], n2));
-					final WB_IntersectionResult ir = WB_GeometryOp3D
+					final WB_IntersectionResult ir = WB_GeometryOp
 							.getIntersection3D(S1, S2);
 					final WB_Coord p = ir.dimension == 0 ? (WB_Point) ir.object
 							: ((WB_Segment) ir.object).getCenter();
@@ -1090,7 +1090,7 @@ public class HEM_Extrude extends HEM_Modifier {
 			for (int i = 0; i < newhes.size(); i++) {
 				final HE_Halfedge e = newhes.get(i);
 				// if (e.isEdge()) {
-				if (WB_Epsilon.isZeroSq(WB_CoordOp3D.getSqDistance3D(
+				if (WB_Epsilon.isZeroSq(WB_CoordOp.getSqDistance3D(
 						e.getStartVertex(), e.getEndVertex()))) {
 					edgesToRemove.add(e);
 				}

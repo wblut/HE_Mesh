@@ -7,7 +7,7 @@ import java.util.List;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
-WB_GeometryFactory3D gf=new WB_GeometryFactory3D();
+WB_GeometryFactory gf=new WB_GeometryFactory();
 WB_Render2D render;
 List<WB_Polygon> text;
 String[] fontnames;

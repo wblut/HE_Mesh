@@ -8,7 +8,7 @@ List<WB_VoronoiCell2D> voronoiXY;
 List<WB_Mesh> columns;
 
 WB_Render3D render;
-WB_GeometryFactory3D gf=new WB_GeometryFactory3D();
+WB_GeometryFactory gf=new WB_GeometryFactory();
 
 void setup() {
   size(1000, 1000, P3D);

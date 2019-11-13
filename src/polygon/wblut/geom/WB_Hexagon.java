@@ -15,8 +15,8 @@ import lombok.ToString;
 
 @Data
 @ToString(includeFieldNames=true)
-public class WB_Hexagon implements WB_Geometry3D {
-	@Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) private WB_GeometryFactory3D	geometryfactory	= new WB_GeometryFactory3D();
+public class WB_Hexagon implements WB_Geometry {
+	@Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) private WB_GeometryFactory	geometryfactory	= new WB_GeometryFactory();
 	@Setter(AccessLevel.NONE) private WB_Point				p1;
 	@Setter(AccessLevel.NONE) private WB_Point				p2;
 	@Setter(AccessLevel.NONE) private WB_Point				p3;
@@ -75,13 +75,13 @@ public class WB_Hexagon implements WB_Geometry3D {
 	}
 
 	@Override
-	public WB_Hexagon apply(WB_Transform3D T) {
+	public WB_Hexagon apply(WB_Transform T) {
 		return new WB_Hexagon(p1.apply(T), p2.apply(T), p3.apply(T),
 				p4.apply(T), p5.apply(T), p6.apply(T));
 	}
 
 	@Override
-	public WB_Hexagon applySelf(WB_Transform3D T) {
+	public WB_Hexagon applySelf(WB_Transform T) {
 		p1.applySelf(T);
 		p2.applySelf(T);
 		p3.applySelf(T);

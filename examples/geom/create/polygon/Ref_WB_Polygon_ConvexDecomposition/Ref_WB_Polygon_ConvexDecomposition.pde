@@ -6,7 +6,7 @@ import wblut.geom.*;
 import wblut.math.*;
 import java.util.List;
 
-WB_GeometryFactory3D gf=new WB_GeometryFactory3D();
+WB_GeometryFactory gf=new WB_GeometryFactory();
 WB_Render2D render;
 ArrayList<WB_Point> shell;
 ArrayList<WB_Point>[] holes;

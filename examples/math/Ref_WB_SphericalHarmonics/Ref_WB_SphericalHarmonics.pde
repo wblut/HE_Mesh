@@ -10,14 +10,14 @@ double theta,phi,r;
 
 List<WB_Point> points;
 WB_Render3D render;
-WB_GeometryFactory3D gf;
+WB_GeometryFactory gf;
 
 void setup() {
   fullScreen(P3D);
   smooth(8);
   points=new ArrayList<WB_Point>();
   render=new WB_Render3D(this);
-  gf=new WB_GeometryFactory3D();
+  gf=new WB_GeometryFactory();
   //Get spherical theta and phi angles evenly distributed over the sphere
   //Randomly selecting theta [0,PI) and phi [0,TWO_PI) gives higher density at the poles
   WB_PointGenerator rp=new WB_RandomSpherical();

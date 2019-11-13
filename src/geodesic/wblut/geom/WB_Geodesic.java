@@ -11,7 +11,7 @@ import java.security.InvalidParameterException;
 import wblut.math.WB_Epsilon;
 
 public class WB_Geodesic implements WB_SimpleMeshCreator {
-	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	private static WB_GeometryFactory gf = new WB_GeometryFactory();
 
 	public static enum Type {
 		TETRAHEDRON(0), OCTAHEDRON(1), CUBE(2), DODECAHEDRON(3), ICOSAHEDRON(4);

@@ -9,7 +9,7 @@ package wblut.geom;
 /**
  *
  */
-public class WB_Triangulate extends WB_Triangulate3D {
+public class WB_Triangulate extends WB_TriangulationFactory {
 	/**
 	 *
 	 */

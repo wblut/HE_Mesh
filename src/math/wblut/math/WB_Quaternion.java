@@ -2,7 +2,7 @@
 package wblut.math;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_CoordOp3D;
+import wblut.geom.WB_CoordOp;
 import wblut.geom.WB_MutableCoord;
 import wblut.geom.WB_Vector;
 
@@ -139,7 +139,7 @@ public class WB_Quaternion {
 
 	public double getAngleAround(final double axisX, final double axisY,
 			final double axisZ) {
-		final double d = WB_CoordOp3D.dot(this.x, this.y, this.z, axisX, axisY,
+		final double d = WB_CoordOp.dot(this.x, this.y, this.z, axisX, axisY,
 				axisZ);
 		final double l2 = getSqLength(axisX * d, axisY * d, axisZ * d, this.w);
 		return WB_Epsilon.isZero(l2) ? 0.0
@@ -179,7 +179,7 @@ public class WB_Quaternion {
 	public void getSwingTwist(final double axisX, final double axisY,
 			final double axisZ, final WB_Quaternion swing,
 			final WB_Quaternion twist) {
-		final double d = WB_CoordOp3D.dot(this.x, this.y, this.z, axisX, axisY,
+		final double d = WB_CoordOp.dot(this.x, this.y, this.z, axisX, axisY,
 				axisZ);
 		twist.set(axisX * d, axisY * d, axisZ * d, this.w).normalizeSelf();
 		if (d < 0)
@@ -211,7 +211,7 @@ public class WB_Quaternion {
 	 */
 	public void getSwingTwist(final WB_Coord axis, final WB_Quaternion swing,
 			final WB_Quaternion twist) {
-		final double d = WB_CoordOp3D.dot(this.x, this.y, this.z, axis.xd(),
+		final double d = WB_CoordOp.dot(this.x, this.y, this.z, axis.xd(),
 				axis.yd(), axis.zd());
 		twist.set(axis.xd() * d, axis.yd() * d, axis.zd() * d, this.w)
 				.normalizeSelf();
@@ -372,7 +372,7 @@ public class WB_Quaternion {
 
 	public WB_Quaternion setFromAxis(final double x, final double y,
 			final double z, final double radians) {
-		double d = WB_CoordOp3D.getLength3D(x, y, z);
+		double d = WB_CoordOp.getLength3D(x, y, z);
 		if (d == 0.0)
 			return identity();
 		d = 1.0 / d;
@@ -403,9 +403,9 @@ public class WB_Quaternion {
 			double xy, double xz, double yx, double yy, double yz, double zx,
 			double zy, double zz) {
 		if (normalizeAxes) {
-			final double lx = 1.0 / WB_CoordOp3D.getLength3D(xx, xy, xz);
-			final double ly = 1.0 / WB_CoordOp3D.getLength3D(yx, yy, yz);
-			final double lz = 1.0 / WB_CoordOp3D.getLength3D(zx, zy, zz);
+			final double lx = 1.0 / WB_CoordOp.getLength3D(xx, xy, xz);
+			final double ly = 1.0 / WB_CoordOp.getLength3D(yx, yy, yz);
+			final double lz = 1.0 / WB_CoordOp.getLength3D(zx, zy, zz);
 			xx *= lx;
 			xy *= lx;
 			xz *= lx;
@@ -460,7 +460,7 @@ public class WB_Quaternion {
 	public WB_Quaternion setFromCross(final double x1, final double y1,
 			final double z1, final double x2, final double y2,
 			final double z2) {
-		final double dot = clamp(WB_CoordOp3D.dot(x1, y1, z1, x2, y2, z2), -1.0,
+		final double dot = clamp(WB_CoordOp.dot(x1, y1, z1, x2, y2, z2), -1.0,
 				1.0);
 		final double angle = Math.acos(dot);
 		return setFromAxis(y1 * z2 - z1 * y2, z1 * x2 - x1 * z2,

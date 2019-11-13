@@ -480,16 +480,16 @@ public class WB_CoordOp2D {
 	 * @return
 	 */
 	public static final boolean isCollinear2D(final WB_Coord o, final WB_Coord p, final WB_Coord q) {
-		if (WB_Epsilon.isZeroSq(WB_GeometryOp3D.getSqDistanceToPoint2D(p, q))) {
+		if (WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistanceToPoint2D(p, q))) {
 			return true;
 		}
-		if (WB_Epsilon.isZeroSq(WB_GeometryOp3D.getSqDistanceToPoint2D(o, q))) {
+		if (WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistanceToPoint2D(o, q))) {
 			return true;
 		}
-		if (WB_Epsilon.isZeroSq(WB_GeometryOp3D.getSqDistanceToPoint2D(o, p))) {
+		if (WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistanceToPoint2D(o, p))) {
 			return true;
 		}
-		return WB_Epsilon.isZeroSq(WB_GeometryOp3D.getSqDistanceToLine2D(o, p, q));
+		return WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistanceToLine2D(o, p, q));
 	}
 
 	public static final boolean isOrthogonal2D(final WB_Coord v0, final WB_Coord v1) {

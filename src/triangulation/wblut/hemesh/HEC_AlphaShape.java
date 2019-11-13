@@ -50,7 +50,7 @@ public class HEC_AlphaShape extends HEC_Creator {
 			return new HE_Mesh();
 		}
 		int[] tris = alphaTri.getAlphaTriangles(alpha);
-		HEC_FromFacelist ffl = new HEC_FromFacelist().setFaces(tris).setVertices(alphaTri.getpoints())
+		HEC_FromFacelist ffl = new HEC_FromFacelist().setFaces(tris).setVertices(alphaTri.getPoints())
 				.setCheckDuplicateVertices(false);
 		ffl.setCheckManifold(true);
 		return new HE_Mesh(ffl);

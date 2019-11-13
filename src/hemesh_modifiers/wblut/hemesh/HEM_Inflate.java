@@ -9,8 +9,8 @@ package wblut.hemesh;
 import java.util.Iterator;
 
 import wblut.geom.WB_AABB;
-import wblut.geom.WB_KDTreeInteger;
-import wblut.geom.WB_KDTreeInteger.WB_KDEntryInteger;
+import wblut.geom.WB_KDTreeInteger3D;
+import wblut.geom.WB_KDTreeInteger3D.WB_KDEntryInteger;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 
@@ -101,7 +101,7 @@ public class HEM_Inflate extends HEM_Modifier {
 		if (autoRescale) {
 			box = HE_MeshOp.getAABB(mesh);
 		}
-		final WB_KDTreeInteger<HE_Vertex> tree = new WB_KDTreeInteger<HE_Vertex>();
+		final WB_KDTreeInteger3D<HE_Vertex> tree = new WB_KDTreeInteger3D<HE_Vertex>();
 		Iterator<HE_Vertex> vItr = mesh.vItr();
 		HE_Vertex v;
 		int id = 0;
@@ -160,7 +160,7 @@ public class HEM_Inflate extends HEM_Modifier {
 		if (autoRescale) {
 			box = HE_MeshOp.getAABB(selection.getParent());
 		}
-		final WB_KDTreeInteger<HE_Vertex> tree = new WB_KDTreeInteger<HE_Vertex>();
+		final WB_KDTreeInteger3D<HE_Vertex> tree = new WB_KDTreeInteger3D<HE_Vertex>();
 		Iterator<HE_Vertex> vItr = selection.getParent().vItr();
 		HE_Vertex v;
 		int id = 0;

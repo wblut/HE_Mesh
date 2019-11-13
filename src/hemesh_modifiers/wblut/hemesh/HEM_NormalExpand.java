@@ -8,8 +8,6 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_MeanValueCoordinates;
 import wblut.geom.WB_Vector;

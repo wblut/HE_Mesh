@@ -27,13 +27,13 @@ HEC_Cube creator=new HEC_Cube();
     fitr.next().setColor(color(0,0,255));
   }
   //make a skin
-  container.modify(new HEM_Shell().setThickness(100));  
+//  container.modify(new HEM_Shell().setThickness(100));  
 
   
    int B, C;
   // make a icosahedron
-  B=1;
-  C=2;
+  B=5;
+  C=6;
   HEC_Geodesic pointMaker=new HEC_Geodesic();
   pointMaker.setRadius(20);
   pointMaker.setB(B+1);

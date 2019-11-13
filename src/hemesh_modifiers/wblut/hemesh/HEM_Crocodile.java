@@ -13,7 +13,7 @@ import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryFactory3D;
+import wblut.geom.WB_GeometryFactory;
 import wblut.math.WB_ConstantScalarParameter;
 import wblut.math.WB_ScalarParameter;
 
@@ -24,7 +24,7 @@ public class HEM_Crocodile extends HEM_Modifier {
 	/**
 	 *
 	 */
-	private static WB_GeometryFactory3D	gf	= new WB_GeometryFactory3D();
+	private static WB_GeometryFactory	gf	= new WB_GeometryFactory();
 	/**
 	 *
 	 */

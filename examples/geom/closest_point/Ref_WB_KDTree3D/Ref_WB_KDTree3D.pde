@@ -4,14 +4,14 @@ import java.util.*;
 
 WB_RandomPoint source;
 WB_Render3D render;
-WB_KDTreeInteger<WB_Point> tree;
+WB_KDTreeInteger3D<WB_Point> tree;
 List<WB_AABB> leafs;
 List<WB_Point> points;
 void setup() {
   size(800, 800, P3D);
   source=new WB_RandomOnSphere().setRadius(250);
   render=new WB_Render3D(this);
-  tree= new WB_KDTreeInteger<WB_Point>(8);
+  tree= new WB_KDTreeInteger3D<WB_Point>(8);
   points=new ArrayList<WB_Point>();
   for (int i=0; i<1000; i++) {
     points.add(source.nextPoint());

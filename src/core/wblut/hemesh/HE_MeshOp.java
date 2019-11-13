@@ -11,28 +11,28 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
 
 import org.eclipse.collections.impl.list.mutable.FastList;
 import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 import org.eclipse.collections.impl.map.mutable.primitive.LongObjectHashMap;
-import org.eclipse.collections.impl.set.mutable.UnifiedSet;
+
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.core.WB_ProgressReporter.WB_ProgressTracker;
 import wblut.geom.WB_AABB;
-import wblut.geom.WB_AABBTree;
-import wblut.geom.WB_AABBTree.WB_AABBNode;
+import wblut.geom.WB_AABBTree3D;
+import wblut.geom.WB_AABBTree3D.WB_AABBNode3D;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_CoordOp3D;
+import wblut.geom.WB_CoordOp;
 import wblut.geom.WB_CoordinateSystem;
-import wblut.geom.WB_GeometryFactory3D;
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_GeometryOp;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_IntersectionResult;
-import wblut.geom.WB_KDTree;
-import wblut.geom.WB_KDTree.WB_KDEntry;
+import wblut.geom.WB_KDTree3D;
+import wblut.geom.WB_KDTree3D.WB_KDEntry;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_OrthoProject;
 import wblut.geom.WB_Plane;
@@ -48,10 +48,53 @@ import wblut.math.WB_M33;
 import wblut.math.WB_Math;
 
 public class HE_MeshOp {
+	
+	public static class HE_FaceLineIntersection {
+
+		/**
+		 * 
+		 */
+		 HE_Face face;
+
+		/**
+		 * 
+		 */
+		 WB_Point point;
+
+		/**
+		 * 
+		 *
+		 * @param f
+		 * @param p
+		 */
+		public HE_FaceLineIntersection(final HE_Face f, final WB_Point p) {
+			face = f;
+			point = p;
+		}
+		
+		/**
+		 *
+		 *
+		 * @return
+		 */
+		public HE_Face getFace() {
+			return face;
+		}
+
+		/**
+		 *
+		 *
+		 * @return
+		 */
+		public WB_Point getPoint() {
+			return point;
+		}
+	}
+	
 	/**
 	 *
 	 */
-	public static class HET_FaceFaceIntersectionResult {
+	public static class HE_FaceFaceIntersection {
 		/**
 		 *
 		 */
@@ -72,7 +115,7 @@ public class HE_MeshOp {
 		 * @param f2
 		 * @param seg
 		 */
-		public HET_FaceFaceIntersectionResult(final HE_Face f1, final HE_Face f2, final WB_Segment seg) {
+		public HE_FaceFaceIntersection(final HE_Face f1, final HE_Face f2, final WB_Segment seg) {
 			this.f1 = f1;
 			this.f2 = f2;
 			segment = seg;
@@ -109,7 +152,7 @@ public class HE_MeshOp {
 	protected HE_MeshOp() {
 	}
 
-	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	private static WB_GeometryFactory gf = new WB_GeometryFactory();
 	public static final WB_ProgressTracker tracker = WB_ProgressTracker.instance();
 
 	/**
@@ -1814,14 +1857,14 @@ public class HE_MeshOp {
 		// flip would result in overlapping triangles, this detected by
 		// comparing the areas of the two triangles before and after.
 		WB_Plane P = new WB_Plane(getHalfedgeCenter(he), getEdgeNormal(he));
-		final WB_Coord a = WB_GeometryOp3D.projectOnPlane(he.getVertex(), P);
-		final WB_Coord b = WB_GeometryOp3D.projectOnPlane(he.getNextInFace().getVertex(), P);
-		final WB_Coord c = WB_GeometryOp3D.projectOnPlane(he.getNextInFace().getNextInFace().getVertex(), P);
-		final WB_Coord d = WB_GeometryOp3D.projectOnPlane(he.getPair().getNextInFace().getNextInFace().getVertex(), P);
-		double Ai = WB_GeometryOp3D.getArea(a, b, c);
-		Ai += WB_GeometryOp3D.getArea(a, d, b);
-		double Af = WB_GeometryOp3D.getArea(a, d, c);
-		Af += WB_GeometryOp3D.getArea(c, d, b);
+		final WB_Coord a = WB_GeometryOp.projectOnPlane(he.getVertex(), P);
+		final WB_Coord b = WB_GeometryOp.projectOnPlane(he.getNextInFace().getVertex(), P);
+		final WB_Coord c = WB_GeometryOp.projectOnPlane(he.getNextInFace().getNextInFace().getVertex(), P);
+		final WB_Coord d = WB_GeometryOp.projectOnPlane(he.getPair().getNextInFace().getNextInFace().getVertex(), P);
+		double Ai = WB_GeometryOp.getArea(a, b, c);
+		Ai += WB_GeometryOp.getArea(a, d, b);
+		double Af = WB_GeometryOp.getArea(a, d, c);
+		Af += WB_GeometryOp.getArea(c, d, b);
 		final double ratio = Ai / Af;
 		if (ratio > 1.000001 || ratio < 0.99999) {
 			return false;
@@ -1882,14 +1925,14 @@ public class HE_MeshOp {
 		// flip would result in overlapping triangles, this detected by
 		// comparing the areas of the two triangles before and after.
 		WB_Plane P = new WB_Plane(getHalfedgeCenter(he), getEdgeNormal(he));
-		final WB_Coord a = WB_GeometryOp3D.projectOnPlane(he.getVertex(), P);
-		final WB_Coord b = WB_GeometryOp3D.projectOnPlane(he.getNextInFace().getVertex(), P);
-		final WB_Coord c = WB_GeometryOp3D.projectOnPlane(he.getNextInFace().getNextInFace().getVertex(), P);
-		final WB_Coord d = WB_GeometryOp3D.projectOnPlane(he.getPair().getNextInFace().getNextInFace().getVertex(), P);
-		double Ai = WB_GeometryOp3D.getArea(a, b, c);
-		Ai += WB_GeometryOp3D.getArea(a, d, b);
-		double Af = WB_GeometryOp3D.getArea(a, d, c);
-		Af += WB_GeometryOp3D.getArea(c, d, b);
+		final WB_Coord a = WB_GeometryOp.projectOnPlane(he.getVertex(), P);
+		final WB_Coord b = WB_GeometryOp.projectOnPlane(he.getNextInFace().getVertex(), P);
+		final WB_Coord c = WB_GeometryOp.projectOnPlane(he.getNextInFace().getNextInFace().getVertex(), P);
+		final WB_Coord d = WB_GeometryOp.projectOnPlane(he.getPair().getNextInFace().getNextInFace().getVertex(), P);
+		double Ai = WB_GeometryOp.getArea(a, b, c);
+		Ai += WB_GeometryOp.getArea(a, d, b);
+		double Af = WB_GeometryOp.getArea(a, d, c);
+		Af += WB_GeometryOp.getArea(c, d, b);
 		final double ratio = Ai / Af;
 		if (ratio > 1.000001 || ratio < 0.99999) {
 			return false;
@@ -1958,17 +2001,17 @@ public class HE_MeshOp {
 		// flip would result in overlapping triangles, this detected by
 		// comparing the areas of the two triangles before and after.
 		WB_Plane P = new WB_Plane(getHalfedgeCenter(he), getEdgeNormal(he));
-		final WB_Coord a = WB_GeometryOp3D.projectOnPlane(he.getVertex(), P);
-		final WB_Coord b = WB_GeometryOp3D.projectOnPlane(he.getNextInFace().getVertex(), P);
-		final WB_Coord c = WB_GeometryOp3D.projectOnPlane(he.getNextInFace().getNextInFace().getVertex(), P);
-		final WB_Coord d = WB_GeometryOp3D.projectOnPlane(he.getPair().getNextInFace().getNextInFace().getVertex(), P);
-		double Ai = WB_GeometryOp3D.getArea(a, b, c);
-		Ai += WB_GeometryOp3D.getArea(a, d, b);
-		double Af = WB_GeometryOp3D.getArea(a, d, c);
+		final WB_Coord a = WB_GeometryOp.projectOnPlane(he.getVertex(), P);
+		final WB_Coord b = WB_GeometryOp.projectOnPlane(he.getNextInFace().getVertex(), P);
+		final WB_Coord c = WB_GeometryOp.projectOnPlane(he.getNextInFace().getNextInFace().getVertex(), P);
+		final WB_Coord d = WB_GeometryOp.projectOnPlane(he.getPair().getNextInFace().getNextInFace().getVertex(), P);
+		double Ai = WB_GeometryOp.getArea(a, b, c);
+		Ai += WB_GeometryOp.getArea(a, d, b);
+		double Af = WB_GeometryOp.getArea(a, d, c);
 		if (WB_Epsilon.isZero(Af)) {
 			return false;
 		}
-		double Af2 = WB_GeometryOp3D.getArea(c, d, b);
+		double Af2 = WB_GeometryOp.getArea(c, d, b);
 		if (WB_Epsilon.isZero(Af2)) {
 			return false;
 		}
@@ -2148,13 +2191,13 @@ public class HE_MeshOp {
 	 * @param line
 	 * @return
 	 */
-	public static HE_FaceIntersection getIntersection(final HE_Face face, final WB_Line line) {
+	public static HE_FaceLineIntersection getIntersection(final HE_Face face, final WB_Line line) {
 		final WB_Plane P = getPlane(face);
-		HE_FaceIntersection p = null;
-		final WB_IntersectionResult lpi = WB_GeometryOp3D.getIntersection3D(line, P);
+		HE_FaceLineIntersection p = null;
+		final WB_IntersectionResult lpi = WB_GeometryOp.getIntersection3D(line, P);
 		if (lpi.intersection) {
-			p = new HE_FaceIntersection(face, (WB_Point) lpi.object);
-			if (WB_Epsilon.isZero(WB_GeometryOp3D.getDistanceToClosestPoint3D(p.point, getPolygon(face)))) {
+			p = new HE_FaceLineIntersection(face, (WB_Point) lpi.object);
+			if (WB_Epsilon.isZero(WB_GeometryOp.getDistanceToClosestPoint3D(p.point, getPolygon(face)))) {
 				return p;
 			}
 		}
@@ -2168,14 +2211,14 @@ public class HE_MeshOp {
 	 * @param ray
 	 * @return
 	 */
-	public static HE_FaceIntersection getIntersection(final HE_Face face, final WB_Ray ray) {
+	public static HE_FaceLineIntersection getIntersection(final HE_Face face, final WB_Ray ray) {
 		final WB_Plane P = getPlane(face);
-		HE_FaceIntersection p = null;
-		final WB_IntersectionResult lpi = WB_GeometryOp3D.getIntersection3D(ray, P);
+		HE_FaceLineIntersection p = null;
+		final WB_IntersectionResult lpi = WB_GeometryOp.getIntersection3D(ray, P);
 		if (lpi.intersection) {
-			p = new HE_FaceIntersection(face, (WB_Point) lpi.object);
-			if (WB_Epsilon.isZero(WB_GeometryOp3D.getDistanceToClosestPoint3D(p.point, getPolygon(face)))) {
-				return new HE_FaceIntersection(face, p.point);
+			p = new HE_FaceLineIntersection(face, (WB_Point) lpi.object);
+			if (WB_Epsilon.isZero(WB_GeometryOp.getDistanceToClosestPoint3D(p.point, getPolygon(face)))) {
+				return new HE_FaceLineIntersection(face, p.point);
 			}
 		}
 		return null;
@@ -2188,13 +2231,13 @@ public class HE_MeshOp {
 	 * @param segment
 	 * @return
 	 */
-	public static HE_FaceIntersection getIntersection(final HE_Face face, final WB_Segment segment) {
+	public static HE_FaceLineIntersection getIntersection(final HE_Face face, final WB_Segment segment) {
 		final WB_Plane P = getPlane(face);
-		HE_FaceIntersection p = null;
-		final WB_IntersectionResult lpi = WB_GeometryOp3D.getIntersection3D(segment, P);
+		HE_FaceLineIntersection p = null;
+		final WB_IntersectionResult lpi = WB_GeometryOp.getIntersection3D(segment, P);
 		if (lpi.intersection) {
-			p = new HE_FaceIntersection(face, (WB_Point) lpi.object);
-			if (WB_Epsilon.isZero(WB_GeometryOp3D.getDistanceToClosestPoint3D(p.point, getPolygon(face)))) {
+			p = new HE_FaceLineIntersection(face, (WB_Point) lpi.object);
+			if (WB_Epsilon.isZero(WB_GeometryOp.getDistanceToClosestPoint3D(p.point, getPolygon(face)))) {
 				return p;
 			}
 		}
@@ -2209,7 +2252,7 @@ public class HE_MeshOp {
 	 * @return
 	 */
 	public static double getIntersection(final HE_Halfedge e, final WB_Plane P) {
-		final WB_IntersectionResult i = WB_GeometryOp3D.getIntersection3D(e.getStartVertex(), e.getEndVertex(), P);
+		final WB_IntersectionResult i = WB_GeometryOp.getIntersection3D(e.getStartVertex(), e.getEndVertex(), P);
 		if (i.intersection == false) {
 			return -1.0;// intersection beyond endpoints
 		}
@@ -2223,15 +2266,15 @@ public class HE_MeshOp {
 	 * @param ray
 	 * @return
 	 */
-	public static List<HE_FaceIntersection> getIntersection(final WB_AABBTree tree, final WB_Ray ray) {
-		final List<HE_FaceIntersection> p = new FastList<HE_FaceIntersection>();
+	public static List<HE_FaceLineIntersection> getIntersection(final WB_AABBTree3D tree, final WB_Ray ray) {
+		final List<HE_FaceLineIntersection> p = new FastList<HE_FaceLineIntersection>();
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(ray, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(ray, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		for (final HE_Face face : candidates) {
-			final HE_FaceIntersection sect = getIntersection(face, ray);
+			final HE_FaceLineIntersection sect = getIntersection(face, ray);
 			if (sect != null) {
 				p.add(sect);
 			}
@@ -2239,15 +2282,15 @@ public class HE_MeshOp {
 		return p;
 	}
 
-	public static List<HE_FaceIntersection> getIntersectionNoOrigin(final WB_AABBTree tree, final WB_Ray ray) {
-		final List<HE_FaceIntersection> p = new FastList<HE_FaceIntersection>();
+	public static List<HE_FaceLineIntersection> getIntersectionNoOrigin(final WB_AABBTree3D tree, final WB_Ray ray) {
+		final List<HE_FaceLineIntersection> p = new FastList<HE_FaceLineIntersection>();
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(ray, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(ray, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		for (final HE_Face face : candidates) {
-			final HE_FaceIntersection sect = getIntersection(face, ray);
+			final HE_FaceLineIntersection sect = getIntersection(face, ray);
 			if (sect != null && !WB_Epsilon.isZeroSq(WB_Point.getSqDistance3D(ray.getOrigin(), sect.point))) {
 				p.add(sect);
 			}
@@ -2257,20 +2300,20 @@ public class HE_MeshOp {
 
 
 	public static boolean isInside(final HE_Mesh mesh, final WB_Coord p) {
-		return isInside(new WB_AABBTree(mesh, 1), p);
+		return isInside(new WB_AABBTree3D(mesh, 1), p);
 	}
 
-	public static boolean isInside(final WB_AABBTree tree, final WB_Coord p) {
-		final List<HE_FaceIntersection> ints = new FastList<HE_FaceIntersection>();
+	public static boolean isInside(final WB_AABBTree3D tree, final WB_Coord p) {
+		final List<HE_FaceLineIntersection> ints = new FastList<HE_FaceLineIntersection>();
 		final List<HE_Face> candidates = new FastList<HE_Face>();
 		final WB_Vector dir = new WB_Vector(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
 		final WB_Ray R = new WB_Ray(p, dir);
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(R, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(R, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		for (final HE_Face face : candidates) {
-			final HE_FaceIntersection sect = getIntersection(face, R);
+			final HE_FaceLineIntersection sect = getIntersection(face, R);
 			if (sect != null) {
 				ints.add(sect);
 			}
@@ -2285,15 +2328,15 @@ public class HE_MeshOp {
 	 * @param segment
 	 * @return
 	 */
-	public static List<HE_FaceIntersection> getIntersection(final WB_AABBTree tree, final WB_Segment segment) {
-		final List<HE_FaceIntersection> p = new FastList<HE_FaceIntersection>();
+	public static List<HE_FaceLineIntersection> getIntersection(final WB_AABBTree3D tree, final WB_Segment segment) {
+		final List<HE_FaceLineIntersection> p = new FastList<HE_FaceLineIntersection>();
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(segment, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(segment, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		for (final HE_Face face : candidates) {
-			final HE_FaceIntersection sect = getIntersection(face, segment);
+			final HE_FaceLineIntersection sect = getIntersection(face, segment);
 			if (sect != null) {
 				p.add(sect);
 			}
@@ -2308,15 +2351,15 @@ public class HE_MeshOp {
 	 * @param line
 	 * @return
 	 */
-	public static List<HE_FaceIntersection> getIntersection(final WB_AABBTree tree, final WB_Line line) {
-		final List<HE_FaceIntersection> p = new FastList<HE_FaceIntersection>();
+	public static List<HE_FaceLineIntersection> getIntersection(final WB_AABBTree3D tree, final WB_Line line) {
+		final List<HE_FaceLineIntersection> p = new FastList<HE_FaceLineIntersection>();
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(line, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(line, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		for (final HE_Face face : candidates) {
-			final HE_FaceIntersection sect = getIntersection(face, line);
+			final HE_FaceLineIntersection sect = getIntersection(face, line);
 			if (sect != null) {
 				p.add(sect);
 			}
@@ -2331,15 +2374,15 @@ public class HE_MeshOp {
 	 * @param P
 	 * @return
 	 */
-	public static List<WB_Segment> getIntersection(final WB_AABBTree tree, final WB_Plane P) {
+	public static List<WB_Segment> getIntersection(final WB_AABBTree3D tree, final WB_Plane P) {
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(P, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(P, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		final List<WB_Segment> cuts = new FastList<WB_Segment>();
 		for (final HE_Face face : candidates) {
-			cuts.addAll(WB_GeometryOp3D.getIntersection3D(getPolygon(face), P));
+			cuts.addAll(WB_GeometryOp.getIntersection3D(getPolygon(face), P));
 		}
 		return cuts;
 	}
@@ -2351,10 +2394,10 @@ public class HE_MeshOp {
 	 * @param P
 	 * @return
 	 */
-	public static List<HE_Face> getPotentialIntersectedFaces(final WB_AABBTree tree, final WB_Plane P) {
+	public static List<HE_Face> getPotentialIntersectedFaces(final WB_AABBTree3D tree, final WB_Plane P) {
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(P, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(P, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		return candidates;
@@ -2367,28 +2410,28 @@ public class HE_MeshOp {
 	 * @param T
 	 * @return
 	 */
-	public static List<HE_Face> getPotentialIntersectedFaces(final WB_AABBTree tree, final WB_Triangle T) {
+	public static List<HE_Face> getPotentialIntersectedFaces(final WB_AABBTree3D tree, final WB_Triangle T) {
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(T, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(T, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		return candidates;
 	}
 
-	public static List<HE_Face> getPotentialIntersectedFaces(final WB_AABBTree tree, final WB_AABB AABB) {
+	public static List<HE_Face> getPotentialIntersectedFaces(final WB_AABBTree3D tree, final WB_AABB AABB) {
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(AABB, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(AABB, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		return candidates;
 	}
 
-	public static List<HE_Face> getPotentialIntersectedFaces(final WB_AABBTree tree, final WB_Coord p) {
+	public static List<HE_Face> getPotentialIntersectedFaces(final WB_AABBTree3D tree, final WB_Coord p) {
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(p, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(p, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		return candidates;
@@ -2401,10 +2444,10 @@ public class HE_MeshOp {
 	 * @param R
 	 * @return
 	 */
-	public static List<HE_Face> getPotentialIntersectedFaces(final WB_AABBTree tree, final WB_Ray R) {
+	public static List<HE_Face> getPotentialIntersectedFaces(final WB_AABBTree3D tree, final WB_Ray R) {
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(R, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(R, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		return candidates;
@@ -2417,10 +2460,10 @@ public class HE_MeshOp {
 	 * @param L
 	 * @return
 	 */
-	public static List<HE_Face> getPotentialIntersectedFaces(final WB_AABBTree tree, final WB_Line L) {
+	public static List<HE_Face> getPotentialIntersectedFaces(final WB_AABBTree3D tree, final WB_Line L) {
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(L, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(L, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		return candidates;
@@ -2433,10 +2476,10 @@ public class HE_MeshOp {
 	 * @param segment
 	 * @return
 	 */
-	public static List<HE_Face> getPotentialIntersectedFaces(final WB_AABBTree tree, final WB_Segment segment) {
+	public static List<HE_Face> getPotentialIntersectedFaces(final WB_AABBTree3D tree, final WB_Segment segment) {
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(segment, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(segment, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		return candidates;
@@ -2449,16 +2492,16 @@ public class HE_MeshOp {
 	 * @param ray
 	 * @return
 	 */
-	public static HE_FaceIntersection getClosestIntersection(final WB_AABBTree tree, final WB_Ray ray) {
-		HE_FaceIntersection p = null;
+	public static HE_FaceLineIntersection getClosestIntersection(final WB_AABBTree3D tree, final WB_Ray ray) {
+		HE_FaceLineIntersection p = null;
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(ray, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(ray, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		double d2, d2min = Double.POSITIVE_INFINITY;
 		for (final HE_Face face : candidates) {
-			final HE_FaceIntersection sect = getIntersection(face, ray);
+			final HE_FaceLineIntersection sect = getIntersection(face, ray);
 			if (sect != null) {
 				d2 = sect.point.getSqDistance(ray.getOrigin());
 				if (d2 < d2min) {
@@ -2477,16 +2520,16 @@ public class HE_MeshOp {
 	 * @param ray
 	 * @return
 	 */
-	public static HE_FaceIntersection getFurthestIntersection(final WB_AABBTree tree, final WB_Ray ray) {
-		HE_FaceIntersection p = null;
+	public static HE_FaceLineIntersection getFurthestIntersection(final WB_AABBTree3D tree, final WB_Ray ray) {
+		HE_FaceLineIntersection p = null;
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(ray, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(ray, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		double d2, d2max = -1;
 		for (final HE_Face face : candidates) {
-			final HE_FaceIntersection sect = getIntersection(face, ray);
+			final HE_FaceLineIntersection sect = getIntersection(face, ray);
 			if (sect != null) {
 				d2 = sect.point.getSqDistance(ray.getOrigin());
 				if (d2 > d2max) {
@@ -2505,16 +2548,16 @@ public class HE_MeshOp {
 	 * @param line
 	 * @return
 	 */
-	public static HE_FaceIntersection getClosestIntersection(final WB_AABBTree tree, final WB_Line line) {
-		HE_FaceIntersection p = null;
+	public static HE_FaceLineIntersection getClosestIntersection(final WB_AABBTree3D tree, final WB_Line line) {
+		HE_FaceLineIntersection p = null;
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(line, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(line, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		double d2, d2min = Double.POSITIVE_INFINITY;
 		for (final HE_Face face : candidates) {
-			final HE_FaceIntersection sect = getIntersection(face, line);
+			final HE_FaceLineIntersection sect = getIntersection(face, line);
 			if (sect != null) {
 				d2 = sect.point.getSqDistance(line.getOrigin());
 				if (d2 < d2min) {
@@ -2533,16 +2576,16 @@ public class HE_MeshOp {
 	 * @param line
 	 * @return
 	 */
-	public static HE_FaceIntersection getFurthestIntersection(final WB_AABBTree tree, final WB_Line line) {
-		HE_FaceIntersection p = null;
+	public static HE_FaceLineIntersection getFurthestIntersection(final WB_AABBTree3D tree, final WB_Line line) {
+		HE_FaceLineIntersection p = null;
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(line, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(line, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		double d2, d2max = -1;
 		for (final HE_Face face : candidates) {
-			final HE_FaceIntersection sect = getIntersection(face, line);
+			final HE_FaceLineIntersection sect = getIntersection(face, line);
 			if (sect != null) {
 				d2 = sect.point.getSqDistance(line.getOrigin());
 				if (d2 > d2max) {
@@ -2561,16 +2604,16 @@ public class HE_MeshOp {
 	 * @param segment
 	 * @return
 	 */
-	public static HE_FaceIntersection getClosestIntersection(final WB_AABBTree tree, final WB_Segment segment) {
-		HE_FaceIntersection p = null;
+	public static HE_FaceLineIntersection getClosestIntersection(final WB_AABBTree3D tree, final WB_Segment segment) {
+		HE_FaceLineIntersection p = null;
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(segment, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(segment, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		double d2, d2min = Double.POSITIVE_INFINITY;
 		for (final HE_Face face : candidates) {
-			final HE_FaceIntersection sect = getIntersection(face, segment);
+			final HE_FaceLineIntersection sect = getIntersection(face, segment);
 			if (sect != null) {
 				d2 = sect.point.getSqDistance(segment.getOrigin());
 				if (d2 < d2min) {
@@ -2589,16 +2632,16 @@ public class HE_MeshOp {
 	 * @param segment
 	 * @return
 	 */
-	public static HE_FaceIntersection getFurthestIntersection(final WB_AABBTree tree, final WB_Segment segment) {
-		HE_FaceIntersection p = null;
+	public static HE_FaceLineIntersection getFurthestIntersection(final WB_AABBTree3D tree, final WB_Segment segment) {
+		HE_FaceLineIntersection p = null;
 		final List<HE_Face> candidates = new FastList<HE_Face>();
-		final List<WB_AABBNode> nodes = WB_GeometryOp3D.getIntersection3D(segment, tree);
-		for (final WB_AABBNode n : nodes) {
+		final List<WB_AABBNode3D> nodes = WB_GeometryOp.getIntersection3D(segment, tree);
+		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
 		double d2, d2max = -1;
 		for (final HE_Face face : candidates) {
-			final HE_FaceIntersection sect = getIntersection(face, segment);
+			final HE_FaceLineIntersection sect = getIntersection(face, segment);
 			if (sect != null) {
 				d2 = sect.point.getSqDistance(segment.getOrigin());
 				if (d2 > d2max) {
@@ -2617,8 +2660,8 @@ public class HE_MeshOp {
 	 * @param ray
 	 * @return
 	 */
-	public static List<HE_FaceIntersection> getIntersection(final HE_Mesh mesh, final WB_Ray ray) {
-		return getIntersection(new WB_AABBTree(mesh, 10), ray);
+	public static List<HE_FaceLineIntersection> getIntersection(final HE_Mesh mesh, final WB_Ray ray) {
+		return getIntersection(new WB_AABBTree3D(mesh, 10), ray);
 	}
 
 	/**
@@ -2628,8 +2671,8 @@ public class HE_MeshOp {
 	 * @param segment
 	 * @return
 	 */
-	public static List<HE_FaceIntersection> getIntersection(final HE_Mesh mesh, final WB_Segment segment) {
-		return getIntersection(new WB_AABBTree(mesh, 10), segment);
+	public static List<HE_FaceLineIntersection> getIntersection(final HE_Mesh mesh, final WB_Segment segment) {
+		return getIntersection(new WB_AABBTree3D(mesh, 10), segment);
 	}
 
 	/**
@@ -2639,8 +2682,8 @@ public class HE_MeshOp {
 	 * @param line
 	 * @return
 	 */
-	public static List<HE_FaceIntersection> getIntersection(final HE_Mesh mesh, final WB_Line line) {
-		return getIntersection(new WB_AABBTree(mesh, 10), line);
+	public static List<HE_FaceLineIntersection> getIntersection(final HE_Mesh mesh, final WB_Line line) {
+		return getIntersection(new WB_AABBTree3D(mesh, 10), line);
 	}
 
 	/**
@@ -2651,7 +2694,7 @@ public class HE_MeshOp {
 	 * @return
 	 */
 	public static List<WB_Segment> getIntersection(final HE_Mesh mesh, final WB_Plane P) {
-		return getIntersection(new WB_AABBTree(mesh, 10), P);
+		return getIntersection(new WB_AABBTree3D(mesh, 10), P);
 	}
 
 	/**
@@ -2662,7 +2705,7 @@ public class HE_MeshOp {
 	 * @return
 	 */
 	public static List<HE_Face> getPotentialIntersectedFaces(final HE_Mesh mesh, final WB_Plane P) {
-		return getPotentialIntersectedFaces(new WB_AABBTree(mesh, 10), P);
+		return getPotentialIntersectedFaces(new WB_AABBTree3D(mesh, 10), P);
 	}
 
 	/**
@@ -2673,7 +2716,7 @@ public class HE_MeshOp {
 	 * @return
 	 */
 	public static List<HE_Face> getPotentialIntersectedFaces(final HE_Mesh mesh, final WB_Ray R) {
-		return getPotentialIntersectedFaces(new WB_AABBTree(mesh, 10), R);
+		return getPotentialIntersectedFaces(new WB_AABBTree3D(mesh, 10), R);
 	}
 
 	/**
@@ -2684,7 +2727,7 @@ public class HE_MeshOp {
 	 * @return
 	 */
 	public static List<HE_Face> getPotentialIntersectedFaces(final HE_Mesh mesh, final WB_Line L) {
-		return getPotentialIntersectedFaces(new WB_AABBTree(mesh, 10), L);
+		return getPotentialIntersectedFaces(new WB_AABBTree3D(mesh, 10), L);
 	}
 
 	/**
@@ -2695,7 +2738,7 @@ public class HE_MeshOp {
 	 * @return
 	 */
 	public static List<HE_Face> getPotentialIntersectedFaces(final HE_Mesh mesh, final WB_Segment segment) {
-		return getPotentialIntersectedFaces(new WB_AABBTree(mesh, 10), segment);
+		return getPotentialIntersectedFaces(new WB_AABBTree3D(mesh, 10), segment);
 	}
 
 	/**
@@ -2705,8 +2748,8 @@ public class HE_MeshOp {
 	 * @param ray
 	 * @return
 	 */
-	public static HE_FaceIntersection getClosestIntersection(final HE_Mesh mesh, final WB_Ray ray) {
-		return getClosestIntersection(new WB_AABBTree(mesh, 10), ray);
+	public static HE_FaceLineIntersection getClosestIntersection(final HE_Mesh mesh, final WB_Ray ray) {
+		return getClosestIntersection(new WB_AABBTree3D(mesh, 10), ray);
 	}
 
 	/**
@@ -2716,8 +2759,8 @@ public class HE_MeshOp {
 	 * @param ray
 	 * @return
 	 */
-	public static HE_FaceIntersection getFurthestIntersection(final HE_Mesh mesh, final WB_Ray ray) {
-		return getFurthestIntersection(new WB_AABBTree(mesh, 10), ray);
+	public static HE_FaceLineIntersection getFurthestIntersection(final HE_Mesh mesh, final WB_Ray ray) {
+		return getFurthestIntersection(new WB_AABBTree3D(mesh, 10), ray);
 	}
 
 	/**
@@ -2727,8 +2770,8 @@ public class HE_MeshOp {
 	 * @param line
 	 * @return
 	 */
-	public static HE_FaceIntersection getClosestIntersection(final HE_Mesh mesh, final WB_Line line) {
-		return getClosestIntersection(new WB_AABBTree(mesh, 10), line);
+	public static HE_FaceLineIntersection getClosestIntersection(final HE_Mesh mesh, final WB_Line line) {
+		return getClosestIntersection(new WB_AABBTree3D(mesh, 10), line);
 	}
 
 	/**
@@ -2738,8 +2781,8 @@ public class HE_MeshOp {
 	 * @param line
 	 * @return
 	 */
-	public static HE_FaceIntersection getFurthestIntersection(final HE_Mesh mesh, final WB_Line line) {
-		return getFurthestIntersection(new WB_AABBTree(mesh, 10), line);
+	public static HE_FaceLineIntersection getFurthestIntersection(final HE_Mesh mesh, final WB_Line line) {
+		return getFurthestIntersection(new WB_AABBTree3D(mesh, 10), line);
 	}
 
 	/**
@@ -2749,8 +2792,8 @@ public class HE_MeshOp {
 	 * @param segment
 	 * @return
 	 */
-	public static HE_FaceIntersection getClosestIntersection(final HE_Mesh mesh, final WB_Segment segment) {
-		return getClosestIntersection(new WB_AABBTree(mesh, 10), segment);
+	public static HE_FaceLineIntersection getClosestIntersection(final HE_Mesh mesh, final WB_Segment segment) {
+		return getClosestIntersection(new WB_AABBTree3D(mesh, 10), segment);
 	}
 
 	/**
@@ -2760,8 +2803,8 @@ public class HE_MeshOp {
 	 * @param segment
 	 * @return
 	 */
-	public static HE_FaceIntersection getFurthestIntersection(final HE_Mesh mesh, final WB_Segment segment) {
-		return getFurthestIntersection(new WB_AABBTree(mesh, 10), segment);
+	public static HE_FaceLineIntersection getFurthestIntersection(final HE_Mesh mesh, final WB_Segment segment) {
+		return getFurthestIntersection(new WB_AABBTree3D(mesh, 10), segment);
 	}
 
 	public static WB_Classification classifyFaceToPlane3D(final HE_Face f, final WB_Plane P) {
@@ -2769,7 +2812,7 @@ public class HE_MeshOp {
 		int numBehind = 0;
 		HE_Halfedge he = f.getHalfedge();
 		do {
-			switch (WB_GeometryOp3D.classifyPointToPlane3D(P, he.getVertex())) {
+			switch (WB_GeometryOp.classifyPointToPlane3D(P, he.getVertex())) {
 			case FRONT:
 				numInFront++;
 				break;
@@ -2795,7 +2838,7 @@ public class HE_MeshOp {
 	public static WB_Classification classifyEdgeToPlane3D(final HE_Halfedge edge, final WB_Plane P) {
 		int numInFront = 0;
 		int numBehind = 0;
-		switch (WB_GeometryOp3D.classifyPointToPlane3D(edge.getStartVertex(), P)) {
+		switch (WB_GeometryOp.classifyPointToPlane3D(edge.getStartVertex(), P)) {
 		case FRONT:
 			numInFront++;
 			break;
@@ -2804,7 +2847,7 @@ public class HE_MeshOp {
 			break;
 		default:
 		}
-		switch (WB_GeometryOp3D.classifyPointToPlane3D(edge.getEndVertex(), P)) {
+		switch (WB_GeometryOp.classifyPointToPlane3D(edge.getEndVertex(), P)) {
 		case FRONT:
 			numInFront++;
 			break;
@@ -2826,7 +2869,7 @@ public class HE_MeshOp {
 	}
 
 	public static WB_Classification classifyVertexToPlane3D(final HE_Vertex v, final WB_Plane P) {
-		return WB_GeometryOp3D.classifyPointToPlane3D(v, P);
+		return WB_GeometryOp.classifyPointToPlane3D(v, P);
 	}
 
 	/**
@@ -2922,7 +2965,7 @@ public class HE_MeshOp {
 	 *
 	 * @return
 	 */
-	public static WB_Coord getVertexNormal(final HE_Vertex v) {
+	public static WB_Vector getVertexNormal(final HE_Vertex v) {
 		if (v.getHalfedge() == null) {
 			return null;
 		}
@@ -2934,7 +2977,7 @@ public class HE_MeshOp {
 	 *
 	 * @return
 	 */
-	public static WB_Coord getVertexNormalAverage(final HE_Vertex v) {
+	public static WB_Vector getVertexNormalAverage(final HE_Vertex v) {
 		HE_Halfedge he = v.getHalfedge();
 		WB_Vector n = new WB_Vector();
 		do {
@@ -2952,7 +2995,7 @@ public class HE_MeshOp {
 	 *
 	 * @return
 	 */
-	public static WB_Coord getVertexNormalArea(final HE_Vertex v) {
+	public static WB_Vector getVertexNormalArea(final HE_Vertex v) {
 		HE_Halfedge he = v.getHalfedge();
 		WB_Vector n = new WB_Vector();
 		do {
@@ -2990,7 +3033,7 @@ public class HE_MeshOp {
 	 *
 	 * @return
 	 */
-	public static WB_Coord getVertexNormalAngle(final HE_Vertex v) {
+	public static WB_Vector getVertexNormalAngle(final HE_Vertex v) {
 		HE_Halfedge he = v.getHalfedge();
 		WB_Vector n = new WB_Vector();
 		do {
@@ -3008,7 +3051,7 @@ public class HE_MeshOp {
 	 *
 	 * @return
 	 */
-	public static WB_Coord getVertexNormalGaussianCurvature(final HE_Vertex v) {
+	public static WB_Vector getVertexNormalGaussianCurvature(final HE_Vertex v) {
 		HE_Halfedge he = v.getHalfedge();
 		WB_Vector n = new WB_Vector();
 		do {
@@ -3026,7 +3069,7 @@ public class HE_MeshOp {
 	 *
 	 * @return
 	 */
-	public static WB_Coord getVertexNormalMeanCurvature(final HE_Vertex v) {
+	public static WB_Vector getVertexNormalMeanCurvature(final HE_Vertex v) {
 		HE_Halfedge he = v.getHalfedge();
 		WB_Vector n = new WB_Vector();
 		do {
@@ -3044,7 +3087,7 @@ public class HE_MeshOp {
 	 *
 	 * @return
 	 */
-	public static WB_Coord getVertexNormalSphereInscribed(final HE_Vertex v) {
+	public static WB_Vector getVertexNormalSphereInscribed(final HE_Vertex v) {
 		HE_Halfedge he = v.getHalfedge();
 		WB_Vector n = new WB_Vector();
 		WB_Vector u, w;
@@ -3457,7 +3500,7 @@ public class HE_MeshOp {
 	 *
 	 * @return
 	 */
-	public static WB_Coord getFaceCenter(HE_Face f) {
+	public static WB_Point getFaceCenter(HE_Face f) {
 		if (f.getHalfedge() == null) {
 			return null;
 		}
@@ -3479,7 +3522,7 @@ public class HE_MeshOp {
 	 * @param d
 	 * @return
 	 */
-	public static WB_Coord getNormalOffsetFaceCenter(HE_Face f, final double d) {
+	public static WB_Point getNormalOffsetFaceCenter(HE_Face f, final double d) {
 		if (f.getHalfedge() == null) {
 			return null;
 		}
@@ -3573,7 +3616,7 @@ public class HE_MeshOp {
 		return gf.createSimplePolygon(points);
 	}
 
-	public static WB_Coord getFaceNormal(final HE_Face face) {
+	public static WB_Vector getFaceNormal(final HE_Face face) {
 		HE_Halfedge he = face.getHalfedge();
 		if (he == null) {
 			return null;
@@ -3593,7 +3636,7 @@ public class HE_MeshOp {
 		return _normal;
 	}
 
-	public static WB_Coord getFaceNormalNotNormalized(final HE_Face face) {
+	public static WB_Vector getFaceNormalNotNormalized(final HE_Face face) {
 		HE_Halfedge he = face.getHalfedge();
 		if (he == null) {
 			return null;
@@ -3927,7 +3970,7 @@ public class HE_MeshOp {
 	 * @return true/false
 	 */
 	public static boolean pointIsInFace(final WB_Coord p, final HE_Face f) {
-		return WB_Epsilon.isZero(WB_GeometryOp3D.getDistanceToClosestPoint3D(p, getPolygon(f)));
+		return WB_Epsilon.isZero(WB_GeometryOp.getDistanceToClosestPoint3D(p, getPolygon(f)));
 	}
 
 	/**
@@ -3939,11 +3982,11 @@ public class HE_MeshOp {
 	 */
 	public static boolean pointIsStrictlyInFace(final WB_Coord p, final HE_Face f) {
 		final WB_Polygon poly = getPolygon(f);
-		if (!WB_Epsilon.isZeroSq(WB_CoordOp3D.getSqDistance3D(p, WB_GeometryOp3D.getClosestPoint3D(p, poly)))) {
+		if (!WB_Epsilon.isZeroSq(WB_CoordOp.getSqDistance3D(p, WB_GeometryOp.getClosestPoint3D(p, poly)))) {
 			return false;
 		}
 		if (!WB_Epsilon
-				.isZeroSq(WB_CoordOp3D.getSqDistance3D(p, WB_GeometryOp3D.getClosestPointOnPeriphery3D(p, poly)))) {
+				.isZeroSq(WB_CoordOp.getSqDistance3D(p, WB_GeometryOp.getClosestPointOnPeriphery3D(p, poly)))) {
 			return false;
 		}
 		return true;
@@ -4144,34 +4187,34 @@ public class HE_MeshOp {
 		return MA;
 	}
 
-	public static List<HET_FaceFaceIntersectionResult> getIntersection(final HE_Mesh mesh1, final HE_Mesh mesh2) {
-		final List<HET_FaceFaceIntersectionResult> ints = new FastList<HET_FaceFaceIntersectionResult>();
+	public static List<HE_FaceFaceIntersection> getIntersection(final HE_Mesh mesh1, final HE_Mesh mesh2) {
+		final List<HE_FaceFaceIntersection> ints = new FastList<HE_FaceFaceIntersection>();
 		triangulate(mesh1);
 		mesh1.resetFaceInternalLabels();
 		triangulate(mesh2);
 		mesh2.resetFaceInternalLabels();
 		HE_Selection sifs1 = HE_Selection.getSelection(mesh1);
-		WB_AABBTree tree1 = new WB_AABBTree(mesh1, 1);
+		WB_AABBTree3D tree1 = new WB_AABBTree3D(mesh1, 1);
 		HE_Selection sifs2 = HE_Selection.getSelection(mesh2);
-		WB_AABBTree tree2 = new WB_AABBTree(mesh2, 1);
-		List<WB_AABBNode[]> atat = WB_GeometryOp.getIntersection3D(tree1, tree2);
+		WB_AABBTree3D tree2 = new WB_AABBTree3D(mesh2, 1);
+		List<WB_AABBNode3D[]> atat = WB_GeometryOp.getIntersection3D(tree1, tree2);
 		WB_Triangle T0, T1;
 		List<HE_Face> neighbors;
-		for (WB_AABBNode[] node : atat) {
+		for (WB_AABBNode3D[] node : atat) {
 			for (HE_Face f0 : node[0].getFaces()) {
 				T0 = getTriangle(f0);
 				neighbors = f0.getNeighborFaces();
 				for (HE_Face f1 : node[1].getFaces()) {
 					if (!neighbors.contains(f1) && f1.getKey() > f0.getKey()) {
 						T1 = getTriangle(f1);
-						final WB_IntersectionResult ir = WB_GeometryOp3D.getIntersection3D(T0, T1);
+						final WB_IntersectionResult ir = WB_GeometryOp.getIntersection3D(T0, T1);
 						if (ir.intersection && ir.object != null
 								&& !WB_Epsilon.isZero(((WB_Segment) ir.object).getLength())) {
 							f0.setInternalLabel(1);
 							f1.setInternalLabel(1);
 							sifs1.add(f0);
 							sifs2.add(f1);
-							ints.add(new HET_FaceFaceIntersectionResult(f0, f1, (WB_Segment) ir.object));
+							ints.add(new HE_FaceFaceIntersection(f0, f1, (WB_Segment) ir.object));
 						}
 					}
 				}
@@ -4182,12 +4225,12 @@ public class HE_MeshOp {
 		return ints;
 	}
 
-	public Map<Long, HET_IntersectedFace> processIntersectedFaces(List<HET_FaceFaceIntersectionResult> intersections) {
-		Map<Long, HET_IntersectedFace> intersectedFaces = new UnifiedMap<Long, HET_IntersectedFace>();
+	public Map<Long, HE_IntersectedFace> processIntersectedFaces(List<HE_FaceFaceIntersection> intersections) {
+		Map<Long, HE_IntersectedFace> intersectedFaces = new UnifiedMap<Long, HE_IntersectedFace>();
 		
 		Map<Long, FaceSegmentBin> segmentBins = new UnifiedMap<Long,FaceSegmentBin>();
 		
-		for (HET_FaceFaceIntersectionResult ffir : intersections) {
+		for (HE_FaceFaceIntersection ffir : intersections) {
 			FaceSegmentBin fsb=segmentBins.get(ffir.getFace1().getKey());
 			if(fsb==null) {
 				fsb=new FaceSegmentBin(ffir.getFace1());
@@ -4224,12 +4267,12 @@ public class HE_MeshOp {
 		
 	}
 
-	public class HET_IntersectedFace {
+	public class HE_IntersectedFace {
 		HE_Face face;
 		List<WB_Coord> points;
 		int[] constraints;
 
-		public HET_IntersectedFace(HE_Face face, List<WB_Coord> points, int[] constraints) {
+		public HE_IntersectedFace(HE_Face face, List<WB_Coord> points, int[] constraints) {
 			this.face = face;
 			this.points = points;
 			this.constraints = constraints;
@@ -4340,9 +4383,9 @@ public class HE_MeshOp {
 		return f;
 	}
 
-	public static WB_Coord getClosestPoint(HE_Face f, final WB_Coord p) {
+	public static WB_Point getClosestPoint(HE_Face f, final WB_Coord p) {
 		if (f.getFaceDegree() == 3) {
-			return WB_GeometryOp3D.getClosestPointToTriangle3D(p, f.getHalfedge().getVertex(),
+			return WB_GeometryOp.getClosestPointToTriangle3D(p, f.getHalfedge().getVertex(),
 					f.getHalfedge().getNextInFace().getVertex(), f.getHalfedge().getNextInFace(2).getVertex());
 		}
 		List<HE_Vertex> points = f.getFaceVertices();
@@ -4352,9 +4395,9 @@ public class HE_MeshOp {
 		WB_Point closest = new WB_Point();
 		WB_Point tmp;
 		for (int i = 0; i < n; i += 3) {
-			tmp = WB_GeometryOp3D.getClosestPointToTriangle3D(p, points.get(tris[i]), points.get(tris[i + 1]),
+			tmp = WB_GeometryOp.getClosestPointToTriangle3D(p, points.get(tris[i]), points.get(tris[i + 1]),
 					points.get(tris[i + 2]));
-			final double d2 = WB_CoordOp3D.getSqDistance3D(tmp, p);
+			final double d2 = WB_CoordOp.getSqDistance3D(tmp, p);
 			if (d2 < dmax2) {
 				closest = tmp;
 				dmax2 = d2;
@@ -4393,7 +4436,7 @@ public class HE_MeshOp {
 		}
 	}
 
-	public static WB_Coord getHalfedgeVector(HE_Halfedge he) {
+	public static WB_Vector getHalfedgeVector(HE_Halfedge he) {
 		if (he.getPair() != null && he.getVertex() != null && he.getPair().getVertex() != null) {
 			final WB_Vector v = WB_Vector.subToVector3D(he.getPair().getVertex(), he.getVertex());
 			return v;
@@ -4406,7 +4449,7 @@ public class HE_MeshOp {
 	 *
 	 * @return tangent
 	 */
-	public static WB_Coord getHalfedgeTangent(HE_Halfedge he) {
+	public static WB_Vector getHalfedgeTangent(HE_Halfedge he) {
 		if (he.getPair() != null && he.getVertex() != null && he.getPair().getVertex() != null) {
 			final WB_Vector v = WB_Vector.subToVector3D(he.getPair().getVertex(), he.getVertex());
 			v.normalizeSelf();
@@ -4420,8 +4463,8 @@ public class HE_MeshOp {
 	 *
 	 * @return
 	 */
-	public static WB_Coord getEdgeTangent(HE_Halfedge he) {
-		final WB_Coord v = getHalfedgeTangent(he);
+	public static WB_Vector getEdgeTangent(HE_Halfedge he) {
+		final WB_Vector v = getHalfedgeTangent(he);
 		if (v == null) {
 			return null;
 		}
@@ -4433,7 +4476,7 @@ public class HE_MeshOp {
 	 *
 	 * @return center
 	 */
-	public static WB_Coord getHalfedgeCenter(HE_Halfedge he) {
+	public static WB_Point getHalfedgeCenter(HE_Halfedge he) {
 		if (he.getNextInFace() != null && he.getVertex() != null && he.getNextInFace().getVertex() != null) {
 			return gf.createMidpoint(he.getNextInFace().getVertex(), he.getVertex());
 		}
@@ -4446,7 +4489,7 @@ public class HE_MeshOp {
 	 * @param f
 	 * @return center
 	 */
-	public static WB_Coord getHalfedgeCenter(HE_Halfedge he, final double f) {
+	public static WB_Point getHalfedgeCenter(HE_Halfedge he, final double f) {
 		if (he.getNextInFace() != null && he.getVertex() != null && he.getNextInFace().getVertex() != null) {
 			return gf.createMidpoint(he.getNextInFace().getVertex(), he.getVertex()).addMulSelf(f,
 					getHalfedgeNormal(he));
@@ -4459,7 +4502,7 @@ public class HE_MeshOp {
 	 *
 	 * @return
 	 */
-	public static WB_Coord getEdgeCenter(HE_Halfedge he) {
+	public static WB_Point getEdgeCenter(HE_Halfedge he) {
 		if (he.getNextInFace() != null && he.getVertex() != null && he.getNextInFace().getVertex() != null) {
 			return gf.createMidpoint(he.getNextInFace().getVertex(), he.getVertex());
 		}
@@ -4472,7 +4515,7 @@ public class HE_MeshOp {
 	 * @param f
 	 * @return
 	 */
-	public static WB_Coord getEdgeCenter(HE_Halfedge he, final double f) {
+	public static WB_Point getEdgeCenter(HE_Halfedge he, final double f) {
 		if (he.getNextInFace() != null && he.getVertex() != null && he.getNextInFace().getVertex() != null) {
 			return gf.createMidpoint(he.getNextInFace().getVertex(), he.getVertex()).addMulSelf(f, getEdgeNormal(he));
 		}
@@ -4484,7 +4527,7 @@ public class HE_MeshOp {
 	 *
 	 * @return
 	 */
-	public static WB_Coord getEdgeNormal(HE_Halfedge he) {
+	public static WB_Vector getEdgeNormal(HE_Halfedge he) {
 		if (he.getPair() == null) {
 			return null;
 		}
@@ -4511,7 +4554,7 @@ public class HE_MeshOp {
 	 *
 	 * @return in-face normal of face, points inwards
 	 */
-	public static WB_Coord getHalfedgeNormal(HE_Halfedge he) {
+	public static WB_Vector getHalfedgeNormal(HE_Halfedge he) {
 		WB_Coord fn;
 		if (he.getFace() == null && he.getPair() == null) {
 			return null;
@@ -4646,7 +4689,7 @@ public class HE_MeshOp {
 	 * @return
 	 */
 	public static double getLength(HE_Halfedge he) {
-		return WB_CoordOp3D.getDistance3D(he.getVertex(), he.getEndVertex());
+		return WB_CoordOp.getDistance3D(he.getVertex(), he.getEndVertex());
 	}
 
 	/**
@@ -4655,7 +4698,7 @@ public class HE_MeshOp {
 	 * @return
 	 */
 	public static double getSqLength(HE_Halfedge he) {
-		return WB_CoordOp3D.getSqDistance3D(he.getVertex(), he.getEndVertex());
+		return WB_CoordOp.getSqDistance3D(he.getVertex(), he.getEndVertex());
 	}
 
 	/**
@@ -4670,7 +4713,7 @@ public class HE_MeshOp {
 		if (c == null) {
 			return Double.NaN;
 		}
-		return WB_CoordOp3D.getAngleBetween(c.xd(), c.yd(), c.zd(), p1.xd(), p1.yd(), p1.zd(), p2.xd(), p2.yd(),
+		return WB_CoordOp.getAngleBetween(c.xd(), c.yd(), c.zd(), p1.xd(), p1.yd(), p1.zd(), p2.xd(), p2.yd(),
 				p2.zd());
 	}
 
@@ -4709,7 +4752,7 @@ public class HE_MeshOp {
 	}
 
 	public static WB_Sphere getBoundingSphere(HE_Mesh mesh) {
-		return WB_GeometryOp3D.getBoundingSphere(mesh.getVertices());
+		return WB_GeometryOp.getBoundingSphere(mesh.getVertices());
 	}
 
 	public static final WB_AABB getAABB(HE_Selection sel) {
@@ -4720,7 +4763,7 @@ public class HE_MeshOp {
 	}
 
 	public static final WB_Sphere getBoundingSphere(HE_Selection sel) {
-		return WB_GeometryOp3D.getBoundingSphere(sel.getVertices());
+		return WB_GeometryOp.getBoundingSphere(sel.getVertices());
 	}
 
 	/**
@@ -4756,7 +4799,7 @@ public class HE_MeshOp {
 	 * @param vertexTree KD-tree from mesh (from vertexTree())
 	 */
 	public static void addPointInClosestFace(HE_Mesh mesh, final WB_Coord p,
-			final WB_KDTree<WB_Coord, Long> vertexTree) {
+			final WB_KDTree3D<WB_Coord, Long> vertexTree) {
 		final WB_KDEntry<WB_Coord, Long>[] closestVertex = vertexTree.getNearestNeighbors(p, 1);
 		final HE_Vertex v = mesh.getVertexWithKey(closestVertex[0].value);
 		final List<HE_Face> faces = v.getFaceStar();
@@ -4765,8 +4808,8 @@ public class HE_MeshOp {
 		HE_Face face = new HE_Face();
 		for (int i = 0; i < faces.size(); i++) {
 			final WB_Polygon poly = HE_MeshOp.getPolygon(faces.get(i));
-			final WB_Coord tmp = WB_GeometryOp3D.getClosestPoint3D(p, poly);
-			d = WB_CoordOp3D.getSqDistance3D(tmp, p);
+			final WB_Coord tmp = WB_GeometryOp.getClosestPoint3D(p, poly);
+			d = WB_CoordOp.getSqDistance3D(tmp, p);
 			if (d < dmin) {
 				dmin = d;
 				face = faces.get(i);
@@ -4833,7 +4876,7 @@ public class HE_MeshOp {
 	 * @param vertexTree KD-tree from mesh (from vertexTree())
 	 * @return WB_Coordinate closest point
 	 */
-	public static WB_Coord getClosestPoint(HE_Mesh mesh, final WB_Coord p, final WB_KDTree<WB_Coord, Long> vertexTree) {
+	public static WB_Point getClosestPoint(HE_Mesh mesh, final WB_Coord p, final WB_KDTree3D<WB_Coord, Long> vertexTree) {
 		final WB_KDEntry<WB_Coord, Long>[] closestVertex = vertexTree.getNearestNeighbors(p, 1);
 		final HE_Vertex v = mesh.getVertexWithKey(closestVertex[0].value);
 		if (v == null) {
@@ -4842,11 +4885,11 @@ public class HE_MeshOp {
 		final List<HE_Face> faces = v.getFaceStar();
 		double d;
 		double dmin = Double.POSITIVE_INFINITY;
-		WB_Coord result = new WB_Point();
+		WB_Point result = new WB_Point();
 		for (int i = 0; i < faces.size(); i++) {
 			final WB_Polygon poly = HE_MeshOp.getPolygon(faces.get(i));
-			final WB_Coord tmp = WB_GeometryOp3D.getClosestPoint3D(p, poly);
-			d = WB_CoordOp3D.getSqDistance3D(tmp, p);
+			final WB_Point tmp = WB_GeometryOp.getClosestPoint3D(p, poly);
+			d = WB_CoordOp.getSqDistance3D(tmp, p);
 			if (d < dmin) {
 				dmin = d;
 				result = tmp;
@@ -4863,7 +4906,7 @@ public class HE_MeshOp {
 	 * @return HE_Vertex closest vertex
 	 */
 	public static HE_Vertex getClosestVertex(HE_Mesh mesh, final WB_Coord p,
-			final WB_KDTree<WB_Coord, Long> vertexTree) {
+			final WB_KDTree3D<WB_Coord, Long> vertexTree) {
 		final WB_KDEntry<WB_Coord, Long>[] closestVertex = vertexTree.getNearestNeighbors(p, 1);
 		if (closestVertex.length == 0) {
 			return null;
@@ -4943,13 +4986,13 @@ public class HE_MeshOp {
 	 * Cap all remaining unpaired halfedges. Only use after pairHalfedges();
 	 */
 	public static void capHalfedges(HE_Mesh mesh) {
-		tracker.setStartStatus("HE_MeshOp", "Capping unpaired halfedges.");
+		tracker.setStartStatusStr("HE_MeshOp", "Capping unpaired halfedges.");
 		final List<HE_Halfedge> unpairedHalfedges = mesh.getUnpairedHalfedges();
 		final int nuh = unpairedHalfedges.size();
 		final HE_Halfedge[] newHalfedges = new HE_Halfedge[nuh];
 		HE_Halfedge he1, he2;
 		WB_ProgressCounter counter = new WB_ProgressCounter(nuh, 10);
-		tracker.setCounterStatus("HE_MeshOp", "Capping unpaired halfedges.", counter);
+		tracker.setCounterStatusStr("HE_MeshOp", "Capping unpaired halfedges.", counter);
 		for (int i = 0; i < nuh; i++) {
 			he1 = unpairedHalfedges.get(i);
 			he2 = new HE_Halfedge();
@@ -4960,7 +5003,7 @@ public class HE_MeshOp {
 			counter.increment();
 		}
 		counter = new WB_ProgressCounter(nuh, 10);
-		tracker.setCounterStatus("HE_MeshOp", "Cycling new halfedges.", counter);
+		tracker.setCounterStatusStr("HE_MeshOp", "Cycling new halfedges.", counter);
 		for (int i = 0; i < nuh; i++) {
 			he1 = newHalfedges[i];
 			if (he1.getNextInFace() == null) {
@@ -4977,7 +5020,7 @@ public class HE_MeshOp {
 			}
 			counter.increment();
 		}
-		tracker.setStopStatus("HE_MeshOp", "Processed unpaired halfedges.");
+		tracker.setStopStatusStr("HE_MeshOp", "Processed unpaired halfedges.");
 	}
 
 	/**
@@ -5060,7 +5103,7 @@ public class HE_MeshOp {
 	 * @return
 	 */
 	public static List<HE_Halfedge> pairHalfedgesOnePass(HE_Mesh mesh) {
-		tracker.setStartStatus("HE_MeshOp", "Pairing halfedges.");
+		tracker.setStartStatusStr("HE_MeshOp", "Pairing halfedges.");
 		class VertexInfo {
 			FastList<HE_Halfedge> in;
 			FastList<HE_Halfedge> out;
@@ -5075,7 +5118,7 @@ public class HE_MeshOp {
 		HE_Vertex v;
 		VertexInfo vi;
 		WB_ProgressCounter counter = new WB_ProgressCounter(unpairedHalfedges.size(), 10);
-		tracker.setCounterStatus("HE_MeshOp", "Classifying unpaired halfedges.", counter);
+		tracker.setCounterStatusStr("HE_MeshOp", "Classifying unpaired halfedges.", counter);
 		for (final HE_Halfedge he : unpairedHalfedges) {
 			v = he.getVertex();
 			vi = vertexLists.get(v.getKey());
@@ -5096,7 +5139,7 @@ public class HE_MeshOp {
 		HE_Halfedge he;
 		HE_Halfedge he2;
 		counter = new WB_ProgressCounter(vertexLists.size(), 10);
-		tracker.setCounterStatus("HE_MeshOp", "Pairing unpaired halfedges per vertex.", counter);
+		tracker.setCounterStatusStr("HE_MeshOp", "Pairing unpaired halfedges per vertex.", counter);
 		final Iterator<VertexInfo> vitr = vertexLists.iterator();
 		VertexInfo vInfo;
 		final List<HE_Halfedge> mismatchedHalfedges = new FastList<HE_Halfedge>();
@@ -5129,7 +5172,7 @@ public class HE_MeshOp {
 			}
 			counter.increment();
 		}
-		tracker.setStopStatus("HE_MeshOp", "Processed unpaired halfedges.");
+		tracker.setStopStatusStr("HE_MeshOp", "Processed unpaired halfedges.");
 		return mismatchedHalfedges;
 	}
 

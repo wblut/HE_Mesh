@@ -53,7 +53,7 @@ public class WB_Danzer3D {
 		/**
 		 *
 		 */
-		private WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
+		private WB_GeometryFactory geometryfactory = new WB_GeometryFactory();
 
 		public WB_DanzerTile3D(final Type type, final double scale, final WB_Coord offset) {
 			this(type, scale, offset, 0);
@@ -355,7 +355,7 @@ public class WB_Danzer3D {
 		}
 
 		@Override
-		public WB_DanzerTile3D apply(final WB_Transform3D T) {
+		public WB_DanzerTile3D apply(final WB_Transform T) {
 			return new WB_DanzerTile3D(p1.applyAsPoint(T), p2.applyAsPoint(T), p3.applyAsPoint(T), p4.applyAsPoint(T),
 					type, generation);
 		}
@@ -521,7 +521,7 @@ public class WB_Danzer3D {
 
 		public static WB_Point interpolateNonNorm(final WB_Coord v, final WB_Coord w, final double a, final double b) {
 			return new WB_Point(
-					WB_CoordOp3D.interpolate(v.xd(), v.yd(), v.zd(), w.xd(), w.yd(), w.zd(), a / (a + b)));
+					WB_CoordOp.interpolate(v.xd(), v.yd(), v.zd(), w.xd(), w.yd(), w.zd(), a / (a + b)));
 		}
 
 	}

@@ -19,7 +19,7 @@ public class WB_Ring extends WB_PolyLine {
 	/**
 	 *
 	 */
-	private WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
+	private WB_GeometryFactory geometryfactory = new WB_GeometryFactory();
 
 	/**
 	 * Get direction.
@@ -355,7 +355,7 @@ public class WB_Ring extends WB_PolyLine {
 	}
 
 	@Override
-	public WB_Ring apply(final WB_Transform3D T) {
+	public WB_Ring apply(final WB_Transform T) {
 		List<WB_Point> tpoints = new FastList<WB_Point>();
 		for (WB_Point p : points) {
 			tpoints.add(p.applyAsPoint(T));
@@ -383,7 +383,7 @@ public class WB_Ring extends WB_PolyLine {
 	}
 
 	@Override
-	public WB_Ring applySelf(WB_Transform3D T) {
+	public WB_Ring applySelf(WB_Transform T) {
 		for (WB_Point p : points) {
 			p.applyAsPointSelf(T);
 		}

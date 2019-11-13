@@ -160,7 +160,7 @@ public class WB_AlphaTriangulation3D {
 	 *
 	 * @return
 	 */
-	public List<WB_Coord> getpoints() {
+	public List<WB_Coord> getPoints() {
 		return points.asUnmodifiable();
 	}
 

@@ -8,7 +8,7 @@ package wblut.hemesh;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.math.WB_Epsilon;
@@ -150,7 +150,7 @@ public class HEM_TriSplit extends HEM_Modifier {
 			c++;
 			final WB_Plane P = new WB_Plane(HE_MeshOp.getHalfedgeCenter(he),
 					HE_MeshOp.getHalfedgeNormal(he));
-			final double d = WB_GeometryOp3D.getDistance3D(p, P);
+			final double d = WB_GeometryOp.getDistance3D(p, P);
 			if (WB_Epsilon.isZero(d)) {
 				onEdge = true;
 				break;

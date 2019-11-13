@@ -19,7 +19,7 @@ void setup() {
   size(1000, 1000, P3D);
   smooth(8);
   createMesh();
-  HEM_Shell shell=new HEM_Shell().setThickness(new XGradient());
+  HEM_Shell shell=new HEM_Shell().setThickness(new XGradient());//.setTwoSided(true);
   mesh.modify(new HEM_Slice().setPlane(0,0,0,0,1,0));
   mesh.modify(shell);
   render=new WB_Render(this);

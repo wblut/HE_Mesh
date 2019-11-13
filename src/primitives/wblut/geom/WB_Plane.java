@@ -12,7 +12,7 @@ import wblut.math.WB_Math;
 /**
  *
  */
-public class WB_Plane implements WB_Geometry3D {
+public class WB_Plane implements WB_Geometry {
 	/**
 	 *
 	 *
@@ -400,7 +400,7 @@ public class WB_Plane implements WB_Geometry3D {
 	 * @return
 	 */
 	public WB_Point mirrorPoint(final WB_Coord p) {
-		if (WB_Epsilon.isZero(WB_GeometryOp3D.getDistance3D(p, this))) {
+		if (WB_Epsilon.isZero(WB_GeometryOp.getDistance3D(p, this))) {
 			return new WB_Point(p);
 		}
 		return extractPoint2D(localPoint(p).scaleSelf(1, 1, -1));
@@ -449,12 +449,12 @@ public class WB_Plane implements WB_Geometry3D {
 	}
 
 	@Override
-	public WB_Plane apply(WB_Transform3D T) {
+	public WB_Plane apply(WB_Transform T) {
 		return new WB_Plane(origin.apply(T), n.apply(T));
 	}
 
 	@Override
-	public WB_Plane applySelf(WB_Transform3D T) {
+	public WB_Plane applySelf(WB_Transform T) {
 		origin.applySelf(T);
 		n.applySelf(T);
 		return this;

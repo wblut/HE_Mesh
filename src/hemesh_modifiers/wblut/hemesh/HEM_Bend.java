@@ -8,7 +8,7 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Plane;
 import wblut.math.WB_ConstantScalarParameter;
@@ -140,7 +140,7 @@ public class HEM_Bend extends HEM_Modifier {
 			final Iterator<HE_Vertex> vItr = mesh.vItr();
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				final double d = WB_GeometryOp3D.getDistance3D(v, groundPlane);
+				final double d = WB_GeometryOp.getDistance3D(v, groundPlane);
 				if (!posOnly || d > 0) {
 					v.getPosition().rotateAboutAxisSelf(
 							d * angleFactor.evaluate(v.xd(), v.yd(), v.zd()),
@@ -164,7 +164,7 @@ public class HEM_Bend extends HEM_Modifier {
 			final Iterator<HE_Vertex> vItr = selection.vItr();
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				final double d = WB_GeometryOp3D.getDistance3D(v, groundPlane);
+				final double d = WB_GeometryOp.getDistance3D(v, groundPlane);
 				if (!posOnly || d > 0) {
 					v.getPosition().rotateAboutAxisSelf(
 							d * angleFactor.evaluate(v.xd(), v.yd(), v.zd()),

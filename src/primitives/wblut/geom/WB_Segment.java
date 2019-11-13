@@ -24,7 +24,7 @@ public class WB_Segment extends WB_Line implements Comparable<WB_Segment> {
 	 *
 	 */
 	protected WB_Point			endpoint;
-	private WB_GeometryFactory3D	geometryfactory	= new WB_GeometryFactory3D();
+	private WB_GeometryFactory	geometryfactory	= new WB_GeometryFactory();
 
 	/**
 	 *
@@ -84,7 +84,7 @@ public class WB_Segment extends WB_Line implements Comparable<WB_Segment> {
 	public WB_Segment(final WB_Coord p1, final WB_Coord p2) {
 		super(p1, new WB_Vector(p1, p2));
 		endpoint = new WB_Point(p2);
-		length = Math.sqrt(WB_CoordOp3D.getSqDistance3D(p1, p2));
+		length = Math.sqrt(WB_CoordOp.getSqDistance3D(p1, p2));
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class WB_Segment extends WB_Line implements Comparable<WB_Segment> {
 		super(new WB_Point(p1x, p1y, p1z),
 				new WB_Vector(p2x - p1x, p2y - p1y, p2z - p1z));
 		endpoint = new WB_Point(p2x, p2y, p2z);
-		length = Math.sqrt(WB_CoordOp3D.getSqDistance3D(origin, endpoint));
+		length = Math.sqrt(WB_CoordOp.getSqDistance3D(origin, endpoint));
 	}
 
 	/**
@@ -264,23 +264,23 @@ public class WB_Segment extends WB_Line implements Comparable<WB_Segment> {
 		origin.apply2DSelf(T);
 		endpoint.apply2DSelf(T);
 		direction.apply2DSelf(T);
-		length = Math.sqrt(WB_CoordOp3D.getSqDistance3D(origin, endpoint));
+		length = Math.sqrt(WB_CoordOp.getSqDistance3D(origin, endpoint));
 		return this;
 	}
 
 	@Override
-	public WB_Segment apply(final WB_Transform3D T) {
+	public WB_Segment apply(final WB_Transform T) {
 		return geometryfactory.createSegment(
 				new WB_Point(origin).applyAsPoint(T),
 				new WB_Point(endpoint).applyAsPoint(T));
 	}
 
 	@Override
-	public WB_Segment applySelf(WB_Transform3D T) {
+	public WB_Segment applySelf(WB_Transform T) {
 		origin.applySelf(T);
 		endpoint.applySelf(T);
 		direction.applySelf(T);
-		length = Math.sqrt(WB_CoordOp3D.getSqDistance3D(origin, endpoint));
+		length = Math.sqrt(WB_CoordOp.getSqDistance3D(origin, endpoint));
 		return this;
 	}
 

@@ -15,7 +15,6 @@ import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 import wblut.external.QuickHull3D.WB_QuickHull3D;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordCollection;
-import wblut.geom.WB_Point;
 import wblut.geom.WB_PointFactory;
 
 /**

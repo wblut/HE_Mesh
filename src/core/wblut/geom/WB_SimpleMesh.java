@@ -20,7 +20,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.collections.impl.list.mutable.FastList;
 
@@ -28,7 +27,7 @@ public class WB_SimpleMesh implements WB_TriangleFactory {
 	protected int[][]			faces;
 	protected List<WB_Coord>	vertices;
 	List<int[]>					tris;
-	private WB_GeometryFactory3D	geometryfactory	= new WB_GeometryFactory3D();
+	private WB_GeometryFactory	geometryfactory	= new WB_GeometryFactory();
 
 	/**
 	 *
@@ -300,11 +299,11 @@ public class WB_SimpleMesh implements WB_TriangleFactory {
 			int i = 0;
 			for (i = 0; i < threadCount - 1; i++) {
 				final Callable<ArrayList<int[]>> runner = new TriangulateRunner(
-						dfaces * i, dfaces * (i + 1) - 1, i);
+						dfaces * i, dfaces * (i + 1) - 1);
 				set.add(executor.submit(runner));
 			}
 			final Callable<ArrayList<int[]>> runner = new TriangulateRunner(
-					dfaces * i, faces.length - 1, i);
+					dfaces * i, faces.length - 1);
 			set.add(executor.submit(runner));
 			ArrayList<int[]> tris = new ArrayList<int[]>();
 			for (Future<ArrayList<int[]>> future : set) {
@@ -329,7 +328,6 @@ public class WB_SimpleMesh implements WB_TriangleFactory {
 	private class TriangulateRunner implements Callable<ArrayList<int[]>> {
 		int		start;
 		int		end;
-		int		id;
 		int[]	triangles;
 	
 		/**
@@ -339,10 +337,9 @@ public class WB_SimpleMesh implements WB_TriangleFactory {
 		 * @param e
 		 * @param id
 		 */
-		TriangulateRunner(final int s, final int e, final int id) {
+		TriangulateRunner(final int s, final int e) {
 			start = s;
 			end = e;
-			this.id = id;
 		}
 	
 		/*

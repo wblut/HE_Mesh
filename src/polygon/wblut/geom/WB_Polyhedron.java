@@ -14,7 +14,7 @@ import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
  * @author FVH
  *
  */
-public class WB_Polyhedron implements WB_Geometry3D {
+public class WB_Polyhedron implements WB_Geometry {
 	private WB_Point[]	vertices;
 	private int[][]		faces;
 	private String		name;
@@ -986,7 +986,7 @@ public class WB_Polyhedron implements WB_Geometry3D {
 	}
 
 	@Override
-	public WB_Polyhedron apply(WB_Transform3D T) {
+	public WB_Polyhedron apply(WB_Transform T) {
 		WB_Polyhedron poly = new WB_Polyhedron(this);
 		poly.applySelf(T);
 		return this;
@@ -1001,7 +1001,7 @@ public class WB_Polyhedron implements WB_Geometry3D {
 	}
 
 	@Override
-	public WB_Polyhedron applySelf(WB_Transform3D T) {
+	public WB_Polyhedron applySelf(WB_Transform T) {
 		for (WB_Point p : vertices) {
 			p.applyAsPointSelf(T);
 		}

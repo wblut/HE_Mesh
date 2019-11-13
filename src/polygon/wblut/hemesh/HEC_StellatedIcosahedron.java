@@ -6,8 +6,7 @@
  */
 package wblut.hemesh;
 
-import wblut.geom.WB_GeometryFactory3D;
-import wblut.geom.WB_Point;
+import wblut.geom.WB_GeometryFactory;
 
 public class HEC_StellatedIcosahedron extends HEC_Creator {
 	private double	R;
@@ -50,7 +49,7 @@ public class HEC_StellatedIcosahedron extends HEC_Creator {
 	 */
 	@Override
 	public HE_Mesh createBase() {
-		HE_Mesh hmesh = new HE_Mesh(new WB_GeometryFactory3D()
+		HE_Mesh hmesh = new HE_Mesh(new WB_GeometryFactory()
 				.createStellatedIcosahedron(type - 1, R));
 		return hmesh;
 	}

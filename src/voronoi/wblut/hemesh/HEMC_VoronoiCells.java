@@ -14,7 +14,7 @@ import org.eclipse.collections.impl.list.mutable.FastList;
 
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_Point;
-import wblut.geom.WB_VoronoiCreator;
+import wblut.geom.WB_VoronoiFactory;
 import wblut.math.WB_ConstantScalarParameter;
 import wblut.math.WB_ScalarParameter;
 
@@ -226,7 +226,7 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 				result.add(mesh);
 			}
 		} else {
-			final int[][] voronoiIndices = WB_VoronoiCreator
+			final int[][] voronoiIndices = WB_VoronoiFactory
 					.getVoronoi3DNeighbors(points);
 			cvc.setPoints(points).setContainer(container).setSurface(surface)
 					.setOffset(offset);

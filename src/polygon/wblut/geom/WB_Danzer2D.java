@@ -18,7 +18,7 @@ import wblut.math.WB_MTRandom;
 
 public class WB_Danzer2D implements WB_TriangleFactory {
 
-	private WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
+	private WB_GeometryFactory geometryfactory = new WB_GeometryFactory();
 
 	public static enum Type {
 		A, B, C
@@ -144,7 +144,7 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		type = t;
 		final WB_DanzerTile2D T = new WB_DanzerTile2D(type, 0);
 		WB_Point q;
-		WB_Transform3D ROT = new WB_Transform3D().addRotateZ(angle);
+		WB_Transform ROT = new WB_Transform().addRotateZ(angle);
 		switch (type) {
 		case A:
 			WB_Point p = geometryfactory.createPoint();

@@ -2,7 +2,7 @@ import wblut.processing.*;
 import wblut.geom.*;
 import java.util.List;
 
-WB_GeometryFactory3D factory;
+WB_GeometryFactory factory;
 WB_Render2D render;
 
 WB_Line L1;
@@ -11,7 +11,7 @@ WB_Circle C;
 
 void setup() {
   size(800, 800);
-  factory=new WB_GeometryFactory3D();
+  factory=new WB_GeometryFactory();
   render=new WB_Render2D(this);
 }
 

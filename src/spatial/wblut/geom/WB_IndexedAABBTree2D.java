@@ -1,5 +1,5 @@
 /*
- * HE_Mesh  Frederik Vanhoutte - www.wblut.com
+Point * HE_Mesh  Frederik Vanhoutte - www.wblut.com
  * 
  * https://github.com/wblut/HE_Mesh
  * A Processing/Java library for for creating and manipulating polygonal meshes.

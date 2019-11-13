@@ -12,7 +12,7 @@ package wblut.hemesh;
 import java.util.Iterator;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Vector;
 
@@ -98,7 +98,7 @@ public class HEM_Twist extends HEM_Modifier {
 			final Iterator<HE_Vertex> vItr = mesh.vItr();
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				final double d = WB_GeometryOp3D.getDistance3D(v, twistAxis);
+				final double d = WB_GeometryOp.getDistance3D(v, twistAxis);
 				v.getPosition().rotateAboutAxisSelf(d * angleFactor, twistAxis.getOrigin(), twistAxis.getDirection());
 			}
 		}
@@ -120,7 +120,7 @@ public class HEM_Twist extends HEM_Modifier {
 			final Iterator<HE_Vertex> vItr = selection.vItr();
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				final double d = WB_GeometryOp3D.getDistance3D(v, twistAxis);
+				final double d = WB_GeometryOp.getDistance3D(v, twistAxis);
 				v.getPosition().rotateAboutAxisSelf(d * angleFactor, twistAxis.getOrigin(), twistAxis.getDirection());
 			}
 		}

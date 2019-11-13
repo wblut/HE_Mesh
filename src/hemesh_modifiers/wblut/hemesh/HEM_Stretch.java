@@ -11,7 +11,7 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
@@ -136,13 +136,13 @@ public class HEM_Stretch extends HEM_Modifier {
 			HE_Vertex v;
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				final double d = WB_GeometryOp3D.getDistance3D(v, groundPlane);
+				final double d = WB_GeometryOp.getDistance3D(v, groundPlane);
 				if (!posOnly || d > WB_Epsilon.EPSILON) {
-					p = WB_GeometryOp3D.getClosestPoint3D(v, groundPlane);
+					p = WB_GeometryOp.getClosestPoint3D(v, groundPlane);
 					v.getPosition().subSelf(p);
 					v.getPosition().mulSelf(stretchFactor);
 					v.getPosition().addSelf(p);
-					p = WB_GeometryOp3D.getClosestPoint3D(v, L);
+					p = WB_GeometryOp.getClosestPoint3D(v, L);
 					v.getPosition().subSelf(p);
 					v.getPosition().mulSelf(1 / compressionFactor);
 					v.getPosition().addSelf(p);
@@ -170,13 +170,13 @@ public class HEM_Stretch extends HEM_Modifier {
 			HE_Vertex v;
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				final double d = WB_GeometryOp3D.getDistance3D(v, groundPlane);
+				final double d = WB_GeometryOp.getDistance3D(v, groundPlane);
 				if (!posOnly || d > WB_Epsilon.EPSILON) {
-					p = WB_GeometryOp3D.getClosestPoint3D(v, groundPlane);
+					p = WB_GeometryOp.getClosestPoint3D(v, groundPlane);
 					v.getPosition().subSelf(p);
 					v.getPosition().mulSelf(stretchFactor);
 					v.getPosition().addSelf(p);
-					p = WB_GeometryOp3D.getClosestPoint3D(v, L);
+					p = WB_GeometryOp.getClosestPoint3D(v, L);
 					v.getPosition().subSelf(p);
 					v.getPosition().mulSelf(1 / compressionFactor);
 					v.getPosition().addSelf(p);

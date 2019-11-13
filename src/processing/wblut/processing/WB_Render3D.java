@@ -18,8 +18,8 @@ import processing.core.PMatrix3D;
 import processing.opengl.PGraphicsOpenGL;
 import wblut.core.WB_ProgressReporter.WB_ProgressTracker;
 import wblut.geom.WB_AABB;
-import wblut.geom.WB_AABBTree;
-import wblut.geom.WB_AABBTree.WB_AABBNode;
+import wblut.geom.WB_AABBTree3D;
+import wblut.geom.WB_AABBTree3D.WB_AABBNode3D;
 import wblut.geom.WB_BinaryGrid3D;
 import wblut.geom.WB_Circle;
 import wblut.geom.WB_Classification;
@@ -28,9 +28,11 @@ import wblut.geom.WB_CoordCollection;
 import wblut.geom.WB_Curve;
 import wblut.geom.WB_Danzer3D;
 import wblut.geom.WB_Danzer3D.WB_DanzerTile3D;
-import wblut.geom.WB_GeometryFactory3D;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Hexagon;
+import wblut.geom.WB_IndexedAABBTree3D;
+import wblut.geom.WB_IndexedAABBTree3D.WB_IndexedAABBNode3D;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Map;
 import wblut.geom.WB_Map2D;
@@ -52,7 +54,7 @@ import wblut.geom.WB_Ring;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_SimpleMesh;
 import wblut.geom.WB_Tetrahedron;
-import wblut.geom.WB_Transform3D;
+import wblut.geom.WB_Transform;
 import wblut.geom.WB_Triangle;
 import wblut.geom.WB_TriangleFactory;
 import wblut.geom.WB_Triangulation2D;
@@ -61,7 +63,7 @@ import wblut.geom.WB_Vector;
 import wblut.hemesh.HE_Face;
 import wblut.hemesh.HE_FaceEdgeCirculator;
 import wblut.hemesh.HE_FaceHalfedgeInnerCirculator;
-import wblut.hemesh.HE_FaceIntersection;
+import wblut.hemesh.HE_MeshOp.HE_FaceLineIntersection;
 import wblut.hemesh.HE_FaceIterator;
 import wblut.hemesh.HE_FaceVertexCirculator;
 import wblut.hemesh.HE_Halfedge;
@@ -83,7 +85,7 @@ public class WB_Render3D extends WB_Render2D {
 	/**
 	 *
 	 */
-	private WB_GeometryFactory3D				geometryfactory	= new WB_GeometryFactory3D();
+	private WB_GeometryFactory				geometryfactory	= new WB_GeometryFactory();
 	public static final WB_ProgressTracker	tracker			= WB_ProgressTracker
 			.instance();
 	/**
@@ -137,7 +139,7 @@ public class WB_Render3D extends WB_Render2D {
 	 * @param node
 	 *            the node
 	 */
-	public void drawAABBNode(final WB_AABBNode node) {
+	public void drawAABBNode(final WB_AABBNode3D node) {
 		drawAABB(node.getAABB());
 		if (node.getChildA() != null) {
 			drawAABBNode(node.getChildA());
@@ -155,7 +157,7 @@ public class WB_Render3D extends WB_Render2D {
 	 * @param level
 	 *            the level
 	 */
-	private void drawAABBNode(final WB_AABBNode node, final int level) {
+	private void drawAABBNode(final WB_AABBNode3D node, final int level) {
 		if (node.getLevel() == level) {
 			drawAABB(node.getAABB());
 		}
@@ -175,7 +177,7 @@ public class WB_Render3D extends WB_Render2D {
 	 * @param node
 	 *            the node
 	 */
-	private void drawAABBLeafNode(final WB_AABBNode node) {
+	private void drawAABBLeafNode(final WB_AABBNode3D node) {
 		if (node.isLeaf()) {
 			drawAABB(node.getAABB());
 		} else {
@@ -194,15 +196,91 @@ public class WB_Render3D extends WB_Render2D {
 	 * @param tree
 	 *            the tree
 	 */
-	public void drawAABBLeafNodes(final WB_AABBTree tree) {
+	public void drawAABBLeafNodes(final WB_AABBTree3D tree) {
+		drawAABBLeafNode(tree.getRoot());
+	}
+	
+	/**
+	 * Draw WB_AABBTree node.
+	 *
+	 *
+	 * @param node
+	 *            the node
+	 */
+	public void drawAABBNode(final WB_IndexedAABBNode3D node) {
+		drawAABB(node.getAABB());
+		if (node.getChildA() != null) {
+			drawAABBNode(node.getChildA());
+		}
+		if (node.getChildB() != null) {
+			drawAABBNode(node.getChildB());
+		}
+	}
+
+	/**
+	 * Draw WB_AABBTree node.
+	 *
+	 * @param node
+	 *            the node
+	 * @param level
+	 *            the level
+	 */
+	private void drawAABBNode(final WB_IndexedAABBNode3D node, final int level) {
+		if (node.getLevel() == level) {
+			drawAABB(node.getAABB());
+		}
+		if (node.getLevel() < level) {
+			if (node.getChildA() != null) {
+				drawAABBNode(node.getChildA(), level);
+			}
+			if (node.getChildB() != null) {
+				drawAABBNode(node.getChildB(), level);
+			}
+		}
+	}
+
+	/**
+	 * Draw leaf node.
+	 *
+	 * @param node
+	 *            the node
+	 */
+	private void drawAABBLeafNode(final WB_IndexedAABBNode3D node) {
+		if (node.isLeaf()) {
+			drawAABB(node.getAABB());
+		} else {
+			if (node.getChildA() != null) {
+				drawAABBLeafNode(node.getChildA());
+			}
+			if (node.getChildB() != null) {
+				drawAABBLeafNode(node.getChildB());
+			}
+		}
+	}
+
+	/**
+	 * Draw leafs.
+	 *
+	 * @param tree
+	 *            the tree
+	 */
+	public void drawAABBLeafNodes(final WB_IndexedAABBTree3D tree) {
 		drawAABBLeafNode(tree.getRoot());
 	}
 
-	public void drawAABBTree(final WB_AABBTree tree) {
+	public void drawAABBTree(final WB_AABBTree3D tree) {
 		drawAABBNode(tree.getRoot());
 	}
 
-	public void drawAABBTree(final WB_AABBTree tree, final int level) {
+	public void drawAABBTree(final WB_AABBTree3D tree, final int level) {
+		drawAABBNode(tree.getRoot(), level);
+	}
+	
+	public void drawAABBTree(final WB_IndexedAABBTree3D tree) {
+		drawAABBNode(tree.getRoot());
+	}
+
+	public void drawAABBTree(final WB_IndexedAABBTree3D tree, final int level) {
 		drawAABBNode(tree.getRoot(), level);
 	}
 
@@ -318,7 +396,7 @@ public class WB_Render3D extends WB_Render2D {
 	public void drawCircle(final WB_Circle C) {
 		home.pushMatrix();
 		translate(C.getCenter());
-		final WB_Transform3D T = new WB_Transform3D(geometryfactory.Z(),
+		final WB_Transform T = new WB_Transform(geometryfactory.Z(),
 				C.getNormal());
 		final WB_Vector angles = T.getEulerAnglesXYZ();
 		home.rotateZ(angles.zf());
@@ -4626,9 +4704,9 @@ public class WB_Render3D extends WB_Render2D {
 	public HE_Face pickClosestFace(final HE_Mesh mesh, final double x,
 			final double y) {
 		final WB_Ray mouseRay3d = getPickingRay(x, y);
-		final HE_FaceIntersection p = HE_MeshOp.getClosestIntersection(mesh,
+		final HE_FaceLineIntersection p = HE_MeshOp.getClosestIntersection(mesh,
 				mouseRay3d);
-		return p == null ? null : p.face;
+		return p == null ? null : p.getFace();
 	}
 
 	/**
@@ -4639,12 +4717,12 @@ public class WB_Render3D extends WB_Render2D {
 	 * @param y
 	 * @return
 	 */
-	public HE_Face pickClosestFace(final WB_AABBTree meshtree, final double x,
+	public HE_Face pickClosestFace(final WB_AABBTree3D meshtree, final double x,
 			final double y) {
 		final WB_Ray mouseRay3d = getPickingRay(x, y);
-		final HE_FaceIntersection p = HE_MeshOp.getClosestIntersection(meshtree,
+		final HE_FaceLineIntersection p = HE_MeshOp.getClosestIntersection(meshtree,
 				mouseRay3d);
-		return p == null ? null : p.face;
+		return p == null ? null : p.getFace();
 	}
 
 	/**
@@ -4658,12 +4736,12 @@ public class WB_Render3D extends WB_Render2D {
 	public HE_Halfedge pickEdge(final HE_Mesh mesh, final double x,
 			final double y) {
 		final WB_Ray mouseRay3d = getPickingRay(x, y);
-		final HE_FaceIntersection p = HE_MeshOp.getClosestIntersection(mesh,
+		final HE_FaceLineIntersection p = HE_MeshOp.getClosestIntersection(mesh,
 				mouseRay3d);
 		if (p == null) {
 			return null;
 		}
-		final HE_Face f = p.face;
+		final HE_Face f = p.getFace();
 		final HE_FaceEdgeCirculator fec = f.feCrc();
 		HE_Halfedge trial;
 		HE_Halfedge closest = null;
@@ -4671,7 +4749,7 @@ public class WB_Render3D extends WB_Render2D {
 		double d2min = Double.MAX_VALUE;
 		while (fec.hasNext()) {
 			trial = fec.next();
-			d2 = WB_GeometryOp3D.getDistanceToSegment3D(p.point,
+			d2 = WB_GeometryOp.getDistanceToSegment3D(p.getPoint(),
 					trial.getStartVertex(), trial.getEndVertex());
 			if (d2 < d2min) {
 				d2min = d2;
@@ -4689,15 +4767,15 @@ public class WB_Render3D extends WB_Render2D {
 	 * @param y
 	 * @return
 	 */
-	public HE_Halfedge pickEdge(final WB_AABBTree tree, final double x,
+	public HE_Halfedge pickEdge(final WB_AABBTree3D tree, final double x,
 			final double y) {
 		final WB_Ray mouseRay3d = getPickingRay(x, y);
-		final HE_FaceIntersection p = HE_MeshOp.getClosestIntersection(tree,
+		final HE_FaceLineIntersection p = HE_MeshOp.getClosestIntersection(tree,
 				mouseRay3d);
 		if (p == null) {
 			return null;
 		}
-		final HE_Face f = p.face;
+		final HE_Face f = p.getFace();
 		final HE_FaceEdgeCirculator fec = f.feCrc();
 		HE_Halfedge trial;
 		HE_Halfedge closest = null;
@@ -4705,7 +4783,7 @@ public class WB_Render3D extends WB_Render2D {
 		double d2min = Double.MAX_VALUE;
 		while (fec.hasNext()) {
 			trial = fec.next();
-			d2 = WB_GeometryOp3D.getDistanceToSegment3D(p.point,
+			d2 = WB_GeometryOp.getDistanceToSegment3D(p.getPoint(),
 					trial.getStartVertex(), trial.getEndVertex());
 			if (d2 < d2min) {
 				d2min = d2;
@@ -4726,11 +4804,11 @@ public class WB_Render3D extends WB_Render2D {
 	public List<HE_Face> pickFaces(final HE_Mesh mesh, final double x,
 			final double y) {
 		final WB_Ray mouseRay3d = getPickingRay(x, y);
-		final List<HE_FaceIntersection> p = HE_MeshOp.getIntersection(mesh,
+		final List<HE_FaceLineIntersection> p = HE_MeshOp.getIntersection(mesh,
 				mouseRay3d);
 		final List<HE_Face> result = new ArrayList<HE_Face>();
-		for (final HE_FaceIntersection fi : p) {
-			result.add(fi.face);
+		for (final HE_FaceLineIntersection fi : p) {
+			result.add(fi.getFace());
 		}
 		return result;
 	}
@@ -4743,14 +4821,14 @@ public class WB_Render3D extends WB_Render2D {
 	 * @param y
 	 * @return
 	 */
-	public List<HE_Face> pickFaces(final WB_AABBTree meshtree, final double x,
+	public List<HE_Face> pickFaces(final WB_AABBTree3D meshtree, final double x,
 			final double y) {
 		final WB_Ray mouseRay3d = getPickingRay(x, y);
-		final List<HE_FaceIntersection> p = HE_MeshOp.getIntersection(meshtree,
+		final List<HE_FaceLineIntersection> p = HE_MeshOp.getIntersection(meshtree,
 				mouseRay3d);
 		final List<HE_Face> result = new ArrayList<HE_Face>();
-		for (final HE_FaceIntersection fi : p) {
-			result.add(fi.face);
+		for (final HE_FaceLineIntersection fi : p) {
+			result.add(fi.getFace());
 		}
 		return result;
 	}
@@ -4766,9 +4844,9 @@ public class WB_Render3D extends WB_Render2D {
 	public HE_Face pickFurthestFace(final HE_Mesh mesh, final double x,
 			final double y) {
 		final WB_Ray mouseRay3d = getPickingRay(x, y);
-		final HE_FaceIntersection p = HE_MeshOp.getFurthestIntersection(mesh,
+		final HE_FaceLineIntersection p = HE_MeshOp.getFurthestIntersection(mesh,
 				mouseRay3d);
-		return p == null ? null : p.face;
+		return p == null ? null : p.getFace();
 	}
 
 	/**
@@ -4779,12 +4857,12 @@ public class WB_Render3D extends WB_Render2D {
 	 * @param y
 	 * @return
 	 */
-	public HE_Face pickFurthestFace(final WB_AABBTree meshtree, final double x,
+	public HE_Face pickFurthestFace(final WB_AABBTree3D meshtree, final double x,
 			final double y) {
 		final WB_Ray mouseRay3d = getPickingRay(x, y);
-		final HE_FaceIntersection p = HE_MeshOp
+		final HE_FaceLineIntersection p = HE_MeshOp
 				.getFurthestIntersection(meshtree, mouseRay3d);
-		return p == null ? null : p.face;
+		return p == null ? null : p.getFace();
 	}
 
 	/**
@@ -4798,12 +4876,12 @@ public class WB_Render3D extends WB_Render2D {
 	public HE_Vertex pickVertex(final HE_Mesh mesh, final double x,
 			final double y) {
 		final WB_Ray mouseRay3d = getPickingRay(x, y);
-		final HE_FaceIntersection p = HE_MeshOp.getClosestIntersection(mesh,
+		final HE_FaceLineIntersection p = HE_MeshOp.getClosestIntersection(mesh,
 				mouseRay3d);
 		if (p == null) {
 			return null;
 		}
-		final HE_Face f = p.face;
+		final HE_Face f = p.getFace();
 		final HE_FaceVertexCirculator fvc = f.fvCrc();
 		HE_Vertex trial;
 		HE_Vertex closest = null;
@@ -4811,7 +4889,7 @@ public class WB_Render3D extends WB_Render2D {
 		double d2min = Double.MAX_VALUE;
 		while (fvc.hasNext()) {
 			trial = fvc.next();
-			d2 = trial.getPosition().getSqDistance(p.point);
+			d2 = trial.getPosition().getSqDistance(p.getPoint());
 			if (d2 < d2min) {
 				d2min = d2;
 				closest = trial;
@@ -4828,15 +4906,15 @@ public class WB_Render3D extends WB_Render2D {
 	 * @param y
 	 * @return
 	 */
-	public HE_Vertex pickVertex(final WB_AABBTree tree, final double x,
+	public HE_Vertex pickVertex(final WB_AABBTree3D tree, final double x,
 			final double y) {
 		final WB_Ray mouseRay3d = getPickingRay(x, y);
-		final HE_FaceIntersection p = HE_MeshOp.getClosestIntersection(tree,
+		final HE_FaceLineIntersection p = HE_MeshOp.getClosestIntersection(tree,
 				mouseRay3d);
 		if (p == null) {
 			return null;
 		}
-		final HE_Face f = p.face;
+		final HE_Face f = p.getFace();
 		final HE_FaceVertexCirculator fvc = f.fvCrc();
 		HE_Vertex trial;
 		HE_Vertex closest = null;
@@ -4844,7 +4922,7 @@ public class WB_Render3D extends WB_Render2D {
 		double d2min = Double.MAX_VALUE;
 		while (fvc.hasNext()) {
 			trial = fvc.next();
-			d2 = trial.getPosition().getSqDistance(p.point);
+			d2 = trial.getPosition().getSqDistance(p.getPoint());
 			if (d2 < d2min) {
 				d2min = d2;
 				closest = trial;

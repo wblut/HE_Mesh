@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import wblut.hemesh.HE_Element;
 
+//TODO duplicate errors in HE_Mesh create transform step
 public class WB_ProgressReporter extends Thread {
 	WB_ProgressTracker	tracker;
 	WB_ProgressStatus	status;

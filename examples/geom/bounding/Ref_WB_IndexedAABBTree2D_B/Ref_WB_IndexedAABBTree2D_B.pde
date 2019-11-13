@@ -26,7 +26,7 @@ void setup() {
     points.add(source.nextPoint());
   }
   alpha=17.0;
-  triangulation=WB_Triangulate.alphaTriangulate2D(points);
+  triangulation=WB_TriangulationFactory.alphaTriangulate2D(points);
   tree=new WB_IndexedAABBTree2D(triangulation,alpha,1);
 }
 

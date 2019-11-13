@@ -9,8 +9,8 @@ package wblut.hemesh;
 import wblut.core.WB_HashCode;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_CoordOp3D;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Vector;
 
 /**
  * Half-edge element of half-edge data structure.
@@ -276,23 +276,23 @@ public class HE_Halfedge extends HE_MeshElement
 		return null;
 	}
 	
-	public WB_Coord getCenter() {
+	public WB_Point getCenter() {
 		return HE_MeshOp.getEdgeCenter(this);
 	}
 	
-	public WB_Coord getEdgeNormal() {
+	public WB_Vector getEdgeNormal() {
 		return HE_MeshOp.getEdgeNormal(this);
 	}
 	
-	public WB_Coord getEdgeDirection() {
+	public WB_Vector getEdgeDirection() {
 		return HE_MeshOp.getEdgeTangent(this);
 	}
 	
-	public WB_Coord getHalfedgeNormal() {
+	public WB_Vector getHalfedgeNormal() {
 		return HE_MeshOp.getHalfedgeNormal(this);
 	}
 	
-	public WB_Coord getHalfedgeDirection() {
+	public WB_Vector getHalfedgeDirection() {
 		return HE_MeshOp.getHalfedgeTangent(this);
 	}
 	
@@ -617,7 +617,7 @@ public class HE_Halfedge extends HE_MeshElement
 	 * @param f
 	 * @return
 	 */
-	public WB_Coord getEdgeCenter(final double f) {
+	public WB_Point getEdgeCenter(final double f) {
 		
 				return HE_MeshOp.getEdgeCenter(this,f);
 	}
@@ -641,7 +641,7 @@ public class HE_Halfedge extends HE_MeshElement
 	 * @param f
 	 * @return center
 	 */
-	public WB_Coord getHalfedgeCenter(final double f) {
+	public WB_Point getHalfedgeCenter(final double f) {
 		return HE_MeshOp.getHalfedgeCenter(this,f);
 	}
 

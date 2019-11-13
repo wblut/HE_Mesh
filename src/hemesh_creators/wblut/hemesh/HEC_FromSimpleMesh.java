@@ -14,8 +14,8 @@ import org.eclipse.collections.impl.list.mutable.FastList;
 import org.eclipse.collections.impl.map.mutable.primitive.LongObjectHashMap;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_KDTreeInteger;
-import wblut.geom.WB_KDTreeInteger.WB_KDEntryInteger;
+import wblut.geom.WB_KDTreeInteger3D;
+import wblut.geom.WB_KDTreeInteger3D.WB_KDEntryInteger;
 import wblut.geom.WB_SimpleMesh;
 import wblut.geom.WB_SimpleMeshCreator;
 import wblut.math.WB_Epsilon;
@@ -204,7 +204,7 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 	private List<HE_Vertex> getUniqueVertices(final HE_Mesh mesh) {
 		final List<HE_Vertex> uniqueVertices = new FastList<HE_Vertex>();
 		if (getCheckDuplicateVertices()) {
-			final WB_KDTreeInteger<WB_Coord> kdtree = new WB_KDTreeInteger<WB_Coord>();
+			final WB_KDTreeInteger3D<WB_Coord> kdtree = new WB_KDTreeInteger3D<WB_Coord>();
 			WB_KDEntryInteger<WB_Coord> neighbor;
 			HE_Vertex v = new HE_Vertex(source.getVertex(0));
 			kdtree.add(source.getVertex(0), 0);

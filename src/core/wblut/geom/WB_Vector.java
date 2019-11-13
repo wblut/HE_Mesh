@@ -16,7 +16,7 @@ import wblut.math.WB_Math;
  *
  */
 public class WB_Vector extends WB_MutableCoordinate
-		implements WB_MutableCoord, WB_MutableCoordMath3D, WB_Geometry3D {
+		implements WB_MutableCoord, WB_MutableCoordMath, WB_Geometry {
 	private static final WB_Coord	X		= new WB_MutableCoordinate(1, 0, 0);
 	private static final WB_Coord	Y		= new WB_MutableCoordinate(0, 1, 0);
 	private static final WB_Coord	Z		= new WB_MutableCoordinate(0, 0, 1);
@@ -270,7 +270,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static double dot(final WB_Coord p, final WB_Coord q) {
-		return WB_CoordOp3D.dot(p.xd(), p.yd(), p.zd(), q.xd(), q.yd(), q.zd());
+		return WB_CoordOp.dot(p.xd(), p.yd(), p.zd(), q.xd(), q.yd(), q.zd());
 	}
 
 	/**
@@ -281,7 +281,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static double absDot(final WB_Coord p, final WB_Coord q) {
-		return WB_Math.fastAbs(WB_CoordOp3D.dot(p.xd(), p.yd(), p.zd(), q.xd(),
+		return WB_Math.fastAbs(WB_CoordOp.dot(p.xd(), p.yd(), p.zd(), q.xd(),
 				q.yd(), q.zd()));
 	}
 
@@ -306,7 +306,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static WB_M33 tensor(final WB_Coord u, final WB_Coord v) {
-		return new WB_M33(WB_CoordOp3D.tensor3D(u.xd(), u.yd(), u.zd(), v.xd(),
+		return new WB_M33(WB_CoordOp.tensor3D(u.xd(), u.yd(), u.zd(), v.xd(),
 				v.yd(), v.zd()));
 	}
 
@@ -320,7 +320,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	public static double scalarTriple(final WB_Coord u, final WB_Coord v,
 			final WB_Coord w) {
-		return WB_CoordOp3D.scalarTriple(u.xd(), u.yd(), u.zd(), v.xd(), v.yd(),
+		return WB_CoordOp.scalarTriple(u.xd(), u.yd(), u.zd(), v.xd(), v.yd(),
 				v.zd(), w.xd(), w.yd(), w.zd());
 	}
 
@@ -343,7 +343,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static double getDistance3D(final WB_Coord q, final WB_Coord p) {
-		return WB_CoordOp3D.getDistance3D(q.xd(), q.yd(), q.zd(), p.xd(),
+		return WB_CoordOp.getDistance3D(q.xd(), q.yd(), q.zd(), p.xd(),
 				p.yd(), p.zd());
 	}
 
@@ -355,7 +355,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static double getDistance(final WB_Coord q, final WB_Coord p) {
-		return WB_CoordOp3D.getDistance3D(q.xd(), q.yd(), q.zd(), p.xd(),
+		return WB_CoordOp.getDistance3D(q.xd(), q.yd(), q.zd(), p.xd(),
 				p.yd(), p.zd());
 	}
 
@@ -378,7 +378,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static double getSqDistance3D(final WB_Coord q, final WB_Coord p) {
-		return WB_CoordOp3D.getSqDistance3D(q.xd(), q.yd(), q.zd(), p.xd(),
+		return WB_CoordOp.getSqDistance3D(q.xd(), q.yd(), q.zd(), p.xd(),
 				p.yd(), p.zd());
 	}
 
@@ -390,7 +390,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static double getSqDistance(final WB_Coord q, final WB_Coord p) {
-		return WB_CoordOp3D.getSqDistance3D(q.xd(), q.yd(), q.zd(), p.xd(),
+		return WB_CoordOp.getSqDistance3D(q.xd(), q.yd(), q.zd(), p.xd(),
 				p.yd(), p.zd());
 	}
 
@@ -411,7 +411,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static double getLength3D(final WB_Coord p) {
-		return WB_CoordOp3D.getLength3D(p.xd(), p.yd(), p.zd());
+		return WB_CoordOp.getLength3D(p.xd(), p.yd(), p.zd());
 	}
 
 	/**
@@ -421,7 +421,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static double getLength(final WB_Coord p) {
-		return WB_CoordOp3D.getLength3D(p.xd(), p.yd(), p.zd());
+		return WB_CoordOp.getLength3D(p.xd(), p.yd(), p.zd());
 	}
 
 	/**
@@ -441,7 +441,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static double getSqLength3D(final WB_Coord v) {
-		return WB_CoordOp3D.getSqLength3D(v.xd(), v.yd(), v.zd());
+		return WB_CoordOp.getSqLength3D(v.xd(), v.yd(), v.zd());
 	}
 
 	/**
@@ -451,7 +451,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static double getSqLength(final WB_Coord v) {
-		return WB_CoordOp3D.getSqLength3D(v.xd(), v.yd(), v.zd());
+		return WB_CoordOp.getSqLength3D(v.xd(), v.yd(), v.zd());
 	}
 
 	/**
@@ -462,7 +462,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static double getAngle(final WB_Coord q, final WB_Coord p) {
-		return WB_CoordOp3D.getAngleBetween(q.xd(), q.yd(), q.zd(), p.xd(),
+		return WB_CoordOp.getAngleBetween(q.xd(), q.yd(), q.zd(), p.xd(),
 				p.yd(), p.zd());
 	}
 
@@ -474,7 +474,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static double getAngleNorm(final WB_Coord q, final WB_Coord p) {
-		return WB_CoordOp3D.getAngleBetweenNorm(q.xd(), q.yd(), q.zd(), p.xd(),
+		return WB_CoordOp.getAngleBetweenNorm(q.xd(), q.yd(), q.zd(), p.xd(),
 				p.yd(), p.zd());
 	}
 
@@ -498,7 +498,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	public static boolean isCollinear(final WB_Coord o, final WB_Coord p,
 			final WB_Coord q) {
-		return WB_CoordOp3D.isCollinear(o, p, q);
+		return WB_CoordOp.isCollinear(o, p, q);
 	}
 
 	/**
@@ -522,7 +522,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static boolean isParallel(final WB_Coord p, final WB_Coord q) {
-		return WB_CoordOp3D.isParallel(p, q);
+		return WB_CoordOp.isParallel(p, q);
 	}
 
 	/**
@@ -535,7 +535,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	public static boolean isParallel(final WB_Coord p, final WB_Coord q,
 			final double t) {
-		return WB_CoordOp3D.isParallel(p, q, t);
+		return WB_CoordOp.isParallel(p, q, t);
 	}
 
 	/**
@@ -546,7 +546,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static boolean isParallelNorm(final WB_Coord p, final WB_Coord q) {
-		return WB_CoordOp3D.isParallelNorm(p, q);
+		return WB_CoordOp.isParallelNorm(p, q);
 	}
 
 	/**
@@ -559,7 +559,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	public static boolean isParallelNorm(final WB_Coord p, final WB_Coord q,
 			final double t) {
-		return WB_CoordOp3D.isParallelNorm(p, q, t);
+		return WB_CoordOp.isParallelNorm(p, q, t);
 	}
 
 	/**
@@ -618,7 +618,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static boolean isOrthogonal(final WB_Coord p, final WB_Coord q) {
-		return WB_CoordOp3D.isOrthogonal(p, q);
+		return WB_CoordOp.isOrthogonal(p, q);
 	}
 
 	/**
@@ -631,7 +631,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	public static boolean isOrthogonal(final WB_Coord p, final WB_Coord q,
 			final double t) {
-		return WB_CoordOp3D.isOrthogonal(p, q, t);
+		return WB_CoordOp.isOrthogonal(p, q, t);
 	}
 
 	/**
@@ -642,7 +642,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @return
 	 */
 	public static boolean isOrthogonalNorm(final WB_Coord p, final WB_Coord q) {
-		return WB_CoordOp3D.isOrthogonalNorm(p, q);
+		return WB_CoordOp.isOrthogonalNorm(p, q);
 	}
 
 	/**
@@ -655,7 +655,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	public static boolean isOrthogonalNorm(final WB_Coord p, final WB_Coord q,
 			final double t) {
-		return WB_CoordOp3D.isOrthogonalNorm(p, q, t);
+		return WB_CoordOp.isOrthogonalNorm(p, q, t);
 	}
 
 	/**
@@ -753,13 +753,13 @@ public class WB_Vector extends WB_MutableCoordinate
 
 	public static WB_Vector interpolate(final WB_Coord v, final WB_Coord w,
 			final double f) {
-		return new WB_Vector(WB_CoordOp3D.interpolate(v.xd(), v.yd(), v.zd(),
+		return new WB_Vector(WB_CoordOp.interpolate(v.xd(), v.yd(), v.zd(),
 				w.xd(), w.yd(), w.zd(), f));
 	}
 
 	public static WB_Vector interpolateEase(final WB_Coord v, final WB_Coord w,
 			final double f, final WB_Ease ease, final WB_Ease.EaseType type) {
-		return new WB_Vector(WB_CoordOp3D.interpolateEase(v.xd(), v.yd(),
+		return new WB_Vector(WB_CoordOp.interpolateEase(v.xd(), v.yd(),
 				v.zd(), w.xd(), w.yd(), w.zd(), f, ease, type));
 	}
 
@@ -910,7 +910,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public double dot(final WB_Coord p) {
-		return WB_CoordOp3D.dot(xd(), yd(), zd(), p.xd(), p.yd(), p.zd());
+		return WB_CoordOp.dot(xd(), yd(), zd(), p.xd(), p.yd(), p.zd());
 	}
 
 	/*
@@ -920,7 +920,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	@Override
 	public double absDot(final WB_Coord p) {
 		return WB_Math.fastAbs(
-				WB_CoordOp3D.dot(xd(), yd(), zd(), p.xd(), p.yd(), p.zd()));
+				WB_CoordOp.dot(xd(), yd(), zd(), p.xd(), p.yd(), p.zd()));
 	}
 
 	/*
@@ -939,7 +939,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public WB_M33 tensor(final WB_Coord v) {
-		return new WB_M33(WB_CoordOp3D.tensor3D(xd(), yd(), zd(), v.xd(),
+		return new WB_M33(WB_CoordOp.tensor3D(xd(), yd(), zd(), v.xd(),
 				v.yd(), v.zd()));
 	}
 
@@ -950,7 +950,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public double scalarTriple(final WB_Coord v, final WB_Coord w) {
-		return WB_CoordOp3D.scalarTriple(xd(), yd(), zd(), v.xd(), v.yd(),
+		return WB_CoordOp.scalarTriple(xd(), yd(), zd(), v.xd(), v.yd(),
 				v.zd(), w.xd(), w.yd(), w.zd());
 	}
 
@@ -1305,7 +1305,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * @see wblut.geom.WB_CoordinateTransform#apply(wblut.geom.WB_Transform)
 	 */
 	@Override
-	public WB_Vector apply(final WB_Transform3D T) {
+	public WB_Vector apply(final WB_Transform T) {
 		return T.applyAsVector(this);
 	}
 
@@ -1315,7 +1315,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * wblut.geom.WB_CoordinateTransform#applyAsPoint(wblut.geom.WB_Transform)
 	 */
 	@Override
-	public WB_Point applyAsPoint(final WB_Transform3D T) {
+	public WB_Point applyAsPoint(final WB_Transform T) {
 		return T.applyAsPoint(this);
 	}
 
@@ -1325,7 +1325,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * wblut.geom.WB_CoordinateTransform#applyAsNormal(wblut.geom.WB_Transform)
 	 */
 	@Override
-	public WB_Vector applyAsNormal(final WB_Transform3D T) {
+	public WB_Vector applyAsNormal(final WB_Transform T) {
 		return T.applyAsNormal(this);
 	}
 
@@ -1335,7 +1335,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * wblut.geom.WB_CoordinateTransform#applyAsVector(wblut.geom.WB_Transform)
 	 */
 	@Override
-	public WB_Vector applyAsVector(final WB_Transform3D T) {
+	public WB_Vector applyAsVector(final WB_Transform T) {
 		return T.applyAsVector(this);
 	}
 
@@ -1368,7 +1368,7 @@ public class WB_Vector extends WB_MutableCoordinate
 			final double p1y, final double p1z, final double p2x,
 			final double p2y, final double p2z) {
 		final WB_Vector result = new WB_Vector(this);
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, new WB_Vector(p1x, p1y, p1z),
 				new WB_Vector(p2x - p1x, p2y - p1y, p2z - p1z));
 		raa.applyAsVectorSelf(result);
@@ -1391,7 +1391,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	public WB_Vector rotateAboutAxis2P(final double angle, final WB_Coord p1,
 			final WB_Coord p2) {
 		final WB_Vector result = new WB_Vector(this);
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, p1, new WB_Vector(p1, p2));
 		raa.applyAsVectorSelf(result);
 		return result;
@@ -1408,7 +1408,7 @@ public class WB_Vector extends WB_MutableCoordinate
 			final double py, final double pz, final double ax, final double ay,
 			final double az) {
 		final WB_Vector result = new WB_Vector(this);
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, new WB_Vector(px, py, pz),
 				new WB_Vector(ax, ay, az));
 		raa.applyAsVectorSelf(result);
@@ -1424,7 +1424,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	public WB_Vector rotateAboutAxis(final double angle, final WB_Coord p,
 			final WB_Coord a) {
 		final WB_Vector result = new WB_Vector(this);
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, p, a);
 		raa.applyAsVectorSelf(result);
 		return result;
@@ -1440,7 +1440,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	public WB_Vector rotateAboutOrigin(final double angle, final double x,
 			final double y, final double z) {
 		final WB_Vector result = new WB_Vector(this);
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutOrigin(angle, new WB_Vector(x, y, z));
 		raa.applyAsVectorSelf(result);
 		return result;
@@ -1454,7 +1454,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	@Override
 	public WB_Vector rotateAboutOrigin(final double angle, final WB_Coord a) {
 		final WB_Vector result = new WB_Vector(this);
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutOrigin(angle, a);
 		raa.applyAsVectorSelf(result);
 		return result;
@@ -1496,7 +1496,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * wblut.geom.WB_MutableCoordinateMath#applySelf(wblut.geom.WB_Transform)
 	 */
 	@Override
-	public WB_Vector applySelf(final WB_Transform3D T) {
+	public WB_Vector applySelf(final WB_Transform T) {
 		return applyAsVectorSelf(T);
 	}
 
@@ -1506,7 +1506,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * WB_Transform )
 	 */
 	@Override
-	public WB_Vector applyAsPointSelf(final WB_Transform3D T) {
+	public WB_Vector applyAsPointSelf(final WB_Transform T) {
 		T.applyAsPointSelf(this);
 		return this;
 	}
@@ -1517,7 +1517,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * WB_Transform )
 	 */
 	@Override
-	public WB_Vector applyAsVectorSelf(final WB_Transform3D T) {
+	public WB_Vector applyAsVectorSelf(final WB_Transform T) {
 		T.applyAsVectorSelf(this);
 		return this;
 	}
@@ -1528,7 +1528,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 * WB_Transform )
 	 */
 	@Override
-	public WB_Vector applyAsNormalSelf(final WB_Transform3D T) {
+	public WB_Vector applyAsNormalSelf(final WB_Transform T) {
 		T.applyAsNormalSelf(this);
 		return this;
 	}
@@ -1566,7 +1566,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	public WB_Vector rotateAboutAxis2PSelf(final double angle, final double p1x,
 			final double p1y, final double p1z, final double p2x,
 			final double p2y, final double p2z) {
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, new WB_Vector(p1x, p1y, p1z),
 				new WB_Vector(p2x - p1x, p2y - p1y, p2z - p1z));
 		raa.applyAsVectorSelf(this);
@@ -1582,7 +1582,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	@Override
 	public WB_Vector rotateAboutAxis2PSelf(final double angle,
 			final WB_Coord p1, final WB_Coord p2) {
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, p1, new WB_Vector(p1, p2));
 		raa.applyAsVectorSelf(this);
 		return this;
@@ -1596,7 +1596,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	@Override
 	public WB_Vector rotateAboutAxisSelf(final double angle, final WB_Coord p,
 			final WB_Coord a) {
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, p, a);
 		raa.applyAsVectorSelf(this);
 		return this;
@@ -1612,7 +1612,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	public WB_Vector rotateAboutAxisSelf(final double angle, final double px,
 			final double py, final double pz, final double ax, final double ay,
 			final double az) {
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, new WB_Vector(px, py, pz),
 				new WB_Vector(ax, ay, az));
 		raa.applyAsVectorSelf(this);
@@ -1628,7 +1628,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	@Override
 	public WB_Vector rotateAboutOriginSelf(final double angle, final double x,
 			final double y, final double z) {
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutOrigin(angle, new WB_Vector(x, y, z));
 		raa.applyAsVectorSelf(this);
 		return this;
@@ -1642,7 +1642,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	@Override
 	public WB_Vector rotateAboutOriginSelf(final double angle,
 			final WB_Coord a) {
-		final WB_Transform3D raa = new WB_Transform3D();
+		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutOrigin(angle, a);
 		raa.applyAsVectorSelf(this);
 		return this;
@@ -1879,7 +1879,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public double getDistance(final WB_Coord p) {
-		return WB_CoordOp3D.getDistance3D(xd(), yd(), zd(), p.xd(), p.yd(),
+		return WB_CoordOp.getDistance3D(xd(), yd(), zd(), p.xd(), p.yd(),
 				p.zd());
 	}
 
@@ -1905,7 +1905,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public double getSqDistance(final WB_Coord p) {
-		return WB_CoordOp3D.getSqDistance3D(xd(), yd(), zd(), p.xd(), p.yd(),
+		return WB_CoordOp.getSqDistance3D(xd(), yd(), zd(), p.xd(), p.yd(),
 				p.zd());
 	}
 
@@ -1924,7 +1924,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public double getLength() {
-		return WB_CoordOp3D.getLength3D(xd(), yd(), zd());
+		return WB_CoordOp.getLength3D(xd(), yd(), zd());
 	}
 
 	/*
@@ -1946,7 +1946,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public double getSqLength() {
-		return WB_CoordOp3D.getSqLength3D(xd(), yd(), zd());
+		return WB_CoordOp.getSqLength3D(xd(), yd(), zd());
 	}
 
 	/*
@@ -1955,7 +1955,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public double getAngle(final WB_Coord p) {
-		return WB_CoordOp3D.getAngleBetween(xd(), yd(), zd(), p.xd(), p.yd(),
+		return WB_CoordOp.getAngleBetween(xd(), yd(), zd(), p.xd(), p.yd(),
 				p.zd());
 	}
 
@@ -1966,7 +1966,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public double getAngleNorm(final WB_Coord p) {
-		return WB_CoordOp3D.getAngleBetweenNorm(xd(), yd(), zd(), p.xd(),
+		return WB_CoordOp.getAngleBetweenNorm(xd(), yd(), zd(), p.xd(),
 				p.yd(), p.zd());
 	}
 
@@ -2003,7 +2003,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public boolean isCollinear(final WB_Coord p, final WB_Coord q) {
-		return WB_CoordOp3D.isCollinear(this, p, q);
+		return WB_CoordOp.isCollinear(this, p, q);
 	}
 
 	/**
@@ -2014,7 +2014,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public boolean isParallel(final WB_Coord p) {
-		return WB_CoordOp3D.isParallel(this, p);
+		return WB_CoordOp.isParallel(this, p);
 	}
 
 	/**
@@ -2026,7 +2026,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public boolean isParallel(final WB_Coord p, final double t) {
-		return WB_CoordOp3D.isParallel(this, p, t);
+		return WB_CoordOp.isParallel(this, p, t);
 	}
 
 	/**
@@ -2037,7 +2037,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public boolean isParallelNorm(final WB_Coord p) {
-		return WB_CoordOp3D.isParallelNorm(this, p);
+		return WB_CoordOp.isParallelNorm(this, p);
 	}
 
 	/**
@@ -2049,7 +2049,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public boolean isParallelNorm(final WB_Coord p, final double t) {
-		return WB_CoordOp3D.isParallelNorm(this, p, t);
+		return WB_CoordOp.isParallelNorm(this, p, t);
 	}
 
 	/**
@@ -2060,7 +2060,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public boolean isOrthogonal(final WB_Coord p) {
-		return WB_CoordOp3D.isOrthogonal(this, p);
+		return WB_CoordOp.isOrthogonal(this, p);
 	}
 
 	/**
@@ -2072,7 +2072,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public boolean isOrthogonal(final WB_Coord p, final double t) {
-		return WB_CoordOp3D.isOrthogonal(this, p, t);
+		return WB_CoordOp.isOrthogonal(this, p, t);
 	}
 
 	/**
@@ -2083,7 +2083,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public boolean isOrthogonalNorm(final WB_Coord p) {
-		return WB_CoordOp3D.isOrthogonalNorm(this, p);
+		return WB_CoordOp.isOrthogonalNorm(this, p);
 	}
 
 	/**
@@ -2095,7 +2095,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public boolean isOrthogonalNorm(final WB_Coord p, final double t) {
-		return WB_CoordOp3D.isOrthogonalNorm(this, p, t);
+		return WB_CoordOp.isOrthogonalNorm(this, p, t);
 	}
 
 	/*
@@ -2104,7 +2104,7 @@ public class WB_Vector extends WB_MutableCoordinate
 	 */
 	@Override
 	public boolean isZero() {
-		return WB_CoordOp3D.isZero3D(xd(), yd(), zd());
+		return WB_CoordOp.isZero3D(xd(), yd(), zd());
 	}
 
 	/**

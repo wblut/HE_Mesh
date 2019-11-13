@@ -374,7 +374,7 @@ public class HE_Vertex extends HE_MeshElement implements WB_MutableCoord {
 		return _halfedge == null;
 	}
 	
-	public WB_Coord getVertexNormal() {
+	public WB_Vector getVertexNormal() {
 		return HE_MeshOp.getVertexNormal(this);
 	}
 	
@@ -1031,7 +1031,7 @@ public class HE_Vertex extends HE_MeshElement implements WB_MutableCoord {
 	 *
 	 * @return
 	 */
-	public WB_Coord getVertexNormalAngle() {
+	public WB_Vector getVertexNormalAngle() {
 		return HE_MeshOp.getVertexNormal(this);
 	}
 
@@ -1040,7 +1040,7 @@ public class HE_Vertex extends HE_MeshElement implements WB_MutableCoord {
 	 *
 	 * @return
 	 */
-	public WB_Coord getVertexNormalArea() {
+	public WB_Vector getVertexNormalArea() {
 		return HE_MeshOp.getVertexNormalArea(this);
 	}
 
@@ -1049,7 +1049,7 @@ public class HE_Vertex extends HE_MeshElement implements WB_MutableCoord {
 	 *
 	 * @return
 	 */
-	public WB_Coord getVertexNormalAverage() {
+	public WB_Vector getVertexNormalAverage() {
 		return HE_MeshOp.getVertexNormalAverage(this);
 	}
 
@@ -1058,7 +1058,7 @@ public class HE_Vertex extends HE_MeshElement implements WB_MutableCoord {
 	 *
 	 * @return
 	 */
-	public WB_Coord getVertexNormalGaussianCurvature() {
+	public WB_Vector getVertexNormalGaussianCurvature() {
 		return HE_MeshOp.getVertexNormalGaussianCurvature(this);
 	}
 
@@ -1068,7 +1068,7 @@ public class HE_Vertex extends HE_MeshElement implements WB_MutableCoord {
 	 *
 	 * @return
 	 */
-	public WB_Coord getVertexNormalMeanCurvature() {
+	public WB_Vector getVertexNormalMeanCurvature() {
 		return HE_MeshOp.getVertexNormalMeanCurvature(this);
 	}
 
@@ -1078,7 +1078,7 @@ public class HE_Vertex extends HE_MeshElement implements WB_MutableCoord {
 	 *
 	 * @return
 	 */
-	public WB_Coord getVertexNormalSphereInscribed() {
+	public WB_Vector getVertexNormalSphereInscribed() {
 		return HE_MeshOp.getVertexNormalSphereInscribed(this);
 	}
 

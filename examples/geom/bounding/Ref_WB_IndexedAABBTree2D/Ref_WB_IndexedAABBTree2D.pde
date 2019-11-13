@@ -25,7 +25,7 @@ void setup() {
   for (int i=0; i<2000; i++) {
     points.add(source.nextPoint());
   }
-  triangulation=WB_Triangulate.triangulate2D(points);
+  triangulation=WB_TriangulationFactory.triangulate2D(points);
   tree=new WB_IndexedAABBTree2D(triangulation, WB_CoordCollection.getCollection(points),1);
 }
 

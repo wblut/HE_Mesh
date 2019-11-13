@@ -42,7 +42,7 @@ void createMesh() {
   creator.setU(16).setV(8).setRadius(50);
   creator.setDonutParameters(0, 10, 10, 10, 3, 6, 12, 12, 3, 1);
   mesh=new HE_Mesh(creator);
-  mesh.modify(new HEM_Extrude().setDistance(100).setChamfer(1));
+  mesh.modify(new HEM_Extrude().setDistance(70).setChamfer(1));
   mesh.subdivide(new HES_Planar().setRandom(true).setRange(0.8));
 }
 

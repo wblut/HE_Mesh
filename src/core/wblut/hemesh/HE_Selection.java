@@ -13,7 +13,7 @@ import java.util.List;
 import org.eclipse.collections.impl.list.mutable.FastList;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryFactory3D;
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Plane;
 
 /**
@@ -29,7 +29,7 @@ public class HE_Selection extends HE_MeshElement
 	 */
 	private HE_Mesh					parent;
 	String							createdBy;
-	protected WB_GeometryFactory3D	gf	= new WB_GeometryFactory3D();
+	protected WB_GeometryFactory	gf	= new WB_GeometryFactory();
 	private HE_RAS<HE_Vertex>		vertices;
 	private HE_RAS<HE_Halfedge>		halfedges;
 	private HE_RAS<HE_Halfedge>		edges;

@@ -8,7 +8,7 @@ package wblut.nurbs;
 
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_Curve;
-import wblut.geom.WB_GeometryFactory3D;
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PointHomogeneous;
 import wblut.geom.WB_Vector;
@@ -21,7 +21,7 @@ public class WB_Bezier implements WB_Curve {
 	/**
 	 *
 	 */
-	private static WB_GeometryFactory3D	gf	= new WB_GeometryFactory3D();
+	private static WB_GeometryFactory	gf	= new WB_GeometryFactory();
 	/**
 	 *
 	 */

@@ -26,7 +26,6 @@ public class HEM_Smooth extends HEM_Modifier {
 	 *
 	 */
 	private boolean	keepBoundary;
-	private boolean	keepEdges;
 	private double	lambda;
 	/**
 	 *
@@ -75,10 +74,6 @@ public class HEM_Smooth extends HEM_Modifier {
 		return this;
 	}
 
-	public HEM_Smooth setKeepEdges(final boolean b) {
-		keepEdges = b;
-		return this;
-	}
 
 	/**
 	 *

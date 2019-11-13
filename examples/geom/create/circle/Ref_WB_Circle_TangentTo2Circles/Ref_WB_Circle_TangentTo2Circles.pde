@@ -2,7 +2,7 @@ import wblut.processing.*;
 import wblut.geom.*;
 import java.util.List;
 
-WB_GeometryFactory3D gf;
+WB_GeometryFactory gf;
 WB_Render2D render;
 
 WB_Circle C1,C2;
@@ -11,7 +11,7 @@ float radius;
 
 void setup() {
   size(800, 800);
-  gf=new WB_GeometryFactory3D();
+  gf=new WB_GeometryFactory();
   render=new WB_Render2D(this);
   radius=200;
   C1= gf.createCircleWithRadius(-200,0,100);

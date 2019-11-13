@@ -23,7 +23,7 @@ import wblut.math.WB_Math;
 
 public class WB_Network {
 
-	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	private static WB_GeometryFactory gf = new WB_GeometryFactory();
 
 	private List<Connection> connections;
 
@@ -597,7 +597,7 @@ public class WB_Network {
 		for (int i = 0; i < connections.size(); i++) {
 			final Connection connection = connections.get(i);
 			final WB_Segment S = new WB_Segment(connection.start(), connection.end());
-			d = Math.min(d, WB_GeometryOp3D.getDistance3D(p, S));
+			d = Math.min(d, WB_GeometryOp.getDistance3D(p, S));
 		}
 		return d;
 	}
@@ -612,7 +612,7 @@ public class WB_Network {
 		double mind = Double.POSITIVE_INFINITY;
 		int q = -1;
 		for (int i = 0; i < nodes.size(); i++) {
-			final double d = WB_CoordOp3D.getSqDistance3D(p, nodes.get(i));
+			final double d = WB_CoordOp.getSqDistance3D(p, nodes.get(i));
 			if (d < mind) {
 				mind = d;
 				q = i;
@@ -633,10 +633,10 @@ public class WB_Network {
 		for (int i = 0; i < connections.size(); i++) {
 			final Connection connection = connections.get(i);
 			final WB_Segment S = new WB_Segment(connection.start(), connection.end());
-			final double d = WB_GeometryOp3D.getDistance3D(p, S);
+			final double d = WB_GeometryOp.getDistance3D(p, S);
 			if (d < mind) {
 				mind = d;
-				q = WB_GeometryOp3D.getClosestPoint3D(S, p);
+				q = WB_GeometryOp.getClosestPoint3D(S, p);
 			}
 		}
 		return q;
@@ -655,7 +655,7 @@ public class WB_Network {
 		for (int i = 0; i < connections.size(); i++) {
 			final Connection connection = connections.get(i);
 			final WB_Segment S = new WB_Segment(connection.start(), connection.end());
-			d = Math.min(d, WB_GeometryOp3D.getDistance3D(new WB_Point(x, y, z), S));
+			d = Math.min(d, WB_GeometryOp.getDistance3D(new WB_Point(x, y, z), S));
 		}
 		return d;
 	}
@@ -674,10 +674,10 @@ public class WB_Network {
 		for (int i = 0; i < connections.size(); i++) {
 			final Connection connection = connections.get(i);
 			final WB_Segment S = new WB_Segment(connection.start(), connection.end());
-			final double d = WB_GeometryOp3D.getDistance3D(new WB_Point(x, y, z), S);
+			final double d = WB_GeometryOp.getDistance3D(new WB_Point(x, y, z), S);
 			if (d < mind) {
 				mind = d;
-				q = WB_GeometryOp3D.getClosestPoint3D(S, new WB_Point(x, y, z));
+				q = WB_GeometryOp.getClosestPoint3D(S, new WB_Point(x, y, z));
 			}
 		}
 		return q;
@@ -806,20 +806,56 @@ public class WB_Network {
 		}
 		return result;
 	}
+	
+	public WB_Network clipConnections(WB_AABB aabb) {
+		List<Connection> toRemove =new FastList<Connection>();
+		for(Connection c: connections) {
+			if(! aabb.contains(c.start())||! aabb.contains(c.end())) {
+				toRemove.add(c);
+			}
+			
+			
+		}
+		for(Connection c:toRemove) {
+			removeConnection(c);
+		}
+		return this;
+		
+		
+	}
+	
+	
+	public WB_Network clipConnections(WB_Coord center, double d) {
+		double d2=d*d;
+		List<Connection> toRemove =new FastList<Connection>();
+		for(Connection c: connections) {
+			if(WB_Point.getSqDistance3D(center, c.start())>d2|| WB_Point.getSqDistance3D(center, c.end())>d2) {
+				toRemove.add(c);
+			}
+			
+			
+		}
+		for(Connection c:toRemove) {
+			removeConnection(c);
+		}
+		return this;
+		
+		
+	}
 
 	/**
 	 *
 	 *
-	 * @param n
-	 * @param r
-	 * @param d
-	 * @param l
-	 * @param rr
-	 * @param dr
+	 * @param facets
+	 * @param connectionRadius
+	 * @param segmentLength
+	 * @param nodeDetail
+	 * @param nodeRadius
+	 * @param noise
 	 * @return
 	 */
-	public List<WB_Point> toPointCloud(final int n, final double r, final double d, final int l, final double rr,
-			final double dr) {
+	public List<WB_Point> toPointCloud(final int facets, final double connectionRadius, final double segmentLength, final int nodeDetail, final double nodeRadius,
+			final double noise) {
 		final List<WB_Point> points = new FastList<WB_Point>();
 		double sl, dsl;
 		int divs;
@@ -827,33 +863,33 @@ public class WB_Network {
 		WB_Vector u, localu, v;
 		WB_Point p;
 		final WB_RandomOnSphere rnd = new WB_RandomOnSphere();
-		final double da = 2.0 * Math.PI / n;
+		final double da = 2.0 * Math.PI / facets;
 		for (final Connection connection : connections) {
-			sl = connection.getLength() - 2 * rr;
+			sl = connection.getLength() - 2 * nodeRadius;
 			if (sl > 0) {
-				divs = (int) WB_Math.max(1, Math.round(sl / d));
+				divs = (int) WB_Math.max(1, Math.round(sl / segmentLength));
 				dsl = sl / divs;
 				P = connection.toPlane();
-				u = P.getU().mul(r);
+				u = P.getU().mul(connectionRadius);
 				v = connection.toNormVector().copy();
-				connection.start().addMul(rr, v);
+				connection.start().addMul(nodeRadius, v);
 				v.mulSelf(dsl);
 				for (int i = 0; i <= divs; i++) {
-					for (int j = 0; j < n; j++) {
+					for (int j = 0; j < facets; j++) {
 						p = connection.start().addMul(i, v);
 						localu = u.copy();
-						localu.rotateAboutAxisSelf(j * da, new WB_Point(), P.getNormal());
+						localu.rotateAboutAxisSelf(j * da+((i%2==0)?0.0:0.5*da), new WB_Point(), P.getNormal());
 						p.addSelf(localu);
-						p.addSelf(rnd.nextVector().mulSelf(dr));
+						p.addSelf(rnd.nextVector().mulSelf(noise));
 						points.add(p);
 					}
 				}
 			}
 		}
 		for (final Node node : nodes) {
-			final HE_Mesh ball = new HE_Mesh(new HEC_Geodesic().setRadius(rr).setB(l).setC(0).setCenter(node));
+			final HE_Mesh ball = new HE_Mesh(new HEC_Geodesic().setRadius(nodeRadius).setB(nodeDetail).setC(0).setCenter(node));
 			for (final WB_Coord q : ball.getVerticesAsCoord()) {
-				points.add(new WB_Point(q).addSelf(rnd.nextVector().mulSelf(dr)));
+				points.add(new WB_Point(q).addSelf(rnd.nextVector().mulSelf(noise)));
 			}
 		}
 		return points;
@@ -1238,7 +1274,7 @@ public class WB_Network {
 		 * @return
 		 */
 		public double getSqLength() {
-			return WB_CoordOp3D.getSqDistance3D(end(), start());
+			return WB_CoordOp.getSqDistance3D(end(), start());
 		}
 
 		/**
@@ -1247,7 +1283,7 @@ public class WB_Network {
 		 * @return
 		 */
 		public double getLength() {
-			return WB_CoordOp3D.getDistance3D(end(), start());
+			return WB_CoordOp.getDistance3D(end(), start());
 		}
 
 		/**

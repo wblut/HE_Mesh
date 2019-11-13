@@ -250,12 +250,12 @@ public class WB_Ray extends WB_Line {
 	}
 
 	@Override
-	public WB_Ray apply(WB_Transform3D T) {
+	public WB_Ray apply(WB_Transform T) {
 		return new WB_Ray(origin.apply(T), direction.apply(T));
 	}
 
 	@Override
-	public WB_Ray applySelf(WB_Transform3D T) {
+	public WB_Ray applySelf(WB_Transform T) {
 		origin.applySelf(T);
 		direction.applySelf(T);
 		return this;

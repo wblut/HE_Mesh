@@ -16,10 +16,6 @@ import processing.core.PImage;
 import processing.core.PShape;
 import wblut.geom.WB_BinaryGrid3D;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_CoordCollection;
-import wblut.geom.WB_GeometryFactory3D;
-import wblut.geom.WB_SimpleMesh;
-import wblut.geom.WB_Vector;
 import wblut.hemesh.HEC_IsoSkin;
 import wblut.hemesh.HE_Face;
 import wblut.hemesh.HE_Halfedge;
@@ -34,7 +30,7 @@ import wblut.hemesh.HE_Vertex;
  *
  */
 public class WB_PShapeFactory {
-	private static WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
+
 
 	/**
 	 *
@@ -643,18 +639,18 @@ public class WB_PShapeFactory {
 			Iterator<HE_Halfedge> eItr = mesh.eItr();
 			HE_Halfedge e;
 			HE_Vertex v;
-			WB_Coord fn;
+
 			
 			retained.beginShape(PApplet.LINES);
 			while (eItr.hasNext()) {
 				e = eItr.next();
 				v = e.getVertex();
-				fn = v.getVertexNormal();
+
 				retained.vertex(v.xf() , v.yf(),
 						v.zf() );
 
 				v = e.getEndVertex();
-				fn = v.getVertexNormal();
+
 				retained.vertex(v.xf() , v.yf() ,
 						v.zf() );
 
