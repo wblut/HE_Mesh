@@ -4,7 +4,7 @@ public class WB_Version {
 	public static final WB_Version	CURRENT_VERSION	= new WB_Version();
 	public static final int			MAJOR			= 2019;
 	public static final int			MINOR			= 0;
-	public static final int			PATCH			= 1;
+	public static final int			PATCH			= 2;
 	private static final String		releaseInfo		= "Phoenix";
 
 	public static void main(final String[] args) {

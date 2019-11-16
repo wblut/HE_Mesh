@@ -9,18 +9,18 @@
 
 package wblut.hemesh;
 
-import wblut.geom.WB_Transform;
+import wblut.geom.WB_Transform3D;
 
 /**
  * @author FVH
  *
  */
-public class HEC_Transform extends HEC_Creator {
+public class HEC_Transform3D extends HEC_Creator {
 
-	private WB_Transform T;
+	private WB_Transform3D T;
 	private HE_Mesh source;
 
-	public HEC_Transform() {
+	public HEC_Transform3D() {
 		super();
 		T = null;
 		source = null;
@@ -28,7 +28,7 @@ public class HEC_Transform extends HEC_Creator {
 
 	}
 
-	public HEC_Transform(final HE_Mesh source, final WB_Transform T) {
+	public HEC_Transform3D(final HE_Mesh source, final WB_Transform3D T) {
 		super();
 		this.T = T;
 		this.source = source;
@@ -36,13 +36,13 @@ public class HEC_Transform extends HEC_Creator {
 
 	}
 
-	public HEC_Transform setTransform(final WB_Transform T) {
+	public HEC_Transform3D setTransform(final WB_Transform3D T) {
 		this.T = T;
 		return this;
 
 	}
 
-	public HEC_Transform setSource(final HE_Mesh mesh) {
+	public HEC_Transform3D setSource(final HE_Mesh mesh) {
 		this.source = mesh;
 		return this;
 

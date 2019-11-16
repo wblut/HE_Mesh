@@ -17,7 +17,7 @@ import wblut.geom.WB_DefaultMap3D;
 import wblut.geom.WB_Map;
 import wblut.geom.WB_ModelViewMap;
 import wblut.geom.WB_Point;
-import wblut.geom.WB_Transform;
+import wblut.geom.WB_Transform3D;
 import wblut.geom.WB_TransformMap;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
@@ -252,14 +252,14 @@ public abstract class HEC_Creator extends HE_Machine {
 		return this;
 	}
 
-	public HEC_Creator setToModelview(final WB_Transform T) {
+	public HEC_Creator setToModelview(final WB_Transform3D T) {
 		parameters.set("map", new WB_TransformMap(T));
 		parameters.set("modelview", true);
 		return this;
 	}
 
 	public HEC_Creator setToModelview(final WB_CoordinateSystem CS) {
-		WB_Transform T = new WB_Transform();
+		WB_Transform3D T = new WB_Transform3D();
 		T.addFromCSToWorld(CS);
 		parameters.set("map", new WB_TransformMap(T));
 		parameters.set("modelview", true);

@@ -15,7 +15,7 @@ import wblut.math.WB_Epsilon;
  * @author FVH
  *
  */
-public interface WB_PointGenerator extends WB_PointFactory{
+public interface WB_PointFactory{
 
 	public static WB_Point ORIGIN() {
 		return new WB_Point();

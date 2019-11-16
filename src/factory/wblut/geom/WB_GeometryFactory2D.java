@@ -140,7 +140,7 @@ public class WB_GeometryFactory2D {
 	 * @return
 	 */
 	public WB_CoordinateSystem createTransformedCS(
-			final WB_CoordinateSystem CS, final WB_Transform T,
+			final WB_CoordinateSystem CS, final WB_Transform3D T,
 			final WB_CoordinateSystem parent) {
 		return CS.apply(T, parent);
 	}
@@ -153,7 +153,7 @@ public class WB_GeometryFactory2D {
 	 * @return
 	 */
 	public WB_CoordinateSystem createTransformedCS(
-			final WB_CoordinateSystem CS, final WB_Transform T) {
+			final WB_CoordinateSystem CS, final WB_Transform3D T) {
 		return CS.apply(T);
 	}
 
@@ -2808,7 +2808,7 @@ public class WB_GeometryFactory2D {
 					WB_CoordOp2D.getDistance2D(C1.getCenter(), C2.getCenter()))
 							? createNormalizedVectorFromTo2D(C1.getCenter(),
 									C2.getCenter())
-							: WB_VectorFactory.X();
+							: WB_VectorGenerator.X();
 			WB_Point invcenter = WB_Point.addMul(C1.getCenter(),
 					0.5 * (C1.getRadius() + C2.getRadius()), v);
 			if (WB_Epsilon.isZero(invcenter.getDistance2D(p))) {
@@ -2837,7 +2837,7 @@ public class WB_GeometryFactory2D {
 					WB_CoordOp2D.getDistance2D(C1.getCenter(), C2.getCenter()))
 							? createNormalizedVectorFromTo2D(C2.getCenter(),
 									C1.getCenter())
-							: WB_VectorFactory.X();
+							: WB_VectorGenerator.X();
 			WB_Point invcenter = WB_Point.addMul(C2.getCenter(),
 					0.5 * (C1.getRadius() + C2.getRadius()), v);
 			if (WB_Epsilon.isZero(invcenter.getDistance2D(p))) {
@@ -3165,11 +3165,11 @@ public class WB_GeometryFactory2D {
 							inversion);
 					final WB_Circle invL = createCirclePPP(p, p1, p2);
 					p1 = createInversionPoint2D(WB_Point.addMul(C.getCenter(),
-							C.getRadius(), WB_VectorFactory.X()), inversion);
+							C.getRadius(), WB_VectorGenerator.X()), inversion);
 					p2 = createInversionPoint2D(WB_Point.addMul(C.getCenter(),
-							-C.getRadius(),WB_VectorFactory.X()), inversion);
+							-C.getRadius(),WB_VectorGenerator.X()), inversion);
 					final WB_Point p3 = createInversionPoint2D(WB_Point.addMul(
-							C.getCenter(), C.getRadius(), WB_VectorFactory.Y()), inversion);
+							C.getCenter(), C.getRadius(), WB_VectorGenerator.Y()), inversion);
 					final WB_Circle invC = createCirclePPP(p1, p2, p3);
 					final List<WB_Line> invResult = createLinesTangentTo2Circles(
 							invL, invC);
@@ -3188,13 +3188,13 @@ public class WB_GeometryFactory2D {
 						inversion);
 				final WB_Circle invL = createCirclePPP(p, p1, p2);
 				p1 = createInversionPoint2D(
-						WB_Point.addMul(C.getCenter(), C.getRadius(),WB_VectorFactory.X()),
+						WB_Point.addMul(C.getCenter(), C.getRadius(),WB_VectorGenerator.X()),
 						inversion);
 				p2 = createInversionPoint2D(
-						WB_Point.addMul(C.getCenter(), -C.getRadius(), WB_VectorFactory.X()),
+						WB_Point.addMul(C.getCenter(), -C.getRadius(), WB_VectorGenerator.X()),
 						inversion);
 				final WB_Point p3 = createInversionPoint2D(
-						WB_Point.addMul(C.getCenter(), C.getRadius(), WB_VectorFactory.Y()),
+						WB_Point.addMul(C.getCenter(), C.getRadius(), WB_VectorGenerator.Y()),
 						inversion);
 				final WB_Circle invC = createCirclePPP(p1, p2, p3);
 				final List<WB_Line> invResult = createLinesTangentTo2Circles(

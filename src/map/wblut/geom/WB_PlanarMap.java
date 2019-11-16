@@ -29,7 +29,7 @@ public class WB_PlanarMap extends WB_CoordinateSystem implements WB_Map2D {
 	/**
 	 *
 	 */
-	private final WB_Transform T2D3D;
+	private final WB_Transform3D T2D3D;
 	/**
 	 *
 	 */

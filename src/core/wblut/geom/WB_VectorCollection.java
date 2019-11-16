@@ -49,7 +49,7 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 		return new WB_VectorCollectionList(coords);
 	}
 	
-	public static WB_VectorCollection getCollection(WB_VectorFactory factory, int numberOfPoints) { 
+	public static WB_VectorCollection getCollection(WB_VectorGenerator factory, int numberOfPoints) { 
 	return new WB_VectorCollectionFactory(factory, numberOfPoints);
 	}
 	
@@ -74,7 +74,7 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 	}
 
 
-	public WB_VectorCollection noise(final WB_VectorFactory factory) {
+	public WB_VectorCollection noise(final WB_VectorGenerator factory) {
 		return new WB_VectorCollectionNoise(this, factory);
 	}
 
@@ -330,7 +330,7 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 	static class WB_VectorCollectionFactory extends WB_VectorCollection {
 		WB_Vector[] array;
 
-		WB_VectorCollectionFactory(final WB_VectorFactory factory, int numberOfPoints) {
+		WB_VectorCollectionFactory(final WB_VectorGenerator factory, int numberOfPoints) {
 			this.array = new WB_Vector[numberOfPoints] ;
 			for(int i=0;i<numberOfPoints;i++) {
 				array[i]=factory.nextVector();
@@ -429,7 +429,7 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 		WB_Vector[]			noise;
 
 		WB_VectorCollectionNoise(final WB_VectorCollection source,
-				final WB_VectorFactory factory) {
+				final WB_VectorGenerator factory) {
 			this.source = source;
 			noise = new WB_Vector[source.size()];
 			for (int i = 0; i < source.size(); i++) {
@@ -655,7 +655,7 @@ public abstract class WB_VectorCollection extends WB_CoordCollection {
 				final double d) {
 			this.source = source;
 			noise = new WB_Vector[source.size()];
-			WB_VectorFactory factory = new WB_RandomOnSphere();
+			WB_VectorGenerator factory = new WB_RandomOnSphere();
 			for (int i = 0; i < source.size(); i++) {
 				noise[i] = factory.nextVector().mulSelf(d);
 			}

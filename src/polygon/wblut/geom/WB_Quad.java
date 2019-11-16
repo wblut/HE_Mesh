@@ -121,12 +121,12 @@ public class WB_Quad implements WB_Geometry {
 	}
 
 	@Override
-	public WB_Quad apply(WB_Transform T) {
+	public WB_Quad apply(WB_Transform3D T) {
 		return new WB_Quad(p1.apply(T), p2.apply(T), p3.apply(T), p4.apply(T));
 	}
 
 	@Override
-	public WB_Quad applySelf(WB_Transform T) {
+	public WB_Quad applySelf(WB_Transform3D T) {
 		p1.applySelf(T);
 		p2.applySelf(T);
 		p3.applySelf(T);

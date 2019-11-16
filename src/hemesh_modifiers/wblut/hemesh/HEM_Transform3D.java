@@ -9,29 +9,29 @@
 
 package wblut.hemesh;
 
-import wblut.geom.WB_Transform;
+import wblut.geom.WB_Transform3D;
 
 /**
  * @author FVH
  *
  */
-public class HEM_Transform extends HEM_Modifier {
+public class HEM_Transform3D extends HEM_Modifier {
 
-	private WB_Transform T;
+	private WB_Transform3D T;
 
-	public HEM_Transform() {
+	public HEM_Transform3D() {
 		super();
 		T = null;
 
 	}
 
-	public HEM_Transform(final WB_Transform T) {
+	public HEM_Transform3D(final WB_Transform3D T) {
 		super();
 		this.T = T;
 
 	}
 
-	public HEM_Transform setTransform(final WB_Transform T) {
+	public HEM_Transform3D setTransform(final WB_Transform3D T) {
 		this.T = T;
 		return this;
 

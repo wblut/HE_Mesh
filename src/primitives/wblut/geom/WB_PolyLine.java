@@ -366,7 +366,7 @@ public class WB_PolyLine implements WB_Geometry {
 	 * @see wblut.geom.WB_Geometry#apply(wblut.geom.WB_Transform)
 	 */
 	@Override
-	public WB_PolyLine apply(final WB_Transform T) {
+	public WB_PolyLine apply(final WB_Transform3D T) {
 		List<WB_Point> tpoints = new FastList<WB_Point>();
 		for (WB_Point p : points) {
 			tpoints.add(p.applyAsPoint(T));
@@ -394,7 +394,7 @@ public class WB_PolyLine implements WB_Geometry {
 	}
 
 	@Override
-	public WB_PolyLine applySelf(WB_Transform T) {
+	public WB_PolyLine applySelf(WB_Transform3D T) {
 		for (WB_Point p : points) {
 			p.applyAsPointSelf(T);
 		}

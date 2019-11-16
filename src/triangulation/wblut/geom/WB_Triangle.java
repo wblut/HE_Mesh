@@ -524,13 +524,13 @@ public class WB_Triangle implements WB_Geometry {
 	}
 
 	@Override
-	public WB_Triangle apply(WB_Transform T) {
+	public WB_Triangle apply(WB_Transform3D T) {
 		return new WB_Triangle(new WB_Point(p1).apply(T),
 				new WB_Point(p2).apply(T), new WB_Point(p3).apply(T));
 	}
 
 	@Override
-	public WB_Triangle applySelf(WB_Transform T) {
+	public WB_Triangle applySelf(WB_Transform3D T) {
 		p1 = new WB_Point(p1).applySelf(T);
 		p2 = new WB_Point(p2).applySelf(T);
 		p3 = new WB_Point(p3).applySelf(T);

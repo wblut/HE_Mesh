@@ -98,7 +98,7 @@ public class WB_Circle implements WB_Geometry {
 	 * @see wblut.geom.WB_Geometry#apply(wblut.geom.WB_Transform)
 	 */
 	@Override
-	public WB_Circle apply(final WB_Transform T) {
+	public WB_Circle apply(final WB_Transform3D T) {
 		WB_Point p = geometryfactory.createPoint(center).applyAsPointSelf(T);
 		WB_Point q = geometryfactory.createPoint(center).addSelf(radius, 0, 0)
 				.applyAsPointSelf(T);
@@ -115,7 +115,7 @@ public class WB_Circle implements WB_Geometry {
 	 * @return
 	 */
 	@Override
-	public WB_Circle applySelf(final WB_Transform T) {
+	public WB_Circle applySelf(final WB_Transform3D T) {
 		WB_Point p = geometryfactory.createPoint(center).applyAsPointSelf(T);
 		WB_Point q = geometryfactory.createPoint(center).addSelf(radius, 0, 0)
 				.applyAsPointSelf(T);
@@ -250,7 +250,7 @@ public class WB_Circle implements WB_Geometry {
 
 	public WB_Point[] getPoints(final int n, final double phase) {
 		WB_Plane P = new WB_Plane(center, normal);
-		WB_Transform T = new WB_Transform();
+		WB_Transform3D T = new WB_Transform3D();
 		T.addFromCSToWorld(new WB_CoordinateSystem(P));
 		double da = 2.0 * Math.PI / n;
 		WB_Point[] result = new WB_Point[n];
@@ -265,7 +265,7 @@ public class WB_Circle implements WB_Geometry {
 
 	public WB_Point[] getPoints(final int n) {
 		WB_Plane P = new WB_Plane(center, normal);
-		WB_Transform T = new WB_Transform();
+		WB_Transform3D T = new WB_Transform3D();
 		T.addFromCSToWorld(new WB_CoordinateSystem(P));
 		double da = 2.0 * Math.PI / n;
 		WB_Point[] result = new WB_Point[n];
@@ -280,7 +280,7 @@ public class WB_Circle implements WB_Geometry {
 
 	public double[] getPointsAsArray(final int n) {
 		WB_Plane P = new WB_Plane(center, normal);
-		WB_Transform T = new WB_Transform();
+		WB_Transform3D T = new WB_Transform3D();
 		T.addFromCSToWorld(new WB_CoordinateSystem(P));
 		double da = 2.0 * Math.PI / n;
 		double[] result = new double[3 * n];

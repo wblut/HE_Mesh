@@ -1,5 +1,5 @@
 package wblut.geom;
 
-public interface WB_RandomVector extends WB_VectorFactory{
+public interface WB_RandomVector extends WB_VectorGenerator{
 
 }

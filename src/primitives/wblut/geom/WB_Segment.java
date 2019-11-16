@@ -269,14 +269,14 @@ public class WB_Segment extends WB_Line implements Comparable<WB_Segment> {
 	}
 
 	@Override
-	public WB_Segment apply(final WB_Transform T) {
+	public WB_Segment apply(final WB_Transform3D T) {
 		return geometryfactory.createSegment(
 				new WB_Point(origin).applyAsPoint(T),
 				new WB_Point(endpoint).applyAsPoint(T));
 	}
 
 	@Override
-	public WB_Segment applySelf(WB_Transform T) {
+	public WB_Segment applySelf(WB_Transform3D T) {
 		origin.applySelf(T);
 		endpoint.applySelf(T);
 		direction.applySelf(T);

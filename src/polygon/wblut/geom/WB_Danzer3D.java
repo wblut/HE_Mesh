@@ -355,7 +355,7 @@ public class WB_Danzer3D {
 		}
 
 		@Override
-		public WB_DanzerTile3D apply(final WB_Transform T) {
+		public WB_DanzerTile3D apply(final WB_Transform3D T) {
 			return new WB_DanzerTile3D(p1.applyAsPoint(T), p2.applyAsPoint(T), p3.applyAsPoint(T), p4.applyAsPoint(T),
 					type, generation);
 		}

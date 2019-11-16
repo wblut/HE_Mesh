@@ -168,7 +168,7 @@ public class WB_Arc implements WB_Curve {
 
 	public WB_Point[] getPoints(final int n, final double phase) {
 		WB_Plane P = new WB_Plane(center, normal);
-		WB_Transform T = new WB_Transform();
+		WB_Transform3D T = new WB_Transform3D();
 		T.addFromCSToWorld(new WB_CoordinateSystem(P));
 		double da = 2.0 * Math.PI / n;
 		WB_Point[] result = new WB_Point[n];
@@ -183,7 +183,7 @@ public class WB_Arc implements WB_Curve {
 
 	public WB_Point[] getPoints(final int n) {
 		WB_Plane P = new WB_Plane(center, normal);
-		WB_Transform T = new WB_Transform();
+		WB_Transform3D T = new WB_Transform3D();
 		T.addFromCSToWorld(new WB_CoordinateSystem(P));
 		double da = 2.0 * Math.PI / n;
 		WB_Point[] result = new WB_Point[n];
@@ -198,7 +198,7 @@ public class WB_Arc implements WB_Curve {
 
 	public double[] getPointsAsArray(final int n) {
 		WB_Plane P = new WB_Plane(center, normal);
-		WB_Transform T = new WB_Transform();
+		WB_Transform3D T = new WB_Transform3D();
 		T.addFromCSToWorld(new WB_CoordinateSystem(P));
 		double da = 2.0 * Math.PI / n;
 		double[] result = new double[3 * n];
@@ -225,7 +225,7 @@ public class WB_Arc implements WB_Curve {
 
 	public WB_Point getPointOnCurve(double u) {
 		WB_Plane P = new WB_Plane(center, normal);
-		WB_Transform T = new WB_Transform();
+		WB_Transform3D T = new WB_Transform3D();
 		T.addFromCSToWorld(new WB_CoordinateSystem(P));
 		WB_Point p = new WB_Point(radius * Math.cos(u), radius * Math.sin(u));
 		p.applySelf(T);
@@ -234,7 +234,7 @@ public class WB_Arc implements WB_Curve {
 
 	public WB_Vector getDirectionOnCurve(double u) {
 		WB_Plane P = new WB_Plane(center, normal);
-		WB_Transform T = new WB_Transform();
+		WB_Transform3D T = new WB_Transform3D();
 		T.addFromCSToWorld(new WB_CoordinateSystem(P));
 		WB_Point p = new WB_Point(-Math.sin(u), Math.cos(u));
 		p.applySelf(T);
@@ -243,7 +243,7 @@ public class WB_Arc implements WB_Curve {
 
 	public WB_Vector getDerivative(double u) {
 		WB_Plane P = new WB_Plane(center, normal);
-		WB_Transform T = new WB_Transform();
+		WB_Transform3D T = new WB_Transform3D();
 		T.addFromCSToWorld(new WB_CoordinateSystem(P));
 		WB_Point p = new WB_Point(-radius * Math.sin(u), radius * Math.cos(u));
 		p.applySelf(T);

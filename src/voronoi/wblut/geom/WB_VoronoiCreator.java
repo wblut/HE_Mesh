@@ -12,9 +12,9 @@ package wblut.geom;
 /**
  *
  */
-public class WB_Voronoi extends WB_VoronoiFactory {
+public class WB_VoronoiCreator extends WB_VoronoiFactory {
 
-	private WB_Voronoi() {
+	private WB_VoronoiCreator() {
 
 	}
 }

@@ -12,7 +12,7 @@ import wblut.math.WB_Epsilon;
  * @author FVH
  *
  */
-public interface WB_VectorGenerator extends WB_VectorFactory {
+public interface WB_VectorFactory{
 	public static WB_Vector X() {
 		return new WB_Point(1,0,0);
 	}

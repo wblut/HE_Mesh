@@ -859,7 +859,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 	}
 
 	@Override
-	public WB_Polygon apply(final WB_Transform T) {
+	public WB_Polygon apply(final WB_Transform3D T) {
 		WB_Polygon poly = new WB_Polygon(this);
 		poly.applySelf(T);
 		return poly;
@@ -882,7 +882,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 	}
 
 	@Override
-	public WB_Polygon applySelf(WB_Transform T) {
+	public WB_Polygon applySelf(WB_Transform3D T) {
 		for (WB_Point p : points) {
 			p.applyAsPointSelf(T);
 		}

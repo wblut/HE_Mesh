@@ -84,7 +84,7 @@ public class WB_Sphere {
 		return (int) (tmp ^ tmp >>> 32);
 	}
 
-	public WB_Sphere apply(final WB_Transform T) {
+	public WB_Sphere apply(final WB_Transform3D T) {
 		return geometryfactory.createSphereWithRadius(center.applyAsPoint(T), radius);
 	}
 

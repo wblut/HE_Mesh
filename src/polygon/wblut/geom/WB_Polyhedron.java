@@ -986,7 +986,7 @@ public class WB_Polyhedron implements WB_Geometry {
 	}
 
 	@Override
-	public WB_Polyhedron apply(WB_Transform T) {
+	public WB_Polyhedron apply(WB_Transform3D T) {
 		WB_Polyhedron poly = new WB_Polyhedron(this);
 		poly.applySelf(T);
 		return this;
@@ -1001,7 +1001,7 @@ public class WB_Polyhedron implements WB_Geometry {
 	}
 
 	@Override
-	public WB_Polyhedron applySelf(WB_Transform T) {
+	public WB_Polyhedron applySelf(WB_Transform3D T) {
 		for (WB_Point p : vertices) {
 			p.applyAsPointSelf(T);
 		}

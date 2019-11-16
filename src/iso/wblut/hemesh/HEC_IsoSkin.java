@@ -69,6 +69,10 @@ public class HEC_IsoSkin extends HEC_Creator {
 		}
 		if (checkMesh(mesh)) {
 			substrate = new Substrate(mesh, l);
+		}else {
+			throw(new IllegalArgumentException("HEC_IsoSkin substrate can only have triangle or quad faces."));
+			
+			
 		}
 		isolevel = 0.5;
 		return this;
@@ -405,13 +409,21 @@ public class HEC_IsoSkin extends HEC_Creator {
 			edges = new LongObjectHashMap<HE_Vertex>();
 			vertices = new IntObjectHashMap<HE_Vertex>();
 			vertexremaps = new IntObjectHashMap<VertexRemap>();
-			polygonise(isolevel, true, patch);
-			setvalues(isolevel);
+			
+			//polygonise(isolevel, true, patch);
+			
+			//setvalues(isolevel);
+			
 			polygonise(isolevel, false, patch);
-			snapvertices();
-			resetvalues();
+			
+			//snapvertices();
+			
+			//resetvalues();
+			
+			patch.removeUnconnectedElements();
 			patch.clean();
-			HET_Fixer.fixNonManifoldVertices(patch);
+			
+			
 			return patch;
 		}
 

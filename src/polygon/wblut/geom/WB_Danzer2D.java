@@ -144,7 +144,7 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		type = t;
 		final WB_DanzerTile2D T = new WB_DanzerTile2D(type, 0);
 		WB_Point q;
-		WB_Transform ROT = new WB_Transform().addRotateZ(angle);
+		WB_Transform3D ROT = new WB_Transform3D().addRotateZ(angle);
 		switch (type) {
 		case A:
 			WB_Point p = geometryfactory.createPoint();

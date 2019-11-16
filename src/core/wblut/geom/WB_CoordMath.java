@@ -229,7 +229,7 @@ public interface WB_CoordMath extends WB_CoordMath2D {
 	 * @param T
 	 * @return new WB_Coord
 	 */
-	public WB_Coord applyAsPoint(final WB_Transform T);
+	public WB_Coord applyAsPoint(final WB_Transform3D T);
 
 	/**
 	 * Apply WB_Transform as vector.
@@ -237,7 +237,7 @@ public interface WB_CoordMath extends WB_CoordMath2D {
 	 * @param T
 	 * @return new WB_Coord
 	 */
-	public WB_Coord applyAsVector(final WB_Transform T);
+	public WB_Coord applyAsVector(final WB_Transform3D T);
 
 	/**
 	 * Apply WB_Transform as normal.
@@ -245,7 +245,7 @@ public interface WB_CoordMath extends WB_CoordMath2D {
 	 * @param T
 	 * @return new WB_Coord
 	 */
-	public WB_Coord applyAsNormal(final WB_Transform T);
+	public WB_Coord applyAsNormal(final WB_Transform3D T);
 
 	/**
 	 * 3D translate.

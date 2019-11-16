@@ -28,6 +28,7 @@ public class HEM_Clean extends HEM_Modifier {
 	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
+		mesh.removeUnconnectedElements();
 		mesh.getFaceColors();
 		mesh.getFaceUserLabels();
 		mesh.getFaceInternalLabels();

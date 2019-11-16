@@ -54,7 +54,7 @@ import wblut.geom.WB_Ring;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_SimpleMesh;
 import wblut.geom.WB_Tetrahedron;
-import wblut.geom.WB_Transform;
+import wblut.geom.WB_Transform3D;
 import wblut.geom.WB_Triangle;
 import wblut.geom.WB_TriangleFactory;
 import wblut.geom.WB_Triangulation2D;
@@ -396,7 +396,7 @@ public class WB_Render3D extends WB_Render2D {
 	public void drawCircle(final WB_Circle C) {
 		home.pushMatrix();
 		translate(C.getCenter());
-		final WB_Transform T = new WB_Transform(geometryfactory.Z(),
+		final WB_Transform3D T = new WB_Transform3D(geometryfactory.Z(),
 				C.getNormal());
 		final WB_Vector angles = T.getEulerAnglesXYZ();
 		home.rotateZ(angles.zf());

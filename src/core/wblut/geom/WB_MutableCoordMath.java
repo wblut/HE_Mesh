@@ -144,7 +144,7 @@ public interface WB_MutableCoordMath extends WB_CoordMath {
 	 * @param T
 	 * @return this
 	 */
-	public WB_Coord applyAsNormalSelf(final WB_Transform T);
+	public WB_Coord applyAsNormalSelf(final WB_Transform3D T);
 
 	/**
 	 *
@@ -152,7 +152,7 @@ public interface WB_MutableCoordMath extends WB_CoordMath {
 	 * @param T
 	 * @return this
 	 */
-	public WB_Coord applyAsPointSelf(final WB_Transform T);
+	public WB_Coord applyAsPointSelf(final WB_Transform3D T);
 
 	/**
 	 *
@@ -160,7 +160,7 @@ public interface WB_MutableCoordMath extends WB_CoordMath {
 	 * @param T
 	 * @return this
 	 */
-	public WB_Coord applyAsVectorSelf(final WB_Transform T);
+	public WB_Coord applyAsVectorSelf(final WB_Transform3D T);
 
 	/**
 	 *

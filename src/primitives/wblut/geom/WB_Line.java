@@ -329,12 +329,12 @@ public class WB_Line implements WB_Curve, WB_Geometry {
 	}
 
 	@Override
-	public WB_Line apply(WB_Transform T) {
+	public WB_Line apply(WB_Transform3D T) {
 		return new WB_Line(origin.apply(T), direction.apply(T));
 	}
 
 	@Override
-	public WB_Line applySelf(WB_Transform T) {
+	public WB_Line applySelf(WB_Transform3D T) {
 		origin.applySelf(T);
 		direction.applySelf(T);
 		return this;

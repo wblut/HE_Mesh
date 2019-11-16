@@ -857,7 +857,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	 * @see wblut.geom.WB_CoordinateTransform#apply(wblut.geom.WB_Transform)
 	 */
 	@Override
-	public WB_Point apply(final WB_Transform T) {
+	public WB_Point apply(final WB_Transform3D T) {
 		return T.applyAsPoint(this);
 	}
 
@@ -867,7 +867,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	 * wblut.geom.WB_CoordinateTransform#applyAsPoint(wblut.geom.WB_Transform)
 	 */
 	@Override
-	public WB_Point applyAsPoint(final WB_Transform T) {
+	public WB_Point applyAsPoint(final WB_Transform3D T) {
 		return T.applyAsPoint(this);
 	}
 
@@ -877,7 +877,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	 * wblut.geom.WB_CoordinateTransform#applyAsNormal(wblut.geom.WB_Transform)
 	 */
 	@Override
-	public WB_Point applyAsNormal(final WB_Transform T) {
+	public WB_Point applyAsNormal(final WB_Transform3D T) {
 		return new WB_Point(T.applyAsNormal(this));
 	}
 
@@ -887,7 +887,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	 * wblut.geom.WB_CoordinateTransform#applyAsVector(wblut.geom.WB_Transform)
 	 */
 	@Override
-	public WB_Point applyAsVector(final WB_Transform T) {
+	public WB_Point applyAsVector(final WB_Transform3D T) {
 		return new WB_Point(T.applyAsVector(this));
 	}
 
@@ -920,7 +920,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 			final double p1y, final double p1z, final double p2x,
 			final double p2y, final double p2z) {
 		final WB_Point result = new WB_Point(this);
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, new WB_Vector(p1x, p1y, p1z),
 				new WB_Vector(p2x - p1x, p2y - p1y, p2z - p1z));
 		raa.applyAsPointSelf(result);
@@ -943,7 +943,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	public WB_Point rotateAboutAxis2P(final double angle, final WB_Coord p1,
 			final WB_Coord p2) {
 		final WB_Point result = new WB_Point(this);
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, p1, new WB_Vector(p1, p2));
 		raa.applyAsPointSelf(result);
 		return result;
@@ -960,7 +960,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 			final double py, final double pz, final double ax, final double ay,
 			final double az) {
 		final WB_Point result = new WB_Point(this);
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, new WB_Vector(px, py, pz),
 				new WB_Vector(ax, ay, az));
 		raa.applyAsPointSelf(result);
@@ -976,7 +976,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	public WB_Point rotateAboutAxis(final double angle, final WB_Coord p,
 			final WB_Coord a) {
 		final WB_Point result = new WB_Point(this);
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, p, a);
 		raa.applyAsPointSelf(result);
 		return result;
@@ -992,7 +992,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	public WB_Point rotateAboutOrigin(final double angle, final double x,
 			final double y, final double z) {
 		final WB_Point result = new WB_Point(this);
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutOrigin(angle, new WB_Vector(x, y, z));
 		raa.applyAsPointSelf(result);
 		return result;
@@ -1006,7 +1006,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	@Override
 	public WB_Point rotateAboutOrigin(final double angle, final WB_Coord a) {
 		final WB_Point result = new WB_Point(this);
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutOrigin(angle, a);
 		raa.applyAsPointSelf(result);
 		return result;
@@ -1048,7 +1048,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	 * wblut.geom.WB_MutableCoordinateMath#applySelf(wblut.geom.WB_Transform)
 	 */
 	@Override
-	public WB_Point applySelf(final WB_Transform T) {
+	public WB_Point applySelf(final WB_Transform3D T) {
 		return applyAsPointSelf(T);
 	}
 
@@ -1058,7 +1058,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	 * WB_Transform )
 	 */
 	@Override
-	public WB_Point applyAsPointSelf(final WB_Transform T) {
+	public WB_Point applyAsPointSelf(final WB_Transform3D T) {
 		T.applyAsPointSelf(this);
 		return this;
 	}
@@ -1069,7 +1069,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	 * WB_Transform )
 	 */
 	@Override
-	public WB_Vector applyAsVectorSelf(final WB_Transform T) {
+	public WB_Vector applyAsVectorSelf(final WB_Transform3D T) {
 		T.applyAsVectorSelf(this);
 		return this;
 	}
@@ -1080,7 +1080,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	 * WB_Transform )
 	 */
 	@Override
-	public WB_Vector applyAsNormalSelf(final WB_Transform T) {
+	public WB_Vector applyAsNormalSelf(final WB_Transform3D T) {
 		T.applyAsNormalSelf(this);
 		return this;
 	}
@@ -1118,7 +1118,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	public WB_Point rotateAboutAxis2PSelf(final double angle, final double p1x,
 			final double p1y, final double p1z, final double p2x,
 			final double p2y, final double p2z) {
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, new WB_Vector(p1x, p1y, p1z),
 				new WB_Vector(p2x - p1x, p2y - p1y, p2z - p1z));
 		raa.applyAsPointSelf(this);
@@ -1134,7 +1134,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	@Override
 	public WB_Point rotateAboutAxis2PSelf(final double angle, final WB_Coord p1,
 			final WB_Coord p2) {
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, p1, new WB_Vector(p1, p2));
 		raa.applyAsPointSelf(this);
 		return this;
@@ -1148,7 +1148,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	@Override
 	public WB_Point rotateAboutAxisSelf(final double angle, final WB_Coord p,
 			final WB_Coord a) {
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, p, a);
 		raa.applyAsPointSelf(this);
 		return this;
@@ -1164,7 +1164,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	public WB_Point rotateAboutAxisSelf(final double angle, final double px,
 			final double py, final double pz, final double ax, final double ay,
 			final double az) {
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, new WB_Vector(px, py, pz),
 				new WB_Vector(ax, ay, az));
 		raa.applyAsPointSelf(this);
@@ -1180,7 +1180,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	@Override
 	public WB_Point rotateAboutOriginSelf(final double angle, final double x,
 			final double y, final double z) {
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutOrigin(angle, new WB_Vector(x, y, z));
 		raa.applyAsPointSelf(this);
 		return this;
@@ -1194,7 +1194,7 @@ public class WB_Point extends WB_Vector implements WB_Geometry {
 	@Override
 	public WB_Point rotateAboutOriginSelf(final double angle,
 			final WB_Coord a) {
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutOrigin(angle, a);
 		raa.applyAsPointSelf(this);
 		return this;

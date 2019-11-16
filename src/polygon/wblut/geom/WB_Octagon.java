@@ -82,14 +82,14 @@ public class WB_Octagon implements WB_Geometry {
 	}
 
 	@Override
-	public WB_Octagon apply(WB_Transform T) {
+	public WB_Octagon apply(WB_Transform3D T) {
 		return new WB_Octagon(p1.apply(T), p2.apply(T), p3.apply(T),
 				p4.apply(T), p5.apply(T), p6.apply(T), p7.apply(T),
 				p8.apply(T));
 	}
 
 	@Override
-	public WB_Octagon applySelf(WB_Transform T) {
+	public WB_Octagon applySelf(WB_Transform3D T) {
 		p1.applySelf(T);
 		p2.applySelf(T);
 		p3.applySelf(T);

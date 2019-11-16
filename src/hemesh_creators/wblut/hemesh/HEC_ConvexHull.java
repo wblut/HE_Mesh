@@ -15,7 +15,7 @@ import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 import wblut.external.QuickHull3D.WB_QuickHull3D;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordCollection;
-import wblut.geom.WB_PointFactory;
+import wblut.geom.WB_PointGenerator;
 
 /**
  * Creates the convex hull of a collection of points.
@@ -101,7 +101,7 @@ public class HEC_ConvexHull extends HEC_Creator {
 		return this;
 	}
 	
-	public HEC_ConvexHull setPoints(WB_PointFactory generator, final int numberOfPoints) {
+	public HEC_ConvexHull setPoints(WB_PointGenerator generator, final int numberOfPoints) {
 		this.points = WB_CoordCollection.getCollection(generator, numberOfPoints);
 		return this;
 	}

@@ -41,7 +41,7 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_SimpleMesh;
 import wblut.geom.WB_SimpleMeshCreator;
-import wblut.geom.WB_Transform;
+import wblut.geom.WB_Transform3D;
 import wblut.geom.WB_Transform2D;
 import wblut.geom.WB_TriangleFactory;
 import wblut.geom.WB_Vector;
@@ -535,8 +535,8 @@ public class HE_Mesh extends HE_MeshElement
 	}
 
 	@Override
-	public HE_Mesh apply(final WB_Transform T) {
-		return new HEC_Transform(this, T).create();
+	public HE_Mesh apply(final WB_Transform3D T) {
+		return new HEC_Transform3D(this, T).create();
 	}
 
 	/**
@@ -545,8 +545,8 @@ public class HE_Mesh extends HE_MeshElement
 	 * @return
 	 */
 	@Override
-	public HE_Mesh applySelf(final WB_Transform T) {
-		return modify(new HEM_Transform(T));
+	public HE_Mesh applySelf(final WB_Transform3D T) {
+		return modify(new HEM_Transform3D(T));
 	}
 
 	@Override
@@ -568,6 +568,7 @@ public class HE_Mesh extends HE_MeshElement
 	 * Clean.
 	 */
 	public void clean() {
+		
 		modify(new HEM_Clean());
 	}
 
@@ -2812,7 +2813,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Mesh result = copy();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = result.vItr();
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, new WB_Point(px, py, pz),
 				new WB_Vector(ax, ay, az));
 		while (vItr.hasNext()) {
@@ -2840,7 +2841,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Mesh result = copy();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = result.vItr();
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, p, a);
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -2875,7 +2876,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Mesh result = copy();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = result.vItr();
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, new WB_Point(p1x, p1y, p1z),
 				new WB_Vector(p2x - p1x, p2y - p1y, p2z - p1z));
 		while (vItr.hasNext()) {
@@ -2902,7 +2903,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Mesh result = copy();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = result.vItr();
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, p1, new WB_Vector(p1, p2));
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -2936,7 +2937,7 @@ public class HE_Mesh extends HE_MeshElement
 			final double p2y, final double p2z) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, new WB_Point(p1x, p1y, p1z),
 				new WB_Vector(p2x - p1x, p2y - p1y, p2z - p1z));
 		while (vItr.hasNext()) {
@@ -2962,7 +2963,7 @@ public class HE_Mesh extends HE_MeshElement
 			final WB_Coord p2) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, p1, new WB_Vector(p1, p2));
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -2990,7 +2991,7 @@ public class HE_Mesh extends HE_MeshElement
 			final double az) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, new WB_Point(px, py, pz),
 				new WB_Vector(ax, ay, az));
 		while (vItr.hasNext()) {
@@ -3017,7 +3018,7 @@ public class HE_Mesh extends HE_MeshElement
 			final WB_Coord a) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutAxis(angle, p, a);
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -3098,7 +3099,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Mesh result = copy();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = result.vItr();
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutOrigin(angle, new WB_Vector(ax, ay, az));
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -3121,7 +3122,7 @@ public class HE_Mesh extends HE_MeshElement
 		HE_Mesh result = copy();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = result.vItr();
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutOrigin(angle, a);
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -3145,7 +3146,7 @@ public class HE_Mesh extends HE_MeshElement
 			final double ay, final double az) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutOrigin(angle, new WB_Vector(ax, ay, az));
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -3167,7 +3168,7 @@ public class HE_Mesh extends HE_MeshElement
 	public HE_Mesh rotateAboutOriginSelf(final double angle, final WB_Coord a) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
-		final WB_Transform raa = new WB_Transform();
+		final WB_Transform3D raa = new WB_Transform3D();
 		raa.addRotateAboutOrigin(angle, a);
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -5826,8 +5827,8 @@ HE_Selection sel = HE_Selection.getSelection(this);
 	 *
 	 * @return copy
 	 */
-	public HE_Mesh transform(final WB_Transform T) {
-		return copy().modify(new HEM_Transform(T));
+	public HE_Mesh transform(final WB_Transform3D T) {
+		return copy().modify(new HEM_Transform3D(T));
 	}
 
 	/**
@@ -5838,8 +5839,8 @@ HE_Selection sel = HE_Selection.getSelection(this);
 	 *
 	 * @return self
 	 */
-	public HE_Mesh transformSelf(final WB_Transform T) {
-		return modify(new HEM_Transform(T));
+	public HE_Mesh transformSelf(final WB_Transform3D T) {
+		return modify(new HEM_Transform3D(T));
 	}
 
 	/**

@@ -449,12 +449,12 @@ public class WB_Plane implements WB_Geometry {
 	}
 
 	@Override
-	public WB_Plane apply(WB_Transform T) {
+	public WB_Plane apply(WB_Transform3D T) {
 		return new WB_Plane(origin.apply(T), n.apply(T));
 	}
 
 	@Override
-	public WB_Plane applySelf(WB_Transform T) {
+	public WB_Plane applySelf(WB_Transform3D T) {
 		origin.applySelf(T);
 		n.applySelf(T);
 		return this;
