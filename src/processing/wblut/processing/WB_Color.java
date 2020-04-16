@@ -1,22 +1,8 @@
-/*
- * HE_Mesh  Frederik Vanhoutte - www.wblut.com
- * 
- * https://github.com/wblut/HE_Mesh
- * A Processing/Java library for for creating and manipulating polygonal meshes.
- * 
- * Public Domain: http://creativecommons.org/publicdomain/zero/1.0/
- */
-
 package wblut.processing;
 
 import wblut.geom.WB_Vector;
 
-/**
- * @author FVH
- *
- */
 public class WB_Color {
-
 	// http://www.cs.uml.edu/~haim/ColorCenter/ColorCenter.htm
 	// ==============================================================================
 	// HeatedObject ColorRGB SCALE Class
@@ -179,7 +165,6 @@ public class WB_Color {
 			color(255, 235, 219), color(255, 237, 223), color(255, 239, 226), color(255, 240, 229),
 			color(255, 242, 232), color(255, 244, 236), color(255, 246, 239), color(255, 248, 242),
 			color(255, 250, 245), color(255, 251, 249), color(255, 253, 252), color(255, 255, 255) };
-
 	// ==============================================================================
 	// LOCS ColorRGB SCALE Class
 	//
@@ -249,67 +234,65 @@ public class WB_Color {
 	//
 	// 041497 - created
 	// ==============================================================================
-	static public int[] GRAY = new int[] {
-
-			color(0, 0, 0), color(1, 1, 1), color(2, 2, 2), color(3, 3, 3), color(4, 4, 4), color(5, 5, 5),
-			color(6, 6, 6), color(7, 7, 7), color(8, 8, 8), color(9, 9, 9), color(10, 10, 10), color(11, 11, 11),
-			color(12, 12, 12), color(13, 13, 13), color(14, 14, 14), color(15, 15, 15), color(16, 16, 16),
-			color(17, 17, 17), color(18, 18, 18), color(19, 19, 19), color(20, 20, 20), color(21, 21, 21),
-			color(22, 22, 22), color(23, 23, 23), color(24, 24, 24), color(25, 25, 25), color(26, 26, 26),
-			color(27, 27, 27), color(28, 28, 28), color(29, 29, 29), color(30, 30, 30), color(31, 31, 31),
-			color(32, 32, 32), color(33, 33, 33), color(34, 34, 34), color(35, 35, 35), color(36, 36, 36),
-			color(37, 37, 37), color(38, 38, 38), color(39, 39, 39), color(40, 40, 40), color(41, 41, 41),
-			color(42, 42, 42), color(43, 43, 43), color(44, 44, 44), color(45, 45, 45), color(46, 46, 46),
-			color(47, 47, 47), color(48, 48, 48), color(49, 49, 49), color(50, 50, 50), color(51, 51, 51),
-			color(52, 52, 52), color(53, 53, 53), color(54, 54, 54), color(55, 55, 55), color(56, 56, 56),
-			color(57, 57, 57), color(58, 58, 58), color(59, 59, 59), color(60, 60, 60), color(61, 61, 61),
-			color(62, 62, 62), color(63, 63, 63), color(64, 64, 64), color(65, 65, 65), color(66, 66, 66),
-			color(67, 67, 67), color(68, 68, 68), color(69, 69, 69), color(70, 70, 70), color(71, 71, 71),
-			color(72, 72, 72), color(73, 73, 73), color(74, 74, 74), color(75, 75, 75), color(76, 76, 76),
-			color(77, 77, 77), color(78, 78, 78), color(79, 79, 79), color(80, 80, 80), color(81, 81, 81),
-			color(82, 82, 82), color(83, 83, 83), color(84, 84, 84), color(85, 85, 85), color(86, 86, 86),
-			color(87, 87, 87), color(88, 88, 88), color(89, 89, 89), color(90, 90, 90), color(91, 91, 91),
-			color(92, 92, 92), color(93, 93, 93), color(94, 94, 94), color(95, 95, 95), color(96, 96, 96),
-			color(97, 97, 97), color(98, 98, 98), color(99, 99, 99), color(100, 100, 100), color(101, 101, 101),
-			color(102, 102, 102), color(103, 103, 103), color(104, 104, 104), color(105, 105, 105),
-			color(106, 106, 106), color(107, 107, 107), color(108, 108, 108), color(109, 109, 109),
-			color(110, 110, 110), color(111, 111, 111), color(112, 112, 112), color(113, 113, 113),
-			color(114, 114, 114), color(115, 115, 115), color(116, 116, 116), color(117, 117, 117),
-			color(118, 118, 118), color(119, 119, 119), color(120, 120, 120), color(121, 121, 121),
-			color(122, 122, 122), color(123, 123, 123), color(124, 124, 124), color(125, 125, 125),
-			color(126, 126, 126), color(127, 127, 127), color(128, 128, 128), color(129, 129, 129),
-			color(130, 130, 130), color(131, 131, 131), color(132, 132, 132), color(133, 133, 133),
-			color(134, 134, 134), color(135, 135, 135), color(136, 136, 136), color(137, 137, 137),
-			color(138, 138, 138), color(139, 139, 139), color(140, 140, 140), color(141, 141, 141),
-			color(142, 142, 142), color(143, 143, 143), color(144, 144, 144), color(145, 145, 145),
-			color(146, 146, 146), color(147, 147, 147), color(148, 148, 148), color(149, 149, 149),
-			color(150, 150, 150), color(151, 151, 151), color(152, 152, 152), color(153, 153, 153),
-			color(154, 154, 154), color(155, 155, 155), color(156, 156, 156), color(157, 157, 157),
-			color(158, 158, 158), color(159, 159, 159), color(160, 160, 160), color(161, 161, 161),
-			color(162, 162, 162), color(163, 163, 163), color(164, 164, 164), color(165, 165, 165),
-			color(166, 166, 166), color(167, 167, 167), color(168, 168, 168), color(169, 169, 169),
-			color(170, 170, 170), color(171, 171, 171), color(172, 172, 172), color(173, 173, 173),
-			color(174, 174, 174), color(175, 175, 175), color(176, 176, 176), color(177, 177, 177),
-			color(178, 178, 178), color(179, 179, 179), color(180, 180, 180), color(181, 181, 181),
-			color(182, 182, 182), color(183, 183, 183), color(184, 184, 184), color(185, 185, 185),
-			color(186, 186, 186), color(187, 187, 187), color(188, 188, 188), color(189, 189, 189),
-			color(190, 190, 190), color(191, 191, 191), color(192, 192, 192), color(193, 193, 193),
-			color(194, 194, 194), color(195, 195, 195), color(196, 196, 196), color(197, 197, 197),
-			color(198, 198, 198), color(199, 199, 199), color(200, 200, 200), color(201, 201, 201),
-			color(202, 202, 202), color(203, 203, 203), color(204, 204, 204), color(205, 205, 205),
-			color(206, 206, 206), color(207, 207, 207), color(208, 208, 208), color(209, 209, 209),
-			color(210, 210, 210), color(211, 211, 211), color(212, 212, 212), color(213, 213, 213),
-			color(214, 214, 214), color(215, 215, 215), color(216, 216, 216), color(217, 217, 217),
-			color(218, 218, 218), color(219, 219, 219), color(220, 220, 220), color(221, 221, 221),
-			color(222, 222, 222), color(223, 223, 223), color(224, 224, 224), color(225, 225, 225),
-			color(226, 226, 226), color(227, 227, 227), color(228, 228, 228), color(229, 229, 229),
-			color(230, 230, 230), color(231, 231, 231), color(232, 232, 232), color(233, 233, 233),
-			color(234, 234, 234), color(235, 235, 235), color(236, 236, 236), color(237, 237, 237),
-			color(238, 238, 238), color(239, 239, 239), color(240, 240, 240), color(241, 241, 241),
-			color(242, 242, 242), color(243, 243, 243), color(244, 244, 244), color(245, 245, 245),
-			color(246, 246, 246), color(247, 247, 247), color(248, 248, 248), color(249, 249, 249),
-			color(250, 250, 250), color(251, 251, 251), color(252, 252, 252), color(253, 253, 253),
-			color(254, 254, 254), color(255, 255, 255) };
+	static public int[] GRAY = new int[] { color(0, 0, 0), color(1, 1, 1), color(2, 2, 2), color(3, 3, 3),
+			color(4, 4, 4), color(5, 5, 5), color(6, 6, 6), color(7, 7, 7), color(8, 8, 8), color(9, 9, 9),
+			color(10, 10, 10), color(11, 11, 11), color(12, 12, 12), color(13, 13, 13), color(14, 14, 14),
+			color(15, 15, 15), color(16, 16, 16), color(17, 17, 17), color(18, 18, 18), color(19, 19, 19),
+			color(20, 20, 20), color(21, 21, 21), color(22, 22, 22), color(23, 23, 23), color(24, 24, 24),
+			color(25, 25, 25), color(26, 26, 26), color(27, 27, 27), color(28, 28, 28), color(29, 29, 29),
+			color(30, 30, 30), color(31, 31, 31), color(32, 32, 32), color(33, 33, 33), color(34, 34, 34),
+			color(35, 35, 35), color(36, 36, 36), color(37, 37, 37), color(38, 38, 38), color(39, 39, 39),
+			color(40, 40, 40), color(41, 41, 41), color(42, 42, 42), color(43, 43, 43), color(44, 44, 44),
+			color(45, 45, 45), color(46, 46, 46), color(47, 47, 47), color(48, 48, 48), color(49, 49, 49),
+			color(50, 50, 50), color(51, 51, 51), color(52, 52, 52), color(53, 53, 53), color(54, 54, 54),
+			color(55, 55, 55), color(56, 56, 56), color(57, 57, 57), color(58, 58, 58), color(59, 59, 59),
+			color(60, 60, 60), color(61, 61, 61), color(62, 62, 62), color(63, 63, 63), color(64, 64, 64),
+			color(65, 65, 65), color(66, 66, 66), color(67, 67, 67), color(68, 68, 68), color(69, 69, 69),
+			color(70, 70, 70), color(71, 71, 71), color(72, 72, 72), color(73, 73, 73), color(74, 74, 74),
+			color(75, 75, 75), color(76, 76, 76), color(77, 77, 77), color(78, 78, 78), color(79, 79, 79),
+			color(80, 80, 80), color(81, 81, 81), color(82, 82, 82), color(83, 83, 83), color(84, 84, 84),
+			color(85, 85, 85), color(86, 86, 86), color(87, 87, 87), color(88, 88, 88), color(89, 89, 89),
+			color(90, 90, 90), color(91, 91, 91), color(92, 92, 92), color(93, 93, 93), color(94, 94, 94),
+			color(95, 95, 95), color(96, 96, 96), color(97, 97, 97), color(98, 98, 98), color(99, 99, 99),
+			color(100, 100, 100), color(101, 101, 101), color(102, 102, 102), color(103, 103, 103),
+			color(104, 104, 104), color(105, 105, 105), color(106, 106, 106), color(107, 107, 107),
+			color(108, 108, 108), color(109, 109, 109), color(110, 110, 110), color(111, 111, 111),
+			color(112, 112, 112), color(113, 113, 113), color(114, 114, 114), color(115, 115, 115),
+			color(116, 116, 116), color(117, 117, 117), color(118, 118, 118), color(119, 119, 119),
+			color(120, 120, 120), color(121, 121, 121), color(122, 122, 122), color(123, 123, 123),
+			color(124, 124, 124), color(125, 125, 125), color(126, 126, 126), color(127, 127, 127),
+			color(128, 128, 128), color(129, 129, 129), color(130, 130, 130), color(131, 131, 131),
+			color(132, 132, 132), color(133, 133, 133), color(134, 134, 134), color(135, 135, 135),
+			color(136, 136, 136), color(137, 137, 137), color(138, 138, 138), color(139, 139, 139),
+			color(140, 140, 140), color(141, 141, 141), color(142, 142, 142), color(143, 143, 143),
+			color(144, 144, 144), color(145, 145, 145), color(146, 146, 146), color(147, 147, 147),
+			color(148, 148, 148), color(149, 149, 149), color(150, 150, 150), color(151, 151, 151),
+			color(152, 152, 152), color(153, 153, 153), color(154, 154, 154), color(155, 155, 155),
+			color(156, 156, 156), color(157, 157, 157), color(158, 158, 158), color(159, 159, 159),
+			color(160, 160, 160), color(161, 161, 161), color(162, 162, 162), color(163, 163, 163),
+			color(164, 164, 164), color(165, 165, 165), color(166, 166, 166), color(167, 167, 167),
+			color(168, 168, 168), color(169, 169, 169), color(170, 170, 170), color(171, 171, 171),
+			color(172, 172, 172), color(173, 173, 173), color(174, 174, 174), color(175, 175, 175),
+			color(176, 176, 176), color(177, 177, 177), color(178, 178, 178), color(179, 179, 179),
+			color(180, 180, 180), color(181, 181, 181), color(182, 182, 182), color(183, 183, 183),
+			color(184, 184, 184), color(185, 185, 185), color(186, 186, 186), color(187, 187, 187),
+			color(188, 188, 188), color(189, 189, 189), color(190, 190, 190), color(191, 191, 191),
+			color(192, 192, 192), color(193, 193, 193), color(194, 194, 194), color(195, 195, 195),
+			color(196, 196, 196), color(197, 197, 197), color(198, 198, 198), color(199, 199, 199),
+			color(200, 200, 200), color(201, 201, 201), color(202, 202, 202), color(203, 203, 203),
+			color(204, 204, 204), color(205, 205, 205), color(206, 206, 206), color(207, 207, 207),
+			color(208, 208, 208), color(209, 209, 209), color(210, 210, 210), color(211, 211, 211),
+			color(212, 212, 212), color(213, 213, 213), color(214, 214, 214), color(215, 215, 215),
+			color(216, 216, 216), color(217, 217, 217), color(218, 218, 218), color(219, 219, 219),
+			color(220, 220, 220), color(221, 221, 221), color(222, 222, 222), color(223, 223, 223),
+			color(224, 224, 224), color(225, 225, 225), color(226, 226, 226), color(227, 227, 227),
+			color(228, 228, 228), color(229, 229, 229), color(230, 230, 230), color(231, 231, 231),
+			color(232, 232, 232), color(233, 233, 233), color(234, 234, 234), color(235, 235, 235),
+			color(236, 236, 236), color(237, 237, 237), color(238, 238, 238), color(239, 239, 239),
+			color(240, 240, 240), color(241, 241, 241), color(242, 242, 242), color(243, 243, 243),
+			color(244, 244, 244), color(245, 245, 245), color(246, 246, 246), color(247, 247, 247),
+			color(248, 248, 248), color(249, 249, 249), color(250, 250, 250), color(251, 251, 251),
+			color(252, 252, 252), color(253, 253, 253), color(254, 254, 254), color(255, 255, 255) };
 	// ==============================================================================
 	// LinGray ColorRGB SCALE Class
 	//
@@ -319,62 +302,60 @@ public class WB_Color {
 	//
 	// 041497 - created
 	// ==============================================================================
-	static public int[] LINGRAY = new int[] {
-
-			color(0, 0, 0), color(0, 0, 0), color(0, 0, 0), color(0, 0, 0), color(0, 0, 0), color(0, 0, 0),
-			color(0, 0, 0), color(1, 1, 1), color(1, 1, 1), color(1, 1, 1), color(1, 1, 1), color(1, 1, 1),
-			color(1, 1, 1), color(1, 1, 1), color(1, 1, 1), color(1, 1, 1), color(2, 2, 2), color(2, 2, 2),
-			color(2, 2, 2), color(2, 2, 2), color(2, 2, 2), color(2, 2, 2), color(2, 2, 2), color(3, 3, 3),
-			color(3, 3, 3), color(3, 3, 3), color(3, 3, 3), color(3, 3, 3), color(3, 3, 3), color(3, 3, 3),
-			color(4, 4, 4), color(4, 4, 4), color(4, 4, 4), color(4, 4, 4), color(4, 4, 4), color(5, 5, 5),
-			color(5, 5, 5), color(5, 5, 5), color(5, 5, 5), color(5, 5, 5), color(6, 6, 6), color(6, 6, 6),
-			color(6, 6, 6), color(6, 6, 6), color(6, 6, 6), color(7, 7, 7), color(7, 7, 7), color(7, 7, 7),
-			color(7, 7, 7), color(7, 7, 7), color(8, 8, 8), color(8, 8, 8), color(9, 9, 9), color(9, 9, 9),
-			color(9, 9, 9), color(9, 9, 9), color(10, 10, 10), color(10, 10, 10), color(10, 10, 10), color(10, 10, 10),
-			color(10, 10, 10), color(11, 11, 11), color(11, 11, 11), color(12, 12, 12), color(12, 12, 12),
-			color(12, 12, 12), color(13, 13, 13), color(13, 13, 13), color(14, 14, 14), color(14, 14, 14),
-			color(15, 15, 15), color(15, 15, 15), color(15, 15, 15), color(16, 16, 16), color(16, 16, 16),
-			color(17, 17, 17), color(17, 17, 17), color(18, 18, 18), color(18, 18, 18), color(19, 19, 19),
-			color(19, 19, 19), color(19, 19, 19), color(19, 19, 19), color(19, 19, 19), color(20, 20, 20),
-			color(20, 20, 20), color(22, 22, 22), color(22, 22, 22), color(22, 22, 22), color(23, 23, 23),
-			color(23, 23, 23), color(24, 24, 24), color(24, 24, 24), color(26, 26, 26), color(26, 26, 26),
-			color(26, 26, 26), color(27, 27, 27), color(27, 27, 27), color(29, 29, 29), color(29, 29, 29),
-			color(30, 30, 30), color(30, 30, 30), color(32, 32, 32), color(32, 32, 32), color(32, 32, 32),
-			color(32, 32, 32), color(32, 32, 32), color(34, 34, 34), color(34, 34, 34), color(35, 35, 35),
-			color(35, 35, 35), color(35, 35, 35), color(37, 37, 37), color(37, 37, 37), color(39, 39, 39),
-			color(39, 39, 39), color(41, 41, 41), color(41, 41, 41), color(41, 41, 41), color(43, 43, 43),
-			color(43, 43, 43), color(45, 45, 45), color(45, 45, 45), color(46, 46, 46), color(46, 46, 46),
-			color(46, 46, 46), color(47, 47, 47), color(47, 47, 47), color(49, 49, 49), color(49, 49, 49),
-			color(51, 51, 51), color(51, 51, 51), color(52, 52, 52), color(52, 52, 52), color(52, 52, 52),
-			color(54, 54, 54), color(54, 54, 54), color(56, 56, 56), color(56, 56, 56), color(59, 59, 59),
-			color(59, 59, 59), color(59, 59, 59), color(61, 61, 61), color(61, 61, 61), color(64, 64, 64),
-			color(64, 64, 64), color(67, 67, 67), color(67, 67, 67), color(67, 67, 67), color(69, 69, 69),
-			color(69, 69, 69), color(72, 72, 72), color(72, 72, 72), color(75, 75, 75), color(75, 75, 75),
-			color(76, 76, 76), color(76, 76, 76), color(76, 76, 76), color(78, 78, 78), color(78, 78, 78),
-			color(81, 81, 81), color(81, 81, 81), color(84, 84, 84), color(84, 84, 84), color(84, 84, 84),
-			color(87, 87, 87), color(87, 87, 87), color(91, 91, 91), color(91, 91, 91), color(94, 94, 94),
-			color(94, 94, 94), color(94, 94, 94), color(97, 97, 97), color(97, 97, 97), color(101, 101, 101),
-			color(101, 101, 101), color(104, 104, 104), color(104, 104, 104), color(107, 107, 107),
-			color(107, 107, 107), color(107, 107, 107), color(108, 108, 108), color(108, 108, 108),
-			color(112, 112, 112), color(112, 112, 112), color(116, 116, 116), color(116, 116, 116),
-			color(116, 116, 116), color(120, 120, 120), color(120, 120, 120), color(124, 124, 124),
-			color(124, 124, 124), color(128, 128, 128), color(128, 128, 128), color(128, 128, 128),
-			color(132, 132, 132), color(132, 132, 132), color(136, 136, 136), color(136, 136, 136),
-			color(141, 141, 141), color(141, 141, 141), color(145, 145, 145), color(145, 145, 145),
-			color(145, 145, 145), color(147, 147, 147), color(147, 147, 147), color(150, 150, 150),
-			color(150, 150, 150), color(154, 154, 154), color(154, 154, 154), color(154, 154, 154),
-			color(159, 159, 159), color(159, 159, 159), color(164, 164, 164), color(164, 164, 164),
-			color(169, 169, 169), color(169, 169, 169), color(169, 169, 169), color(174, 174, 174),
-			color(174, 174, 174), color(179, 179, 179), color(179, 179, 179), color(185, 185, 185),
-			color(185, 185, 185), color(190, 190, 190), color(190, 190, 190), color(190, 190, 190),
-			color(195, 195, 195), color(195, 195, 195), color(195, 195, 195), color(195, 195, 195),
-			color(201, 201, 201), color(201, 201, 201), color(201, 201, 201), color(207, 207, 207),
-			color(207, 207, 207), color(212, 212, 212), color(212, 212, 212), color(218, 218, 218),
-			color(218, 218, 218), color(218, 218, 218), color(224, 224, 224), color(224, 224, 224),
-			color(230, 230, 230), color(230, 230, 230), color(237, 237, 237), color(237, 237, 237),
-			color(243, 243, 243), color(243, 243, 243), color(243, 243, 243), color(249, 249, 249),
-			color(249, 249, 249), color(252, 252, 252), color(252, 252, 252), color(252, 252, 252),
-			color(255, 255, 255) };
+	static public int[] LINGRAY = new int[] { color(0, 0, 0), color(0, 0, 0), color(0, 0, 0), color(0, 0, 0),
+			color(0, 0, 0), color(0, 0, 0), color(0, 0, 0), color(1, 1, 1), color(1, 1, 1), color(1, 1, 1),
+			color(1, 1, 1), color(1, 1, 1), color(1, 1, 1), color(1, 1, 1), color(1, 1, 1), color(1, 1, 1),
+			color(2, 2, 2), color(2, 2, 2), color(2, 2, 2), color(2, 2, 2), color(2, 2, 2), color(2, 2, 2),
+			color(2, 2, 2), color(3, 3, 3), color(3, 3, 3), color(3, 3, 3), color(3, 3, 3), color(3, 3, 3),
+			color(3, 3, 3), color(3, 3, 3), color(4, 4, 4), color(4, 4, 4), color(4, 4, 4), color(4, 4, 4),
+			color(4, 4, 4), color(5, 5, 5), color(5, 5, 5), color(5, 5, 5), color(5, 5, 5), color(5, 5, 5),
+			color(6, 6, 6), color(6, 6, 6), color(6, 6, 6), color(6, 6, 6), color(6, 6, 6), color(7, 7, 7),
+			color(7, 7, 7), color(7, 7, 7), color(7, 7, 7), color(7, 7, 7), color(8, 8, 8), color(8, 8, 8),
+			color(9, 9, 9), color(9, 9, 9), color(9, 9, 9), color(9, 9, 9), color(10, 10, 10), color(10, 10, 10),
+			color(10, 10, 10), color(10, 10, 10), color(10, 10, 10), color(11, 11, 11), color(11, 11, 11),
+			color(12, 12, 12), color(12, 12, 12), color(12, 12, 12), color(13, 13, 13), color(13, 13, 13),
+			color(14, 14, 14), color(14, 14, 14), color(15, 15, 15), color(15, 15, 15), color(15, 15, 15),
+			color(16, 16, 16), color(16, 16, 16), color(17, 17, 17), color(17, 17, 17), color(18, 18, 18),
+			color(18, 18, 18), color(19, 19, 19), color(19, 19, 19), color(19, 19, 19), color(19, 19, 19),
+			color(19, 19, 19), color(20, 20, 20), color(20, 20, 20), color(22, 22, 22), color(22, 22, 22),
+			color(22, 22, 22), color(23, 23, 23), color(23, 23, 23), color(24, 24, 24), color(24, 24, 24),
+			color(26, 26, 26), color(26, 26, 26), color(26, 26, 26), color(27, 27, 27), color(27, 27, 27),
+			color(29, 29, 29), color(29, 29, 29), color(30, 30, 30), color(30, 30, 30), color(32, 32, 32),
+			color(32, 32, 32), color(32, 32, 32), color(32, 32, 32), color(32, 32, 32), color(34, 34, 34),
+			color(34, 34, 34), color(35, 35, 35), color(35, 35, 35), color(35, 35, 35), color(37, 37, 37),
+			color(37, 37, 37), color(39, 39, 39), color(39, 39, 39), color(41, 41, 41), color(41, 41, 41),
+			color(41, 41, 41), color(43, 43, 43), color(43, 43, 43), color(45, 45, 45), color(45, 45, 45),
+			color(46, 46, 46), color(46, 46, 46), color(46, 46, 46), color(47, 47, 47), color(47, 47, 47),
+			color(49, 49, 49), color(49, 49, 49), color(51, 51, 51), color(51, 51, 51), color(52, 52, 52),
+			color(52, 52, 52), color(52, 52, 52), color(54, 54, 54), color(54, 54, 54), color(56, 56, 56),
+			color(56, 56, 56), color(59, 59, 59), color(59, 59, 59), color(59, 59, 59), color(61, 61, 61),
+			color(61, 61, 61), color(64, 64, 64), color(64, 64, 64), color(67, 67, 67), color(67, 67, 67),
+			color(67, 67, 67), color(69, 69, 69), color(69, 69, 69), color(72, 72, 72), color(72, 72, 72),
+			color(75, 75, 75), color(75, 75, 75), color(76, 76, 76), color(76, 76, 76), color(76, 76, 76),
+			color(78, 78, 78), color(78, 78, 78), color(81, 81, 81), color(81, 81, 81), color(84, 84, 84),
+			color(84, 84, 84), color(84, 84, 84), color(87, 87, 87), color(87, 87, 87), color(91, 91, 91),
+			color(91, 91, 91), color(94, 94, 94), color(94, 94, 94), color(94, 94, 94), color(97, 97, 97),
+			color(97, 97, 97), color(101, 101, 101), color(101, 101, 101), color(104, 104, 104), color(104, 104, 104),
+			color(107, 107, 107), color(107, 107, 107), color(107, 107, 107), color(108, 108, 108),
+			color(108, 108, 108), color(112, 112, 112), color(112, 112, 112), color(116, 116, 116),
+			color(116, 116, 116), color(116, 116, 116), color(120, 120, 120), color(120, 120, 120),
+			color(124, 124, 124), color(124, 124, 124), color(128, 128, 128), color(128, 128, 128),
+			color(128, 128, 128), color(132, 132, 132), color(132, 132, 132), color(136, 136, 136),
+			color(136, 136, 136), color(141, 141, 141), color(141, 141, 141), color(145, 145, 145),
+			color(145, 145, 145), color(145, 145, 145), color(147, 147, 147), color(147, 147, 147),
+			color(150, 150, 150), color(150, 150, 150), color(154, 154, 154), color(154, 154, 154),
+			color(154, 154, 154), color(159, 159, 159), color(159, 159, 159), color(164, 164, 164),
+			color(164, 164, 164), color(169, 169, 169), color(169, 169, 169), color(169, 169, 169),
+			color(174, 174, 174), color(174, 174, 174), color(179, 179, 179), color(179, 179, 179),
+			color(185, 185, 185), color(185, 185, 185), color(190, 190, 190), color(190, 190, 190),
+			color(190, 190, 190), color(195, 195, 195), color(195, 195, 195), color(195, 195, 195),
+			color(195, 195, 195), color(201, 201, 201), color(201, 201, 201), color(201, 201, 201),
+			color(207, 207, 207), color(207, 207, 207), color(212, 212, 212), color(212, 212, 212),
+			color(218, 218, 218), color(218, 218, 218), color(218, 218, 218), color(224, 224, 224),
+			color(224, 224, 224), color(230, 230, 230), color(230, 230, 230), color(237, 237, 237),
+			color(237, 237, 237), color(243, 243, 243), color(243, 243, 243), color(243, 243, 243),
+			color(249, 249, 249), color(249, 249, 249), color(252, 252, 252), color(252, 252, 252),
+			color(252, 252, 252), color(255, 255, 255) };
 	// ==============================================================================
 	// Rainbow ColorRGB SCALE Class
 	//
@@ -445,22 +426,6 @@ public class WB_Color {
 			SPECTRUM[i] = spectralColor(400.0 + 300.0 / 255.0 * i);
 		}
 	}
-	/*
-	 * New matplotlib colormaps by Nathaniel J. Smith, Stefan van der Walt, and
-	 * (in the case of viridis) Eric Firing.
-	 *
-	 * This file and the colormaps in it are released under the CC0 license /
-	 * public domain dedication. We would appreciate credit if you use or
-	 * redistribute these colormaps, but do not impose any legal restrictions.
-	 *
-	 * To the extent possible under law, the persons who associated CC0 with
-	 * mpl-colormaps have waived all copyright and related or neighboring rights
-	 * to mpl-colormaps.
-	 *
-	 * You should have received a copy of the CC0 legalcode along with this
-	 * work. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
-	 */
-
 	static public int[] MAGMA = new int[] { normColor(0.001462, 0.000466, 0.013866),
 			normColor(0.002258, 0.001295, 0.018331), normColor(0.003279, 0.002305, 0.023708),
 			normColor(0.004512, 0.003490, 0.029965), normColor(0.005950, 0.004843, 0.037130),
@@ -978,14 +943,6 @@ public class WB_Color {
 			normColor(0.974417, 0.903590, 0.130215), normColor(0.983868, 0.904867, 0.136897),
 			normColor(0.993248, 0.906157, 0.143936) };
 
-	/**
-	 *
-	 *
-	 * @param v1
-	 * @param v2
-	 * @param v3
-	 * @return
-	 */
 	public static int color(int v1, int v2, int v3) {
 		if (v1 > 255) {
 			v1 = 255;
@@ -1009,20 +966,12 @@ public class WB_Color {
 		return color((int) (256 * v1), (int) (256 * v2), (int) (256 * v3));
 	}
 
-	/**
-	 * Wavelength to RGB color
-	 *
-	 * @param wavelength
-	 *            wavelength from 400nm-700nm
-	 * @return
-	 */
 	public static int spectralColor(final double wavelength) // RGB <0,1> <-
 																// lambda l
 	// <400,700>
 	// [nm]
 	{
 		double t;
-
 		double r = 0.0;
 		double g = 0.0;
 		double b = 0.0;
@@ -1073,76 +1022,47 @@ public class WB_Color {
 			return 0.0;
 		}
 		return x;
-
 	}
 
 	static WB_Vector bump3y(final WB_Vector x, final WB_Vector yoffset) {
-		WB_Vector y = new WB_Vector(1.0 - x.xd() * x.xd(), 1.0 - x.yd() * x.yd(), 1.0 - x.zd() * x.zd());
+		final WB_Vector y = new WB_Vector(1.0 - x.xd() * x.xd(), 1.0 - x.yd() * x.yd(), 1.0 - x.zd() * x.zd());
 		y.subSelf(yoffset);
 		y.set(clamp(y.xf()), clamp(y.yf()), clamp(y.zf()));
 		return y;
 	}
 
-	/**
-	 *
-	 * @param wavelength
-	 *            400-700
-	 * @return
-	 */
 	public static int spectralColorZucconi6(final double wavelength) {
-		WB_Vector x = new WB_Vector(1.0, 1.0, 1.0).mulSelf((wavelength - 400.0) / 300.0);
-
-		WB_Vector c1 = new WB_Vector(3.54585104, 2.93225262, 2.41593945);
-		WB_Vector x1 = new WB_Vector(0.69549072, 0.49228336, 0.27699880);
-		WB_Vector y1 = new WB_Vector(0.02312639, 0.15225084, 0.52607955);
-
-		WB_Vector c2 = new WB_Vector(3.90307140, 3.21182957, 3.96587128);
-		WB_Vector x2 = new WB_Vector(0.11748627, 0.86755042, 0.66077860);
-		WB_Vector y2 = new WB_Vector(0.84897130, 0.88445281, 0.73949448);
-
-		WB_Vector c1xmx1 = x.sub(x1).scaleSelf(c1.xd(), c1.yd(), c1.zd());
-		WB_Vector c2xmx2 = x.sub(x2).scaleSelf(c2.xd(), c2.yd(), c2.zd());
-		WB_Vector result = bump3y(c1xmx1, y1).addSelf(bump3y(c2xmx2, y2));
+		final WB_Vector x = new WB_Vector(1.0, 1.0, 1.0).mulSelf((wavelength - 400.0) / 300.0);
+		final WB_Vector c1 = new WB_Vector(3.54585104, 2.93225262, 2.41593945);
+		final WB_Vector x1 = new WB_Vector(0.69549072, 0.49228336, 0.27699880);
+		final WB_Vector y1 = new WB_Vector(0.02312639, 0.15225084, 0.52607955);
+		final WB_Vector c2 = new WB_Vector(3.90307140, 3.21182957, 3.96587128);
+		final WB_Vector x2 = new WB_Vector(0.11748627, 0.86755042, 0.66077860);
+		final WB_Vector y2 = new WB_Vector(0.84897130, 0.88445281, 0.73949448);
+		final WB_Vector c1xmx1 = x.sub(x1).scaleSelf(c1.xd(), c1.yd(), c1.zd());
+		final WB_Vector c2xmx2 = x.sub(x2).scaleSelf(c2.xd(), c2.yd(), c2.zd());
+		final WB_Vector result = bump3y(c1xmx1, y1).addSelf(bump3y(c2xmx2, y2));
 		return color((int) (259.99 * result.xd()), (int) (259.99 * result.yd()), (int) (259.99 * result.zd()));
 	}
 	// http://planetpixelemporium.com/tutorialpages/light.html
 
 	static public int Candle = color(255, 147, 41);
-
 	static public int Tungsten40W = color(255, 197, 143);
-
 	static public int Tungsten100W = color(255, 214, 170);
-
 	static public int Halogen = color(255, 241, 224);
-
 	static public int CarbonArc = color(255, 250, 244);
-
 	static public int HighNoonSun = color(255, 255, 251);
-
 	static public int DirectSunlight = color(255, 255, 255);
-
 	static public int OvercastSky = color(201, 226, 255);
-
 	static public int ClearBlueSky = color(64, 156, 255);
-
 	static public int WarmFluorescent = color(255, 244, 229);
-
 	static public int StandardFluorescent = color(244, 255, 250);
-
 	static public int CoolWhiteFluorescent = color(212, 235, 255);
-
 	static public int FullSpectrumFluorescent = color(255, 244, 242);
-
 	static public int GrowLightFluorescent = color(255, 239, 247);
-
 	static public int BlackLightFluorescent = color(167, 0, 255);
-
 	static public int MercuryVapor = color(216, 247, 255);
-
 	static public int SodiumVapor = color(255, 209, 178);
-
 	static public int MetalHalide = color(242, 252, 255);
-
 	static public int HighPressureSodium = color(255, 183, 76);
-
 }

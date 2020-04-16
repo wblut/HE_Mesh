@@ -1,12 +1,3 @@
-/*
- * HE_Mesh  Frederik Vanhoutte - www.wblut.com
- * 
- * https://github.com/wblut/HE_Mesh
- * A Processing/Java library for for creating and manipulating polygonal meshes.
- * 
- * Public Domain: http://creativecommons.org/publicdomain/zero/1.0/
- */
-
 package wblut.hemesh;
 
 import java.io.DataInputStream;
@@ -14,18 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.InflaterInputStream;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
-/**
- * Model: sourced from a free Beethoven obj floating around, origin untraceable.
- */
 public class HEC_Beethoven extends HEC_Creator {
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see wblut.hemesh.HEC_Creator#createBase()
-	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final InputStream is = this.getClass().getClassLoader().getResourceAsStream("resources/beethoven.binhemesh");
@@ -34,20 +14,19 @@ public class HEC_Beethoven extends HEC_Creator {
 		}
 		final HE_Mesh mesh = new HE_Mesh();
 		try {
-
 			final DataInputStream dis = new DataInputStream(new InflaterInputStream(is));
 			final int numVertices = dis.readInt();
 			final int numHalfedges = dis.readInt();
 			final int numFaces = dis.readInt();
-			final FastList<HE_Vertex> vertices = new FastList<HE_Vertex>();
+			final HE_VertexList vertices = new HE_VertexList();
 			for (int i = 0; i < numVertices; i++) {
 				vertices.add(new HE_Vertex());
 			}
-			final FastList<HE_Halfedge> halfedges = new FastList<HE_Halfedge>();
+			final HE_HalfedgeList halfedges = new HE_HalfedgeList();
 			for (int i = 0; i < numHalfedges; i++) {
 				halfedges.add(new HE_Halfedge());
 			}
-			final FastList<HE_Face> faces = new FastList<HE_Face>();
+			final HE_FaceList faces = new HE_FaceList();
 			for (int i = 0; i < numFaces; i++) {
 				faces.add(new HE_Face());
 			}
@@ -62,18 +41,13 @@ public class HEC_Beethoven extends HEC_Creator {
 				heid = dis.readInt();
 				v.setColor(dis.readInt());
 				v.setInternalLabel(dis.readInt());
-				v.setUserLabel(dis.readInt());
+				v.setLabel(dis.readInt());
 				hasuvw = dis.readInt();
 				v.set(x, y, z);
 				if (heid > -1) {
 					mesh.setHalfedge(v, halfedges.get(heid));
 				}
-
-				if (hasuvw == 1) {
-					v.setUVW(dis.readDouble(), dis.readDouble(), dis.readDouble());
-				}
 			}
-
 			HE_Halfedge he;
 			for (int i = 0; i < numHalfedges; i++) {
 				he = halfedges.get(i);
@@ -83,7 +57,7 @@ public class HEC_Beethoven extends HEC_Creator {
 				fid = dis.readInt();
 				he.setColor(dis.readInt());
 				he.setInternalLabel(dis.readInt());
-				he.setUserLabel(dis.readInt());
+				he.setLabel(dis.readInt());
 				hasuvw = dis.readInt();
 				if (vid > -1) {
 					mesh.setVertex(he, vertices.get(vid));
@@ -92,7 +66,6 @@ public class HEC_Beethoven extends HEC_Creator {
 					mesh.setNext(he, halfedges.get(henextid));
 				}
 				if (hepairid > -1) {
-
 					he.setPair(halfedges.get(hepairid));
 					halfedges.get(hepairid).setPair(he);
 				}
@@ -103,7 +76,6 @@ public class HEC_Beethoven extends HEC_Creator {
 					he.setUVW(dis.readDouble(), dis.readDouble(), dis.readDouble());
 				}
 			}
-
 			HE_Face f;
 			for (int i = 0; i < numFaces; i++) {
 				f = faces.get(i);
@@ -114,7 +86,7 @@ public class HEC_Beethoven extends HEC_Creator {
 				f.setColor(dis.readInt());
 				f.setTextureId(dis.readInt());
 				f.setInternalLabel(dis.readInt());
-				f.setUserLabel(dis.readInt());
+				f.setLabel(dis.readInt());
 			}
 			dis.close();
 			mesh.addVertices(vertices);
@@ -127,5 +99,4 @@ public class HEC_Beethoven extends HEC_Creator {
 		HE_MeshOp.improveTriangulation(mesh);
 		return mesh;
 	}
-
 }

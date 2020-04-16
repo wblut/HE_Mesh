@@ -1,11 +1,11 @@
 package wblut.core;
 
 public class WB_Version {
-	public static final WB_Version	CURRENT_VERSION	= new WB_Version();
-	public static final int			MAJOR			= 2019;
-	public static final int			MINOR			= 0;
-	public static final int			PATCH			= 2;
-	private static final String		releaseInfo		= "Phoenix";
+	public static final WB_Version CURRENT_VERSION = new WB_Version();
+	public static final int MAJOR = 2020;
+	public static final int MINOR = 0;
+	public static final int PATCH = 0;
+	private static final String releaseInfo = "Quarante";
 
 	public static void main(final String[] args) {
 		System.out.println(CURRENT_VERSION);
@@ -28,8 +28,7 @@ public class WB_Version {
 
 	@Override
 	public String toString() {
-		final String ver = "W:Blut HE_Mesh " + MAJOR + "." + MINOR + "."
-				+ PATCH;
+		final String ver = "W:Blut HE_Mesh " + MAJOR + "." + MINOR + "." + PATCH;
 		if (releaseInfo != null && releaseInfo.length() > 0) {
 			return ver + " " + releaseInfo;
 		}

@@ -5,12 +5,8 @@ HE_Mesh, a Java library for creating and manipulating polygonal meshes. Aimed pr
 
 ## Building HE_Mesh from source.
 
-The first thing you need to do is download or fork this repository and import the code in Eclipse.
-You need to add some other external *.jar files to the properties of your Eclipse project to compile HE_Mesh. These are included in the repository (folder external).
+The first thing you need to do is download or fork this repository and import the code in Eclipse. Dependencies are managed by Maven except for these two:
 
-* `core.jar`: This is the core Processing API for Processing 3. (http://processing.org/)
-* `eclipse-collections-9.0.0.jar`: Eclipse Collections project.(http://www.eclipse.org/collections/)
-* `javaluator-3.0.2.jar` : Evaluation of mathematical expressions http://javaluator.fathzer.com/en/home/
 * `hemesh-external-6_0_0.jar`: HE_Mesh contains source code from other authors that was converted to use my geometry classes for convenience. To protect the rights of the original authors whose work is not in the public domain, the source code is only available on request.
 * `hemesh-data-3_0_0.jar`: Data for HE_Mesh.
 
@@ -20,9 +16,9 @@ You need to add some other external *.jar files to the properties of your Eclips
 Download the current release here: https://www.wblut.com/hemesh/hemesh.zip.
 
 
-## Build-of-the-day HE_Mesh (2019/11/14)
+## Version in progress: 2020.0.0 - Quarante (2020/04/05)
 
-Download a recent built here: https://www.wblut.com/hemesh/hemesh20191114.zip.
+Download a recent built here: https://www.wblut.com/hemesh/hemesh20200105.zip.
 
 ## Examples
 

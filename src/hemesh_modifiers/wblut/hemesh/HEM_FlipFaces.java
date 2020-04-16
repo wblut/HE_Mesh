@@ -1,40 +1,19 @@
-/*
- * HE_Mesh Frederik Vanhoutte - www.wblut.com
- * https://github.com/wblut/HE_Mesh
- * A Processing/Java library for for creating and manipulating polygonal meshes.
- * Public Domain: http://creativecommons.org/publicdomain/zero/1.0/
- */
 package wblut.hemesh;
 
 import java.util.Iterator;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 
-/**
- * Flip face normals.
- *
- * @author Frederik Vanhoutte (W:Blut)
- *
- */
 public class HEM_FlipFaces extends HEM_Modifier {
-	/**
-	 * Instantiates a new HEM_FlipFaces.
-	 */
 	public HEM_FlipFaces() {
 		super();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
-	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatusStr("HEM_FlipFacesMeshOp", "Flipping faces.");
-		WB_ProgressCounter counter = new WB_ProgressCounter(
-				mesh.getNumberOfEdges(), 10);
-		tracker.setCounterStatusStr("HEM_FlipFacesMeshOp", "Reversing edges.",
-				counter);
+		WB_ProgressCounter counter = new WB_ProgressCounter(mesh.getNumberOfEdges(), 10);
+		tracker.setCounterStatusStr("HEM_FlipFacesMeshOp", "Reversing edges.", counter);
 		HE_Halfedge he1;
 		HE_Halfedge he2;
 		HE_Vertex tmp;
@@ -47,14 +26,11 @@ public class HEM_FlipFaces extends HEM_Modifier {
 		int i = 0;
 		HE_HalfedgeIterator heItr = mesh.heItr();
 		counter = new WB_ProgressCounter(2 * mesh.getNumberOfHalfedges(), 10);
-		tracker.setCounterStatusStr("HEM_FlipFacesMeshOp",
-				"Reordering halfedges.", counter);
+		tracker.setCounterStatusStr("HEM_FlipFacesMeshOp", "Reordering halfedges.", counter);
 		while (heItr.hasNext()) {
 			he = heItr.next();
 			prevHe[i] = he.getPrevInFace();
-			nextHeUVW[i] = he.getNextInFace().hasHalfedgeUVW()
-					? he.getNextInFace().getHalfedgeUVW()
-					: null;
+			nextHeUVW[i] = he.getNextInFace().hasUVW() ? he.getNextInFace().getUVW() : null;
 			i++;
 			counter.increment();
 		}
@@ -64,7 +40,7 @@ public class HEM_FlipFaces extends HEM_Modifier {
 			he = heItr.next();
 			mesh.setNext(he, prevHe[i]);
 			if (nextHeUVW[i] == null) {
-				he.clearUVW();
+				he.setUVW(0, 0, 0);
 			} else {
 				he.setUVW(nextHeUVW[i]);
 			}
@@ -88,18 +64,11 @@ public class HEM_FlipFaces extends HEM_Modifier {
 		return mesh;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
-	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		tracker.setStartStatusStr("HEM_FlipFacesMeshOp", "Flipping faces.");
-		WB_ProgressCounter counter = new WB_ProgressCounter(
-				selection.getNumberOfEdges(), 10);
-		tracker.setCounterStatusStr("HEM_FlipFacesMeshOp", "Reversing edges.",
-				counter);
+		WB_ProgressCounter counter = new WB_ProgressCounter(selection.getNumberOfEdges(), 10);
+		tracker.setCounterStatusStr("HEM_FlipFacesMeshOp", "Reversing edges.", counter);
 		HE_Halfedge he1;
 		HE_Halfedge he2;
 		HE_Vertex tmp;
@@ -112,16 +81,12 @@ public class HEM_FlipFaces extends HEM_Modifier {
 		nextHeUVW = new HE_TextureCoordinate[selection.getNumberOfHalfedges()];
 		int i = 0;
 		Iterator<HE_Halfedge> heItr = selection.heItr();
-		counter = new WB_ProgressCounter(2 * selection.getNumberOfHalfedges(),
-				10);
-		tracker.setCounterStatusStr("HEM_FlipFacesMeshOp",
-				"Reordering halfedges.", counter);
+		counter = new WB_ProgressCounter(2 * selection.getNumberOfHalfedges(), 10);
+		tracker.setCounterStatusStr("HEM_FlipFacesMeshOp", "Reordering halfedges.", counter);
 		while (heItr.hasNext()) {
 			he = heItr.next();
 			prevHe[i] = he.getPrevInFace();
-			nextHeUVW[i] = he.getNextInFace().hasHalfedgeUVW()
-					? he.getNextInFace().getHalfedgeUVW()
-					: null;
+			nextHeUVW[i] = he.getNextInFace().hasUVW() ? he.getNextInFace().getUVW() : null;
 			i++;
 			counter.increment();
 		}
@@ -131,7 +96,7 @@ public class HEM_FlipFaces extends HEM_Modifier {
 			he = heItr.next();
 			selection.getParent().setNext(he, prevHe[i]);
 			if (nextHeUVW[i] == null) {
-				he.clearUVW();
+				he.setUVW(0, 0, 0);
 			} else {
 				he.setUVW(nextHeUVW[i]);
 			}

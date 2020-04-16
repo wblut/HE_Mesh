@@ -1,9 +1,3 @@
-/*
- * HE_Mesh Frederik Vanhoutte - www.wblut.com
- * https://github.com/wblut/HE_Mesh
- * A Processing/Java library for for creating and manipulating polygonal meshes.
- * Public Domain: http://creativecommons.org/publicdomain/zero/1.0/
- */
 package wblut.hemesh;
 
 import java.util.HashMap;
@@ -13,7 +7,7 @@ import java.util.Map;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
@@ -21,46 +15,16 @@ import wblut.math.WB_ConstantScalarParameter;
 import wblut.math.WB_FactorScalarParameter;
 import wblut.math.WB_ScalarParameter;
 
-/**
- *
- */
 public class HEM_Lattice extends HEM_Modifier {
-	/**
-	 *
-	 */
-	private static final WB_GeometryFactory	gf	= new WB_GeometryFactory();
-	/**
-	 *
-	 */
-	private WB_ScalarParameter				d;
-	/**
-	 *
-	 */
-	private WB_ScalarParameter				sew;
-	/**
-	 *
-	 */
-	private WB_ScalarParameter				hew;
-	/**
-	 *
-	 */
-	private double							thresholdAngle;
-	/**
-	 *
-	 */
-	private boolean							fuse;
-	/**
-	 *
-	 */
-	private double							fuseAngle;
-	/**
-	 *
-	 */
-	private WB_ScalarParameter				ibulge, obulge;
+	private static final WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	private WB_ScalarParameter d;
+	private WB_ScalarParameter sew;
+	private WB_ScalarParameter hew;
+	private double thresholdAngle;
+	private boolean fuse;
+	private double fuseAngle;
+	private WB_ScalarParameter ibulge, obulge;
 
-	/**
-	 *
-	 */
 	public HEM_Lattice() {
 		super();
 		d = null;
@@ -71,12 +35,6 @@ public class HEM_Lattice extends HEM_Modifier {
 		ibulge = obulge = new WB_ConstantScalarParameter(0);
 	}
 
-	/**
-	 *
-	 *
-	 * @param d
-	 * @return
-	 */
 	public HEM_Lattice setDepth(final double d) {
 		this.d = new WB_ConstantScalarParameter(-d);
 		return this;
@@ -87,12 +45,6 @@ public class HEM_Lattice extends HEM_Modifier {
 		return this;
 	}
 
-	/**
-	 *
-	 *
-	 * @param w
-	 * @return
-	 */
 	public HEM_Lattice setWidth(final double w) {
 		sew = new WB_ConstantScalarParameter(0.5 * w);
 		hew = new WB_ConstantScalarParameter(w);
@@ -105,32 +57,18 @@ public class HEM_Lattice extends HEM_Modifier {
 		return this;
 	}
 
-	/**
-	 *
-	 *
-	 * @param w
-	 * @param hew
-	 * @return
-	 */
 	public HEM_Lattice setWidth(final double w, final double hew) {
 		sew = new WB_ConstantScalarParameter(0.5 * w);
 		this.hew = new WB_ConstantScalarParameter(hew);
 		return this;
 	}
 
-	public HEM_Lattice setWidth(final WB_ScalarParameter w,
-			final WB_ScalarParameter hew) {
+	public HEM_Lattice setWidth(final WB_ScalarParameter w, final WB_ScalarParameter hew) {
 		sew = new WB_FactorScalarParameter(0.5, w);
 		this.hew = hew;
 		return this;
 	}
 
-	/**
-	 *
-	 *
-	 * @param d
-	 * @return
-	 */
 	public HEM_Lattice setBulge(final double d) {
 		ibulge = new WB_ConstantScalarParameter(d);
 		obulge = new WB_ConstantScalarParameter(d);
@@ -143,63 +81,33 @@ public class HEM_Lattice extends HEM_Modifier {
 		return this;
 	}
 
-	/**
-	 *
-	 *
-	 * @param inner
-	 * @param outer
-	 * @return
-	 */
 	public HEM_Lattice setBulge(final double inner, final double outer) {
 		ibulge = new WB_ConstantScalarParameter(inner);
 		obulge = new WB_ConstantScalarParameter(outer);
 		return this;
 	}
 
-	public HEM_Lattice setBulge(final WB_ScalarParameter inner,
-			final WB_ScalarParameter outer) {
+	public HEM_Lattice setBulge(final WB_ScalarParameter inner, final WB_ScalarParameter outer) {
 		ibulge = inner;
 		obulge = outer;
 		return this;
 	}
 
-	/**
-	 *
-	 *
-	 * @param b
-	 * @return
-	 */
 	public HEM_Lattice setFuse(final boolean b) {
 		fuse = b;
 		return this;
 	}
 
-	/**
-	 *
-	 *
-	 * @param a
-	 * @return
-	 */
 	public HEM_Lattice setThresholdAngle(final double a) {
 		thresholdAngle = a;
 		return this;
 	}
 
-	/**
-	 *
-	 *
-	 * @param a
-	 * @return
-	 */
 	public HEM_Lattice setFuseAngle(final double a) {
 		fuseAngle = a;
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
-	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HEM_Lattice.");
@@ -209,26 +117,21 @@ public class HEM_Lattice extends HEM_Modifier {
 			return mesh;
 		}
 		if (sew == null) {
-			tracker.setStopStatus(this,
-					"Can't create with zero width. Exiting HEM_Lattice.");
+			tracker.setStopStatus(this, "Can't create with zero width. Exiting HEM_Lattice.");
 			return mesh;
 		}
-		final HEM_Extrude extm = new HEM_Extrude().setDistance(0)
-				.setRelative(false).setChamfer(sew).setFuse(fuse)
-				.setHardEdgeChamfer(hew).setFuseAngle(fuseAngle)
-				.setThresholdAngle(thresholdAngle);
+		final HEM_Extrude extm = new HEM_Extrude().setDistance(0).setRelative(false).setChamfer(sew).setFuse(fuse)
+				.setHardEdgeChamfer(hew).setFuseAngle(fuseAngle).setThresholdAngle(thresholdAngle);
 		mesh.modify(extm);
-
 		tracker.setDuringStatus(this, "Creating inner mesh.");
-		HEC_Copy cc = new HEC_Copy().setMesh(mesh);
+		final HEC_Copy cc = new HEC_Copy().setMesh(mesh);
 		final HE_Mesh innerMesh = cc.create();
-		Map<Long,Long> allheCorrelation = cc.halfedgeCorrelation;
-		WB_ProgressCounter counter = new WB_ProgressCounter(
-				mesh.getNumberOfFaces(), 10);
+		final HE_LongMap allheCorrelation = cc.halfedgeCorrelation;
+		WB_ProgressCounter counter = new WB_ProgressCounter(mesh.getNumberOfFaces(), 10);
 		tracker.setCounterStatus(this, "Creating face correlations.", counter);
-		final HashMap<Long, Long> faceCorrelation = new HashMap<Long, Long>();
-		final Iterator<HE_Face> fItr1 = mesh.fItr();
-		final Iterator<HE_Face> fItr2 = innerMesh.fItr();
+		final HashMap<Long, Long> faceCorrelation = new HashMap<>();
+		final HE_FaceIterator fItr1 = mesh.fItr();
+		final HE_FaceIterator fItr2 = innerMesh.fItr();
 		HE_Face f1;
 		HE_Face f2;
 		while (fItr1.hasNext()) {
@@ -238,17 +141,16 @@ public class HEM_Lattice extends HEM_Modifier {
 			counter.increment();
 		}
 		counter = new WB_ProgressCounter(mesh.getNumberOfHalfedges(), 10);
-		tracker.setCounterStatus(this,
-				"Creating boundary halfedge correlations.", counter);
-		final HashMap<Long, Long> heCorrelation = new HashMap<Long, Long>();
+		tracker.setCounterStatus(this, "Creating boundary halfedge correlations.", counter);
+		final HashMap<Long, Long> heCorrelation = new HashMap<>();
 		HE_Halfedge he1;
 		HE_Halfedge he2;
-		Object[] keys = allheCorrelation.keySet().toArray();
-		Object[] values =allheCorrelation.values().toArray();
+		final long[] keys = allheCorrelation.keySet().toArray();
+		final long[] values = allheCorrelation.values().toArray();
 		for (int i = 0; i < keys.length; i++) {
-			he1 = mesh.getHalfedgeWithKey((Long)keys[i]);
+			he1 = mesh.getHalfedgeWithKey(keys[i]);
 			if (he1.getFace() == null) {
-				he2 = innerMesh.getHalfedgeWithKey((Long)values[i]);
+				he2 = innerMesh.getHalfedgeWithKey(values[i]);
 				heCorrelation.put(he1.getKey(), he2.getKey());
 			}
 			counter.increment();
@@ -256,7 +158,7 @@ public class HEM_Lattice extends HEM_Modifier {
 		tracker.setDuringStatus(this, "Shrinking inner mesh.");
 		final HEM_VertexExpand expm = new HEM_VertexExpand().setDistance(d);
 		expm.applySelf(innerMesh);
-		HEM_FlipFaces ff = new HEM_FlipFaces();
+		final HEM_FlipFaces ff = new HEM_FlipFaces();
 		ff.applySelf(innerMesh);
 		final int nf = mesh.getNumberOfFaces();
 		final HE_Face[] origFaces = mesh.getFacesAsArray();
@@ -276,10 +178,9 @@ public class HEM_Lattice extends HEM_Modifier {
 		counter = new WB_ProgressCounter(nf, 10);
 		WB_Coord co, ci;
 		double ob, ib;
-		HE_Selection connect = HE_Selection.getSelection(mesh);
-		HE_Selection boundary = HE_Selection.getSelection(mesh);
-		tracker.setCounterStatus(this, "Connecting outer and inner faces.",
-				counter);
+		final HE_Selection connect = HE_Selection.getSelection(mesh);
+		final HE_Selection boundary = HE_Selection.getSelection(mesh);
+		tracker.setCounterStatus(this, "Connecting outer and inner faces.", counter);
 		for (int i = 0; i < nf; i++) {
 			fo = origFaces[i];
 			final Long innerKey = faceCorrelation.get(fo.getKey());
@@ -341,10 +242,8 @@ public class HEM_Lattice extends HEM_Modifier {
 			counter.increment();
 		}
 		counter = new WB_ProgressCounter(heCorrelation.size(), 10);
-		tracker.setCounterStatus(this, "Connecting outer and inner boundaries.",
-				counter);
-		final Iterator<Map.Entry<Long, Long>> it = heCorrelation.entrySet()
-				.iterator();
+		tracker.setCounterStatus(this, "Connecting outer and inner boundaries.", counter);
+		final Iterator<Map.Entry<Long, Long>> it = heCorrelation.entrySet().iterator();
 		while (it.hasNext()) {
 			final Map.Entry<Long, Long> pairs = it.next();
 			he1 = mesh.getHalfedgeWithKey(pairs.getKey());
@@ -376,10 +275,6 @@ public class HEM_Lattice extends HEM_Modifier {
 		return mesh;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
-	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		tracker.setStartStatus(this, "Starting HEM_Lattice.");
@@ -389,26 +284,21 @@ public class HEM_Lattice extends HEM_Modifier {
 			return selection.getParent();
 		}
 		if (sew == null) {
-			tracker.setStopStatus(this,
-					"Can't create with zero width. Exiting HEM_Lattice.");
+			tracker.setStopStatus(this, "Can't create with zero width. Exiting HEM_Lattice.");
 			return selection.getParent();
 		}
-		final HEM_Extrude extm = new HEM_Extrude().setDistance(0)
-				.setRelative(false).setChamfer(sew).setFuse(fuse)
-				.setHardEdgeChamfer(hew).setFuseAngle(fuseAngle)
-				.setThresholdAngle(thresholdAngle);
+		final HEM_Extrude extm = new HEM_Extrude().setDistance(0).setRelative(false).setChamfer(sew).setFuse(fuse)
+				.setHardEdgeChamfer(hew).setFuseAngle(fuseAngle).setThresholdAngle(thresholdAngle);
 		selection.modify(extm);
 		tracker.setDuringStatus(this, "Creating inner mesh.");
-		
-		HEC_Copy cc = new HEC_Copy().setMesh(selection.getParent());
+		final HEC_Copy cc = new HEC_Copy().setMesh(selection.getParent());
 		final HE_Mesh innerMesh = cc.create();
-		Map<Long,Long> allheCorrelation = cc.halfedgeCorrelation;
-		WB_ProgressCounter counter = new WB_ProgressCounter(
-				selection.getParent().getNumberOfFaces(), 10);
+		final HE_LongMap allheCorrelation = cc.halfedgeCorrelation;
+		WB_ProgressCounter counter = new WB_ProgressCounter(selection.getParent().getNumberOfFaces(), 10);
 		tracker.setCounterStatus(this, "Creating face correlations.", counter);
-		final HashMap<Long, Long> faceCorrelation = new HashMap<Long, Long>();
-		final Iterator<HE_Face> fItr1 = selection.getParent().fItr();
-		final Iterator<HE_Face> fItr2 = innerMesh.fItr();
+		final HashMap<Long, Long> faceCorrelation = new HashMap<>();
+		final HE_FaceIterator fItr1 = selection.getParent().fItr();
+		final HE_FaceIterator fItr2 = innerMesh.fItr();
 		HE_Face f1;
 		HE_Face f2;
 		while (fItr1.hasNext()) {
@@ -417,19 +307,17 @@ public class HEM_Lattice extends HEM_Modifier {
 			faceCorrelation.put(f1.getKey(), f2.getKey());
 			counter.increment();
 		}
-		counter = new WB_ProgressCounter(
-				selection.getParent().getNumberOfHalfedges(), 10);
-		tracker.setCounterStatus(this,
-				"Creating boundary halfedge correlations.", counter);
-		final HashMap<Long, Long> heCorrelation = new HashMap<Long, Long>();
+		counter = new WB_ProgressCounter(selection.getParent().getNumberOfHalfedges(), 10);
+		tracker.setCounterStatus(this, "Creating boundary halfedge correlations.", counter);
+		final HashMap<Long, Long> heCorrelation = new HashMap<>();
 		HE_Halfedge he1;
 		HE_Halfedge he2;
-		Object[] keys = allheCorrelation.keySet().toArray();
-		Object[] values =allheCorrelation.values().toArray();
+		final long[] keys = allheCorrelation.keySet().toArray();
+		final long[] values = allheCorrelation.values().toArray();
 		for (int i = 0; i < keys.length; i++) {
-			he1 = selection.getParent().getHalfedgeWithKey((Long)keys[i]);
+			he1 = selection.getParent().getHalfedgeWithKey(keys[i]);
 			if (he1.getFace() == null) {
-				he2 = innerMesh.getHalfedgeWithKey((Long)values[i]);
+				he2 = innerMesh.getHalfedgeWithKey(values[i]);
 				heCorrelation.put(he1.getKey(), he2.getKey());
 			}
 			counter.increment();
@@ -437,7 +325,7 @@ public class HEM_Lattice extends HEM_Modifier {
 		tracker.setDuringStatus(this, "Shrinking inner mesh.");
 		final HEM_VertexExpand expm = new HEM_VertexExpand().setDistance(d);
 		expm.applySelf(innerMesh);
-		HEM_FlipFaces ff = new HEM_FlipFaces();
+		final HEM_FlipFaces ff = new HEM_FlipFaces();
 		ff.applySelf(innerMesh);
 		final int nf = selection.getParent().getNumberOfFaces();
 		final HE_Face[] origFaces = selection.getParent().getFacesAsArray();
@@ -456,11 +344,9 @@ public class HEM_Lattice extends HEM_Modifier {
 		counter = new WB_ProgressCounter(nf, 10);
 		WB_Coord co, ci;
 		double ob, ib;
-		HE_Selection connect = HE_Selection.getSelection(selection.getParent());
-		HE_Selection boundary = HE_Selection
-				.getSelection(selection.getParent());
-		tracker.setCounterStatus(this, "Connecting outer and inner faces.",
-				counter);
+		final HE_Selection connect = HE_Selection.getSelection(selection.getParent());
+		final HE_Selection boundary = HE_Selection.getSelection(selection.getParent());
+		tracker.setCounterStatus(this, "Connecting outer and inner faces.", counter);
 		for (int i = 0; i < nf; i++) {
 			fo = origFaces[i];
 			final Long innerKey = faceCorrelation.get(fo.getKey());
@@ -522,10 +408,8 @@ public class HEM_Lattice extends HEM_Modifier {
 			counter.increment();
 		}
 		counter = new WB_ProgressCounter(heCorrelation.size(), 10);
-		tracker.setCounterStatus(this, "Connecting outer and inner boundaries.",
-				counter);
-		final Iterator<Map.Entry<Long, Long>> it = heCorrelation.entrySet()
-				.iterator();
+		tracker.setCounterStatus(this, "Connecting outer and inner boundaries.", counter);
+		final Iterator<Map.Entry<Long, Long>> it = heCorrelation.entrySet().iterator();
 		while (it.hasNext()) {
 			final Map.Entry<Long, Long> pairs = it.next();
 			he1 = selection.getParent().getHalfedgeWithKey(pairs.getKey());

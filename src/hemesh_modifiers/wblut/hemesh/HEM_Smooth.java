@@ -1,9 +1,3 @@
-/*
- * HE_Mesh Frederik Vanhoutte - www.wblut.com
- * https://github.com/wblut/HE_Mesh
- * A Processing/Java library for for creating and manipulating polygonal meshes.
- * Public Domain: http://creativecommons.org/publicdomain/zero/1.0/
- */
 package wblut.hemesh;
 
 import java.util.Iterator;
@@ -14,82 +8,38 @@ import wblut.geom.WB_AABB;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_Point;
 
-/**
- *
- */
 public class HEM_Smooth extends HEM_Modifier {
-	/**
-	 *
-	 */
-	private boolean	autoRescale;
-	/**
-	 *
-	 */
-	private boolean	keepBoundary;
-	private double	lambda;
-	/**
-	 *
-	 */
-	private int		iter;
+	private boolean autoRescale;
+	private boolean keepBoundary;
+	private double lambda;
+	private int iter;
 
-	/**
-	 *
-	 */
 	public HEM_Smooth() {
 		lambda = 0.5;
 		iter = 1;
 		keepBoundary = false;
 	}
 
-	/**
-	 *
-	 *
-	 * @param b
-	 * @return
-	 */
 	public HEM_Smooth setAutoRescale(final boolean b) {
 		autoRescale = b;
 		return this;
 	}
 
-	/**
-	 *
-	 *
-	 * @param r
-	 * @return
-	 */
 	public HEM_Smooth setIterations(final int r) {
 		iter = r;
 		return this;
 	}
 
-	/**
-	 *
-	 *
-	 * @param b
-	 * @return
-	 */
 	public HEM_Smooth setKeepBoundary(final boolean b) {
 		keepBoundary = b;
 		return this;
 	}
 
-
-	/**
-	 *
-	 *
-	 * @param lambda
-	 * @return
-	 */
 	public HEM_Smooth setLambda(final double lambda) {
 		this.lambda = lambda;
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see wblut.hemesh.HEM_Modifier#apply(wblut.hemesh.HE_Mesh)
-	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HEM_Smooth.");
@@ -97,13 +47,11 @@ public class HEM_Smooth extends HEM_Modifier {
 		if (autoRescale) {
 			box = HE_MeshOp.getAABB(mesh);
 		}
-		final WB_Coord[] newPositions = new WB_Coord[mesh
-				.getNumberOfVertices()];
+		final WB_Coord[] newPositions = new WB_Coord[mesh.getNumberOfVertices()];
 		if (iter < 1) {
 			iter = 1;
 		}
-		WB_ProgressCounter counter = new WB_ProgressCounter(
-				iter * mesh.getNumberOfVertices(), 10);
+		final WB_ProgressCounter counter = new WB_ProgressCounter(iter * mesh.getNumberOfVertices(), 10);
 		tracker.setCounterStatus(this, "Smoothing vertices.", counter);
 		for (int r = 0; r < iter; r++) {
 			Iterator<HE_Vertex> vItr = mesh.vItr();
@@ -119,8 +67,7 @@ public class HEM_Smooth extends HEM_Modifier {
 					p = new WB_Point(v).mulSelf(1.0 - lambda);
 					neighbors = v.getNeighborVertices();
 					for (int i = 0; i < neighbors.size(); i++) {
-						p.addMulSelf(lambda / neighbors.size(),
-								neighbors.get(i));
+						p.addMulSelf(lambda / neighbors.size(), neighbors.get(i));
 					}
 					newPositions[id] = p;
 				}
@@ -141,11 +88,6 @@ public class HEM_Smooth extends HEM_Modifier {
 		return mesh;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
-	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		tracker.setStartStatus(this, "Starting HEM_Smooth.");
@@ -154,13 +96,11 @@ public class HEM_Smooth extends HEM_Modifier {
 		if (autoRescale) {
 			box = HE_MeshOp.getAABB(selection.getParent());
 		}
-		final WB_Coord[] newPositions = new WB_Coord[selection
-				.getNumberOfVertices()];
+		final WB_Coord[] newPositions = new WB_Coord[selection.getNumberOfVertices()];
 		if (iter < 1) {
 			iter = 1;
 		}
-		WB_ProgressCounter counter = new WB_ProgressCounter(
-				iter * selection.getNumberOfVertices(), 10);
+		final WB_ProgressCounter counter = new WB_ProgressCounter(iter * selection.getNumberOfVertices(), 10);
 		tracker.setCounterStatus(this, "Smoothing vertices.", counter);
 		for (int r = 0; r < iter; r++) {
 			Iterator<HE_Vertex> vItr = selection.vItr();
@@ -183,8 +123,7 @@ public class HEM_Smooth extends HEM_Modifier {
 						}
 					}
 					for (int i = 0; i < neighbors.size(); i++) {
-						p.addMulSelf(lambda / neighbors.size(),
-								neighbors.get(i));
+						p.addMulSelf(lambda / neighbors.size(), neighbors.get(i));
 					}
 					newPositions[id] = p.addMulSelf(1.0 - lambda, v);
 				}

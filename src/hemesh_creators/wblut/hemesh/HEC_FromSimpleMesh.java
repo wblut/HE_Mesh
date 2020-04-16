@@ -1,44 +1,21 @@
-/*
- * HE_Mesh Frederik Vanhoutte - www.wblut.com
- * https://github.com/wblut/HE_Mesh
- * A Processing/Java library for for creating and manipulating polygonal meshes.
- * Public Domain: http://creativecommons.org/publicdomain/zero/1.0/
- */
 package wblut.hemesh;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-import org.eclipse.collections.impl.map.mutable.primitive.LongObjectHashMap;
-
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_KDTreeInteger3D;
 import wblut.geom.WB_KDTreeInteger3D.WB_KDEntryInteger;
+import wblut.geom.WB_Point;
+import wblut.geom.WB_PyramidFactory;
 import wblut.geom.WB_SimpleMesh;
 import wblut.geom.WB_SimpleMeshCreator;
 import wblut.math.WB_Epsilon;
 
-/**
- * Creates a new mesh from a list of vertices and faces. Vertices can be
- * duplicate.
- *
- * @author Frederik Vanhoutte (W:Blut)
- *
- */
 public class HEC_FromSimpleMesh extends HEC_Creator {
-	/**
-	 * Facelist source mesh.
-	 */
-	private final WB_SimpleMesh	source;
+	private final WB_SimpleMesh source;
 
-
-	/**
-	 * 
-	 *
-	 * @param source
-	 */
 	public HEC_FromSimpleMesh(final WB_SimpleMesh source) {
 		super();
 		this.source = source;
@@ -48,11 +25,6 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		setCheckUniformNormals(true);
 	}
 
-	/**
-	 *
-	 *
-	 * @param source
-	 */
 	public HEC_FromSimpleMesh(final WB_SimpleMeshCreator source) {
 		super();
 		this.source = source.create();
@@ -61,13 +33,13 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		setOverride(true);
 		setCheckUniformNormals(true);
 	}
-	
+
 	protected boolean getCheckDuplicateVertices() {
-		return parameters.get("duplicate",  true);	
+		return parameters.get("duplicate", true);
 	}
-	
+
 	protected boolean getCheckUniformNormals() {
-		return parameters.get("uniform",  true);	
+		return parameters.get("uniform", true);
 	}
 
 	public HEC_FromSimpleMesh setCheckDuplicateVertices(final boolean b) {
@@ -75,16 +47,11 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		return this;
 	}
 
-	
 	public HEC_FromSimpleMesh setCheckUniformNormals(final boolean b) {
 		parameters.set("uniform", b);
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see wblut.hemesh.HE_Creator#create()
-	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final HE_Mesh mesh = new HE_Mesh();
@@ -102,7 +69,9 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		int id = 0;
 		HE_Halfedge he;
 		for (final int[] face : faces) {
-			final ArrayList<HE_Halfedge> faceEdges = new ArrayList<HE_Halfedge>();
+			
+			if(face.length==0) continue;
+			final ArrayList<HE_Halfedge> faceEdges = new ArrayList<>();
 			final HE_Face hef = new HE_Face();
 			hef.setInternalLabel(id);
 			id++;
@@ -111,15 +80,12 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 			int li = 0;
 			locface[li++] = face[0];
 			for (int i = 1; i < fl - 1; i++) {
-				if (uniqueVertices.get(face[i]) != uniqueVertices
-						.get(face[i - 1])) {
+				if (uniqueVertices.get(face[i]) != uniqueVertices.get(face[i - 1])) {
 					locface[li++] = face[i];
 				}
 			}
-			if (uniqueVertices.get(face[fl - 1]) != uniqueVertices
-					.get(face[fl - 2])
-					&& uniqueVertices.get(face[fl - 1]) != uniqueVertices
-							.get(face[0])) {
+			if (uniqueVertices.get(face[fl - 1]) != uniqueVertices.get(face[fl - 2])
+					&& uniqueVertices.get(face[fl - 1]) != uniqueVertices.get(face[0])) {
 				locface[li++] = face[fl - 1];
 			}
 			if (li > 2) {
@@ -146,15 +112,6 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		return mesh;
 	}
 
-	/**
-	 * Ohash.
-	 *
-	 * @param u
-	 *            the u
-	 * @param v
-	 *            the v
-	 * @return the long
-	 */
 	private Long ohash(final int u, final int v) {
 		int lu = u;
 		int lv = v;
@@ -167,44 +124,22 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		return A >= B ? A * A + A + B : A + B * B;
 	}
 
-	/**
-	 * Consistent order.
-	 *
-	 * @param i
-	 *            the i
-	 * @param j
-	 *            the j
-	 * @param face
-	 *            the face
-	 * @param neighbor
-	 *            the neighbor
-	 * @return the int
-	 */
-	private int consistentOrder(final int i, final int j, final int[] face,
-			final int[] neighbor) {
+	private int consistentOrder(final int i, final int j, final int[] face, final int[] neighbor) {
 		for (int k = 0; k < neighbor.length; k++) {
-			if (neighbor[k] == face[i]
-					&& neighbor[(k + 1) % neighbor.length] == face[j]) {
+			if (neighbor[k] == face[i] && neighbor[(k + 1) % neighbor.length] == face[j]) {
 				return -1;
 			}
-			if (neighbor[k] == face[j]
-					&& neighbor[(k + 1) % neighbor.length] == face[i]) {
+			if (neighbor[k] == face[j] && neighbor[(k + 1) % neighbor.length] == face[i]) {
 				return 1;
 			}
 		}
 		return 0;
 	}
 
-	/**
-	 *
-	 *
-	 * @param mesh
-	 * @return
-	 */
 	private List<HE_Vertex> getUniqueVertices(final HE_Mesh mesh) {
-		final List<HE_Vertex> uniqueVertices = new FastList<HE_Vertex>();
+		final List<HE_Vertex> uniqueVertices = new HE_VertexList();
 		if (getCheckDuplicateVertices()) {
-			final WB_KDTreeInteger3D<WB_Coord> kdtree = new WB_KDTreeInteger3D<WB_Coord>();
+			final WB_KDTreeInteger3D<WB_Coord> kdtree = new WB_KDTreeInteger3D<>();
 			WB_KDEntryInteger<WB_Coord> neighbor;
 			HE_Vertex v = new HE_Vertex(source.getVertex(0));
 			kdtree.add(source.getVertex(0), 0);
@@ -234,13 +169,8 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		return uniqueVertices;
 	}
 
-	/**
-	 *
-	 *
-	 * @param faces
-	 */
 	private void unifyNormals(final int[][] faces) {
-		final LongObjectHashMap<int[]> edges = new LongObjectHashMap<int[]>();
+		final HE_ObjectMap<int[]> edges = new HE_ObjectMap<>();
 		for (int i = 0; i < faces.length; i++) {
 			final int[] face = faces[i];
 			final int fl = face.length;
@@ -255,7 +185,7 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 			}
 		}
 		final boolean[] visited = new boolean[faces.length];
-		final LinkedList<Integer> queue = new LinkedList<Integer>();
+		final LinkedList<Integer> queue = new LinkedList<>();
 		boolean facesleft = false;
 		int starti = 0;
 		do {
@@ -279,13 +209,11 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 					if (neighbor > -1) {
 						if (visited[neighbor] == false) {
 							queue.add(neighbor);
-							if (consistentOrder(j, (j + 1) % fl, face,
-									faces[neighbor]) == -1) {
+							if (consistentOrder(j, (j + 1) % fl, face, faces[neighbor]) == -1) {
 								final int fln = faces[neighbor].length;
 								for (int k = 0; k < fln / 2; k++) {
 									temp = faces[neighbor][k];
-									faces[neighbor][k] = faces[neighbor][fln - k
-											- 1];
+									faces[neighbor][k] = faces[neighbor][fln - k - 1];
 									faces[neighbor][fln - k - 1] = temp;
 								}
 							}
@@ -300,5 +228,18 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 				}
 			}
 		} while (facesleft);
+	}
+	
+	
+	public static final void main(String arg[]) {
+		WB_PyramidFactory pf=new WB_PyramidFactory();
+		  WB_Point[] points =new WB_Point[12];
+		  for (int i=0; i<12; i++) {
+		    float radius=(float)(200.0*Math.random());
+		    points[i]=new WB_Point(radius*Math.cos(Math.PI/6.0*i), radius*Math.sin(Math.PI/6.0*i));
+		  }
+		  pf.setPoints(points);
+		  WB_SimpleMesh smesh=pf.createPyramidWithHeightAndAngle(450,Math.PI/6.0);
+		 HE_Mesh mesh=new HE_Mesh(smesh);
 	}
 }

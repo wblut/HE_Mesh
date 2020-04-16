@@ -1,17 +1,7 @@
-/*
- * Colormap from matplotlib
- * https://github.com/matplotlib/
- */
-
 package wblut.processing;
 
-/**
- * @author FVH
- *
- */
-
 public interface WB_ColorMap {
-	public int getColor(final double f);
+	int getColor(final double f);
 
 	static abstract class AbstractColorMap implements WB_ColorMap {
 		int color(int v1, int v2, int v3) {
@@ -43,14 +33,13 @@ public interface WB_ColorMap {
 				i = i + 1;
 			}
 			i = i - 1;
-			double c1 = values[i][1];
-			double c2 = values[i + 1][1];
-			double scaling = (x - values[i][0]) / Math.abs(values[i][0] - values[i + 1][0]);
+			final double c1 = values[i][1];
+			final double c2 = values[i + 1][1];
+			final double scaling = (x - values[i][0]) / Math.abs(values[i][0] - values[i + 1][0]);
 			return c1 + (c2 - c1) * scaling;
 		}
 
 		// Gnuplot palette functions
-
 		double gfunc0(final double x) {
 			return 0;
 		}
@@ -355,5 +344,4 @@ public interface WB_ColorMap {
 			return normColor(lookup(f, red), lookup(f, green), lookup(f, blue));
 		}
 	}
-
 }

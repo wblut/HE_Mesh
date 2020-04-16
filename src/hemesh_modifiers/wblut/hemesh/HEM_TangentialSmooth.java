@@ -1,12 +1,6 @@
-/*
- * HE_Mesh Frederik Vanhoutte - www.wblut.com
- * https://github.com/wblut/HE_Mesh
- * A Processing/Java library for for creating and manipulating polygonal meshes.
- * Public Domain: http://creativecommons.org/publicdomain/zero/1.0/
- */
 package wblut.hemesh;
 
-import static wblut.geom.WB_GeometryOp.projectOnPlane;
+import static wblut.geom.WB_GeometryOp3D.projectOnPlane;
 
 import java.util.Iterator;
 import java.util.List;
@@ -17,81 +11,38 @@ import wblut.geom.WB_Coord;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 
-/**
- *
- */
 public class HEM_TangentialSmooth extends HEM_Modifier {
-	/**
-	 *
-	 */
-	private boolean	autoRescale;
-	/**
-	 *
-	 */
-	private boolean	keepBoundary;
-	/**
-	 *
-	 */
-	private int		iter;
-	private double	lambda;
+	private boolean autoRescale;
+	private boolean keepBoundary;
+	private int iter;
+	private double lambda;
 
-	/**
-	 *
-	 */
 	public HEM_TangentialSmooth() {
 		lambda = 0.5;
 		iter = 1;
 		keepBoundary = false;
 	}
 
-	/**
-	 *
-	 *
-	 * @param b
-	 * @return
-	 */
 	public HEM_TangentialSmooth setAutoRescale(final boolean b) {
 		autoRescale = b;
 		return this;
 	}
 
-	/**
-	 *
-	 *
-	 * @param r
-	 * @return
-	 */
 	public HEM_TangentialSmooth setIterations(final int r) {
 		iter = r;
 		return this;
 	}
 
-	/**
-	 *
-	 *
-	 * @param b
-	 * @return
-	 */
 	public HEM_TangentialSmooth setKeepBoundary(final boolean b) {
 		keepBoundary = b;
 		return this;
 	}
 
-	/**
-	 *
-	 *
-	 * @param lambda
-	 * @return
-	 */
 	public HEM_TangentialSmooth setLambda(final double lambda) {
 		this.lambda = lambda;
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see wblut.hemesh.HEM_Modifier#apply(wblut.hemesh.HE_Mesh)
-	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HEM_TangentialSmooth.");
@@ -99,13 +50,11 @@ public class HEM_TangentialSmooth extends HEM_Modifier {
 		if (autoRescale) {
 			box = HE_MeshOp.getAABB(mesh);
 		}
-		final WB_Coord[] newPositions = new WB_Coord[mesh
-				.getNumberOfVertices()];
+		final WB_Coord[] newPositions = new WB_Coord[mesh.getNumberOfVertices()];
 		if (iter < 1) {
 			iter = 1;
 		}
-		WB_ProgressCounter counter = new WB_ProgressCounter(
-				iter * mesh.getNumberOfVertices(), 10);
+		final WB_ProgressCounter counter = new WB_ProgressCounter(iter * mesh.getNumberOfVertices(), 10);
 		tracker.setCounterStatus(this, "Smoothing vertices.", counter);
 		for (int r = 0; r < iter; r++) {
 			Iterator<HE_Vertex> vItr = mesh.vItr();
@@ -124,8 +73,7 @@ public class HEM_TangentialSmooth extends HEM_Modifier {
 					neighbors = v.getNeighborVertices();
 					p.mulSelf(1 - lambda);
 					for (int i = 0; i < neighbors.size(); i++) {
-						p.addMulSelf(lambda / neighbors.size(),
-								neighbors.get(i));
+						p.addMulSelf(lambda / neighbors.size(), neighbors.get(i));
 					}
 					newPositions[id] = projectOnPlane(p, tangent);
 				}
@@ -146,11 +94,6 @@ public class HEM_TangentialSmooth extends HEM_Modifier {
 		return mesh;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
-	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		tracker.setStartStatus(this, "Starting HEM_TangentialSmooth.");
@@ -159,13 +102,11 @@ public class HEM_TangentialSmooth extends HEM_Modifier {
 		if (autoRescale) {
 			box = HE_MeshOp.getAABB(selection.getParent());
 		}
-		final WB_Coord[] newPositions = new WB_Coord[selection
-				.getNumberOfVertices()];
+		final WB_Coord[] newPositions = new WB_Coord[selection.getNumberOfVertices()];
 		if (iter < 1) {
 			iter = 1;
 		}
-		WB_ProgressCounter counter = new WB_ProgressCounter(
-				iter * selection.getNumberOfVertices(), 10);
+		final WB_ProgressCounter counter = new WB_ProgressCounter(iter * selection.getNumberOfVertices(), 10);
 		tracker.setCounterStatus(this, "Smoothing vertices.", counter);
 		WB_Plane tangent;
 		for (int r = 0; r < iter; r++) {
@@ -190,11 +131,9 @@ public class HEM_TangentialSmooth extends HEM_Modifier {
 						}
 					}
 					for (int i = 0; i < neighbors.size(); i++) {
-						p.addMulSelf(lambda / neighbors.size(),
-								neighbors.get(i));
+						p.addMulSelf(lambda / neighbors.size(), neighbors.get(i));
 					}
-					newPositions[id] = projectOnPlane(
-							p.addMulSelf(1.0 - lambda, v), tangent);
+					newPositions[id] = projectOnPlane(p.addMulSelf(1.0 - lambda, v), tangent);
 				}
 				id++;
 			}

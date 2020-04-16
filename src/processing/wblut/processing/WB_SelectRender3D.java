@@ -1,12 +1,3 @@
-/*
- * HE_Mesh  Frederik Vanhoutte - www.wblut.com
- * 
- * https://github.com/wblut/HE_Mesh
- * A Processing/Java library for for creating and manipulating polygonal meshes.
- * 
- * Public Domain: http://creativecommons.org/publicdomain/zero/1.0/
- */
-
 package wblut.processing;
 
 import java.util.HashMap;
@@ -17,49 +8,19 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.opengl.PGraphics3D;
 import wblut.hemesh.HE_Face;
+import wblut.hemesh.HE_FaceIterator;
 import wblut.hemesh.HE_Halfedge;
 import wblut.hemesh.HE_HalfedgeStructure;
 import wblut.hemesh.HE_Vertex;
 
-/**
- *
- */
 public class WB_SelectRender3D {
-
-	/**
-	 *
-	 */
 	private final PApplet home;
-
-	/**
-	 *
-	 */
 	private final PGraphics3D selector;
-
-	/**
-	 *
-	 */
 	private final int[] samples;
-
-	/**
-	 *
-	 */
-
-	/** The current_color. */
 	protected int currentColor;
-	/** The color to object. */
 	protected HashMap<Integer, Long> colorToObject;
-
-	/**
-	 *
-	 */
 	private final double scale;
 
-	/**
-	 *
-	 *
-	 * @param home
-	 */
 	public WB_SelectRender3D(final PApplet home) {
 		scale = 1;// doesn't work yet
 		selector = (PGraphics3D) home.createGraphics((int) (home.width * scale), (int) (home.height * scale),
@@ -69,25 +30,17 @@ public class WB_SelectRender3D {
 		selector.noLights();
 		selector.endDraw();
 		this.home = home;
-		colorToObject = new HashMap<Integer, Long>();
+		colorToObject = new HashMap<>();
 		currentColor = -16777216;
 		samples = new int[5];
 	}
 
-	/**
-	 * Draw one face.
-	 *
-	 * @param f
-	 *            face
-	 */
 	private void drawFace(final HE_Face f) {
 		if (f.getFaceDegree() > 2) {
 			final int[] tris = f.getTriangles();
 			final List<HE_Vertex> vertices = f.getFaceVertices();
 			HE_Vertex v0, v1, v2;
-
 			for (int i = 0; i < tris.length; i += 3) {
-
 				selector.beginShape(PConstants.TRIANGLES);
 				v0 = vertices.get(tris[i]);
 				v1 = vertices.get(tris[i + 1]);
@@ -100,19 +53,12 @@ public class WB_SelectRender3D {
 		}
 	}
 
-	/**
-	 * Draw mesh faces. Typically used with noStroke();
-	 *
-	 * @param mesh
-	 *            the mesh
-	 * @return key of face at mouse position
-	 */
 	public void drawFaces(final HE_HalfedgeStructure mesh) {
 		selector.beginDraw();
 		selector.setMatrix(home.getMatrix());
 		selector.scale((float) scale);
 		selector.clear();
-		final Iterator<HE_Face> fItr = mesh.fItr();
+		final HE_FaceIterator fItr = mesh.fItr();
 		HE_Face f;
 		selector.strokeWeight(1.0f);
 		while (fItr.hasNext()) {
@@ -123,14 +69,6 @@ public class WB_SelectRender3D {
 		selector.endDraw();
 	}
 
-	/**
-	 * Draw mesh edges.
-	 *
-	 * @param mesh
-	 *            the mesh
-	 * @param d
-	 * @return key of edge at mouse position
-	 */
 	public void drawEdges(final HE_HalfedgeStructure mesh, final double d) {
 		selector.beginDraw();
 		selector.setMatrix(home.getMatrix());
@@ -148,15 +86,6 @@ public class WB_SelectRender3D {
 		selector.endDraw();
 	}
 
-	/**
-	 * Draw mesh vertices as box.
-	 *
-	 * @param mesh
-	 *            the mesh
-	 * @param d
-	 *            size of box
-	 * @return key of vertex at mouse position
-	 */
 	public void drawVertices(final HE_HalfedgeStructure mesh, final double d) {
 		selector.beginDraw();
 		selector.setMatrix(home.getMatrix());
@@ -176,13 +105,6 @@ public class WB_SelectRender3D {
 		selector.endDraw();
 	}
 
-	/**
-	 *
-	 *
-	 * @param x
-	 * @param y
-	 * @return
-	 */
 	public long getKeyAA(final int x, final int y) {
 		final int locx = (int) (x * scale);
 		final int locy = (int) (y * scale);
@@ -213,13 +135,6 @@ public class WB_SelectRender3D {
 		return selection == null ? -1 : selection;
 	}
 
-	/**
-	 *
-	 *
-	 * @param x
-	 * @param y
-	 * @return
-	 */
 	public long getKey(final int x, final int y) {
 		final int locx = (int) (x * scale);
 		final int locy = (int) (y * scale);
@@ -230,30 +145,14 @@ public class WB_SelectRender3D {
 		return selection == null ? -1 : selection;
 	}
 
-	/**
-	 *
-	 *
-	 * @return
-	 */
 	public long getKey() {
 		return getKey(home.mouseX, home.mouseY);
 	}
 
-	/**
-	 *
-	 *
-	 * @return
-	 */
 	public long getKeyAA() {
 		return getKeyAA(home.mouseX, home.mouseY);
 	}
 
-	/**
-	 * Set the key.
-	 *
-	 * @param i
-	 *            new key
-	 */
 	private void setKey(final Long i) {
 		if (i < 0 || i > 16777214) {
 			PApplet.println("[HE_Selector error] setKey(): ID out of range");
@@ -267,9 +166,6 @@ public class WB_SelectRender3D {
 		selector.stroke(currentColor);
 	}
 
-	/**
-	 *
-	 */
 	public void image() {
 		home.image(selector, 0, 0);
 	}

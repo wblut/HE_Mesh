@@ -1,33 +1,17 @@
-/*
- * HE_Mesh Frederik Vanhoutte - www.wblut.com
- * https://github.com/wblut/HE_Mesh
- * A Processing/Java library for for creating and manipulating polygonal meshes.
- * Public Domain: http://creativecommons.org/publicdomain/zero/1.0/
- */
 package wblut.hemesh;
 
 import java.util.List;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 
-/**
- *
- */
 public class HEM_CapHoles extends HEM_Modifier {
 	private HE_Selection caps;
 
-	/**
-	 *
-	 */
 	public HEM_CapHoles() {
 		super();
 		caps = null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
-	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HEM_CapHoles.");
@@ -41,13 +25,11 @@ public class HEM_CapHoles extends HEM_Modifier {
 		HE_RAS<HE_Halfedge> newHalfedges;
 		HE_Halfedge phe;
 		HE_Halfedge nhe;
-		WB_ProgressCounter counter = new WB_ProgressCounter(
-				unpairedEdges.size(), 10);
-		tracker.setCounterStatus(this, "Finding loops and closing holes.",
-				counter);
+		final WB_ProgressCounter counter = new WB_ProgressCounter(unpairedEdges.size(), 10);
+		tracker.setCounterStatus(this, "Finding loops and closing holes.", counter);
 		while (unpairedEdges.size() > 0) {
 			boolean abort = false;
-			loopedHalfedges = new HE_RAS<HE_Halfedge>();
+			loopedHalfedges = new HE_RAS<>();
 			start = unpairedEdges.get(0);
 			loopedHalfedges.add(start);
 			he = start;
@@ -69,31 +51,25 @@ public class HEM_CapHoles extends HEM_Modifier {
 					noNextFound = true;
 				}
 				he = hen;
-			} while (hen.getNextInFace().getVertex() != start.getVertex()
-					&& !noNextFound && !abort);
+			} while (hen.getNextInFace().getVertex() != start.getVertex() && !noNextFound && !abort);
 			if (!abort) {
 				nf = new HE_Face();
-				boolean noLoopFound = start.getVertex() != loopedHalfedges
-						.getWithIndex(loopedHalfedges.size() - 1)
-						.getNextInFace().getVertex();
+				final boolean noLoopFound = start.getVertex() != loopedHalfedges
+						.getWithIndex(loopedHalfedges.size() - 1).getNextInFace().getVertex();
 				int ii = 0;
-				StringBuilder sb = new StringBuilder(100);
+				final StringBuilder sb = new StringBuilder(100);
 				if (noLoopFound) {
 					sb.append("Polyline found: ");
 					for (ii = 0; ii < loopedHalfedges.size() - 1; ii++) {
-						sb.append(unpairedEdges.indexOf(
-								loopedHalfedges.getWithIndex(ii)) + "-> ");
+						sb.append(unpairedEdges.indexOf(loopedHalfedges.getWithIndex(ii)) + "-> ");
 					}
-					sb.append(unpairedEdges
-							.indexOf(loopedHalfedges.getWithIndex(ii)));
+					sb.append(unpairedEdges.indexOf(loopedHalfedges.getWithIndex(ii)));
 				} else {
 					sb.append("Cycle found: ");
 					for (ii = 0; ii < loopedHalfedges.size(); ii++) {
-						sb.append(unpairedEdges.indexOf(
-								loopedHalfedges.getWithIndex(ii)) + "-> ");
+						sb.append(unpairedEdges.indexOf(loopedHalfedges.getWithIndex(ii)) + "-> ");
 					}
-					sb.append(unpairedEdges
-							.indexOf(loopedHalfedges.getWithIndex(0)));
+					sb.append(unpairedEdges.indexOf(loopedHalfedges.getWithIndex(0)));
 				}
 				tracker.setDuringStatus(this, sb.toString());
 				unpairedEdges.removeAll(loopedHalfedges);
@@ -101,7 +77,7 @@ public class HEM_CapHoles extends HEM_Modifier {
 					mesh.add(nf);
 					caps.add(nf);
 				}
-				newHalfedges = new HE_RAS<HE_Halfedge>();
+				newHalfedges = new HE_RAS<>();
 				for (int i = 0; i < loopedHalfedges.size(); i++) {
 					phe = loopedHalfedges.getWithIndex(i);
 					nhe = new HE_Halfedge();
@@ -116,8 +92,7 @@ public class HEM_CapHoles extends HEM_Modifier {
 						}
 					}
 				}
-				HE_MeshOp.orderHalfedgesReverse(mesh, newHalfedges.getObjects(),
-						!noLoopFound);
+				HE_MeshOp.orderHalfedgesReverse(mesh, newHalfedges.getObjects(), !noLoopFound);
 				counter.increment(newHalfedges.size());
 			}
 		}
@@ -128,10 +103,6 @@ public class HEM_CapHoles extends HEM_Modifier {
 		return mesh;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
-	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		return applySelf(selection.getParent());

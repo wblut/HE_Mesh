@@ -1,9 +1,3 @@
-/*
- * HE_Mesh Frederik Vanhoutte - www.wblut.com
- * https://github.com/wblut/HE_Mesh
- * A Processing/Java library for for creating and manipulating polygonal meshes.
- * Public Domain: http://creativecommons.org/publicdomain/zero/1.0/
- */
 package wblut.hemesh;
 
 import wblut.geom.WB_JTS;
@@ -12,19 +6,9 @@ import wblut.geom.WB_Vector;
 import wblut.math.WB_Math;
 
 public interface HET_InfoFace<E extends Object> {
-	/**
-	 *
-	 *
-	 * @param face
-	 * @return
-	 */
-	public E retrieve(final HE_Face face);
+	E retrieve(final HE_Face face);
 
 	public static class HET_FaceNormal implements HET_InfoFace<WB_Vector> {
-		/*
-		 * (non-Javadoc)
-		 * @see wblut.hemesh.HET_FaceInfo#retrieve(wblut.hemesh.HE_Face)
-		 */
 		@Override
 		public WB_Vector retrieve(final HE_Face face) {
 			if (face.getHalfedge() == null) {
@@ -38,8 +22,7 @@ public interface HET_InfoFace<E extends Object> {
 			do {
 				p0 = he.getVertex();
 				p1 = he.getNextInFace().getVertex();
-				normal.addSelf((p0.yd() - p1.yd()) * (p0.zd() + p1.zd()),
-						(p0.zd() - p1.zd()) * (p0.xd() + p1.xd()),
+				normal.addSelf((p0.yd() - p1.yd()) * (p0.zd() + p1.zd()), (p0.zd() - p1.zd()) * (p0.xd() + p1.xd()),
 						(p0.xd() - p1.xd()) * (p0.yd() + p1.yd()));
 				he = he.getNextInFace();
 			} while (he != face.getHalfedge());
@@ -49,10 +32,6 @@ public interface HET_InfoFace<E extends Object> {
 	}
 
 	public static class HET_FaceCenter implements HET_InfoFace<WB_Point> {
-		/*
-		 * (non-Javadoc)
-		 * @see wblut.hemesh.HET_FaceInfo#retrieve(wblut.hemesh.HE_Face)
-		 */
 		@Override
 		public WB_Point retrieve(final HE_Face face) {
 			if (face.getHalfedge() == null) {
@@ -72,10 +51,6 @@ public interface HET_InfoFace<E extends Object> {
 	}
 
 	public static class HET_FaceArea implements HET_InfoFace<Double> {
-		/*
-		 * (non-Javadoc)
-		 * @see wblut.hemesh.HET_FaceInfo#retrieve(wblut.hemesh.HE_Face)
-		 */
 		@Override
 		public Double retrieve(final HE_Face face) {
 			if (face.getHalfedge() == null) {
@@ -88,8 +63,7 @@ public interface HET_InfoFace<E extends Object> {
 			do {
 				p0 = he.getVertex();
 				p1 = he.getNextInFace().getVertex();
-				n.addSelf((p0.yd() - p1.yd()) * (p0.zd() + p1.zd()),
-						(p0.zd() - p1.zd()) * (p0.xd() + p1.xd()),
+				n.addSelf((p0.yd() - p1.yd()) * (p0.zd() + p1.zd()), (p0.zd() - p1.zd()) * (p0.xd() + p1.xd()),
 						(p0.xd() - p1.xd()) * (p0.yd() + p1.yd()));
 				he = he.getNextInFace();
 			} while (he != face.getHalfedge());
@@ -110,43 +84,36 @@ public interface HET_InfoFace<E extends Object> {
 			he = face.getHalfedge();
 			do {
 				switch (coord) {
-					case 1:
-						area += he.getVertex().yd()
-								* (he.getNextInFace().getVertex().zd()
-										- he.getPrevInFace().getVertex().zd());
-						break;
-					case 2:
-						area += he.getVertex().xd()
-								* (he.getNextInFace().getVertex().zd()
-										- he.getPrevInFace().getVertex().zd());
-						break;
-					case 3:
-						area += he.getVertex().xd()
-								* (he.getNextInFace().getVertex().yd()
-										- he.getPrevInFace().getVertex().yd());
-						break;
+				case 1:
+					area += he.getVertex().yd()
+							* (he.getNextInFace().getVertex().zd() - he.getPrevInFace().getVertex().zd());
+					break;
+				case 2:
+					area += he.getVertex().xd()
+							* (he.getNextInFace().getVertex().zd() - he.getPrevInFace().getVertex().zd());
+					break;
+				case 3:
+					area += he.getVertex().xd()
+							* (he.getNextInFace().getVertex().yd() - he.getPrevInFace().getVertex().yd());
+					break;
 				}
 				he = he.getNextInFace();
 			} while (he != face.getHalfedge());
 			switch (coord) {
-				case 1:
-					area *= 0.5 / x;
-					break;
-				case 2:
-					area *= 0.5 / y;
-					break;
-				case 3:
-					area *= 0.5 / z;
+			case 1:
+				area *= 0.5 / x;
+				break;
+			case 2:
+				area *= 0.5 / y;
+				break;
+			case 3:
+				area *= 0.5 / z;
 			}
 			return WB_Math.fastAbs(area);
 		}
 	}
 
 	public static class HET_FaceTriangles implements HET_InfoFace<int[]> {
-		/*
-		 * (non-Javadoc)
-		 * @see wblut.hemesh.HET_FaceInfo#retrieve(wblut.hemesh.HE_Face)
-		 */
 		@Override
 		public int[] retrieve(final HE_Face f) {
 			int[] triangles;
@@ -167,16 +134,13 @@ public interface HET_InfoFace<E extends Object> {
 				int i = 0;
 				HE_Halfedge he = f.getHalfedge();
 				do {
-					points[i] = new WB_Point(he.getVertex().xd(),
-							he.getVertex().yd(), he.getVertex().zd());
+					points[i] = new WB_Point(he.getVertex().xd(), he.getVertex().yd(), he.getVertex().zd());
 					he = he.getNextInFace();
 					i++;
 				} while (he != f.getHalfedge());
-				return WB_JTS.PolygonTriangulatorJTS.triangulateQuad(points[0],
-						points[1], points[2], points[3]);
+				return WB_JTS.PolygonTriangulatorJTS.triangulateQuad(points[0], points[1], points[2], points[3]);
 			} else {
-				triangles = new WB_JTS.PolygonTriangulatorJTS()
-						.triangulatePolygon2D(HE_MeshOp.getPolygon(f), true)
+				triangles = new WB_JTS.PolygonTriangulatorJTS().triangulatePolygon2D(HE_MeshOp.getPolygon(f), true)
 						.getTriangles();
 			}
 			return triangles;

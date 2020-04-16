@@ -1,86 +1,49 @@
-/*
- * HE_Mesh Frederik Vanhoutte - www.wblut.com
- * https://github.com/wblut/HE_Mesh
- * A Processing/Java library for for creating and manipulating polygonal meshes.
- * Public Domain: http://creativecommons.org/publicdomain/zero/1.0/
- */
 package wblut.hemesh;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 
-/**
- * Axis Aligned Box.
- *
- * @author Frederik Vanhoutte (W:Blut)
- *
- */
 public class HEC_Copy extends HEC_Creator {
-	/**
-	 *
-	 */
-	private HE_HalfedgeStructure	source;
-	 Map<Long,Long>	vertexCorrelation;
-	
-	Map<Long,Long>	faceCorrelation;
-	 Map<Long,Long>	halfedgeCorrelation;
+	private HE_HalfedgeStructure source;
+	HE_LongMap vertexCorrelation;
+	HE_LongMap faceCorrelation;
+	HE_LongMap halfedgeCorrelation;
 
-	/**
-	 *
-	 */
 	public HEC_Copy() {
 		super();
 		setOverride(true);
 		setModelViewOverride(true);
 	}
 
-	/**
-	 *
-	 *
-	 * @param source
-	 */
 	public HEC_Copy(final HE_HalfedgeStructure source) {
 		this();
 		setMesh(source);
 	}
 
-	/**
-	 *
-	 *
-	 * @param source
-	 * @return
-	 */
 	public HEC_Copy setMesh(final HE_HalfedgeStructure source) {
 		this.source = source;
 		return this;
 	}
-	
+
 	public HEC_Copy setSource(final HE_HalfedgeStructure source) {
 		this.source = source;
 		return this;
 	}
 
-
-	public Map<Long, Long> getVertexCorrelation() {
+	public HE_LongMap getVertexCorrelation() {
 		return vertexCorrelation;
 	}
 
-	public Map<Long, Long> getFaceCorrelation() {
+	public HE_LongMap getFaceCorrelation() {
 		return faceCorrelation;
 	}
 
-	public Map<Long, Long> getHalfedgeCorrelation() {
+	public HE_LongMap getHalfedgeCorrelation() {
 		return halfedgeCorrelation;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see wblut.hemesh.HE_Creator#create()
-	 */
 	@Override
 	protected HE_Mesh createBase() {
 		tracker.setStartStatus(this, "Starting HEC_Copy.");
@@ -92,13 +55,12 @@ public class HEC_Copy extends HEC_Creator {
 		if (source instanceof HE_Mesh) {
 			final HE_Mesh mesh = (HE_Mesh) source;
 			result.copyProperties(mesh);
-			vertexCorrelation = new UnifiedMap<Long,Long>();
-			faceCorrelation = new UnifiedMap<Long,Long>();
-			halfedgeCorrelation = new UnifiedMap<Long,Long>();
+			vertexCorrelation = new HE_LongMap();
+			faceCorrelation = new HE_LongMap();
+			halfedgeCorrelation = new HE_LongMap();
 			HE_Vertex rv;
 			HE_Vertex v;
-			WB_ProgressCounter counter = new WB_ProgressCounter(
-					mesh.getNumberOfVertices(), 10);
+			WB_ProgressCounter counter = new WB_ProgressCounter(mesh.getNumberOfVertices(), 10);
 			tracker.setCounterStatus(this, "Creating vertices.", counter);
 			final Iterator<HE_Vertex> vItr = mesh.vItr();
 			while (vItr.hasNext()) {
@@ -113,7 +75,7 @@ public class HEC_Copy extends HEC_Creator {
 			HE_Face f;
 			counter = new WB_ProgressCounter(mesh.getNumberOfFaces(), 10);
 			tracker.setCounterStatus(this, "Creating faces.", counter);
-			final Iterator<HE_Face> fItr = mesh.fItr();
+			final HE_FaceIterator fItr = mesh.fItr();
 			while (fItr.hasNext()) {
 				f = fItr.next();
 				rf = new HE_Face();
@@ -126,7 +88,7 @@ public class HEC_Copy extends HEC_Creator {
 			HE_Halfedge he;
 			counter = new WB_ProgressCounter(mesh.getNumberOfHalfedges(), 10);
 			tracker.setCounterStatus(this, "Creating halfedges.", counter);
-			HE_RAS<HE_Halfedge> copyHalfedges = new HE_RAS<HE_Halfedge>();
+			final HE_RAS<HE_Halfedge> copyHalfedges = new HE_RAS<>();
 			final Iterator<HE_Halfedge> heItr = mesh.getHalfedges().iterator();
 			while (heItr.hasNext()) {
 				he = heItr.next();
@@ -137,11 +99,10 @@ public class HEC_Copy extends HEC_Creator {
 				counter.increment();
 			}
 			counter = new WB_ProgressCounter(mesh.getNumberOfVertices(), 10);
-			tracker.setCounterStatus(this, "Setting vertex properties.",
-					counter);
+			tracker.setCounterStatus(this, "Setting vertex properties.", counter);
 			HE_Vertex sv;
 			HE_Vertex tv;
-			Iterator<HE_Vertex> svItr = mesh.vItr();
+			final Iterator<HE_Vertex> svItr = mesh.vItr();
 			final Iterator<HE_Vertex> tvItr = result.vItr();
 			Long key;
 			while (svItr.hasNext()) {
@@ -160,8 +121,8 @@ public class HEC_Copy extends HEC_Creator {
 			tracker.setCounterStatus(this, "Setting face properties.", counter);
 			HE_Face sf;
 			HE_Face tf;
-			Iterator<HE_Face> sfItr = mesh.fItr();
-			final Iterator<HE_Face> tfItr = result.fItr();
+			final HE_FaceIterator sfItr = mesh.fItr();
+			final HE_FaceIterator tfItr = result.fItr();
 			while (sfItr.hasNext()) {
 				sf = sfItr.next();
 				tf = tfItr.next();
@@ -174,11 +135,10 @@ public class HEC_Copy extends HEC_Creator {
 				counter.increment();
 			}
 			counter = new WB_ProgressCounter(mesh.getNumberOfHalfedges(), 10);
-			tracker.setCounterStatus(this, "Setting halfedge properties.",
-					counter);
+			tracker.setCounterStatus(this, "Setting halfedge properties.", counter);
 			HE_Halfedge she;
 			HE_Halfedge the;
-			Iterator<HE_Halfedge> sheItr = mesh.getHalfedges().iterator();
+			final Iterator<HE_Halfedge> sheItr = mesh.getHalfedges().iterator();
 			final Iterator<HE_Halfedge> theItr = copyHalfedges.iterator();
 			while (sheItr.hasNext()) {
 				she = sheItr.next();
@@ -212,44 +172,19 @@ public class HEC_Copy extends HEC_Creator {
 				result.add(the);
 				counter.increment();
 			}
-			Set<String> names = mesh.getSelectionNames();
-			for (String name : names) {
-				
-				HE_Selection sourcesel = mesh.getSelection(name);
-				HE_Selection target = HE_Selection.getSelection(result);
-				svItr = sourcesel.vItr();
-				while (svItr.hasNext()) {
-					sv = svItr.next();
-					key = vertexCorrelation.get(sv.getKey());
-					target.add(result.getVertexWithKey(key));
-				}
-				sheItr = sourcesel.heItr();
-				while (sheItr.hasNext()) {
-					she = sheItr.next();
-					key = halfedgeCorrelation.get(she.getKey());
-					target.add(result.getHalfedgeWithKey(key));
-				}
-				sfItr = sourcesel.fItr();
-				while (sfItr.hasNext()) {
-					sf = sfItr.next();
-					key = faceCorrelation.get(sf.getKey());
-				
-					target.add(result.getFaceWithKey(key));
-				}
-				result.addSelection(name, target);
-			}
+			copySelections(mesh, result);
+			copyAttributes(mesh, result);
 			tracker.setStopStatus(this, "Exiting HEC_Copy.");
 		} else if (source instanceof HE_Selection) {
 			final HE_Selection sel = ((HE_Selection) source).get();
 			result.copyProperties(sel);
 			sel.completeFromFaces();
-			vertexCorrelation = new UnifiedMap<Long,Long>();;
-			faceCorrelation = new UnifiedMap<Long,Long>();
-			halfedgeCorrelation = new UnifiedMap<Long,Long>();
+			vertexCorrelation = new HE_LongMap();
+			faceCorrelation = new HE_LongMap();
+			halfedgeCorrelation = new HE_LongMap();
 			HE_Vertex rv;
 			HE_Vertex v;
-			WB_ProgressCounter counter = new WB_ProgressCounter(
-					sel.getNumberOfVertices(), 10);
+			WB_ProgressCounter counter = new WB_ProgressCounter(sel.getNumberOfVertices(), 10);
 			tracker.setCounterStatus(this, "Creating vertices.", counter);
 			final Iterator<HE_Vertex> vItr = sel.vItr();
 			while (vItr.hasNext()) {
@@ -264,7 +199,7 @@ public class HEC_Copy extends HEC_Creator {
 			HE_Face f;
 			counter = new WB_ProgressCounter(sel.getNumberOfFaces(), 10);
 			tracker.setCounterStatus(this, "Creating faces.", counter);
-			final Iterator<HE_Face> fItr = sel.fItr();
+			final HE_FaceIterator fItr = sel.fItr();
 			while (fItr.hasNext()) {
 				f = fItr.next();
 				rf = new HE_Face();
@@ -276,7 +211,7 @@ public class HEC_Copy extends HEC_Creator {
 			HE_Halfedge rhe;
 			HE_Halfedge he;
 			counter = new WB_ProgressCounter(sel.getNumberOfHalfedges(), 10);
-			HE_RAS<HE_Halfedge> copyHalfedges = new HE_RAS<HE_Halfedge>();
+			final HE_RAS<HE_Halfedge> copyHalfedges = new HE_RAS<>();
 			tracker.setCounterStatus(this, "Creating halfedges.", counter);
 			final Iterator<HE_Halfedge> heItr = sel.heItr();
 			while (heItr.hasNext()) {
@@ -288,8 +223,7 @@ public class HEC_Copy extends HEC_Creator {
 				counter.increment();
 			}
 			counter = new WB_ProgressCounter(sel.getNumberOfVertices(), 10);
-			tracker.setCounterStatus(this, "Setting vertex properties.",
-					counter);
+			tracker.setCounterStatus(this, "Setting vertex properties.", counter);
 			HE_Vertex sv;
 			HE_Vertex tv;
 			final Iterator<HE_Vertex> svItr = sel.vItr();
@@ -311,8 +245,8 @@ public class HEC_Copy extends HEC_Creator {
 			tracker.setCounterStatus(this, "Setting face properties.", counter);
 			HE_Face sf;
 			HE_Face tf;
-			final Iterator<HE_Face> sfItr = sel.fItr();
-			final Iterator<HE_Face> tfItr = result.fItr();
+			final HE_FaceIterator sfItr = sel.fItr();
+			final HE_FaceIterator tfItr = result.fItr();
 			while (sfItr.hasNext()) {
 				sf = sfItr.next();
 				tf = tfItr.next();
@@ -325,8 +259,7 @@ public class HEC_Copy extends HEC_Creator {
 				counter.increment();
 			}
 			counter = new WB_ProgressCounter(sel.getNumberOfHalfedges(), 10);
-			tracker.setCounterStatus(this, "Setting halfedge properties.",
-					counter);
+			tracker.setCounterStatus(this, "Setting halfedge properties.", counter);
 			HE_Halfedge she;
 			HE_Halfedge the;
 			final Iterator<HE_Halfedge> sheItr = sel.heItr();
@@ -368,5 +301,241 @@ public class HEC_Copy extends HEC_Creator {
 			tracker.setStopStatus(this, "Exiting HEC_Copy.");
 		}
 		return result;
+	}
+
+	void copySelections(final HE_Mesh mesh, final HE_Mesh result) {
+		final String[] names = mesh.getSelectionNames();
+		for (final String name : names) {
+			final HE_Selection sourceSel = mesh.getSelection(name);
+			final HE_Selection targetSel = HE_Selection.getSelection(result);
+			final HE_VertexIterator svItr = sourceSel.vItr();
+			HE_Vertex sv;
+			long key;
+			while (svItr.hasNext()) {
+				sv = svItr.next();
+				key = vertexCorrelation.get(sv.getKey());
+				targetSel.add(result.getVertexWithKey(key));
+			}
+			final HE_HalfedgeIterator sheItr = sourceSel.heItr();
+			HE_Halfedge she;
+			while (sheItr.hasNext()) {
+				she = sheItr.next();
+				key = halfedgeCorrelation.get(she.getKey());
+				targetSel.add(result.getHalfedgeWithKey(key));
+			}
+			final HE_FaceIterator sfItr = sourceSel.fItr();
+			HE_Face sf;
+			while (sfItr.hasNext()) {
+				sf = sfItr.next();
+				key = faceCorrelation.get(sf.getKey());
+				targetSel.add(result.getFaceWithKey(key));
+			}
+			result.addSelection(name, targetSel);
+		}
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	void copyAttributes(final HE_Mesh mesh, final HE_Mesh result) {
+		Set<String> names = mesh.getAttributeNames();
+		HE_Vertex sv;
+		HE_Halfedge she;
+		HE_Face sf;
+		long key;
+		for (final String name : names) {
+			final HE_Attribute sourceAtt = mesh.getAttribute(name);
+			final HE_Attribute targetAtt = result.addAttribute(name, sourceAtt.defaultValue, sourceAtt.persistent);
+			final HE_VertexIterator svItr = source.vItr();
+			while (svItr.hasNext()) {
+				sv = svItr.next();
+				key = vertexCorrelation.get(sv.getKey());
+				final Object o = sourceAtt.get(sv.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_HalfedgeIterator sheItr = source.heItr();
+			while (sheItr.hasNext()) {
+				she = sheItr.next();
+				key = halfedgeCorrelation.get(she.getKey());
+				final Object o = sourceAtt.get(she.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_FaceIterator sfItr = source.fItr();
+			while (sfItr.hasNext()) {
+				sf = sfItr.next();
+				key = faceCorrelation.get(sf.getKey());
+				final Object o = sourceAtt.get(sf.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+		}
+		names = mesh.getIntegerAttributeNames();
+		for (final String name : names) {
+			final HE_IntegerAttribute sourceAtt = mesh.getIntegerAttribute(name);
+			final HE_IntegerAttribute targetAtt = result.addIntegerAttribute(name, sourceAtt.defaultValue,
+					sourceAtt.persistent);
+			final HE_VertexIterator svItr = source.vItr();
+			while (svItr.hasNext()) {
+				sv = svItr.next();
+				key = vertexCorrelation.get(sv.getKey());
+				final int o = sourceAtt.get(sv.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_HalfedgeIterator sheItr = source.heItr();
+			while (sheItr.hasNext()) {
+				she = sheItr.next();
+				key = halfedgeCorrelation.get(she.getKey());
+				final int o = sourceAtt.get(she.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_FaceIterator sfItr = source.fItr();
+			while (sfItr.hasNext()) {
+				sf = sfItr.next();
+				key = faceCorrelation.get(sf.getKey());
+				final int o = sourceAtt.get(sf.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+		}
+		names = mesh.getFloatAttributeNames();
+		for (final String name : names) {
+			final HE_FloatAttribute sourceAtt = mesh.getFloatAttribute(name);
+			final HE_FloatAttribute targetAtt = result.addFloatAttribute(name, sourceAtt.defaultValue,
+					sourceAtt.persistent);
+			final HE_VertexIterator svItr = source.vItr();
+			while (svItr.hasNext()) {
+				sv = svItr.next();
+				key = vertexCorrelation.get(sv.getKey());
+				final float o = sourceAtt.get(sv.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_HalfedgeIterator sheItr = source.heItr();
+			while (sheItr.hasNext()) {
+				she = sheItr.next();
+				key = halfedgeCorrelation.get(she.getKey());
+				final float o = sourceAtt.get(she.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_FaceIterator sfItr = source.fItr();
+			while (sfItr.hasNext()) {
+				sf = sfItr.next();
+				key = faceCorrelation.get(sf.getKey());
+				final float o = sourceAtt.get(sf.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+		}
+		names = mesh.getDoubleAttributeNames();
+		for (final String name : names) {
+			final HE_DoubleAttribute sourceAtt = mesh.getDoubleAttribute(name);
+			final HE_DoubleAttribute targetAtt = result.addDoubleAttribute(name, sourceAtt.defaultValue,
+					sourceAtt.persistent);
+			final HE_VertexIterator svItr = source.vItr();
+			while (svItr.hasNext()) {
+				sv = svItr.next();
+				key = vertexCorrelation.get(sv.getKey());
+				final double o = sourceAtt.get(sv.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_HalfedgeIterator sheItr = source.heItr();
+			while (sheItr.hasNext()) {
+				she = sheItr.next();
+				key = halfedgeCorrelation.get(she.getKey());
+				final double o = sourceAtt.get(she.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_FaceIterator sfItr = source.fItr();
+			while (sfItr.hasNext()) {
+				sf = sfItr.next();
+				key = faceCorrelation.get(sf.getKey());
+				final double o = sourceAtt.get(sf.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+		}
+		names = mesh.getBooleanAttributeNames();
+		for (final String name : names) {
+			final HE_BooleanAttribute sourceAtt = mesh.getBooleanAttribute(name);
+			final HE_BooleanAttribute targetAtt = result.addBooleanAttribute(name, sourceAtt.defaultValue,
+					sourceAtt.persistent);
+			final HE_VertexIterator svItr = source.vItr();
+			while (svItr.hasNext()) {
+				sv = svItr.next();
+				key = vertexCorrelation.get(sv.getKey());
+				final boolean o = sourceAtt.get(sv.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_HalfedgeIterator sheItr = source.heItr();
+			while (sheItr.hasNext()) {
+				she = sheItr.next();
+				key = halfedgeCorrelation.get(she.getKey());
+				final boolean o = sourceAtt.get(she.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_FaceIterator sfItr = source.fItr();
+			while (sfItr.hasNext()) {
+				sf = sfItr.next();
+				key = faceCorrelation.get(sf.getKey());
+				final boolean o = sourceAtt.get(sf.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+		}
+		names = mesh.getStringAttributeNames();
+		for (final String name : names) {
+			final HE_StringAttribute sourceAtt = mesh.getStringAttribute(name);
+			final HE_StringAttribute targetAtt = result.addStringAttribute(name, sourceAtt.defaultValue,
+					sourceAtt.persistent);
+			final HE_VertexIterator svItr = source.vItr();
+			while (svItr.hasNext()) {
+				sv = svItr.next();
+				key = vertexCorrelation.get(sv.getKey());
+				final String o = sourceAtt.get(sv.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_HalfedgeIterator sheItr = source.heItr();
+			while (sheItr.hasNext()) {
+				she = sheItr.next();
+				key = halfedgeCorrelation.get(she.getKey());
+				final String o = sourceAtt.get(she.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_FaceIterator sfItr = source.fItr();
+			while (sfItr.hasNext()) {
+				sf = sfItr.next();
+				key = faceCorrelation.get(sf.getKey());
+				final String o = sourceAtt.get(sf.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+		}
 	}
 }
