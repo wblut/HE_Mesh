@@ -2,9 +2,9 @@ package wblut.hemesh;
 
 import java.util.Collection;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
+import wblut.geom.WB_List;
 
-public class HE_FaceList extends FastList<HE_Face> {
+public class HE_FaceList extends WB_List<HE_Face> {
 	public HE_FaceList() {
 		super();
 	}

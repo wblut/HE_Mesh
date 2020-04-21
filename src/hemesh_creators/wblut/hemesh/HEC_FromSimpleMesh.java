@@ -69,8 +69,9 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		int id = 0;
 		HE_Halfedge he;
 		for (final int[] face : faces) {
-			
-			if(face.length==0) continue;
+			if (face.length == 0) {
+				continue;
+			}
 			final ArrayList<HE_Halfedge> faceEdges = new ArrayList<>();
 			final HE_Face hef = new HE_Face();
 			hef.setInternalLabel(id);
@@ -229,17 +230,16 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 			}
 		} while (facesleft);
 	}
-	
-	
-	public static final void main(String arg[]) {
-		WB_PyramidFactory pf=new WB_PyramidFactory();
-		  WB_Point[] points =new WB_Point[12];
-		  for (int i=0; i<12; i++) {
-		    float radius=(float)(200.0*Math.random());
-		    points[i]=new WB_Point(radius*Math.cos(Math.PI/6.0*i), radius*Math.sin(Math.PI/6.0*i));
-		  }
-		  pf.setPoints(points);
-		  WB_SimpleMesh smesh=pf.createPyramidWithHeightAndAngle(450,Math.PI/6.0);
-		 HE_Mesh mesh=new HE_Mesh(smesh);
+
+	public static final void main(final String arg[]) {
+		final WB_PyramidFactory pf = new WB_PyramidFactory();
+		final WB_Point[] points = new WB_Point[12];
+		for (int i = 0; i < 12; i++) {
+			final float radius = (float) (200.0 * Math.random());
+			points[i] = new WB_Point(radius * Math.cos(Math.PI / 6.0 * i), radius * Math.sin(Math.PI / 6.0 * i));
+		}
+		pf.setPoints(points);
+		final WB_SimpleMesh smesh = pf.createPyramidWithHeightAndAngle(450, Math.PI / 6.0);
+		final HE_Mesh mesh = new HE_Mesh(smesh);
 	}
 }

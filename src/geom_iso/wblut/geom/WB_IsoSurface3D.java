@@ -12,8 +12,6 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import processing.core.PApplet;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_ScalarParameter;
@@ -75,7 +73,7 @@ public class WB_IsoSurface3D {
 	private WB_IndexedDoubleMap valueremaps;
 	private double gamma;
 	private boolean invert;
-	private FastList<WB_Triangle> tris;
+	private WB_List<WB_Triangle> tris;
 	private WB_CoordList rawtris;
 
 	public WB_IsoSurface3D() {
@@ -359,7 +357,7 @@ public class WB_IsoSurface3D {
 	}
 
 	private void polygoniseTriangles() {
-		tris = new FastList<>();
+		tris = new WB_List<>();
 		final WB_Point offset = new WB_Point(cx - 0.5 * resx * dx, cy - 0.5 * resy * dy, cz - 0.5 * resz * dz);
 		if (Double.isNaN(boundary)) {
 			for (int k = 0; k < resz; k++) {

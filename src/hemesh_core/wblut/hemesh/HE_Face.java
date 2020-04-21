@@ -2,8 +2,6 @@ package wblut.hemesh;
 
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
@@ -11,6 +9,7 @@ import wblut.geom.WB_CoordCollection;
 import wblut.geom.WB_CoordinateSystem;
 import wblut.geom.WB_GeometryOp3D;
 import wblut.geom.WB_JTS;
+import wblut.geom.WB_List;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
@@ -239,7 +238,7 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 	}
 
 	public List<HE_TextureCoordinate> getFaceUVWs() {
-		final FastList<HE_TextureCoordinate> fv = new FastList<>();
+		final WB_List<HE_TextureCoordinate> fv = new WB_List<>();
 		if (_halfedge == null) {
 			return fv;
 		}

@@ -2,8 +2,6 @@ package wblut.geom;
 
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.math.WB_Math;
 
 public class WB_Segment extends WB_Line implements Comparable<WB_Segment> {
@@ -74,7 +72,7 @@ public class WB_Segment extends WB_Line implements Comparable<WB_Segment> {
 	}
 
 	public static List<WB_Segment> negate(final List<WB_Segment> segs) {
-		final List<WB_Segment> neg = new FastList<>();
+		final List<WB_Segment> neg = new WB_List<>();
 		for (int i = 0; i < segs.size(); i++) {
 			neg.add(segs.get(i).negate());
 		}

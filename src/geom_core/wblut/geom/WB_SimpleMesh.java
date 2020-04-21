@@ -11,8 +11,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 public class WB_SimpleMesh implements WB_TriangleFactory {
 	protected int[][] faces;
 	protected List<WB_Coord> vertices;
@@ -135,7 +133,7 @@ public class WB_SimpleMesh implements WB_TriangleFactory {
 	}
 
 	public List<WB_Plane> getPlanes(final double d) {
-		final List<WB_Plane> planes = new FastList<>();
+		final List<WB_Plane> planes = new WB_List<>();
 		for (int i = 0; i < faces.length; i++) {
 			planes.add(getPlane(i, d));
 		}

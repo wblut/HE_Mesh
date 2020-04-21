@@ -273,13 +273,13 @@ public class HES_CatmullClark extends HES_Subdividor {
 				newPositions.put(v.getKey(), v);
 			} else {
 				faceStar = v.getFaceStar();
-				for (int i = 0; i < faceStar.size(); i++) {
-					f = faceStar.get(i);
+				for (final HE_Face element : faceStar) {
+					f = element;
 					if (!selection.contains(f)) {
 						P = HE_MeshOp.getPlane(f);
 						boolean unique = true;
-						for (int j = 0; j < planes.size(); j++) {
-							if (WB_GeometryOp3D.isEqual(planes.get(j), P)) {
+						for (final WB_Plane plane : planes) {
+							if (WB_GeometryOp3D.isEqual(plane, P)) {
 								unique = false;
 								break;
 							}
@@ -298,8 +298,8 @@ public class HES_CatmullClark extends HES_Subdividor {
 					if (outer.contains(n)) {
 						sharedFaces = selection.getParent().getSharedFaces(v, n);
 						boolean singleFaceGap = true;
-						for (int j = 0; j < sharedFaces.size(); j++) {
-							if (selection.contains(sharedFaces.get(j))) {
+						for (final HE_Face sharedFace : sharedFaces) {
+							if (selection.contains(sharedFace)) {
 								singleFaceGap = false;
 								break;
 							}

@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
 
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
@@ -18,6 +17,7 @@ import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_GeometryOp3D;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_Line;
+import wblut.geom.WB_List;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
@@ -50,12 +50,12 @@ class HET_FaceSplitter {
 	}
 
 	void processEdges(final List<HE_Vertex> coords, final WB_Plane P) {
-		splitPoly = new FastList<>();
-		edgesOnLine = new FastList<>();
-		for (int i = 0; i < coords.size(); i++) {
-			final WB_Classification edgeStartSide = WB_GeometryOp3D.classifyPointToPlane3D(coords.get(i), P);
-			splitPoly.add(new PolyEdge(coords.get(i), edgeStartSide));
-			if (WB_GeometryOp3D.classifyPointToPlane3D(coords.get(i), P) == ON) {
+		splitPoly = new WB_List<>();
+		edgesOnLine = new WB_List<>();
+		for (final HE_Vertex coord : coords) {
+			final WB_Classification edgeStartSide = WB_GeometryOp3D.classifyPointToPlane3D(coord, P);
+			splitPoly.add(new PolyEdge(coord, edgeStartSide));
+			if (WB_GeometryOp3D.classifyPointToPlane3D(coord, P) == ON) {
 				edgesOnLine.add(splitPoly.get(splitPoly.size() - 1));
 			}
 			// all split are dealt with before calling HET_FaceSplitter
@@ -162,7 +162,7 @@ class HET_FaceSplitter {
 		final List<HE_Vertex[]> resPolys = new ArrayList<>();
 		for (final PolyEdge e : splitPoly) {
 			if (!e.visited) {
-				final List<PolyEdge> edges = new FastList<>();
+				final List<PolyEdge> edges = new WB_List<>();
 				PolyEdge curEdge = e;
 				do {
 					curEdge.visited = true;

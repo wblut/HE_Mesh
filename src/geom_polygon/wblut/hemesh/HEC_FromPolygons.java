@@ -2,9 +2,8 @@ package wblut.hemesh;
 
 import java.util.Collection;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.geom.WB_CoordList;
+import wblut.geom.WB_List;
 import wblut.geom.WB_Polygon;
 
 public class HEC_FromPolygons extends HEC_Creator {
@@ -48,7 +47,7 @@ public class HEC_FromPolygons extends HEC_Creator {
 			if (polygons.length > 0) {
 				final int nq = polygons.length;
 				final WB_CoordList vertices = new WB_CoordList();
-				final FastList<int[]> faces = new FastList<>();
+				final WB_List<int[]> faces = new WB_List<>();
 				int id = 0;
 				for (int i = 0; i < nq; i++) {
 					final WB_Polygon poly = polygons[i];

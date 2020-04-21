@@ -16,8 +16,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.core.WB_ProgressReporter.WB_ProgressTracker;
 import wblut.geom.WB_AABB;
@@ -28,6 +26,7 @@ import wblut.geom.WB_CoordList;
 import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_GeometryOp3D;
 import wblut.geom.WB_KDTree3D;
+import wblut.geom.WB_List;
 import wblut.geom.WB_Network;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
@@ -502,7 +501,7 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 	}
 
 	public void cleanSelections() {
-		final List<String> selToDel = new FastList<>();
+		final List<String> selToDel = new WB_List<>();
 		for (final Entry<String, HE_Selection> entry : selections.entrySet()) {
 			final HE_Selection sel = entry.getValue();
 			sel.cleanSelection();
@@ -1342,7 +1341,7 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 	}
 
 	public List<WB_Polygon> getPolygonList() {
-		final List<WB_Polygon> result = new FastList<>();
+		final List<WB_Polygon> result = new WB_List<>();
 		final HE_FaceIterator fItr = fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {

@@ -2,13 +2,11 @@ package wblut.geom;
 
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 public class WB_Voronoi2D {
-	private final FastList<WB_VoronoiCell2D> cells;
+	private final WB_List<WB_VoronoiCell2D> cells;
 
 	public WB_Voronoi2D(final List<WB_VoronoiCell2D> cells) {
-		this.cells = new FastList<>(cells);
+		this.cells = new WB_List<>(cells);
 	}
 
 	public List<WB_VoronoiCell2D> getCells() {

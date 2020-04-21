@@ -82,8 +82,8 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 				} else {
 					p = new WB_Point(v).mulSelf(1.0 - lambda);
 					neighbors = v.getNeighborVertices();
-					for (int i = 0; i < neighbors.size(); i++) {
-						p.addMulSelf(lambda / neighbors.size(), neighbors.get(i));
+					for (final HE_Vertex neighbor : neighbors) {
+						p.addMulSelf(lambda / neighbors.size(), neighbor);
 					}
 					newPositions[id] = new WB_Point(v).mulSelf(2.0).subSelf(p);
 				}
@@ -142,8 +142,8 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 							nItr.remove();
 						}
 					}
-					for (int i = 0; i < neighbors.size(); i++) {
-						p.addMulSelf(lambda / neighbors.size(), neighbors.get(i));
+					for (final HE_Vertex neighbor : neighbors) {
+						p.addMulSelf(lambda / neighbors.size(), neighbor);
 					}
 					p.addMulSelf(1.0 - lambda, v);
 					newPositions[id] = new WB_Point(v).mulSelf(2.0).subSelf(p);

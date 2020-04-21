@@ -5,12 +5,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
+import wblut.geom.WB_List;
 
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_Geodesic;
 import wblut.geom.WB_GeometryOp3D;
 import wblut.geom.WB_Network;
+import wblut.geom.WB_Network.Connection;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_SimpleMesh;
 import wblut.geom.WB_Triangulation2D;
@@ -166,12 +167,12 @@ public class HET_MeshNetwork {
 		MeshNode v0;
 		MeshNode v1;
 		double d;
-		for (int i = 0; i < connections.size(); i++) {
-			p0 = network.getNode(connections.get(i).getStartIndex());
-			p1 = network.getNode(connections.get(i).getEndIndex());
+		for (final Connection connection : connections) {
+			p0 = network.getNode(connection.getStartIndex());
+			p1 = network.getNode(connection.getEndIndex());
 			d = WB_GeometryOp3D.getDistance3D(p0, p1);
-			v0 = nodes[connections.get(i).getStartIndex()];
-			v1 = nodes[connections.get(i).getEndIndex()];
+			v0 = nodes[connection.getStartIndex()];
+			v1 = nodes[connection.getEndIndex()];
 			v0.neighbors.add(new MeshConnection(v1, d));
 			v1.neighbors.add(new MeshConnection(v0, d));
 		}
@@ -383,7 +384,7 @@ public class HET_MeshNetwork {
 
 		public MeshNode(final int id, final WB_Coord pos) {
 			index = id;
-			neighbors = new FastList<>();
+			neighbors = new WB_List<>();
 			x = pos.xd();
 			y = pos.yd();
 			z = pos.zd();

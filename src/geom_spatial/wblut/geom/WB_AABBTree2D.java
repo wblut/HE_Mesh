@@ -6,8 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.core.WB_ProgressReporter.WB_ProgressTracker;
 
 public class WB_AABBTree2D {
@@ -35,7 +33,7 @@ public class WB_AABBTree2D {
 		tracker.setStartStatus(this,
 				"Starting WB_AABBTree2D construction. Max. number of faces per node: " + maxNumberOfFaces);
 		root = new WB_AABBNode2D();
-		final List<WB_Triangle> faces = new FastList<>();
+		final List<WB_Triangle> faces = new WB_List<>();
 		faces.addAll(mesh);
 		buildNode(root, faces, mesh, 0);
 		tracker.setStopStatus(this, "Exiting WB_AABBTree construction.");
@@ -45,8 +43,8 @@ public class WB_AABBTree2D {
 		tracker.setStartStatus(this,
 				"Starting WB_AABBTree2D construction. Max. number of faces per node: " + maxNumberOfFaces);
 		root = new WB_AABBNode2D();
-		final List<WB_Triangle> faces = new FastList<>();
-		final List<WB_Triangle> mesh = new FastList<>();
+		final List<WB_Triangle> faces = new WB_List<>();
+		final List<WB_Triangle> mesh = new WB_List<>();
 		for (int i = 0; i < triangles.length; i += 3) {
 			mesh.add(new WB_Triangle(points.get(triangles[i]), points.get(triangles[i + 1]),
 					points.get(triangles[i + 2])));
@@ -70,8 +68,8 @@ public class WB_AABBTree2D {
 			depth = Math.max(depth, node.level);
 			return;
 		}
-		final List<WB_Triangle> subsetA = new FastList<>();
-		final List<WB_Triangle> subsetB = new FastList<>();
+		final List<WB_Triangle> subsetA = new WB_List<>();
+		final List<WB_Triangle> subsetB = new WB_List<>();
 		double sah = Double.POSITIVE_INFINITY;
 		for (int i = 0; i < 2; i++) {
 			final WB_TriangleSort fs = new WB_TriangleSort.WB_AABBSortMax1D(i);
@@ -88,8 +86,8 @@ public class WB_AABBTree2D {
 			Collections.sort(faces, fs);
 			sah = findOptimalSubset(sah, node, subsetA, subsetB, faces);
 		}
-		final List<WB_Triangle> childA = new FastList<>();
-		final List<WB_Triangle> childB = new FastList<>();
+		final List<WB_Triangle> childA = new WB_List<>();
+		final List<WB_Triangle> childB = new WB_List<>();
 		if (subsetA.size() < subsetB.size()) {
 			childA.addAll(subsetB);
 			childB.addAll(subsetA);
@@ -267,7 +265,7 @@ public class WB_AABBTree2D {
 
 		public WB_AABBNode2D() {
 			level = -1;
-			faces = new FastList<>();
+			faces = new WB_List<>();
 		}
 
 		public WB_AABB2D getAABB() {

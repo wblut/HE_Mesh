@@ -2,9 +2,8 @@ package wblut.hemesh;
 
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.geom.WB_BinaryGrid3D;
+import wblut.geom.WB_List;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Quad;
 
@@ -22,7 +21,7 @@ public class HEC_FromBinaryGrid3D extends HEC_Creator {
 
 	@Override
 	public HE_Mesh createBase() {
-		final List<WB_Quad> quads = new FastList<>();
+		final List<WB_Quad> quads = new WB_List<>();
 		this.setCenter(grid.getCenter());
 		int val0, valm, sum;
 		double x, y, z;

@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.hemesh.HEC_Geodesic;
 import wblut.hemesh.HE_Mesh;
 import wblut.math.WB_Epsilon;
@@ -18,13 +16,13 @@ public class WB_Network {
 	private List<Node> nodes;
 
 	public WB_Network() {
-		connections = new FastList<>();
-		nodes = new FastList<>();
+		connections = new WB_List<>();
+		nodes = new WB_List<>();
 	}
 
 	public WB_Network(final WB_Coord[] points, final WB_IndexedSegment[] connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final WB_Coord point : points) {
 			addNode(point, 1);
 		}
@@ -34,8 +32,8 @@ public class WB_Network {
 	}
 
 	public WB_Network(final WB_Coord[] points, final Collection<WB_IndexedSegment> connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final WB_Coord point : points) {
 			addNode(point, 1);
 		}
@@ -46,10 +44,10 @@ public class WB_Network {
 
 	public void add(final WB_Coord[] points, final Collection<WB_IndexedSegment> connections) {
 		if (connections == null) {
-			this.connections = new FastList<>();
+			this.connections = new WB_List<>();
 		}
 		if (nodes == null) {
-			nodes = new FastList<>();
+			nodes = new WB_List<>();
 		}
 		final int nodeoffset = nodes.size();
 		for (final WB_Coord point : points) {
@@ -62,10 +60,10 @@ public class WB_Network {
 
 	public void add(final WB_Network frame) {
 		if (connections == null) {
-			this.connections = new FastList<>();
+			this.connections = new WB_List<>();
 		}
 		if (nodes == null) {
-			nodes = new FastList<>();
+			nodes = new WB_List<>();
 		}
 		final int nodeoffset = nodes.size();
 		for (final Node node : frame.nodes) {
@@ -77,8 +75,8 @@ public class WB_Network {
 	}
 
 	public WB_Network(final Collection<? extends WB_Coord> points, final Collection<WB_IndexedSegment> connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final WB_Coord point : points) {
 			addNode(point, 1);
 		}
@@ -88,8 +86,8 @@ public class WB_Network {
 	}
 
 	public WB_Network(final WB_Coord[] points, final int[][] connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final WB_Coord point : points) {
 			addNode(point.xd(), point.yd(), point.zd(), 1);
 		}
@@ -99,8 +97,8 @@ public class WB_Network {
 	}
 
 	public WB_Network(final WB_Coord[] points, final int[] connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final WB_Coord point : points) {
 			addNode(point.xd(), point.yd(), point.zd(), 1);
 		}
@@ -110,8 +108,8 @@ public class WB_Network {
 	}
 
 	public WB_Network(final Collection<? extends WB_Coord> points, final int[][] connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final WB_Coord point : points) {
 			addNode(point.xd(), point.yd(), point.zd(), 1);
 		}
@@ -121,8 +119,8 @@ public class WB_Network {
 	}
 
 	public WB_Network(final Collection<? extends WB_Coord> points, final int[] connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final WB_Coord point : points) {
 			addNode(point.xd(), point.yd(), point.zd(), 1);
 		}
@@ -132,8 +130,8 @@ public class WB_Network {
 	}
 
 	public WB_Network(final WB_CoordCollection points, final int[] connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		WB_Coord point;
 		for (int i = 0; i < points.size(); i++) {
 			point = points.get(i);
@@ -145,8 +143,8 @@ public class WB_Network {
 	}
 
 	public WB_Network(final WB_CoordCollection points, final int[][] connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		WB_Coord point;
 		for (int i = 0; i < points.size(); i++) {
 			point = points.get(i);
@@ -158,8 +156,8 @@ public class WB_Network {
 	}
 
 	public WB_Network(final double[][] points, final int[][] connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final double[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
@@ -169,8 +167,8 @@ public class WB_Network {
 	}
 
 	public WB_Network(final double[][] points, final int[] connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final double[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
@@ -180,8 +178,8 @@ public class WB_Network {
 	}
 
 	public WB_Network(final float[][] points, final int[][] connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final float[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
@@ -191,8 +189,8 @@ public class WB_Network {
 	}
 
 	public WB_Network(final float[][] points, final int[] connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final float[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
@@ -202,8 +200,8 @@ public class WB_Network {
 	}
 
 	public WB_Network(final int[][] points, final int[][] connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final int[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
@@ -213,8 +211,8 @@ public class WB_Network {
 	}
 
 	public WB_Network(final int[][] points, final int[] connections) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final int[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
@@ -224,40 +222,40 @@ public class WB_Network {
 	}
 
 	public WB_Network(final WB_Coord[] points) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final WB_Coord point : points) {
 			addNode(point.xd(), point.yd(), point.zd(), 1);
 		}
 	}
 
 	public WB_Network(final Collection<? extends WB_Coord> points) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final WB_Coord point : points) {
 			addNode(point.xd(), point.yd(), point.zd(), 1);
 		}
 	}
 
 	public WB_Network(final double[][] points) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final double[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
 	}
 
 	public WB_Network(final float[][] points) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final float[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
 	}
 
 	public WB_Network(final int[][] points) {
-		this.connections = new FastList<>();
-		nodes = new FastList<>();
+		this.connections = new WB_List<>();
+		nodes = new WB_List<>();
 		for (final int[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
@@ -392,8 +390,7 @@ public class WB_Network {
 
 	public double getDistanceToConnection(final WB_Coord p) {
 		double d = Double.POSITIVE_INFINITY;
-		for (int i = 0; i < connections.size(); i++) {
-			final Connection connection = connections.get(i);
+		for (final Connection connection : connections) {
 			final WB_Segment S = new WB_Segment(connection.start(), connection.end());
 			d = Math.min(d, WB_GeometryOp3D.getDistance3D(p, S));
 		}
@@ -416,8 +413,7 @@ public class WB_Network {
 	public WB_Coord getClosestPointOnConnection(final WB_Coord p) {
 		double mind = Double.POSITIVE_INFINITY;
 		WB_Coord q = new WB_Point(p);
-		for (int i = 0; i < connections.size(); i++) {
-			final Connection connection = connections.get(i);
+		for (final Connection connection : connections) {
 			final WB_Segment S = new WB_Segment(connection.start(), connection.end());
 			final double d = WB_GeometryOp3D.getDistance3D(p, S);
 			if (d < mind) {
@@ -430,8 +426,7 @@ public class WB_Network {
 
 	public double getDistanceToConnection(final double x, final double y, final double z) {
 		double d = Double.POSITIVE_INFINITY;
-		for (int i = 0; i < connections.size(); i++) {
-			final Connection connection = connections.get(i);
+		for (final Connection connection : connections) {
 			final WB_Segment S = new WB_Segment(connection.start(), connection.end());
 			d = Math.min(d, WB_GeometryOp3D.getDistance3D(new WB_Point(x, y, z), S));
 		}
@@ -441,8 +436,7 @@ public class WB_Network {
 	public WB_Coord getClosestPointOnConnection(final double x, final double y, final double z) {
 		double mind = Double.POSITIVE_INFINITY;
 		WB_Coord q = new WB_Point(x, y, z);
-		for (int i = 0; i < connections.size(); i++) {
-			final Connection connection = connections.get(i);
+		for (final Connection connection : connections) {
 			final WB_Segment S = new WB_Segment(connection.start(), connection.end());
 			final double d = WB_GeometryOp3D.getDistance3D(new WB_Point(x, y, z), S);
 			if (d < mind) {
@@ -560,7 +554,7 @@ public class WB_Network {
 	}
 
 	public WB_Network clipConnections(final WB_AABB aabb) {
-		final List<Connection> toRemove = new FastList<>();
+		final List<Connection> toRemove = new WB_List<>();
 		for (final Connection c : connections) {
 			if (!aabb.contains(c.start()) || !aabb.contains(c.end())) {
 				toRemove.add(c);
@@ -574,7 +568,7 @@ public class WB_Network {
 
 	public WB_Network clipConnections(final WB_Coord center, final double d) {
 		final double d2 = d * d;
-		final List<Connection> toRemove = new FastList<>();
+		final List<Connection> toRemove = new WB_List<>();
 		for (final Connection c : connections) {
 			if (WB_Vector.getSqDistance3D(center, c.start()) > d2 || WB_Vector.getSqDistance3D(center, c.end()) > d2) {
 				toRemove.add(c);
@@ -637,7 +631,7 @@ public class WB_Network {
 		public Node(final WB_Coord pos, final int id, final double v) {
 			super(pos);
 			index = id;
-			connections = new FastList<>();
+			connections = new WB_List<>();
 			value = v == 0 ? 10 * WB_Epsilon.EPSILON : v;
 		}
 
@@ -645,8 +639,8 @@ public class WB_Network {
 			if (connection.start() != this && connection.end() != this) {
 				return false;
 			}
-			for (int i = 0; i < connections.size(); i++) {
-				if (connections.get(i).start() == connection.start() && connections.get(i).end() == connection.end()) {
+			for (final Connection connection2 : connections) {
+				if (connection2.start() == connection.start() && connection2.end() == connection.end()) {
 					return false;
 				}
 			}
@@ -670,11 +664,11 @@ public class WB_Network {
 
 		public List<Node> getNeighbors() {
 			final List<Node> result = new ArrayList<>();
-			for (int i = 0; i < connections.size(); i++) {
-				if (connections.get(i).start() == this) {
-					result.add(connections.get(i).end());
+			for (final Connection connection : connections) {
+				if (connection.start() == this) {
+					result.add(connection.end());
 				} else {
-					result.add(connections.get(i).start());
+					result.add(connection.start());
 				}
 			}
 			return result;
@@ -733,8 +727,8 @@ public class WB_Network {
 
 		public double findShortestConnection() {
 			double minLength = Double.MAX_VALUE;
-			for (int i = 0; i < connections.size(); i++) {
-				minLength = Math.min(minLength, connections.get(i).getSqLength());
+			for (final Connection connection : connections) {
+				minLength = Math.min(minLength, connection.getSqLength());
 			}
 			return Math.sqrt(minLength);
 		}

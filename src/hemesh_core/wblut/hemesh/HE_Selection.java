@@ -593,8 +593,7 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 	public List<HE_Vertex> getOuterVertices() {
 		final List<HE_Vertex> result = new HE_VertexList();
 		final List<HE_Halfedge> outerEdges = getOuterEdges();
-		for (int i = 0; i < outerEdges.size(); i++) {
-			final HE_Halfedge e = outerEdges.get(i);
+		for (final HE_Halfedge e : outerEdges) {
 			final HE_Vertex v1 = e.getVertex();
 			final HE_Vertex v2 = e.getEndVertex();
 			if (!result.contains(v1)) {
@@ -626,8 +625,7 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 	public List<HE_Vertex> getAllBoundaryVertices() {
 		final List<HE_Vertex> result = new HE_VertexList();
 		final List<HE_Halfedge> outerEdges = getOuterEdges();
-		for (int i = 0; i < outerEdges.size(); i++) {
-			final HE_Halfedge e = outerEdges.get(i);
+		for (final HE_Halfedge e : outerEdges) {
 			if (e.getFace() == null || e.getPair().getFace() == null) {
 				final HE_Vertex v1 = e.getVertex();
 				final HE_Vertex v2 = e.getEndVertex();
@@ -862,8 +860,7 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 
 	public void shrink() {
 		final List<HE_Halfedge> outerEdges = getOuterEdges();
-		for (int i = 0; i < outerEdges.size(); i++) {
-			final HE_Halfedge e = outerEdges.get(i);
+		for (final HE_Halfedge e : outerEdges) {
 			final HE_Face f1 = e.getFace();
 			final HE_Face f2 = e.getPair().getFace();
 			if (f1 == null || !contains(f1)) {
@@ -904,8 +901,8 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		while (heItr.hasNext()) {
 			currentHalfedges.add(heItr.next());
 		}
-		for (int i = 0; i < currentHalfedges.size(); i++) {
-			final HE_Face f = currentHalfedges.get(i).getPair().getFace();
+		for (final HE_Halfedge currentHalfedge : currentHalfedges) {
+			final HE_Face f = currentHalfedge.getPair().getFace();
 			if (f != null && !contains(f)) {
 				int ns = 0;
 				HE_Halfedge he = f.getHalfedge();
@@ -928,8 +925,8 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		while (heItr.hasNext()) {
 			currentHalfedges.add(heItr.next());
 		}
-		for (int i = 0; i < currentHalfedges.size(); i++) {
-			final HE_Face f = currentHalfedges.get(i).getPair().getFace();
+		for (final HE_Halfedge currentHalfedge : currentHalfedges) {
+			final HE_Face f = currentHalfedge.getPair().getFace();
 			if (f != null && !contains(f)) {
 				int ns = 0;
 				HE_Halfedge he = f.getHalfedge();

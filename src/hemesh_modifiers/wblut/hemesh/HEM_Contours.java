@@ -2,8 +2,6 @@ package wblut.hemesh;
 
 import java.util.Set;
 
-import org.eclipse.collections.impl.set.mutable.UnifiedSet;
-
 import wblut.math.WB_Epsilon;
 
 public class HEM_Contours extends HEM_Modifier {
@@ -51,7 +49,7 @@ public class HEM_Contours extends HEM_Modifier {
 		final HE_EdgeIterator eItr = mesh.eItr();
 		HE_Halfedge edge;
 		final HE_HalfedgeList edgesToSplit = new HE_HalfedgeList();
-		final Set<HE_Face> facesToSplit = new UnifiedSet<>();
+		final HE_FaceSet facesToSplit = new HE_FaceSet();
 		final HE_DoubleMap intersections = new HE_DoubleMap();
 		while (eItr.hasNext()) {
 			edge = eItr.next();
@@ -193,7 +191,7 @@ public class HEM_Contours extends HEM_Modifier {
 		final HE_EdgeIterator eItr = selection.eItr();
 		HE_Halfedge edge;
 		final HE_HalfedgeList edgesToSplit = new HE_HalfedgeList();
-		final Set<HE_Face> facesToSplit = new UnifiedSet<>();
+		final HE_FaceSet facesToSplit = new HE_FaceSet();
 		final HE_DoubleMap intersections = new HE_DoubleMap();
 		while (eItr.hasNext()) {
 			edge = eItr.next();

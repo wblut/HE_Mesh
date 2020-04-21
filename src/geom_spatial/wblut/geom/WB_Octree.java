@@ -3,8 +3,6 @@ package wblut.geom;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 public class WB_Octree<V> {
 	protected WB_AABB box;
 	protected WB_Coord extent;
@@ -48,7 +46,7 @@ public class WB_Octree<V> {
 		if (box.contains(p)) {
 			if (hsize <= minNodeSize) {
 				if (entries == null) {
-					entries = new FastList<>();
+					entries = new WB_List<>();
 				}
 				entries.add(new WB_OctreeEntry<>(p, value));
 				return;
@@ -124,7 +122,7 @@ public class WB_Octree<V> {
 	}
 
 	public List<WB_Octree<V>> getNodes() {
-		final List<WB_Octree<V>> result = new FastList<>();
+		final List<WB_Octree<V>> result = new WB_List<>();
 		if (numNodes > 0) {
 			for (int i = 0; i < 8; i++) {
 				if (nodes[i] != null) {
@@ -192,9 +190,9 @@ public class WB_Octree<V> {
 	}
 
 	public List<WB_OctreeEntry<V>> getEntries() {
-		FastList<WB_OctreeEntry<V>> result = null;
+		WB_List<WB_OctreeEntry<V>> result = null;
 		if (entries != null) {
-			result = new FastList<>();
+			result = new WB_List<>();
 			result.addAll(entries);
 		} else if (numNodes > 0) {
 			for (int i = 0; i < 8; i++) {
@@ -202,7 +200,7 @@ public class WB_Octree<V> {
 					final List<WB_OctreeEntry<V>> childPoints = nodes[i].getEntries();
 					if (childPoints != null) {
 						if (result == null) {
-							result = new FastList<>();
+							result = new WB_List<>();
 						}
 						result.addAll(childPoints);
 					}
@@ -213,10 +211,10 @@ public class WB_Octree<V> {
 	}
 
 	public List<WB_OctreeEntry<V>> getEntriesInRange(final WB_AABB AABB) {
-		FastList<WB_OctreeEntry<V>> result = new FastList<>();
+		WB_List<WB_OctreeEntry<V>> result = new WB_List<>();
 		if (box.intersects(AABB)) {
 			if (entries != null) {
-				result = new FastList<>();
+				result = new WB_List<>();
 				for (final WB_OctreeEntry<V> oe : entries) {
 					if (AABB.contains(oe.coord)) {
 						result.add(oe);
@@ -237,7 +235,7 @@ public class WB_Octree<V> {
 	}
 
 	public List<WB_OctreeEntry<V>> getEntriesInRange(final WB_Sphere sphere) {
-		final FastList<WB_OctreeEntry<V>> result = new FastList<>();
+		final WB_List<WB_OctreeEntry<V>> result = new WB_List<>();
 		if (box.intersects(sphere)) {
 			if (entries != null) {
 				for (final WB_OctreeEntry<V> oe : entries) {
@@ -304,7 +302,7 @@ public class WB_Octree<V> {
 
 	public List<V> getValues() {
 		final List<WB_OctreeEntry<V>> allEntries = getEntries();
-		final FastList<V> result = new FastList<>();
+		final WB_List<V> result = new WB_List<>();
 		for (final WB_OctreeEntry<V> eo : allEntries) {
 			result.add(eo.value);
 		}
@@ -313,7 +311,7 @@ public class WB_Octree<V> {
 
 	public List<V> getValuesInRange(final WB_AABB AABB) {
 		final List<WB_OctreeEntry<V>> entriesInRange = getEntriesInRange(AABB);
-		final FastList<V> result = new FastList<>();
+		final WB_List<V> result = new WB_List<>();
 		for (final WB_OctreeEntry<V> eo : entriesInRange) {
 			result.add(eo.value);
 		}
@@ -322,7 +320,7 @@ public class WB_Octree<V> {
 
 	public List<V> getValuesInRange(final WB_Sphere sphere) {
 		final List<WB_OctreeEntry<V>> entriesInRange = getEntriesInRange(sphere);
-		final FastList<V> result = new FastList<>();
+		final WB_List<V> result = new WB_List<>();
 		for (final WB_OctreeEntry<V> eo : entriesInRange) {
 			result.add(eo.value);
 		}

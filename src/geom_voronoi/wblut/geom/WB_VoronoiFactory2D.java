@@ -3,8 +3,6 @@ package wblut.geom;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import kn.uni.voronoitreemap.datastructure.OpenList;
 import kn.uni.voronoitreemap.diagram.PowerDiagram;
 import kn.uni.voronoitreemap.j2d.PolygonSimple;
@@ -321,7 +319,7 @@ public class WB_VoronoiFactory2D {
 		diagram.setSites(sites);
 		diagram.setClipPoly(root);
 		diagram.computeDiagram();
-		final List<WB_VoronoiCell2D> cells = new FastList<>();
+		final List<WB_VoronoiCell2D> cells = new WB_List<>();
 		Site site;
 		PolygonSimple polygon;
 		for (int i = 0; i < sites.size; i++) {

@@ -9,8 +9,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.math.WB_Epsilon;
 
 public class WB_PolygonSplitter {
@@ -76,8 +74,8 @@ public class WB_PolygonSplitter {
 	}
 
 	void splitEdges(final List<? extends WB_Coord> coords, final WB_Plane P) {
-		splitPoly = new FastList<>();
-		edgesOnLine = new FastList<>();
+		splitPoly = new WB_List<>();
+		edgesOnLine = new WB_List<>();
 		for (int i = 0; i < coords.size(); i++) {
 			final WB_Segment edge = new WB_Segment(coords.get(i), coords.get((i + 1) % coords.size()));
 			final WB_Classification edgeStartSide = WB_GeometryOp3D.classifyPointToPlane3D(P, edge.getOrigin());
@@ -99,8 +97,8 @@ public class WB_PolygonSplitter {
 	}
 
 	void splitEdges(final List<? extends WB_Coord> coords, final WB_Line L) {
-		splitPoly = new FastList<>();
-		edgesOnLine = new FastList<>();
+		splitPoly = new WB_List<>();
+		edgesOnLine = new WB_List<>();
 		for (int i = 0; i < coords.size(); i++) {
 			final WB_Segment edge = new WB_Segment(coords.get(i), coords.get((i + 1) % coords.size()));
 			final WB_Classification edgeStartSide = WB_GeometryOp2D.classifyPointToLine2D(edge.getOrigin(), L);
@@ -315,7 +313,7 @@ public class WB_PolygonSplitter {
 				this.L = ps.lineFromArray(line);
 			}
 		}
-		final List<TestCase2D> cases2D = new FastList<>();
+		final List<TestCase2D> cases2D = new WB_List<>();
 		cases2D.add(new TestCase2D(poly1, new double[][] { { -60, 0 }, { 55, 0 } }));
 		cases2D.add(new TestCase2D(poly1, new double[][] { { 60, 0 }, { -60, 0 } }));
 		cases2D.add(new TestCase2D(poly1, new double[][] { { -60, 20 }, { 60, 20 } }));
@@ -371,7 +369,7 @@ public class WB_PolygonSplitter {
 				this.P = ps.planeFromArray(plane);
 			}
 		}
-		final List<TestCase3D> cases3D = new FastList<>();
+		final List<TestCase3D> cases3D = new WB_List<>();
 		cases3D.add(new TestCase3D(poly1, new double[][] { { -60, 0 }, { 55, 0 } }));
 		cases3D.add(new TestCase3D(poly1, new double[][] { { 60, 0 }, { -60, 0 } }));
 		cases3D.add(new TestCase3D(poly1, new double[][] { { -60, 20 }, { 60, 20 } }));

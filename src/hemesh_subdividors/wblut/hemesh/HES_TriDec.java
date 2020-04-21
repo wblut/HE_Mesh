@@ -3,9 +3,8 @@ package wblut.hemesh;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
+import wblut.geom.WB_List;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Vector;
@@ -231,21 +230,21 @@ public class HES_TriDec extends HES_Simplifier {
 					// for
 					// boundary vertices, never collapse
 					// boundary inward
-					for (int i = 0; i < vstar.size(); i++) {
-						if (vstar.get(i).isInnerBoundary()) {
-							c = halfedgeCollapseCost(vstar.get(i), lambda);
+					for (final HE_Halfedge element : vstar) {
+						if (element.isInnerBoundary()) {
+							c = halfedgeCollapseCost(element, lambda);
 							if (c < min) {
 								min = c;
-								minhe = vstar.get(i);
+								minhe = element;
 							}
 						}
 					}
 				} else {
-					for (int i = 0; i < vstar.size(); i++) {
-						c = halfedgeCollapseCost(vstar.get(i), lambda);
+					for (final HE_Halfedge element : vstar) {
+						c = halfedgeCollapseCost(element, lambda);
 						if (!Double.isNaN(c) && c < min) {
 							min = c;
-							minhe = vstar.get(i);
+							minhe = element;
 						}
 					}
 				}
@@ -278,21 +277,21 @@ public class HES_TriDec extends HES_Simplifier {
 					// for
 					// boundary vertices, never collapse
 					// boundary inward
-					for (int i = 0; i < vstar.size(); i++) {
-						if (vstar.get(i).isInnerBoundary()) {
-							c = halfedgeCollapseCost(vstar.get(i), lambda);
+					for (final HE_Halfedge element : vstar) {
+						if (element.isInnerBoundary()) {
+							c = halfedgeCollapseCost(element, lambda);
 							if (c < min) {
 								min = c;
-								minhe = vstar.get(i);
+								minhe = element;
 							}
 						}
 					}
 				} else {
-					for (int i = 0; i < vstar.size(); i++) {
-						c = halfedgeCollapseCost(vstar.get(i), lambda);
+					for (final HE_Halfedge element : vstar) {
+						c = halfedgeCollapseCost(element, lambda);
 						if (!Double.isNaN(c) && c < min) {
 							min = c;
-							minhe = vstar.get(i);
+							minhe = element;
 						}
 					}
 				}
@@ -392,8 +391,8 @@ public class HES_TriDec extends HES_Simplifier {
 		private final List<Double> keys;
 
 		public Heap() {
-			heap = new FastList<>();
-			keys = new FastList<>();
+			heap = new WB_List<>();
+			keys = new WB_List<>();
 		}
 
 		public void push(final Double key, final HE_Vertex obj) {

@@ -121,8 +121,8 @@ public class HET_Fixer {
 				edgesToRemove.add(e);
 			}
 		}
-		for (int i = 0; i < edgesToRemove.size(); i++) {
-			HE_MeshOp.collapseEdge(mesh, edgesToRemove.get(i));
+		for (final HE_Halfedge element : edgesToRemove) {
+			HE_MeshOp.collapseEdge(mesh, element);
 		}
 	}
 
@@ -137,8 +137,8 @@ public class HET_Fixer {
 				edgesToRemove.add(e);
 			}
 		}
-		for (int i = 0; i < edgesToRemove.size(); i++) {
-			HE_MeshOp.collapseEdge(mesh, edgesToRemove.get(i));
+		for (final HE_Halfedge element : edgesToRemove) {
+			HE_MeshOp.collapseEdge(mesh, element);
 		}
 	}
 
@@ -189,12 +189,12 @@ public class HET_Fixer {
 			final List<HE_Halfedge> vStar = v.getHalfedgeStar();
 			final HE_Vertex vc = new HE_Vertex(v);
 			mesh.add(vc);
-			for (int i = 0; i < vStar.size(); i++) {
-				mesh.setVertex(vStar.get(i), vc);
+			for (final HE_Halfedge element : vStar) {
+				mesh.setVertex(element, vc);
 			}
 			mesh.setHalfedge(vc, vStar.get(0));
-			for (int i = 0; i < vHalfedges.size(); i++) {
-				he = vHalfedges.get(i);
+			for (final HE_Halfedge vHalfedge : vHalfedges) {
+				he = vHalfedge;
 				if (he.getVertex() == v) {
 					mesh.setHalfedge(v, he);
 					break;

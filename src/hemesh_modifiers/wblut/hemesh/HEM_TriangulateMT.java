@@ -10,9 +10,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
+import wblut.geom.WB_List;
 
 public class HEM_TriangulateMT extends HEM_Modifier {
 	public HE_Selection triangles;
@@ -108,7 +107,7 @@ public class HEM_TriangulateMT extends HEM_Modifier {
 	}
 
 	private List<int[]> triangulate(final List<HE_Face> faces) {
-		final List<int[]> tris = new FastList<>();
+		final List<int[]> tris = new WB_List<>();
 		try {
 			int threadCount = Runtime.getRuntime().availableProcessors();
 			int dfaces = faces.size() / threadCount;

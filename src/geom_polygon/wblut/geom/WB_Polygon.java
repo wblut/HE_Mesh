@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.math.WB_Epsilon;
 
 public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
@@ -344,7 +342,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 			return new WB_Polygon(shellpoints);
 		} else {
 			@SuppressWarnings("unchecked")
-			final List<WB_Point>[] holepoints = new FastList[numberOfContours - 1];
+			final List<WB_Point>[] holepoints = new WB_List[numberOfContours - 1];
 			int index = numberOfShellPoints;
 			for (int i = 0; i < numberOfContours - 1; i++) {
 				holepoints[i] = new WB_PointList();
@@ -371,7 +369,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 			return new WB_Polygon(shellpoints);
 		} else {
 			@SuppressWarnings("unchecked")
-			final List<WB_Point>[] holepoints = new FastList[numberOfContours - 1];
+			final List<WB_Point>[] holepoints = new WB_List[numberOfContours - 1];
 			int index = numberOfShellPoints;
 			for (int i = 0; i < numberOfContours - 1; i++) {
 				holepoints[i] = new WB_PointList();
@@ -475,7 +473,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 			return new WB_Polygon(shellpoints);
 		} else {
 			@SuppressWarnings("unchecked")
-			final List<WB_Point>[] holepoints = new FastList[numberOfContours - 1];
+			final List<WB_Point>[] holepoints = new WB_List[numberOfContours - 1];
 			int index = numberOfShellPoints;
 			for (int i = 0; i < numberOfContours - 1; i++) {
 				holepoints[i] = new WB_PointList();
@@ -530,7 +528,7 @@ public class WB_Polygon extends WB_Ring implements WB_TriangleFactory {
 	}
 
 	public List<WB_Segment> toSegments() {
-		final List<WB_Segment> segments = new FastList<>();
+		final List<WB_Segment> segments = new WB_List<>();
 		for (int i = 0, j = this.numberOfShellPoints - 1; i < this.numberOfShellPoints; j = i, i++) {
 			segments.add(new WB_Segment(getPoint(j), getPoint(i)));
 		}

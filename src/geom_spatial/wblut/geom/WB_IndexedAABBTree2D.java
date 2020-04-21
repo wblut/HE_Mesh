@@ -6,8 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.core.WB_ProgressReporter.WB_ProgressTracker;
 
 public class WB_IndexedAABBTree2D {
@@ -18,7 +16,7 @@ public class WB_IndexedAABBTree2D {
 	public static final WB_ProgressTracker tracker = WB_ProgressTracker.instance();
 
 	public WB_IndexedAABBTree2D(final int[] triangles, final WB_CoordCollection points, final int mnof) {
-		final List<WB_IndexedTriangle> mesh = new FastList<>();
+		final List<WB_IndexedTriangle> mesh = new WB_List<>();
 		for (int i = 0; i < triangles.length; i += 3) {
 			mesh.add(new WB_IndexedTriangle(i, triangles, points));
 		}
@@ -30,7 +28,7 @@ public class WB_IndexedAABBTree2D {
 
 	public WB_IndexedAABBTree2D(final WB_Triangulation2D triangulation, final WB_CoordCollection points,
 			final int mnof) {
-		final List<WB_IndexedTriangle> mesh = new FastList<>();
+		final List<WB_IndexedTriangle> mesh = new WB_List<>();
 		for (int i = 0; i < triangulation.getTriangles().length; i += 3) {
 			mesh.add(new WB_IndexedTriangle(i, triangulation.getTriangles(), points));
 		}
@@ -41,7 +39,7 @@ public class WB_IndexedAABBTree2D {
 	}
 
 	public WB_IndexedAABBTree2D(final WB_AlphaTriangulation2D triangulation, final double alpha, final int mnof) {
-		final List<WB_IndexedTriangle> mesh = new FastList<>();
+		final List<WB_IndexedTriangle> mesh = new WB_List<>();
 		final int[] alphatri = triangulation.getAlphaTriangles(alpha);
 		for (int i = 0; i < alphatri.length; i += 3) {
 			mesh.add(new WB_IndexedTriangle(i, alphatri, triangulation.getPoints()));
@@ -53,7 +51,7 @@ public class WB_IndexedAABBTree2D {
 	}
 
 	public WB_IndexedAABBTree2D(final WB_Triangulation2DWithPoints triangulation, final int mnof) {
-		final List<WB_IndexedTriangle> mesh = new FastList<>();
+		final List<WB_IndexedTriangle> mesh = new WB_List<>();
 		for (int i = 0; i < triangulation.getTriangles().length; i += 3) {
 			mesh.add(new WB_IndexedTriangle(i, triangulation.getTriangles(), triangulation.getPoints()));
 		}
@@ -74,7 +72,7 @@ public class WB_IndexedAABBTree2D {
 		tracker.setStartStatus(this,
 				"Starting WB_AABBTree construction. Max. number of faces per node: " + maxNumberOfFaces);
 		root = new WB_IndexedAABBNode2D();
-		final List<WB_IndexedTriangle> faces = new FastList<>();
+		final List<WB_IndexedTriangle> faces = new WB_List<>();
 		faces.addAll(mesh);
 		buildNode(root, faces, mesh, 0);
 		tracker.setStopStatus(this, "Exiting WB_AABBTree construction.");
@@ -94,8 +92,8 @@ public class WB_IndexedAABBTree2D {
 			depth = Math.max(depth, node.level);
 			return;
 		}
-		final List<WB_IndexedTriangle> subsetA = new FastList<>();
-		final List<WB_IndexedTriangle> subsetB = new FastList<>();
+		final List<WB_IndexedTriangle> subsetA = new WB_List<>();
+		final List<WB_IndexedTriangle> subsetB = new WB_List<>();
 		double sah = Double.POSITIVE_INFINITY;
 		for (int i = 0; i < 2; i++) {
 			final WB_TriangleSort fs = new WB_TriangleSort.WB_AABBSortMax1D(i);
@@ -112,8 +110,8 @@ public class WB_IndexedAABBTree2D {
 			Collections.sort(faces, fs);
 			sah = findOptimalSubset(sah, node, subsetA, subsetB, faces);
 		}
-		final List<WB_IndexedTriangle> childA = new FastList<>();
-		final List<WB_IndexedTriangle> childB = new FastList<>();
+		final List<WB_IndexedTriangle> childA = new WB_List<>();
+		final List<WB_IndexedTriangle> childB = new WB_List<>();
 		if (subsetA.size() < subsetB.size()) {
 			childA.addAll(subsetB);
 			childB.addAll(subsetA);
@@ -293,7 +291,7 @@ public class WB_IndexedAABBTree2D {
 
 		public WB_IndexedAABBNode2D() {
 			level = -1;
-			faces = new FastList<>();
+			faces = new WB_List<>();
 		}
 
 		public WB_AABB2D getAABB() {

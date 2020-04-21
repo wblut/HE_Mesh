@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
+import wblut.geom.WB_List;
 
 public class HET_MTVisitorVertex<E extends Object> {
 	HET_InfoVertex<E> vertexInfo;
@@ -23,7 +23,7 @@ public class HET_MTVisitorVertex<E extends Object> {
 	}
 
 	private List<E> visit(final List<HE_Vertex> vertices) {
-		final List<E> result = new FastList<>();
+		final List<E> result = new WB_List<>();
 		try {
 			final int threadCount = Runtime.getRuntime().availableProcessors();
 			final int dvertices = vertices.size() / threadCount;

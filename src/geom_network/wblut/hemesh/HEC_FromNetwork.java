@@ -456,12 +456,12 @@ public class HEC_FromNetwork extends HEC_Creator {
 			} else {
 				if (nodeTypes[i] != NodeType.ISOLATED || createIsolatedNodes) {
 					double br = connectionRadius.evaluate(node.xd(), node.yd(), node.zd());
-					for (int j = 0; j < connections.size(); j++) {
+					for (final Connection connection : connections) {
 						int offset;
-						if (node == connections.get(j).start()) {
-							offset = connections.get(j).getIndex() * 2;
+						if (node == connection.start()) {
+							offset = connection.getIndex() * 2;
 						} else {
-							offset = connections.get(j).getIndex() * 2 + 1;
+							offset = connection.getIndex() * 2 + 1;
 						}
 						for (int k = 0; k < connectionFacets; k++) {
 							hullPoints.add(connectionNodeConnections[offset].vertices.get(k));
@@ -503,17 +503,17 @@ public class HEC_FromNetwork extends HEC_Creator {
 								facesToRemove.add(f);
 							}
 						}
-						for (int j = 0; j < facesToRemove.size(); j++) {
-							tmp.deleteFace(facesToRemove.get(j));
+						for (final HE_Face element : facesToRemove) {
+							tmp.deleteFace(element);
 						}
 						tmp.removeUnconnectedElements();
 						tmp.uncapBoundaryHalfedges();
-						for (int j = 0; j < connections.size(); j++) {
+						for (final Connection connection : connections) {
 							int offset;
-							if (node == connections.get(j).start()) {
-								offset = connections.get(j).getIndex() * 2;
+							if (node == connection.start()) {
+								offset = connection.getIndex() * 2;
 							} else {
-								offset = connections.get(j).getIndex() * 2 + 1;
+								offset = connection.getIndex() * 2 + 1;
 							}
 							final WB_Vector v = connectionNodeConnections[offset].dir;
 							v.mulSelf(connectionNodeConnections[offset].offset

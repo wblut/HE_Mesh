@@ -9,8 +9,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
+import wblut.geom.WB_List;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PointList;
 
@@ -50,8 +49,8 @@ public class HEC_FromOBJFile extends HEC_Creator {
 		final File file = new File(path);
 		final List<WB_Point> vertexList = new WB_PointList();
 		final List<WB_Point> UVWList = new WB_PointList();
-		final List<int[]> faceList = new FastList<>();
-		final List<int[]> faceUVWList = new FastList<>();
+		final List<int[]> faceList = new WB_List<>();
+		final List<int[]> faceUVWList = new WB_List<>();
 		int faceCount = 0;
 		boolean hasTexture = false;
 		try (InputStream is = createInputStream(file);

@@ -9,6 +9,7 @@ public class WB_Geodesic implements WB_SimpleMeshCreator {
 
 	public enum Type {
 		TETRAHEDRON(0), OCTAHEDRON(1), CUBE(2), DODECAHEDRON(3), ICOSAHEDRON(4);
+
 		Type(final int index) {
 			this.index = index;
 		}

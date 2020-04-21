@@ -9,8 +9,6 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 public class WB_FromOBJFile {
 	private WB_FromOBJFile() {
 	}
@@ -21,7 +19,7 @@ public class WB_FromOBJFile {
 		}
 		final File file = new File(path);
 		final List<WB_Point> vertexList = new WB_PointList();
-		final List<int[]> faceList = new FastList<>();
+		final List<int[]> faceList = new WB_List<>();
 		int faceCount = 0;
 		try (InputStream is = createInputStream(file);
 				final BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));) {

@@ -6,24 +6,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.vecmath.Point3d;
-
-import org.eclipse.collections.impl.list.mutable.FastList;
-import org.twak.camp.Corner;
-import org.twak.camp.Edge;
-import org.twak.camp.Machine;
-import org.twak.camp.Output.Face;
-import org.twak.camp.Skeleton;
-import org.twak.utils.collections.Loop;
-import org.twak.utils.collections.LoopL;
-
 import wblut.data.WB_JohnsonPolyhedraData01;
 import wblut.data.WB_JohnsonPolyhedraData02;
 import wblut.data.WB_JohnsonPolyhedraData03;
 import wblut.data.WB_JohnsonPolyhedraData04;
 import wblut.data.WB_PolyhedraData;
 import wblut.external.QuickHull3D.WB_QuickHull3D;
-
 import wblut.math.WB_Epsilon;
 
 public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
@@ -1254,7 +1242,7 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		final BufferedReader br = new BufferedReader(new InputStreamReader(
 				this.getClass().getClassLoader().getResourceAsStream("resources/" + name + ".wrl")));
 		final List<WB_Point> points = new WB_PointList();
-		final List<int[]> faces = new FastList<>();
+		final List<int[]> faces = new WB_List<>();
 		String line;
 		String[] words;
 		try {
@@ -1719,7 +1707,7 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 	}
 
 	public List<WB_Plane> createUniquePlanes(final List<WB_Plane> planes) {
-		final List<WB_Plane> uniquePlanes = new FastList<>();
+		final List<WB_Plane> uniquePlanes = new WB_List<>();
 		boolean unique = true;
 		WB_Plane Pi, Pj;
 		uniquePlanes.add(planes.get(0));

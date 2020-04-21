@@ -7,8 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import processing.core.PApplet;
 import processing.core.PImage;
 import wblut.math.WB_Epsilon;
@@ -52,7 +50,7 @@ public class WB_IsoSurface2D {
 	private WB_IndexedDoubleMap valueremaps;
 	private double gamma;
 	private boolean invert;
-	private FastList<WB_Segment> segs;
+	private WB_List<WB_Segment> segs;
 
 	public WB_IsoSurface2D() {
 		String line = "";
@@ -267,7 +265,7 @@ public class WB_IsoSurface2D {
 	}
 
 	private void polygonise() {
-		segs = new FastList<>();
+		segs = new WB_List<>();
 		final WB_Point offset = new WB_Point(cx - 0.5 * resx * dx, cy - 0.5 * resy * dy);
 		if (Double.isNaN(boundary)) {
 			for (int i = 0; i < resx; i++) {

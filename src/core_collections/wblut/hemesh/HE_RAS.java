@@ -6,24 +6,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
+import wblut.geom.WB_List;
 
+//Random Access Set
 public class HE_RAS<E extends HE_Element> extends AbstractSet<E> {
-	FastList<E> objects;
+	WB_List<E> objects;
 	HE_IntMap indices;
 
 	public HE_RAS() {
-		objects = new FastList<>();
-		indices = new HE_IntMap();
-	}
-
-	public HE_RAS(final int n) {
-		objects = new FastList<>(n);
+		objects = new WB_List<>();
 		indices = new HE_IntMap();
 	}
 
 	public HE_RAS(final Collection<E> items) {
-		this(items.size());
+		this();
 		for (final E e : items) {
 			add(e);
 		}

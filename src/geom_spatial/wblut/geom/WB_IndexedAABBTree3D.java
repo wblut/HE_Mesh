@@ -6,8 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.core.WB_ProgressReporter.WB_ProgressTracker;
 
 public class WB_IndexedAABBTree3D {
@@ -18,7 +16,7 @@ public class WB_IndexedAABBTree3D {
 	public static final WB_ProgressTracker tracker = WB_ProgressTracker.instance();
 
 	public WB_IndexedAABBTree3D(final int[] tetrahedra, final WB_CoordCollection points, final int mnof) {
-		final List<WB_IndexedTetrahedron> mesh = new FastList<>();
+		final List<WB_IndexedTetrahedron> mesh = new WB_List<>();
 		for (int i = 0; i < tetrahedra.length; i += 4) {
 			mesh.add(new WB_IndexedTetrahedron(i, tetrahedra, points));
 		}
@@ -30,7 +28,7 @@ public class WB_IndexedAABBTree3D {
 
 	public WB_IndexedAABBTree3D(final WB_Triangulation3D triangulation, final WB_CoordCollection points,
 			final int mnof) {
-		final List<WB_IndexedTetrahedron> mesh = new FastList<>();
+		final List<WB_IndexedTetrahedron> mesh = new WB_List<>();
 		for (int i = 0; i < triangulation.getTetrahedra().length; i += 4) {
 			mesh.add(new WB_IndexedTetrahedron(i, triangulation.getTetrahedra(), points));
 		}
@@ -41,7 +39,7 @@ public class WB_IndexedAABBTree3D {
 	}
 
 	public WB_IndexedAABBTree3D(final WB_AlphaTriangulation3D triangulation, final double alpha, final int mnof) {
-		final List<WB_IndexedTetrahedron> mesh = new FastList<>();
+		final List<WB_IndexedTetrahedron> mesh = new WB_List<>();
 		final int[] alphatri = triangulation.getAlphaTriangles(alpha);
 		for (int i = 0; i < alphatri.length; i += 4) {
 			mesh.add(new WB_IndexedTetrahedron(i, alphatri,
@@ -64,7 +62,7 @@ public class WB_IndexedAABBTree3D {
 		tracker.setStartStatus(this,
 				"Starting WB_AABBTree construction. Max. number of faces per node: " + maxNumberOfFaces);
 		root = new WB_IndexedAABBNode3D();
-		final List<WB_IndexedTetrahedron> faces = new FastList<>();
+		final List<WB_IndexedTetrahedron> faces = new WB_List<>();
 		faces.addAll(mesh);
 		buildNode(root, faces, mesh, 0);
 		tracker.setStopStatus(this, "Exiting WB_AABBTree construction.");
@@ -84,8 +82,8 @@ public class WB_IndexedAABBTree3D {
 			depth = Math.max(depth, node.level);
 			return;
 		}
-		final List<WB_IndexedTetrahedron> subsetA = new FastList<>();
-		final List<WB_IndexedTetrahedron> subsetB = new FastList<>();
+		final List<WB_IndexedTetrahedron> subsetA = new WB_List<>();
+		final List<WB_IndexedTetrahedron> subsetB = new WB_List<>();
 		double sah = Double.POSITIVE_INFINITY;
 		for (int i = 0; i < 2; i++) {
 			final WB_TetrahedronSort fs = new WB_TetrahedronSort.WB_AABBSortMax1D(i);
@@ -102,8 +100,8 @@ public class WB_IndexedAABBTree3D {
 			Collections.sort(faces, fs);
 			sah = findOptimalSubset(sah, node, subsetA, subsetB, faces);
 		}
-		final List<WB_IndexedTetrahedron> childA = new FastList<>();
-		final List<WB_IndexedTetrahedron> childB = new FastList<>();
+		final List<WB_IndexedTetrahedron> childA = new WB_List<>();
+		final List<WB_IndexedTetrahedron> childB = new WB_List<>();
 		if (subsetA.size() < subsetB.size()) {
 			childA.addAll(subsetB);
 			childB.addAll(subsetA);
@@ -283,7 +281,7 @@ public class WB_IndexedAABBTree3D {
 
 		public WB_IndexedAABBNode3D() {
 			level = -1;
-			faces = new FastList<>();
+			faces = new WB_List<>();
 		}
 
 		public WB_AABB getAABB() {

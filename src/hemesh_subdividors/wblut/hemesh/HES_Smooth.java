@@ -54,8 +54,8 @@ public class HES_Smooth extends HES_Subdividor {
 			neighbors = v.getNeighborVertices();
 			p.mulSelf(origWeight);
 			double c = origWeight;
-			for (int i = 0; i < neighbors.size(); i++) {
-				n = neighbors.get(i);
+			for (final HE_Vertex neighbor : neighbors) {
+				n = neighbor;
 				p.addSelf(neigWeight * n.xd(), neigWeight * n.yd(), neigWeight * n.zd());
 				c += neigWeight;
 			}
@@ -125,8 +125,8 @@ public class HES_Smooth extends HES_Subdividor {
 			neighbors = v.getNeighborVertices();
 			p.mulSelf(origWeight);
 			double c = origWeight;
-			for (int i = 0; i < neighbors.size(); i++) {
-				n = neighbors.get(i);
+			for (final HE_Vertex neighbor : neighbors) {
+				n = neighbor;
 				p.addSelf(neigWeight * n.xd(), neigWeight * n.yd(), neigWeight * n.zd());
 				c += neigWeight;
 			}
@@ -172,8 +172,8 @@ public class HES_Smooth extends HES_Subdividor {
 					if (outer.contains(n)) {
 						sharedFaces = selection.getParent().getSharedFaces(v, n);
 						boolean singleFaceGap = true;
-						for (int j = 0; j < sharedFaces.size(); j++) {
-							if (selection.contains(sharedFaces.get(j))) {
+						for (final HE_Face sharedFace : sharedFaces) {
+							if (selection.contains(sharedFace)) {
 								singleFaceGap = false;
 								break;
 							}

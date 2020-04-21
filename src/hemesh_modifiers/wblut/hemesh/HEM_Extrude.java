@@ -2,14 +2,13 @@ package wblut.hemesh;
 
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordList;
 import wblut.geom.WB_GeometryOp3D;
 import wblut.geom.WB_IntersectionResult;
+import wblut.geom.WB_List;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
@@ -193,7 +192,7 @@ public class HEM_Extrude extends HEM_Modifier {
 			return mesh;
 		}
 		failedFaces = new HE_FaceList();
-		failedHeights = new FastList<>();
+		failedHeights = new WB_List<>();
 		applyFlat(mesh, faces, isFlat && fuse);
 		if (heights != null) {
 			for (int i = 0; i < failedHeights.size(); i++) {
@@ -304,7 +303,7 @@ public class HEM_Extrude extends HEM_Modifier {
 			return selection.getParent();
 		}
 		failedFaces = new HE_FaceList();
-		failedHeights = new FastList<>();
+		failedHeights = new WB_List<>();
 		applyFlat(selection.getParent(), selFaces, isFlat && fuse);
 		if (heights != null) {
 			for (int i = 0; i < failedHeights.size(); i++) {
@@ -332,8 +331,8 @@ public class HEM_Extrude extends HEM_Modifier {
 							"Length of heights array does not correspond to number of extruded faces.");
 				}
 			} else {
-				for (int i = 0; i < selFaces.size(); i++) {
-					f = selFaces.get(i);
+				for (final HE_Face selFace : selFaces) {
+					f = selFace;
 					n = _faceNormals.get(f.getKey());
 					he = f.getHalfedge();
 					do {
@@ -428,8 +427,7 @@ public class HEM_Extrude extends HEM_Modifier {
 				v.getPosition().addMulSelf(d, n);
 			}
 		}
-		for (int i = 0; i < halfedges.size(); i++) {
-			final HE_Halfedge he = halfedges.get(i);
+		for (final HE_Halfedge he : halfedges) {
 			final int ovi = outerVertices.indexOf(he.getVertex());
 			if (ovi >= 0) {
 				mesh.setVertex(he, extOuterVertices.get(ovi));
@@ -570,8 +568,7 @@ public class HEM_Extrude extends HEM_Modifier {
 				v.getPosition().addMulSelf(d, n);
 			}
 		}
-		for (int i = 0; i < halfedges.size(); i++) {
-			final HE_Halfedge he = halfedges.get(i);
+		for (final HE_Halfedge he : halfedges) {
 			final int ovi = outerVertices.indexOf(he.getVertex());
 			if (ovi >= 0) {
 				mesh.setVertex(he, extOuterVertices.get(ovi));
@@ -877,8 +874,8 @@ public class HEM_Extrude extends HEM_Modifier {
 				}
 				// }
 			}
-			for (int i = 0; i < edgesToRemove.size(); i++) {
-				HE_MeshOp.collapseEdge(mesh, edgesToRemove.get(i));
+			for (final HE_Halfedge element : edgesToRemove) {
+				HE_MeshOp.collapseEdge(mesh, element);
 			}
 		}
 		return isPossible;

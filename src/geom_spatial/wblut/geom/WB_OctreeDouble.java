@@ -3,8 +3,6 @@ package wblut.geom;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 public class WB_OctreeDouble {
 	protected WB_AABB box;
 	protected WB_Coord extent;
@@ -47,7 +45,7 @@ public class WB_OctreeDouble {
 		if (box.contains(p)) {
 			if (hsize <= minNodeSize) {
 				if (entries == null) {
-					entries = new FastList<>();
+					entries = new WB_List<>();
 				}
 				entries.add(new WB_OctreeDoubleEntry(p, value));
 				return;
@@ -123,7 +121,7 @@ public class WB_OctreeDouble {
 	}
 
 	public List<WB_OctreeDouble> getNodes() {
-		final List<WB_OctreeDouble> result = new FastList<>();
+		final List<WB_OctreeDouble> result = new WB_List<>();
 		if (numNodes > 0) {
 			for (int i = 0; i < 8; i++) {
 				if (nodes[i] != null) {
@@ -191,9 +189,9 @@ public class WB_OctreeDouble {
 	}
 
 	public List<WB_OctreeDoubleEntry> getEntries() {
-		FastList<WB_OctreeDoubleEntry> result = null;
+		WB_List<WB_OctreeDoubleEntry> result = null;
 		if (entries != null) {
-			result = new FastList<>();
+			result = new WB_List<>();
 			result.addAll(entries);
 		} else if (numNodes > 0) {
 			for (int i = 0; i < 8; i++) {
@@ -201,7 +199,7 @@ public class WB_OctreeDouble {
 					final List<WB_OctreeDoubleEntry> childPoints = nodes[i].getEntries();
 					if (childPoints != null) {
 						if (result == null) {
-							result = new FastList<>();
+							result = new WB_List<>();
 						}
 						result.addAll(childPoints);
 					}
@@ -212,10 +210,10 @@ public class WB_OctreeDouble {
 	}
 
 	public List<WB_OctreeDoubleEntry> getEntriesInRange(final WB_AABB AABB) {
-		FastList<WB_OctreeDoubleEntry> result = new FastList<>();
+		WB_List<WB_OctreeDoubleEntry> result = new WB_List<>();
 		if (box.intersects(AABB)) {
 			if (entries != null) {
-				result = new FastList<>();
+				result = new WB_List<>();
 				for (final WB_OctreeDoubleEntry oe : entries) {
 					if (AABB.contains(oe.coord)) {
 						result.add(oe);
@@ -236,7 +234,7 @@ public class WB_OctreeDouble {
 	}
 
 	public List<WB_OctreeDoubleEntry> getEntriesInRange(final WB_Sphere sphere) {
-		final FastList<WB_OctreeDoubleEntry> result = new FastList<>();
+		final WB_List<WB_OctreeDoubleEntry> result = new WB_List<>();
 		if (box.intersects(sphere)) {
 			if (entries != null) {
 				for (final WB_OctreeDoubleEntry oe : entries) {

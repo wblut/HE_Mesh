@@ -3,8 +3,6 @@ package wblut.geom;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.math.WB_MTRandom;
 
 public class WB_Danzer2D implements WB_TriangleFactory {
@@ -79,7 +77,7 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		r2 = c / (a + b + c);
 		r3 = b / (a + b + c);
 		points = new WB_PointList();
-		tiles = new FastList<>();
+		tiles = new WB_List<>();
 		type = t;
 		final WB_DanzerTile2D T = new WB_DanzerTile2D(type, 0);
 		WB_Point q;
@@ -158,7 +156,7 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 	}
 
 	public void inflate() {
-		final List<WB_DanzerTile2D> newTiles = new FastList<>();
+		final List<WB_DanzerTile2D> newTiles = new WB_List<>();
 		for (int i = 0; i < tiles.size(); i++) {
 			newTiles.addAll(inflateTileInt(tiles.get(i), 2.0));
 		}
@@ -172,7 +170,7 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 	}
 
 	public void inflate(final double probability) {
-		final List<WB_DanzerTile2D> newTiles = new FastList<>();
+		final List<WB_DanzerTile2D> newTiles = new WB_List<>();
 		for (int i = 0; i < tiles.size(); i++) {
 			newTiles.addAll(inflateTileInt(tiles.get(i), probability));
 		}
@@ -186,7 +184,7 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 	}
 
 	protected List<WB_DanzerTile2D> inflateTileInt(final WB_DanzerTile2D T, final double probability) {
-		final List<WB_DanzerTile2D> newTiles = new FastList<>();
+		final List<WB_DanzerTile2D> newTiles = new WB_List<>();
 		if (rnd.nextDouble() >= probability) {
 			newTiles.add(T);
 		} else {
@@ -420,7 +418,7 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 	}
 
 	public List<WB_Polygon> getTiles() {
-		final List<WB_Polygon> faces = new FastList<>();
+		final List<WB_Polygon> faces = new WB_List<>();
 		clean();
 		for (final WB_DanzerTile2D T : tiles) {
 			faces.add(geometryfactory.createSimplePolygon(points.get(T.p1), points.get(T.p2), points.get(T.p3)));

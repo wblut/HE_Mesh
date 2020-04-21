@@ -7,8 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import processing.core.PApplet;
 import processing.core.PImage;
 import wblut.math.WB_Epsilon;
@@ -291,7 +289,7 @@ public class WB_IsoSurfaceVOL2D {
 		yedges = new WB_IndexedObjectMap<>();
 		vertices = new WB_IndexedObjectMap<>();
 		final WB_Point offset = new WB_Point(cx - 0.5 * resx * dx, cy - 0.5 * resy * dy);
-		triangles = new FastList<>();
+		triangles = new WB_List<>();
 		for (int i = 0; i < resx; i++) {
 			for (int j = 0; j < resy; j++) {
 				getPolygons(i, j, classifyCell(i, j), offset);

@@ -11,8 +11,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
@@ -898,7 +896,7 @@ public class WB_GeometryFactory2D {
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-		return new FastList<>();
+		return new WB_List<>();
 	}
 
 	public List<WB_Polygon> createTextWithFont(final String text, final String fontName, final float pointSize) {
@@ -917,7 +915,7 @@ public class WB_GeometryFactory2D {
 			is = new FileInputStream(fontName);
 		} catch (final Exception e) {
 			e.printStackTrace();
-			return new FastList<>();
+			return new WB_List<>();
 		}
 		Font font = null;
 		try {
@@ -931,7 +929,7 @@ public class WB_GeometryFactory2D {
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-		return new FastList<>();
+		return new WB_List<>();
 	}
 
 	public List<WB_Polygon> createTextWithOpenTypeFont(final String text, final String fontName,
@@ -953,7 +951,7 @@ public class WB_GeometryFactory2D {
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-		return new FastList<>();
+		return new WB_List<>();
 	}
 
 	public List<WB_Polygon> createTextWithType1Font(final String text, final String fontName, final float pointSize) {
@@ -974,7 +972,7 @@ public class WB_GeometryFactory2D {
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-		return new FastList<>();
+		return new WB_List<>();
 	}
 
 	public List<WB_Polygon> createText(final String text, final String fontName, final float pointSize) {
@@ -1008,7 +1006,7 @@ public class WB_GeometryFactory2D {
 			final char[] chs = text.toCharArray();
 			final FontRenderContext fontContext = new FontRenderContext(null, false, true);
 			final GlyphVector gv = font.createGlyphVector(fontContext, chs);
-			final List<WB_Polygon> geometries = new FastList<>();
+			final List<WB_Polygon> geometries = new WB_List<>();
 			for (int i = 0; i < gv.getNumGlyphs(); i++) {
 				geometries.addAll(shapereader.read(gv.getGlyphOutline(i), flatness));
 			}
@@ -1016,7 +1014,7 @@ public class WB_GeometryFactory2D {
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-		return new FastList<>();
+		return new WB_List<>();
 	}
 
 	public List<WB_Polygon> createShape(final Shape shape, final double flatness) {
@@ -1686,8 +1684,7 @@ public class WB_GeometryFactory2D {
 						WB_Point.addMul(C.getCenter(), C.getRadius(), WB_VectorFactory.Y()), inversion);
 				final WB_Circle invC = createCirclePPP(p1, p2, p3);
 				final List<WB_Line> invResult = createLinesTangentTo2Circles(invL, invC);
-				for (int i = 0; i < invResult.size(); i++) {
-					final WB_Line inv = invResult.get(i);
+				for (final WB_Line inv : invResult) {
 					p1 = createInversionPoint2D(inv.getOrigin(), inversion);
 					p2 = createInversionPoint2D(inv.getPoint(100.0), inversion);
 					result.add(createCirclePPP(p, p1, p2));
@@ -1710,23 +1707,23 @@ public class WB_GeometryFactory2D {
 		final List<WB_Line> lines31 = createAngleBisector2D(L3, L1);
 		final List<WB_Point> intersections = new ArrayList<>();
 		WB_Point point;
-		for (int i = 0; i < lines12.size(); i++) {
-			for (int j = 0; j < lines23.size(); j++) {
-				point = createIntersectionPoint2D(lines12.get(i), lines23.get(j));
+		for (final WB_Line element : lines12) {
+			for (final WB_Line element2 : lines23) {
+				point = createIntersectionPoint2D(element, element2);
 				if (point != null) {
 					intersections.add(point);
 				}
 			}
-			for (int j = 0; j < lines31.size(); j++) {
-				point = createIntersectionPoint2D(lines12.get(i), lines31.get(j));
+			for (final WB_Line element2 : lines31) {
+				point = createIntersectionPoint2D(element, element2);
 				if (point != null) {
 					intersections.add(point);
 				}
 			}
 		}
-		for (int i = 0; i < lines23.size(); i++) {
-			for (int j = 0; j < lines31.size(); j++) {
-				point = createIntersectionPoint2D(lines23.get(i), lines31.get(j));
+		for (final WB_Line element : lines23) {
+			for (final WB_Line element2 : lines31) {
+				point = createIntersectionPoint2D(element, element2);
 				if (point != null) {
 					intersections.add(point);
 				}
@@ -1998,8 +1995,8 @@ public class WB_GeometryFactory2D {
 		final List<WB_Circle> uniqcircles = new ArrayList<>();
 		for (int i = 0; i < circles.size(); i++) {
 			boolean uniq = true;
-			for (int j = 0; j < uniqcircles.size(); j++) {
-				if (circles.get(i).equals(uniqcircles.get(j))) {
+			for (final WB_Circle uniqcircle : uniqcircles) {
+				if (circles.get(i).equals(uniqcircle)) {
 					uniq = false;
 					break;
 				}
@@ -2016,8 +2013,8 @@ public class WB_GeometryFactory2D {
 		final WB_Circle C0 = createCircleWithRadius(p0, r);
 		final WB_Circle C1 = createCircleWithRadius(p1, r);
 		final List<WB_Point> intersection = createIntersectionPoints2D(C0, C1);
-		for (int i = 0; i < intersection.size(); i++) {
-			result.add(createCircleWithRadius(intersection.get(i), r));
+		for (final WB_Point element : intersection) {
+			result.add(createCircleWithRadius(element, r));
 		}
 		return result;
 	}
@@ -2087,13 +2084,13 @@ public class WB_GeometryFactory2D {
 			final WB_Circle ctmp1 = createCircleWithRadius(p, r);
 			WB_Circle ctmp2 = createCircleWithRadius(C.getCenter(), r + C.getRadius());
 			List<WB_Point> intersection = createIntersectionPoints2D(ctmp1, ctmp2);
-			for (int i = 0; i < intersection.size(); i++) {
-				result.add(createCircleWithRadius(intersection.get(i), r));
+			for (final WB_Point element : intersection) {
+				result.add(createCircleWithRadius(element, r));
 			}
 			ctmp2 = createCircleWithRadius(C.getCenter(), WB_Math.fastAbs(r - C.getRadius()));
 			intersection = createIntersectionPoints2D(ctmp1, ctmp2);
-			for (int i = 0; i < intersection.size(); i++) {
-				result.add(createCircleWithRadius(intersection.get(i), r));
+			for (final WB_Point element : intersection) {
+				result.add(createCircleWithRadius(element, r));
 			}
 		}
 		return result;
@@ -2118,8 +2115,8 @@ public class WB_GeometryFactory2D {
 		intersections.addAll(createIntersectionPoints2D(L1, C2));
 		intersections.addAll(createIntersectionPoints2D(L2, C1));
 		intersections.addAll(createIntersectionPoints2D(L2, C2));
-		for (int i = 0; i < intersections.size(); i++) {
-			result.add(createCircleWithRadius(intersections.get(i), r));
+		for (final WB_Coord intersection : intersections) {
+			result.add(createCircleWithRadius(intersection, r));
 		}
 		return result;
 	}
@@ -2137,8 +2134,8 @@ public class WB_GeometryFactory2D {
 		if (intersections.size() < 2) {
 			return result;
 		}
-		for (int i = 0; i < intersections.size(); i++) {
-			result.add(createCircleWithRadius(intersections.get(i), r));
+		for (final WB_Point intersection : intersections) {
+			result.add(createCircleWithRadius(intersection, r));
 		}
 		final Iterator<WB_Circle> itr = result.iterator();
 		WB_Circle C;

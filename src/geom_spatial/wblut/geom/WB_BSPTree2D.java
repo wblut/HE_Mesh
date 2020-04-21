@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.math.WB_Epsilon;
 
 public class WB_BSPTree2D {
@@ -24,10 +22,10 @@ public class WB_BSPTree2D {
 			cseg = S2DItr.next();
 		}
 		tree.partition = new WB_Line(cseg.getOrigin(), cseg.getDirection());
-		final FastList<WB_Segment> _segs = new FastList<>();
+		final WB_List<WB_Segment> _segs = new WB_List<>();
 		_segs.add(cseg);
-		final FastList<WB_Segment> pos_list = new FastList<>();
-		final FastList<WB_Segment> neg_list = new FastList<>();
+		final WB_List<WB_Segment> pos_list = new WB_List<>();
+		final WB_List<WB_Segment> neg_list = new WB_List<>();
 		WB_Segment seg = null;
 		while (S2DItr.hasNext()) {
 			seg = S2DItr.next();
@@ -98,8 +96,8 @@ public class WB_BSPTree2D {
 				return -1;
 			}
 		} else {
-			for (int i = 0; i < node.segments.size(); i++) {
-				if (WB_Epsilon.isZero(WB_GeometryOp2D.getDistance2D(p, node.segments.get(i)))) {
+			for (final WB_Segment element : node.segments) {
+				if (WB_Epsilon.isZero(WB_GeometryOp2D.getDistance2D(p, element))) {
 					return 0;
 				}
 			}
@@ -138,12 +136,12 @@ public class WB_BSPTree2D {
 
 	private void partitionCoincidentSegments(final WB_BSPNode2D node, final WB_Segment S, final List<WB_Segment> pos,
 			final List<WB_Segment> neg, final List<WB_Segment> coSame, final List<WB_Segment> coDiff) {
-		FastList<WB_Segment> partSegments = new FastList<>();
+		WB_List<WB_Segment> partSegments = new WB_List<>();
 		partSegments.add(S);
 		WB_Segment thisS, otherS;
 		final WB_Line L = node.partition;
 		for (int i = 0; i < node.segments.size(); i++) {
-			final FastList<WB_Segment> newpartSegments = new FastList<>();
+			final WB_List<WB_Segment> newpartSegments = new WB_List<>();
 			otherS = node.segments.get(i);
 			final double v0 = L.getT(otherS.getOrigin());
 			final double v1 = L.getT(otherS.getEndpoint());
@@ -186,9 +184,9 @@ public class WB_BSPTree2D {
 			}
 			partSegments = newpartSegments;
 		}
-		for (int i = 0; i < partSegments.size(); i++) {
-			getSegmentPosPartition(node, partSegments.get(i), pos, neg, coSame, coDiff);
-			getSegmentNegPartition(node, partSegments.get(i), pos, neg, coSame, coDiff);
+		for (final WB_Segment partSegment : partSegments) {
+			getSegmentPosPartition(node, partSegment, pos, neg, coSame, coDiff);
+			getSegmentNegPartition(node, partSegment, pos, neg, coSame, coDiff);
 		}
 	}
 

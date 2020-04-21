@@ -3,8 +3,6 @@ package wblut.geom;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.math.WB_MTRandom;
 
 public class WB_Danzer3D {
@@ -261,7 +259,7 @@ public class WB_Danzer3D {
 		}
 
 		public List<WB_DanzerTile3D> inflate() {
-			final List<WB_DanzerTile3D> tiles = new FastList<>();
+			final List<WB_DanzerTile3D> tiles = new WB_List<>();
 			WB_Point p5, p6, p7, p8, p9, p10, p11;
 			switch (type) {
 			case A:
@@ -321,7 +319,7 @@ public class WB_Danzer3D {
 		}
 
 		List<WB_DanzerTile3D> inflate(final List<WB_Point> points) {
-			final List<WB_DanzerTile3D> tiles = new FastList<>();
+			final List<WB_DanzerTile3D> tiles = new WB_List<>();
 			WB_Point p5, p6, p7, p8, p9, p10, p11;
 			switch (type) {
 			case A:
@@ -410,7 +408,7 @@ public class WB_Danzer3D {
 	public WB_Danzer3D(final Type type, final double scale, final WB_Coord offset) {
 		rnd = new WB_MTRandom();
 		points = new WB_PointList();
-		tiles = new FastList<>();
+		tiles = new WB_List<>();
 		this.type = type;
 		final WB_DanzerTile3D T = new WB_DanzerTile3D(type, scale, offset, 0);
 		points.add(T.p1);
@@ -434,7 +432,7 @@ public class WB_Danzer3D {
 	}
 
 	public void inflate() {
-		final List<WB_DanzerTile3D> newTiles = new FastList<>();
+		final List<WB_DanzerTile3D> newTiles = new WB_List<>();
 		for (int i = 0; i < tiles.size(); i++) {
 			newTiles.addAll(tiles.get(i).inflate(points));
 		}
@@ -448,7 +446,7 @@ public class WB_Danzer3D {
 	}
 
 	public void inflate(final double probability) {
-		final List<WB_DanzerTile3D> newTiles = new FastList<>();
+		final List<WB_DanzerTile3D> newTiles = new WB_List<>();
 		for (int i = 0; i < tiles.size(); i++) {
 			if (rnd.nextDouble() >= probability) {
 				newTiles.add(tiles.get(i));

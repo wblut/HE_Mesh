@@ -4,9 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
-
 public class WB_Polyhedron implements WB_Transformable3D {
 	private WB_Point[] vertices;
 	private int[][] faces;
@@ -604,7 +601,7 @@ public class WB_Polyhedron implements WB_Transformable3D {
 	}
 
 	public int[][] edges() {
-		final List<int[]> edgeList = new FastList<>();
+		final List<int[]> edgeList = new WB_List<>();
 		int[] face;
 		for (final int[] face2 : faces) {
 			face = face2;
@@ -868,9 +865,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 			final int[][] faces = new int[faceID.size()][];
 			i = 0;
 			String v, v0;
-			IntArrayList face = new IntArrayList();
+			WB_IntList face = new WB_IntList();
 			for (final String f : faceID.keySet()) {
-				face = new IntArrayList();
+				face = new WB_IntList();
 				v0 = faceID.get(f);
 				v = v0;
 				do {

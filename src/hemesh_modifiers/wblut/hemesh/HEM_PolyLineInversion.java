@@ -3,10 +3,9 @@ package wblut.hemesh;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.geom.WB_AABBTree3D;
 import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_List;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PolyLine;
 import wblut.geom.WB_Segment;
@@ -64,7 +63,7 @@ public class HEM_PolyLineInversion extends HEM_Modifier {
 			return mesh;
 		}
 		final WB_AABBTree3D tree = new WB_AABBTree3D(mesh, 10);
-		final List<HE_FaceLineIntersection> intersections = new FastList<>();
+		final List<HE_FaceLineIntersection> intersections = new WB_List<>();
 		for (int i = 0; i < polyLine.getNumberSegments(); i++) {
 			final WB_Segment S = polyLine.getSegment(i);
 			intersections.addAll(HE_MeshOp.getIntersection(tree, S));
@@ -111,7 +110,7 @@ public class HEM_PolyLineInversion extends HEM_Modifier {
 			return selection.getParent();
 		}
 		final WB_AABBTree3D tree = new WB_AABBTree3D(selection.getParent(), 10);
-		final List<HE_FaceLineIntersection> intersections = new FastList<>();
+		final List<HE_FaceLineIntersection> intersections = new WB_List<>();
 		for (int i = 0; i < polyLine.getNumberSegments(); i++) {
 			final WB_Segment S = polyLine.getSegment(i);
 			intersections.addAll(HE_MeshOp.getIntersection(tree, S));

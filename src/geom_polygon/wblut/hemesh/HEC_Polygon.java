@@ -3,8 +3,7 @@ package wblut.hemesh;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
+import wblut.geom.WB_List;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
@@ -22,7 +21,7 @@ public class HEC_Polygon extends HEC_Creator {
 	public HEC_Polygon(final WB_Polygon poly, final double d) {
 		this();
 		setOverride(true);
-		polygon = new FastList<>();
+		polygon = new WB_List<>();
 		polygon.add(poly);
 		thickness = d;
 		offset = 0;
@@ -45,19 +44,19 @@ public class HEC_Polygon extends HEC_Creator {
 	}
 
 	public HEC_Polygon setPolygon(final WB_Polygon poly) {
-		polygon = new FastList<>();
+		polygon = new WB_List<>();
 		polygon.add(poly);
 		return this;
 	}
 
 	public HEC_Polygon setPolygon(final Collection<? extends WB_Polygon> polygons) {
-		polygon = new FastList<>();
+		polygon = new WB_List<>();
 		polygon.addAll(polygons);
 		return this;
 	}
 
 	public HEC_Polygon setPolygon(final WB_Polygon[] polygons) {
-		polygon = new FastList<>();
+		polygon = new WB_List<>();
 		for (final WB_Polygon poly : polygons) {
 			polygon.add(poly);
 		}

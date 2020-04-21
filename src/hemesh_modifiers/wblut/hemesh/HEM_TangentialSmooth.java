@@ -72,8 +72,8 @@ public class HEM_TangentialSmooth extends HEM_Modifier {
 					p = new WB_Point(v);
 					neighbors = v.getNeighborVertices();
 					p.mulSelf(1 - lambda);
-					for (int i = 0; i < neighbors.size(); i++) {
-						p.addMulSelf(lambda / neighbors.size(), neighbors.get(i));
+					for (final HE_Vertex neighbor : neighbors) {
+						p.addMulSelf(lambda / neighbors.size(), neighbor);
 					}
 					newPositions[id] = projectOnPlane(p, tangent);
 				}
@@ -130,8 +130,8 @@ public class HEM_TangentialSmooth extends HEM_Modifier {
 							nItr.remove();
 						}
 					}
-					for (int i = 0; i < neighbors.size(); i++) {
-						p.addMulSelf(lambda / neighbors.size(), neighbors.get(i));
+					for (final HE_Vertex neighbor : neighbors) {
+						p.addMulSelf(lambda / neighbors.size(), neighbor);
 					}
 					newPositions[id] = projectOnPlane(p.addMulSelf(1.0 - lambda, v), tangent);
 				}

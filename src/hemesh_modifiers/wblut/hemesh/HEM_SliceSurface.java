@@ -6,12 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_AABBTree3D;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_List;
 import wblut.geom.WB_Plane;
 import wblut.math.WB_Epsilon;
 
@@ -51,7 +50,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		newEdges = HE_Selection.getSelection(mesh);
 		mesh.resetEdgeInternalLabels();
 		mesh.resetVertexInternalLabels();
-		paths = new FastList<>();
+		paths = new WB_List<>();
 		// no plane defined
 		if (P == null) {
 			tracker.setStopStatus(this, "No cutplane defined. Exiting HEM_SliceSurface.");
@@ -180,7 +179,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		selection.getParent().resetVertexInternalLabels();
 		cutFaces = HE_Selection.getSelection(selection.getParent());
 		newEdges = HE_Selection.getSelection(selection.getParent());
-		paths = new FastList<>();
+		paths = new WB_List<>();
 		// no plane defined
 		if (P == null) {
 			tracker.setStopStatus(this, "No cutplane defined. Exiting HEM_SliceSurface.");
@@ -291,7 +290,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 				splitFace(f, lsel.getParent(), lP);
 				counter.increment();
 			}
-			paths = new FastList<>();
+			paths = new WB_List<>();
 		}
 		if (newEdges.getNumberOfEdges() > 1) {
 			buildPaths(newEdges);

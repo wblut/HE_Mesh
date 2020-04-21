@@ -3,8 +3,6 @@ package wblut.geom;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 public class WB_QuadtreeDouble {
 	protected WB_AABB2D box;
 	protected WB_Coord extent;
@@ -47,7 +45,7 @@ public class WB_QuadtreeDouble {
 		if (box.contains(p)) {
 			if (hsize <= minNodeSize) {
 				if (entries == null) {
-					entries = new FastList<>();
+					entries = new WB_List<>();
 				}
 				entries.add(new WB_QuadtreeDoubleEntry(p, value));
 				return;
@@ -129,7 +127,7 @@ public class WB_QuadtreeDouble {
 	}
 
 	public List<WB_QuadtreeDouble> getNodes() {
-		final List<WB_QuadtreeDouble> result = new FastList<>();
+		final List<WB_QuadtreeDouble> result = new WB_List<>();
 		if (numNodes > 0) {
 			for (int i = 0; i < 4; i++) {
 				if (nodes[i] != null) {
@@ -197,9 +195,9 @@ public class WB_QuadtreeDouble {
 	}
 
 	public List<WB_QuadtreeDoubleEntry> getEntries() {
-		FastList<WB_QuadtreeDoubleEntry> result = null;
+		WB_List<WB_QuadtreeDoubleEntry> result = null;
 		if (entries != null) {
-			result = new FastList<>();
+			result = new WB_List<>();
 			result.addAll(entries);
 		} else if (numNodes > 0) {
 			for (int i = 0; i < 4; i++) {
@@ -207,7 +205,7 @@ public class WB_QuadtreeDouble {
 					final List<WB_QuadtreeDoubleEntry> childPoints = nodes[i].getEntries();
 					if (childPoints != null) {
 						if (result == null) {
-							result = new FastList<>();
+							result = new WB_List<>();
 						}
 						result.addAll(childPoints);
 					}
@@ -218,10 +216,10 @@ public class WB_QuadtreeDouble {
 	}
 
 	public List<WB_QuadtreeDoubleEntry> getEntriesInRange(final WB_AABB2D AABB) {
-		FastList<WB_QuadtreeDoubleEntry> result = new FastList<>();
+		WB_List<WB_QuadtreeDoubleEntry> result = new WB_List<>();
 		if (box.intersects(AABB)) {
 			if (entries != null) {
-				result = new FastList<>();
+				result = new WB_List<>();
 				for (final WB_QuadtreeDoubleEntry oe : entries) {
 					if (AABB.contains(oe.coord)) {
 						result.add(oe);
@@ -242,7 +240,7 @@ public class WB_QuadtreeDouble {
 	}
 
 	public List<WB_QuadtreeDoubleEntry> getEntriesInRange(final WB_Circle circle) {
-		final FastList<WB_QuadtreeDoubleEntry> result = new FastList<>();
+		final WB_List<WB_QuadtreeDoubleEntry> result = new WB_List<>();
 		if (box.intersects(circle)) {
 			if (entries != null) {
 				for (final WB_QuadtreeDoubleEntry oe : entries) {

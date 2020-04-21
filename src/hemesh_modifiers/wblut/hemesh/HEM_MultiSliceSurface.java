@@ -72,9 +72,9 @@ public class HEM_MultiSliceSurface extends HEM_Modifier {
 		HE_Halfedge he;
 		while (eItr.hasNext()) {
 			he = eItr.next();
-			for (int i = 0; i < planes.size(); i++) {
+			for (final WB_Plane plane : planes) {
 				if (WB_GeometryOp3D.classifySegmentToPlane3D(he.getVertex(), he.getEndVertex(),
-						planes.get(i)) == WB_Classification.ON) {
+						plane) == WB_Classification.ON) {
 					he.setInternalLabel(1);
 					newEdges.addEdge(he);
 					break;
@@ -123,9 +123,9 @@ public class HEM_MultiSliceSurface extends HEM_Modifier {
 		HE_Halfedge he;
 		while (eItr.hasNext()) {
 			he = eItr.next();
-			for (int i = 0; i < planes.size(); i++) {
+			for (final WB_Plane plane : planes) {
 				if (WB_GeometryOp3D.classifySegmentToPlane3D(he.getVertex(), he.getEndVertex(),
-						planes.get(i)) == WB_Classification.ON) {
+						plane) == WB_Classification.ON) {
 					he.setInternalLabel(1);
 					newEdges.addEdge(he);
 					break;

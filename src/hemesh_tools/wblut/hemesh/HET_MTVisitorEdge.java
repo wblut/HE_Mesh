@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
+import wblut.geom.WB_List;
 
 public class HET_MTVisitorEdge<E extends Object> {
 	HET_InfoEdge<E> edgeInfo;
@@ -23,7 +23,7 @@ public class HET_MTVisitorEdge<E extends Object> {
 	}
 
 	private List<E> visit(final List<HE_Halfedge> edges) {
-		final List<E> result = new FastList<>();
+		final List<E> result = new WB_List<>();
 		try {
 			final int threadCount = Runtime.getRuntime().availableProcessors();
 			final int dedges = edges.size() / threadCount;

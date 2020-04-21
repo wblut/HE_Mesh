@@ -2,10 +2,9 @@ package wblut.hemesh;
 
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordList;
+import wblut.geom.WB_List;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.math.WB_ScalarParameter;
@@ -298,7 +297,7 @@ public class HEC_Grid extends HEC_Creator {
 		}
 		final double dU = sizeU / U;
 		final double dV = sizeV / V;
-		final List<WB_Polygon> polygons = new FastList<>();
+		final List<WB_Polygon> polygons = new WB_List<>();
 		final double outOfRange = getBaseValue();
 		final boolean base = getBase();
 		for (int i = 0; i < U; i++) {

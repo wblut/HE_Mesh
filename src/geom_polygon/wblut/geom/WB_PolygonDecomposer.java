@@ -2,8 +2,6 @@ package wblut.geom;
 
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 public class WB_PolygonDecomposer {
 	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
 
@@ -11,7 +9,7 @@ public class WB_PolygonDecomposer {
 		if (!polygon.isSimple()) {
 			polygon = gf.createSimplePolygon(polygon);
 		}
-		final List<WB_Polygon> polys = new FastList<>();
+		final List<WB_Polygon> polys = new WB_List<>();
 		if (polygon == null) {
 			return polys;
 		}

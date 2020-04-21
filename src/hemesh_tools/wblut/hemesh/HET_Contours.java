@@ -3,11 +3,10 @@ package wblut.hemesh;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.geom.WB_AABBTree3D;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordList;
+import wblut.geom.WB_List;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Segment;
@@ -21,7 +20,7 @@ public class HET_Contours {
 		final HEM_SliceSurface ss = new HEM_SliceSurface().setPlane(P);
 		slmesh.modify(ss);
 		final List<HE_Path> paths = ss.getPaths();
-		final List<List<WB_Coord>> contours = new FastList<>();
+		final List<List<WB_Coord>> contours = new WB_List<>();
 		for (final HE_Path path : paths) {
 			final List<WB_Coord> contour = new WB_CoordList();
 			contour.addAll(path.getPathVertices());
@@ -40,7 +39,7 @@ public class HET_Contours {
 		final double inc = Math.abs(step);
 		final HE_Mesh lmesh = mesh;
 		HE_MeshOp.triangulate(lmesh);
-		final List<List<WB_Coord>> contours = new FastList<>();
+		final List<List<WB_Coord>> contours = new WB_List<>();
 		for (double offset = start; offset <= end; offset += inc) {
 			final WB_Plane offsetP = new WB_Plane(P.getOrigin().addMul(offset, P.getNormal()), P.getNormal());
 			HE_Mesh slmesh = lmesh.get();
@@ -66,7 +65,7 @@ public class HET_Contours {
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final WB_Plane P) {
 		double A, B, C, D;
 		final double[] side = new double[3];
-		final List<WB_Segment> segments = new FastList<>();
+		final List<WB_Segment> segments = new WB_List<>();
 		A = P.getNormal().xd();
 		B = P.getNormal().yd();
 		C = P.getNormal().zd();
@@ -129,7 +128,7 @@ public class HET_Contours {
 			final double step) {
 		double A, B, C, D;
 		final double[] side = new double[3];
-		final List<WB_Segment> segments = new FastList<>();
+		final List<WB_Segment> segments = new WB_List<>();
 		final double start = Math.min(min, max);
 		final double end = Math.max(min, max);
 		final double inc = Math.abs(step);
@@ -196,7 +195,7 @@ public class HET_Contours {
 
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final WB_ScalarParameter function, final double level) {
 		final double[] side = new double[3];
-		final List<WB_Segment> segments = new FastList<>();
+		final List<WB_Segment> segments = new WB_List<>();
 		WB_Coord p, q, r;
 		WB_Point p1, p2;
 		final HE_Mesh lmesh = mesh;
@@ -253,7 +252,7 @@ public class HET_Contours {
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final WB_ScalarParameter function, final double min,
 			final double max, final double step) {
 		final double[] side = new double[3];
-		final List<WB_Segment> segments = new FastList<>();
+		final List<WB_Segment> segments = new WB_List<>();
 		final double start = Math.min(min, max);
 		final double end = Math.max(min, max);
 		final double inc = Math.abs(step);
@@ -314,7 +313,7 @@ public class HET_Contours {
 
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final double[] vertexValues, final double level) {
 		final double[] side = new double[3];
-		final List<WB_Segment> segments = new FastList<>();
+		final List<WB_Segment> segments = new WB_List<>();
 		HE_Vertex p, q, r;
 		WB_Point p1, p2;
 		final HE_Mesh lmesh = mesh;
@@ -371,7 +370,7 @@ public class HET_Contours {
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final double[] vertexValues, final double min,
 			final double max, final double step) {
 		final double[] side = new double[3];
-		final List<WB_Segment> segments = new FastList<>();
+		final List<WB_Segment> segments = new WB_List<>();
 		final double start = Math.min(min, max);
 		final double end = Math.max(min, max);
 		final double inc = Math.abs(step);
@@ -432,7 +431,7 @@ public class HET_Contours {
 
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final String attribute, final double level) {
 		final double[] side = new double[3];
-		final List<WB_Segment> segments = new FastList<>();
+		final List<WB_Segment> segments = new WB_List<>();
 		HE_Vertex p, q, r;
 		WB_Point p1, p2;
 		final HE_Mesh lmesh = mesh;
@@ -505,7 +504,7 @@ public class HET_Contours {
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final String attribute, final double min,
 			final double max, final double step) {
 		final double[] side = new double[3];
-		final List<WB_Segment> segments = new FastList<>();
+		final List<WB_Segment> segments = new WB_List<>();
 		final double start = Math.min(min, max);
 		final double end = Math.max(min, max);
 		final double inc = Math.abs(step);

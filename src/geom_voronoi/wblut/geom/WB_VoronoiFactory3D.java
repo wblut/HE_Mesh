@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-import org.eclipse.collections.impl.set.mutable.primitive.IntHashSet;
-
 import wblut.external.ProGAL.CTetrahedron;
 import wblut.external.ProGAL.CTriangle;
 import wblut.external.ProGAL.CVertex;
@@ -104,7 +101,7 @@ public class WB_VoronoiFactory3D extends WB_VoronoiFactory2D {
 		}
 		final DelaunayComplex dc = new DelaunayComplex(tmppoints);
 		final List<CVertex> vertices = dc.getVertices();
-		final List<WB_VoronoiCell3D> result = new FastList<>();
+		final List<WB_VoronoiCell3D> result = new WB_List<>();
 		for (i = 0; i < nv; i++) {
 			final CVertex v = vertices.get(i);
 			final Set<CTetrahedron> vertexhull = dc.getVertexHull(v);
@@ -175,7 +172,7 @@ public class WB_VoronoiFactory3D extends WB_VoronoiFactory2D {
 		for (int i = 0; i < nv; i++) {
 			final CVertex v = vertices.get(i);
 			final Set<CTetrahedron> vertexhull = dc.getVertexHull(v);
-			final IntHashSet neighbors = new IntHashSet();
+			final WB_IntSet neighbors = new WB_IntSet();
 			for (final CTetrahedron tetra : vertexhull) {
 				for (int j = 0; j < 4; j++) {
 					if (!tetra.getPoint(j).isBigpoint()) {
@@ -212,7 +209,7 @@ public class WB_VoronoiFactory3D extends WB_VoronoiFactory2D {
 		for (int i = 0; i < nv; i++) {
 			final CVertex v = vertices.get(i);
 			final Set<CTetrahedron> vertexhull = dc.getVertexHull(v);
-			final IntHashSet neighbors = new IntHashSet();
+			final WB_IntSet neighbors = new WB_IntSet();
 			for (final CTetrahedron tetra : vertexhull) {
 				for (int j = 0; j < 4; j++) {
 					if (!tetra.getPoint(j).isBigpoint()) {
@@ -279,7 +276,7 @@ public class WB_VoronoiFactory3D extends WB_VoronoiFactory2D {
 		final List<CTriangle> triangles = dc.getTriangles();
 		CTetrahedron tetra1, tetra2;
 		int i1, i2;
-		final List<int[]> pairs = new FastList<>();
+		final List<int[]> pairs = new WB_List<>();
 		for (final CTriangle triangle : triangles) {
 			tetra1 = triangle.getAdjacentTetrahedron(0);
 			if ((tetra1 == null) || (tetra1.containsBigPoint())) {
@@ -362,7 +359,7 @@ public class WB_VoronoiFactory3D extends WB_VoronoiFactory2D {
 			final WB_ScalarParameter d) {
 		nv = Math.min(nv, points.size());
 		final int n = points.size();
-		final List<WB_VoronoiCell3D> result = new FastList<>();
+		final List<WB_VoronoiCell3D> result = new WB_List<>();
 		for (int i = 0; i < nv; i++) {
 			final ArrayList<WB_Plane> cutPlanes = new ArrayList<>();
 			final WB_Point O = new WB_Point();

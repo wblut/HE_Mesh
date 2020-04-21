@@ -2,10 +2,9 @@ package wblut.hemesh;
 
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.geom.WB_Circle;
 import wblut.geom.WB_Coord;
+import wblut.geom.WB_List;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
@@ -75,7 +74,7 @@ public class HEC_Ring extends HEC_Creator {
 		final WB_Circle outerCircle = new WB_Circle(getCenter(), normal, outerRadius);
 		final WB_Point[] innerPoints = innerCircle.getPoints(N, phase);
 		final WB_Point[] outerPoints = outerCircle.getPoints(N, phase);
-		final List<WB_Polygon> polygons = new FastList<>();
+		final List<WB_Polygon> polygons = new WB_List<>();
 		for (int i = 0; i < N; i++) {
 			polygons.add(
 					new WB_Polygon(innerPoints[i], innerPoints[(i + 1) % N], outerPoints[(i + 1) % N], outerPoints[i]));

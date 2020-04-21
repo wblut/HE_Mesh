@@ -4,9 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
-
 import wblut.geom.WB_DoubleIntMap;
+import wblut.geom.WB_DoubleList;
 import wblut.math.WB_Epsilon;
 
 public class WB_NurbsKnot {
@@ -280,7 +279,7 @@ public class WB_NurbsKnot {
 			}
 			i += mul;
 		}
-		final DoubleArrayList distinctValues = new DoubleArrayList();
+		final WB_DoubleList distinctValues = new WB_DoubleList();
 		distinctValues.addAll(knotvalues.keySet());
 		distinctValues.sortThis();
 		final double[] allValues = new double[total];

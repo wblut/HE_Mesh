@@ -3,9 +3,8 @@ package wblut.hemesh;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.geom.WB_Coord;
+import wblut.geom.WB_List;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Triangle;
 
@@ -18,7 +17,7 @@ public class HEC_FromTriangles extends HEC_Creator {
 	}
 
 	public HEC_FromTriangles setTriangles(final WB_Triangle[] ts) {
-		triangles = new FastList<>();
+		triangles = new WB_List<>();
 		for (final WB_Triangle tri : ts) {
 			triangles.add(tri);
 		}
@@ -26,7 +25,7 @@ public class HEC_FromTriangles extends HEC_Creator {
 	}
 
 	public HEC_FromTriangles setTriangles(final Collection<? extends WB_Triangle> ts) {
-		triangles = new FastList<>();
+		triangles = new WB_List<>();
 		triangles.addAll(ts);
 		return this;
 	}

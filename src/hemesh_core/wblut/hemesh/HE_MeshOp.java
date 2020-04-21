@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.core.WB_ProgressReporter.WB_ProgressTracker;
 import wblut.geom.WB_AABB;
@@ -22,6 +20,7 @@ import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_KDTree3D;
 import wblut.geom.WB_KDTree3D.WB_KDEntry;
 import wblut.geom.WB_Line;
+import wblut.geom.WB_List;
 import wblut.geom.WB_OrthoProject;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
@@ -1702,7 +1701,7 @@ public class HE_MeshOp {
 	}
 
 	public static List<HE_FaceLineIntersection> getIntersection(final WB_AABBTree3D tree, final WB_Ray ray) {
-		final List<HE_FaceLineIntersection> p = new FastList<>();
+		final List<HE_FaceLineIntersection> p = new WB_List<>();
 		final List<HE_Face> candidates = new HE_FaceList();
 		final List<WB_AABBNode3D> nodes = WB_GeometryOp3D.getIntersection3D(ray, tree);
 		for (final WB_AABBNode3D n : nodes) {
@@ -1718,7 +1717,7 @@ public class HE_MeshOp {
 	}
 
 	public static List<HE_FaceLineIntersection> getIntersectionNoOrigin(final WB_AABBTree3D tree, final WB_Ray ray) {
-		final List<HE_FaceLineIntersection> p = new FastList<>();
+		final List<HE_FaceLineIntersection> p = new WB_List<>();
 		final List<HE_Face> candidates = new HE_FaceList();
 		final List<WB_AABBNode3D> nodes = WB_GeometryOp3D.getIntersection3D(ray, tree);
 		for (final WB_AABBNode3D n : nodes) {
@@ -1738,7 +1737,7 @@ public class HE_MeshOp {
 	}
 
 	public static boolean isInside(final WB_AABBTree3D tree, final WB_Coord p) {
-		final List<HE_FaceLineIntersection> ints = new FastList<>();
+		final List<HE_FaceLineIntersection> ints = new WB_List<>();
 		final List<HE_Face> candidates = new HE_FaceList();
 		final WB_Vector dir = new WB_Vector(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
 		final WB_Ray R = new WB_Ray(p, dir);
@@ -1756,7 +1755,7 @@ public class HE_MeshOp {
 	}
 
 	public static List<HE_FaceLineIntersection> getIntersection(final WB_AABBTree3D tree, final WB_Segment segment) {
-		final List<HE_FaceLineIntersection> p = new FastList<>();
+		final List<HE_FaceLineIntersection> p = new WB_List<>();
 		final List<HE_Face> candidates = new HE_FaceList();
 		final List<WB_AABBNode3D> nodes = WB_GeometryOp3D.getIntersection3D(segment, tree);
 		for (final WB_AABBNode3D n : nodes) {
@@ -1772,7 +1771,7 @@ public class HE_MeshOp {
 	}
 
 	public static List<HE_FaceLineIntersection> getIntersection(final WB_AABBTree3D tree, final WB_Line line) {
-		final List<HE_FaceLineIntersection> p = new FastList<>();
+		final List<HE_FaceLineIntersection> p = new WB_List<>();
 		final List<HE_Face> candidates = new HE_FaceList();
 		final List<WB_AABBNode3D> nodes = WB_GeometryOp3D.getIntersection3D(line, tree);
 		for (final WB_AABBNode3D n : nodes) {
@@ -1793,7 +1792,7 @@ public class HE_MeshOp {
 		for (final WB_AABBNode3D n : nodes) {
 			candidates.addAll(n.getFaces());
 		}
-		final List<WB_Segment> cuts = new FastList<>();
+		final List<WB_Segment> cuts = new WB_List<>();
 		for (final HE_Face face : candidates) {
 			cuts.addAll(WB_GeometryOp3D.getIntersection3D(getPolygon(face), P));
 		}
@@ -2836,8 +2835,8 @@ public class HE_MeshOp {
 			}
 			mesh.setNext(hep, hen);
 			mesh.setNext(hePairp, hePairn);
-			for (int i = 0; i < tmp.size(); i++) {
-				mesh.setVertex(tmp.get(i), vp);
+			for (final HE_Halfedge element : tmp) {
+				mesh.setVertex(element, vp);
 			}
 			mesh.setHalfedge(vp, hen);
 			mesh.remove(he);
@@ -2865,8 +2864,8 @@ public class HE_MeshOp {
 				return false;
 			}
 			final List<HE_Halfedge> tmp = v.getHalfedgeStar();
-			for (int i = 0; i < tmp.size(); i++) {
-				mesh.setVertex(tmp.get(i), vp);
+			for (final HE_Halfedge element : tmp) {
+				mesh.setVertex(element, vp);
 			}
 			mesh.setHalfedge(vp, hePair.getNextInVertex());
 			final HE_Halfedge hen = he.getNextInFace();
@@ -2901,8 +2900,8 @@ public class HE_MeshOp {
 			final HE_Vertex vp = hePair.getVertex();
 			vp.getPosition().addSelf(v).mulSelf(0.5);
 			final List<HE_Halfedge> tmp = v.getHalfedgeStar();
-			for (int i = 0; i < tmp.size(); i++) {
-				mesh.setVertex(tmp.get(i), vp);
+			for (final HE_Halfedge element : tmp) {
+				mesh.setVertex(element, vp);
 			}
 			mesh.setHalfedge(vp, hePair.getNextInVertex());
 			final HE_Halfedge hen = he.getNextInFace();
@@ -2959,8 +2958,8 @@ public class HE_MeshOp {
 				}
 			}
 			final List<HE_Halfedge> tmp = v.getHalfedgeStar();
-			for (int i = 0; i < tmp.size(); i++) {
-				mesh.setVertex(tmp.get(i), vp);
+			for (final HE_Halfedge element : tmp) {
+				mesh.setVertex(element, vp);
 			}
 			mesh.setHalfedge(vp, hePair.getNextInVertex());
 			final HE_Halfedge hen = he.getNextInFace();
@@ -3185,7 +3184,7 @@ public class HE_MeshOp {
 	}
 
 	public static List<HE_FaceFaceIntersection> getIntersection(final HE_Mesh mesh1, final HE_Mesh mesh2) {
-		final List<HE_FaceFaceIntersection> ints = new FastList<>();
+		final List<HE_FaceFaceIntersection> ints = new WB_List<>();
 		triangulate(mesh1);
 		mesh1.resetFaceInternalLabels();
 		triangulate(mesh2);
@@ -3248,7 +3247,7 @@ public class HE_MeshOp {
 
 		FaceSegmentBin(final HE_Face face) {
 			this.face = face;
-			segments = new FastList<>();
+			segments = new WB_List<>();
 		}
 
 		void addSegment(final WB_Segment segment) {
@@ -3668,13 +3667,13 @@ public class HE_MeshOp {
 		double d;
 		double dmin = Double.POSITIVE_INFINITY;
 		HE_Face face = new HE_Face();
-		for (int i = 0; i < faces.size(); i++) {
-			final WB_Polygon poly = HE_MeshOp.getPolygon(faces.get(i));
+		for (final HE_Face face2 : faces) {
+			final WB_Polygon poly = HE_MeshOp.getPolygon(face2);
 			final WB_Coord tmp = WB_GeometryOp3D.getClosestPoint3D(p, poly);
 			d = WB_GeometryOp3D.getSqDistance3D(tmp, p);
 			if (d < dmin) {
 				dmin = d;
-				face = faces.get(i);
+				face = face2;
 			}
 		}
 		final HE_Vertex nv = HEM_TriSplit.splitFaceTri(mesh, face, p).vItr().next();
@@ -3729,8 +3728,8 @@ public class HE_MeshOp {
 		double d;
 		double dmin = Double.POSITIVE_INFINITY;
 		WB_Point result = new WB_Point();
-		for (int i = 0; i < faces.size(); i++) {
-			final WB_Polygon poly = HE_MeshOp.getPolygon(faces.get(i));
+		for (final HE_Face face : faces) {
+			final WB_Polygon poly = HE_MeshOp.getPolygon(face);
 			final WB_Point tmp = WB_GeometryOp3D.getClosestPoint3D(p, poly);
 			d = WB_GeometryOp3D.getSqDistance3D(tmp, p);
 			if (d < dmin) {
@@ -3876,11 +3875,11 @@ public class HE_MeshOp {
 		VertexInfo vInfo;
 		while (vitr.hasNext()) {
 			vInfo = vitr.next();
-			for (int i = 0; i < vInfo.out.size(); i++) {
-				he = vInfo.out.get(i);
+			for (final HE_Halfedge element : vInfo.out) {
+				he = element;
 				if (he.getPair() == null) {
-					for (int j = 0; j < vInfo.in.size(); j++) {
-						he2 = vInfo.in.get(j);
+					for (final HE_Halfedge element2 : vInfo.in) {
+						he2 = element2;
 						if (he2.getPair() == null) {
 							if (he.getVertex() == he2.getNextInFace().getVertex()
 									&& he2.getVertex() == he.getNextInFace().getVertex()) {
@@ -3889,8 +3888,8 @@ public class HE_MeshOp {
 							}
 						}
 					}
-					for (int j = 0; j < vInfo.out.size(); j++) {
-						he2 = vInfo.out.get(j);
+					for (final HE_Halfedge element2 : vInfo.out) {
+						he2 = element2;
 						if (he2 != he && he2.getPair() == null) {
 							if (he.getNextInFace().getVertex() == he2.getNextInFace().getVertex()) {
 								// Two identical halfedges found!
@@ -3946,11 +3945,11 @@ public class HE_MeshOp {
 		final List<HE_Halfedge> mismatchedHalfedges = new HE_HalfedgeList();
 		while (vitr.hasNext()) {
 			vInfo = vitr.next();
-			for (int i = 0; i < vInfo.out.size(); i++) {
-				he = vInfo.out.get(i);
+			for (final HE_Halfedge element : vInfo.out) {
+				he = element;
 				if (he.getPair() == null) {
-					for (int j = 0; j < vInfo.in.size(); j++) {
-						he2 = vInfo.in.get(j);
+					for (final HE_Halfedge element2 : vInfo.in) {
+						he2 = element2;
 						if (he2.getPair() == null) {
 							if (he.getVertex() == he2.getNextInFace().getVertex()
 									&& he2.getVertex() == he.getNextInFace().getVertex()) {
@@ -3959,8 +3958,8 @@ public class HE_MeshOp {
 							}
 						}
 					}
-					for (int j = 0; j < vInfo.out.size(); j++) {
-						he2 = vInfo.out.get(j);
+					for (final HE_Halfedge element2 : vInfo.out) {
+						he2 = element2;
 						if (he2 != he && he2.getPair() == null) {
 							if (he.getNextInFace().getVertex() == he2.getNextInFace().getVertex()) {
 								mismatchedHalfedges.add(he);

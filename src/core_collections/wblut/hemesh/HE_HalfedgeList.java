@@ -2,9 +2,9 @@ package wblut.hemesh;
 
 import java.util.Collection;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
+import wblut.geom.WB_List;
 
-public class HE_HalfedgeList extends FastList<HE_Halfedge> {
+public class HE_HalfedgeList extends WB_List<HE_Halfedge> {
 	public HE_HalfedgeList() {
 		super();
 	}

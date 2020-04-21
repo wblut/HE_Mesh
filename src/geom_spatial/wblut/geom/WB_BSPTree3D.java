@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.collections.impl.list.mutable.FastList;
-
 import wblut.hemesh.HEC_Dodecahedron;
 import wblut.hemesh.HEMC_SplitMesh;
 import wblut.hemesh.HEM_Crocodile;
@@ -33,10 +31,10 @@ public class WB_BSPTree3D {
 			if (tree.partition == null) {
 				return;
 			}
-			final FastList<WB_Polygon> _pols = new FastList<>();
+			final WB_List<WB_Polygon> _pols = new WB_List<>();
 			_pols.add(cpol);
-			final FastList<WB_Polygon> pos_list = new FastList<>();
-			final FastList<WB_Polygon> neg_list = new FastList<>();
+			final WB_List<WB_Polygon> pos_list = new WB_List<>();
+			final WB_List<WB_Polygon> neg_list = new WB_List<>();
 			WB_Polygon pol = null;
 			while (PItr.hasNext()) {
 				pol = PItr.next();
@@ -76,10 +74,10 @@ public class WB_BSPTree3D {
 		if (polygons.length > 0) {
 			final WB_Polygon cpol = polygons[0];
 			tree.partition = cpol.getPlane();
-			final FastList<WB_Polygon> _pols = new FastList<>();
+			final WB_List<WB_Polygon> _pols = new WB_List<>();
 			_pols.add(cpol);
-			final FastList<WB_Polygon> pos_list = new FastList<>();
-			final FastList<WB_Polygon> neg_list = new FastList<>();
+			final WB_List<WB_Polygon> pos_list = new WB_List<>();
+			final WB_List<WB_Polygon> neg_list = new WB_List<>();
 			WB_Polygon pol = null;
 			for (int i = 1; i < polygons.length; i++) {
 				pol = polygons[i];
@@ -159,8 +157,8 @@ public class WB_BSPTree3D {
 				return -1;
 			}
 		} else {
-			for (int i = 0; i < node.polygons.size(); i++) {
-				if (WB_Epsilon.isZeroSq(WB_GeometryOp3D.getSqDistance3D(p, node.polygons.get(i)))) {
+			for (final WB_Polygon element : node.polygons) {
+				if (WB_Epsilon.isZeroSq(WB_GeometryOp3D.getSqDistance3D(p, element))) {
 					return 0;
 				}
 			}
