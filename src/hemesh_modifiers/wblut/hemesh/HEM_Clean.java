@@ -1,10 +1,22 @@
 package wblut.hemesh;
 
+/**
+ *
+ */
 public class HEM_Clean extends HEM_Modifier {
+	/**
+	 *
+	 */
 	public HEM_Clean() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		mesh.removeUnconnectedElements();
@@ -19,6 +31,12 @@ public class HEM_Clean extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		return applySelf(selection.getParent());

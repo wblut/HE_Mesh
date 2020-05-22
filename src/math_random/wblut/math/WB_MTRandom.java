@@ -5,23 +5,46 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 
+/**
+ *
+ */
 public class WB_MTRandom implements Serializable, Cloneable {
+	/**  */
 	private static final long serialVersionUID = 3636987267914792302L;
+	/**  */
 	private static final int N = 624;
+	/**  */
 	private static final int M = 397;
+	/**  */
 	private static final int MATRIX_A = 0x9908b0df;
+	/**  */
 	private static final int UPPER_MASK = 0x80000000;
+	/**  */
 	private static final int LOWER_MASK = 0x7fffffff;
+	/**  */
 	private static final int TEMPERING_MASK_B = 0x9d2c5680;
+	/**  */
 	private static final int TEMPERING_MASK_C = 0xefc60000;
+	/**  */
 	private int mt[];
+	/**  */
 	private int mti;
+	/**  */
 	private int mag01[];
+	/**  */
 	// private static final long GOOD_SEED = 4357;
 	private double __nextNextGaussian;
+	/**  */
 	private boolean __haveNextNextGaussian;
+	/**  */
 	private long seed;
 
+	/**
+	 *
+	 *
+	 * @return
+	 * @throws CloneNotSupportedException
+	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		final WB_MTRandom f = (WB_MTRandom) super.clone();
@@ -30,6 +53,12 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		return f;
 	}
 
+	/**
+	 *
+	 *
+	 * @param o
+	 * @return
+	 */
 	public boolean stateEquals(final Object o) {
 		if (o == this) {
 			return true;
@@ -54,6 +83,12 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		return true;
 	}
 
+	/**
+	 *
+	 *
+	 * @param stream
+	 * @throws IOException
+	 */
 	public void readState(final DataInputStream stream) throws IOException {
 		int len = mt.length;
 		for (int x = 0; x < len; x++) {
@@ -68,6 +103,12 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		__haveNextNextGaussian = stream.readBoolean();
 	}
 
+	/**
+	 *
+	 *
+	 * @param stream
+	 * @throws IOException
+	 */
 	public void writeState(final DataOutputStream stream) throws IOException {
 		int len = mt.length;
 		for (int x = 0; x < len; x++) {
@@ -82,14 +123,27 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		stream.writeBoolean(__haveNextNextGaussian);
 	}
 
+	/**
+	 *
+	 */
 	public WB_MTRandom() {
 		this(System.currentTimeMillis());
 	}
 
+	/**
+	 *
+	 *
+	 * @param seed
+	 */
 	public WB_MTRandom(final long seed) {
 		setSeed(seed);
 	}
 
+	/**
+	 *
+	 *
+	 * @param seed
+	 */
 	synchronized public void setSeed(final long seed) {
 		// Due to a bug in java.util.Random clear up to 1.2, we're
 		// doing our own Gaussian variable.
@@ -106,10 +160,18 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		}
 	}
 
+	/**
+	 *
+	 */
 	synchronized public void reset() {
 		setSeed(seed);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public final int nextInt() {
 		int y;
 		if (mti >= N) // generate N words at one time
@@ -137,6 +199,11 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		return y;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public final short nextShort() {
 		int y;
 		if (mti >= N) // generate N words at one time
@@ -164,6 +231,11 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		return (short) (y >>> 16);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public final char nextChar() {
 		int y;
 		if (mti >= N) // generate N words at one time
@@ -191,6 +263,11 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		return (char) (y >>> 16);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public final boolean nextBoolean() {
 		int y;
 		if (mti >= N) // generate N words at one time
@@ -218,6 +295,12 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		return y >>> 31 != 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param probability
+	 * @return
+	 */
 	public final boolean nextBoolean(final float probability) {
 		int y;
 		if (probability < 0.0f || probability > 1.0f) {
@@ -253,6 +336,12 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		return (y >>> 8) / (float) (1 << 24) < probability;
 	}
 
+	/**
+	 *
+	 *
+	 * @param probability
+	 * @return
+	 */
 	public final boolean nextBoolean(final double probability) {
 		int y;
 		int z;
@@ -311,6 +400,11 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		return (((long) (y >>> 6) << 27) + (z >>> 5)) / (double) (1L << 53) < probability;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public final byte nextByte() {
 		int y;
 		if (mti >= N) // generate N words at one time
@@ -338,6 +432,11 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		return (byte) (y >>> 24);
 	}
 
+	/**
+	 *
+	 *
+	 * @param bytes
+	 */
 	public final void nextBytes(final byte[] bytes) {
 		int y;
 		for (int x = 0; x < bytes.length; x++) {
@@ -367,6 +466,11 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public final long nextLong() {
 		int y;
 		int z;
@@ -417,6 +521,12 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		return ((long) y << 32) + z;
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @return
+	 */
 	public final long nextLong(final long n) {
 		if (n <= 0) {
 			throw new IllegalArgumentException("n must be > 0");
@@ -475,6 +585,11 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		return val;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public final double nextDouble() {
 		int y;
 		int z;
@@ -525,10 +640,20 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		return (((long) (y >>> 6) << 27) + (z >>> 5)) / (double) (1L << 53);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public final double nextCenteredDouble() {
 		return nextDouble() - 0.5;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public final double nextGaussian() {
 		if (__haveNextNextGaussian) {
 			__haveNextNextGaussian = false;
@@ -643,6 +768,11 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public final float nextFloat() {
 		int y;
 		if (mti >= N) // generate N words at one time
@@ -670,10 +800,21 @@ public class WB_MTRandom implements Serializable, Cloneable {
 		return (y >>> 8) / (float) (1 << 24);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public final float nextCenteredFloat() {
 		return nextFloat() - 0.5f;
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @return
+	 */
 	public final int nextInt(final int n) {
 		if (n <= 0) {
 			throw new IllegalArgumentException("n must be > 0");

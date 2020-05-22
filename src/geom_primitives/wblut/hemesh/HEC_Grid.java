@@ -9,10 +9,18 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class HEC_Grid extends HEC_Creator {
+	/**  */
 	private double[][] values;
+	/**  */
 	private double minWValue, maxWValue;
 
+	/**
+	 *
+	 */
 	public HEC_Grid() {
 		super();
 		parameters.set("sizeu", 100.0);
@@ -28,6 +36,14 @@ public class HEC_Grid extends HEC_Creator {
 		parameters.set("override", true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param U
+	 * @param V
+	 * @param sizeU
+	 * @param sizeV
+	 */
 	public HEC_Grid(final int U, final int V, final double sizeU, final double sizeV) {
 		this();
 		parameters.set("sizeu", sizeU);
@@ -36,68 +52,150 @@ public class HEC_Grid extends HEC_Creator {
 		parameters.set("v", V);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected boolean getStepped() {
 		return parameters.get("stepped", false);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected boolean getBase() {
 		return parameters.get("base", false);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getBaseValue() {
 		return parameters.get("baseValue", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected int getU() {
 		return parameters.get("u", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected int getV() {
 		return parameters.get("v", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getSizeU() {
 		return parameters.get("sizeu", 100.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getSizeV() {
 		return parameters.get("sizev", 100.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getValueScale() {
 		return parameters.get("valuescale", 1.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param U
+	 * @return
+	 */
 	public HEC_Grid setU(final int U) {
 		parameters.set("u", U);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param V
+	 * @return
+	 */
 	public HEC_Grid setV(final int V) {
 		parameters.set("v", V);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sizeU
+	 * @return
+	 */
 	public HEC_Grid setUSize(final double sizeU) {
 		parameters.set("sizeu", sizeU);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sizeU
+	 * @return
+	 */
 	public HEC_Grid setSizeU(final double sizeU) {
 		parameters.set("sizeu", sizeU);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sizeV
+	 * @return
+	 */
 	public HEC_Grid setVSize(final double sizeV) {
 		parameters.set("sizev", sizeV);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sizeV
+	 * @return
+	 */
 	public HEC_Grid setsizeV(final double sizeV) {
 		parameters.set("sizev", sizeV);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public HEC_Grid setValues(final double[][] values) {
 		this.values = new double[values.length][values[0].length];
 		for (int i = 0; i < values.length; i++) {
@@ -110,6 +208,16 @@ public class HEC_Grid extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param height
+	 * @param ui
+	 * @param vi
+	 * @param du
+	 * @param dv
+	 * @return
+	 */
 	public HEC_Grid setValues(final WB_ScalarParameter height, final double ui, final double vi, final double du,
 			final double dv) {
 		values = new double[values.length][values[0].length];
@@ -123,6 +231,12 @@ public class HEC_Grid extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public HEC_Grid setValues(final float[][] values) {
 		this.values = new double[values.length][values[0].length];
 		for (int i = 0; i < values.length; i++) {
@@ -135,26 +249,55 @@ public class HEC_Grid extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param value
+	 * @return
+	 */
 	public HEC_Grid setValueScale(final double value) {
 		parameters.set("valuescale", value);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEC_Grid setStepped(final boolean b) {
 		parameters.set("stepped", b);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEC_Grid setBase(final boolean b) {
 		parameters.set("base", b);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param value
+	 * @return
+	 */
 	public HEC_Grid setBaseValue(final double value) {
 		parameters.set("baseValue", value);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		if (getStepped()) {
@@ -164,6 +307,11 @@ public class HEC_Grid extends HEC_Creator {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	private HE_Mesh createGrid() {
 		final int U = getU();
 		final int V = getV();
@@ -286,6 +434,11 @@ public class HEC_Grid extends HEC_Creator {
 		return baseMesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	private HE_Mesh createStepGrid() {
 		final int U = getU();
 		final int V = getV();
@@ -501,6 +654,14 @@ public class HEC_Grid extends HEC_Creator {
 		return baseMesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @param outOfRange
+	 * @return
+	 */
 	double getValue(final int u, final int v, final double outOfRange) {
 		if (u >= 0 && u < values.length && v >= 0 && v < values[0].length) {
 			return values[u][v];

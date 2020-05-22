@@ -12,37 +12,63 @@ import processing.core.PImage;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class WB_IsoSurfaceVOL2D {
+	/**  */
 	final static int ONVERTEX = 0;
+	/**  */
 	final static int ONEDGE = 1;
+	/**  */
 	final static int NEGATIVE = 0;
+	/**  */
 	final static int EQUAL = 1;
+	/**  */
 	final static int POSITIVE = 2;
+	/**  */
 	private int[] digits = new int[4];
+	/**  */
 	final static WB_Point[] gridvertices = new WB_Point[] { new WB_Point(0, 0), new WB_Point(1, 0), new WB_Point(0, 1),
 			new WB_Point(1, 1) };
+	/**  */
 	// EDGES: 2 vertices per edge
 	final static int[][] edges = { { 0, 1 }, // x ij
 			{ 0, 2 }, // y ij
 			{ 1, 3 } // y Ij
 	};
+	/**  */
 	private final int[][] entries;
+	/**  */
 	private WB_IsoValues2D values;
 	// type=ONVERTEX iso vertex on vertex, index in vertex list
 	// type=ONEDGE iso vertex on edge, index in edge list, 0=lower
+	/**  */
 	// threshold,1=higher threshold
 	final static int[][] isovertices = new int[][] { { 1, 0, 0 }, { 1, 0, 1 }, { 1, 1, 0 }, { 1, 1, 1 }, { 1, 2, 0 },
 			{ 1, 2, 1 }, { 1, 3, 0 }, { 1, 3, 1 }, { 0, 0 }, { 0, 1 }, { 0, 2 }, { 0, 3 } };
+	/**  */
 	private int resx, resy;
+	/**  */
 	private double cx, cy;
+	/**  */
 	private double dx, dy;
+	/**  */
 	private double isolevelmin, isolevelmax;
+	/**  */
 	private WB_IndexedObjectMap<WB_Point> xedges;
+	/**  */
 	private WB_IndexedObjectMap<WB_Point> yedges;
+	/**  */
 	private WB_IndexedObjectMap<WB_Point> vertices;
+	/**  */
 	private double zFactor;
+	/**  */
 	private List<WB_Triangle> triangles;
 
+	/**
+	 *
+	 */
 	public WB_IsoSurfaceVOL2D() {
 		super();
 		String line = "";
@@ -83,23 +109,49 @@ public class WB_IsoSurfaceVOL2D {
 		zFactor = 0.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param resx
+	 * @param resy
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL2D setResolution(final int resx, final int resy) {
 		this.resx = resx;
 		this.resy = resy;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param dx
+	 * @param dy
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL2D setSize(final double dx, final double dy) {
 		this.dx = dx;
 		this.dy = dy;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param zf
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL2D setZFactor(final double zf) {
 		this.zFactor = zf;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL2D setValues(final double[][] values) {
 		this.values = new WB_IsoValues2D.GridRaw2D(values);
 		resx = values.length - 1;
@@ -107,6 +159,12 @@ public class WB_IsoSurfaceVOL2D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL2D setValues(final float[][] values) {
 		this.values = new WB_IsoValues2D.Grid2D(values);
 		resx = values.length - 1;
@@ -114,6 +172,18 @@ public class WB_IsoSurfaceVOL2D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param function
+	 * @param xi
+	 * @param yi
+	 * @param dx
+	 * @param dy
+	 * @param width
+	 * @param height
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL2D setValues(final WB_ScalarParameter function, final double xi, final double yi,
 			final double dx, final double dy, final int width, final int height) {
 		this.values = new WB_IsoValues2D.Function2D(function, xi, yi, dx, dy, width, height);
@@ -122,6 +192,12 @@ public class WB_IsoSurfaceVOL2D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL2D setValues(final WB_HashGridDouble2D values) {
 		this.values = new WB_IsoValues2D.HashGrid2D(values);
 		resx = values.getWidth() - 1;
@@ -129,6 +205,15 @@ public class WB_IsoSurfaceVOL2D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param path
+	 * @param home
+	 * @param width
+	 * @param height
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL2D setValues(final String path, final PApplet home, final int width, final int height) {
 		this.values = new WB_IsoValues2D.ImageGrid2D(path, home, width, height);
 		resx = values.getWidth() - 1;
@@ -136,6 +221,16 @@ public class WB_IsoSurfaceVOL2D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param path
+	 * @param home
+	 * @param width
+	 * @param height
+	 * @param mode
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL2D setValues(final String path, final PApplet home, final int width, final int height,
 			final WB_IsoValues2D.Mode mode) {
 		this.values = new WB_IsoValues2D.ImageGrid2D(path, home, width, height, mode);
@@ -144,6 +239,15 @@ public class WB_IsoSurfaceVOL2D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param image
+	 * @param home
+	 * @param width
+	 * @param height
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL2D setValues(final PImage image, final PApplet home, final int width, final int height) {
 		this.values = new WB_IsoValues2D.ImageGrid2D(image, home, width, height);
 		resx = values.getWidth() - 1;
@@ -151,6 +255,16 @@ public class WB_IsoSurfaceVOL2D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param image
+	 * @param home
+	 * @param width
+	 * @param height
+	 * @param mode
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL2D setValues(final PImage image, final PApplet home, final int width, final int height,
 			final WB_IsoValues2D.Mode mode) {
 		this.values = new WB_IsoValues2D.ImageGrid2D(image, home, width, height, mode);
@@ -159,6 +273,12 @@ public class WB_IsoSurfaceVOL2D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL2D setValues(final WB_IsoValues2D values) {
 		this.values = values;
 		resx = values.getWidth() - 1;
@@ -166,26 +286,61 @@ public class WB_IsoSurfaceVOL2D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param isolevelmin
+	 * @param isolevelmax
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL2D setIsolevel(final double isolevelmin, final double isolevelmax) {
 		this.isolevelmin = isolevelmin;
 		this.isolevelmax = isolevelmax;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param c
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL2D setCenter(final WB_Coord c) {
 		cx = c.xd();
 		cy = c.yd();
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @return
+	 */
 	private int index(final int i, final int j) {
 		return i + 1 + (resx + 2) * (j + 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @return
+	 */
 	private double value(final int i, final int j) {
 		return values.value(i, j);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param offset
+	 * @return
+	 */
 	private WB_Point vertex(final int i, final int j, final WB_Point offset) {
 		WB_Point vertex = vertices.get(index(i, j));
 		if (vertex != null) {
@@ -197,6 +352,15 @@ public class WB_IsoSurfaceVOL2D {
 		return vertex;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param offset
+	 * @param isolevel
+	 * @return
+	 */
 	private WB_Point xedge(final int i, final int j, final WB_Point offset, final double isolevel) {
 		WB_Point xedge = xedges.get(index(i, j));
 		if (xedge != null) {
@@ -212,6 +376,15 @@ public class WB_IsoSurfaceVOL2D {
 		return xedge;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param offset
+	 * @param isolevel
+	 * @return
+	 */
 	private WB_Point yedge(final int i, final int j, final WB_Point offset, final double isolevel) {
 		WB_Point yedge = yedges.get(index(i, j));
 		if (yedge != null) {
@@ -227,6 +400,16 @@ public class WB_IsoSurfaceVOL2D {
 		return yedge;
 	}
 
+	/**
+	 *
+	 *
+	 * @param isolevel
+	 * @param p1
+	 * @param p2
+	 * @param valp1
+	 * @param valp2
+	 * @return
+	 */
 	private WB_Point interp(final double isolevel, final WB_Point p1, final WB_Point p2, final double valp1,
 			final double valp2) {
 		double mu;
@@ -243,6 +426,13 @@ public class WB_IsoSurfaceVOL2D {
 		return new WB_Point(p1.xd() + mu * (p2.xd() - p1.xd()), p1.yd() + mu * (p2.yd() - p1.yd()), zFactor * isolevel);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @return
+	 */
 	private int classifyCell(final int i, final int j) {
 		if (i < 0 || j < 0 || i >= resx || j >= resy) {
 			return -1;
@@ -284,6 +474,9 @@ public class WB_IsoSurfaceVOL2D {
 		return cubeindex;
 	}
 
+	/**
+	 *
+	 */
 	private void polygonise() {
 		xedges = new WB_IndexedObjectMap<>();
 		yedges = new WB_IndexedObjectMap<>();
@@ -297,6 +490,14 @@ public class WB_IsoSurfaceVOL2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param cubeindex
+	 * @param offset
+	 */
 	private void getPolygons(final int i, final int j, final int cubeindex, final WB_Point offset) {
 		final int[] indices = entries[cubeindex];
 		final int numtris = indices[0];
@@ -309,11 +510,25 @@ public class WB_IsoSurfaceVOL2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_Triangle> getTriangles() {
 		polygonise();
 		return triangles;
 	}
 
+	/**
+	 *
+	 *
+	 * @param isopointindex
+	 * @param i
+	 * @param j
+	 * @param offset
+	 * @return
+	 */
 	private WB_Point getIsoVertex(final int isopointindex, final int i, final int j, final WB_Point offset) {
 		if (isovertices[isopointindex][0] == ONVERTEX) {
 			switch (isovertices[isopointindex][1]) {

@@ -5,14 +5,28 @@ import wblut.geom.WB_MutableCoord;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class WB_M33 {
+	/**  */
 	public double m11, m12, m13;
+	/**  */
 	public double m21, m22, m23;
+	/**  */
 	public double m31, m32, m33;
 
+	/**
+	 *
+	 */
 	public WB_M33() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param matrix33
+	 */
 	public WB_M33(final double[][] matrix33) {
 		m11 = matrix33[0][0];
 		m12 = matrix33[0][1];
@@ -25,6 +39,19 @@ public class WB_M33 {
 		m33 = matrix33[2][2];
 	}
 
+	/**
+	 *
+	 *
+	 * @param m11
+	 * @param m12
+	 * @param m13
+	 * @param m21
+	 * @param m22
+	 * @param m23
+	 * @param m31
+	 * @param m32
+	 * @param m33
+	 */
 	public WB_M33(final double m11, final double m12, final double m13, final double m21, final double m22,
 			final double m23, final double m31, final double m32, final double m33) {
 		this.m11 = m11;
@@ -38,6 +65,11 @@ public class WB_M33 {
 		this.m33 = m33;
 	}
 
+	/**
+	 *
+	 *
+	 * @param matrix33
+	 */
 	public void set(final double[][] matrix33) {
 		m11 = matrix33[0][0];
 		m12 = matrix33[0][1];
@@ -50,6 +82,11 @@ public class WB_M33 {
 		m33 = matrix33[2][2];
 	}
 
+	/**
+	 *
+	 *
+	 * @param matrix33
+	 */
 	public void set(final float[][] matrix33) {
 		m11 = matrix33[0][0];
 		m12 = matrix33[0][1];
@@ -62,6 +99,11 @@ public class WB_M33 {
 		m33 = matrix33[2][2];
 	}
 
+	/**
+	 *
+	 *
+	 * @param matrix33
+	 */
 	public void set(final int[][] matrix33) {
 		m11 = matrix33[0][0];
 		m12 = matrix33[0][1];
@@ -74,6 +116,19 @@ public class WB_M33 {
 		m33 = matrix33[2][2];
 	}
 
+	/**
+	 *
+	 *
+	 * @param m11
+	 * @param m12
+	 * @param m13
+	 * @param m21
+	 * @param m22
+	 * @param m23
+	 * @param m31
+	 * @param m32
+	 * @param m33
+	 */
 	public void set(final double m11, final double m12, final double m13, final double m21, final double m22,
 			final double m23, final double m31, final double m32, final double m33) {
 		this.m11 = m11;
@@ -87,6 +142,11 @@ public class WB_M33 {
 		this.m33 = m33;
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 */
 	public void set(final WB_M33 m) {
 		m11 = m.m11;
 		m12 = m.m12;
@@ -99,10 +159,21 @@ public class WB_M33 {
 		m33 = m.m33;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_M33 get() {
 		return new WB_M33(m11, m12, m13, m21, m22, m23, m31, m32, m33);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public WB_Vector row(final int i) {
 		if (i == 0) {
 			return new WB_Vector(m11, m12, m13);
@@ -116,6 +187,12 @@ public class WB_M33 {
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param result
+	 */
 	public void rowInto(final int i, final WB_MutableCoord result) {
 		if (i == 0) {
 			result.set(m11, m12, m13);
@@ -129,6 +206,12 @@ public class WB_M33 {
 		result.set(0, 0, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public WB_Vector col(final int i) {
 		if (i == 0) {
 			return new WB_Vector(m11, m21, m31);
@@ -142,6 +225,12 @@ public class WB_M33 {
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param result
+	 */
 	public void colInto(final int i, final WB_MutableCoord result) {
 		if (i == 0) {
 			result.set(m11, m21, m31);
@@ -155,6 +244,11 @@ public class WB_M33 {
 		result.set(0, 0, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 */
 	public void add(final WB_M33 m) {
 		m11 += m.m11;
 		m12 += m.m12;
@@ -167,6 +261,11 @@ public class WB_M33 {
 		m33 += m.m33;
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 */
 	public void sub(final WB_M33 m) {
 		m11 -= m.m11;
 		m12 -= m.m12;
@@ -179,6 +278,11 @@ public class WB_M33 {
 		m33 -= m.m33;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 */
 	public void mul(final double f) {
 		m11 *= f;
 		m12 *= f;
@@ -191,6 +295,11 @@ public class WB_M33 {
 		m33 *= f;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 */
 	public void div(final double f) {
 		final double invf = WB_Epsilon.isZero(f) ? Double.NaN : 1.0 / f;
 		m11 *= invf;
@@ -204,6 +313,12 @@ public class WB_M33 {
 		m33 *= invf;
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 * @param result
+	 */
 	public void addInto(final WB_M33 m, final WB_M33 result) {
 		result.m11 = m11 + m.m11;
 		result.m12 = m12 + m.m12;
@@ -216,6 +331,12 @@ public class WB_M33 {
 		result.m33 = m33 + m.m33;
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 * @param result
+	 */
 	public void subInto(final WB_M33 m, final WB_M33 result) {
 		result.m11 = m11 - m.m11;
 		result.m12 = m12 - m.m12;
@@ -228,6 +349,12 @@ public class WB_M33 {
 		result.m33 = m33 - m.m33;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @param result
+	 */
 	public void multInto(final double f, final WB_M33 result) {
 		result.m11 = f * m11;
 		result.m12 = f * m12;
@@ -240,6 +367,12 @@ public class WB_M33 {
 		result.m33 = f * m33;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @param result
+	 */
 	public void divInto(final double f, final WB_M33 result) {
 		final double invf = WB_Epsilon.isZero(f) ? 0 : 1.0 / f;
 		result.m11 = invf * m11;
@@ -253,6 +386,13 @@ public class WB_M33 {
 		result.m33 = invf * m33;
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 * @param n
+	 * @return
+	 */
 	public static WB_M33 mul(final WB_M33 m, final WB_M33 n) {
 		return new WB_M33(m.m11 * n.m11 + m.m12 * n.m21 + m.m13 * n.m31, m.m11 * n.m12 + m.m12 * n.m22 + m.m13 * n.m32,
 				m.m11 * n.m13 + m.m12 * n.m23 + m.m13 * n.m33, m.m21 * n.m11 + m.m22 * n.m21 + m.m23 * n.m31,
@@ -261,6 +401,13 @@ public class WB_M33 {
 				m.m31 * n.m13 + m.m32 * n.m23 + m.m33 * n.m33);
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 * @param n
+	 * @param result
+	 */
 	public static void mulInto(final WB_M33 m, final WB_M33 n, final WB_M33 result) {
 		result.set(m.m11 * n.m11 + m.m12 * n.m21 + m.m13 * n.m31, m.m11 * n.m12 + m.m12 * n.m22 + m.m13 * n.m32,
 				m.m11 * n.m13 + m.m12 * n.m23 + m.m13 * n.m33, m.m21 * n.m11 + m.m22 * n.m21 + m.m23 * n.m31,
@@ -269,6 +416,12 @@ public class WB_M33 {
 				m.m31 * n.m13 + m.m32 * n.m23 + m.m33 * n.m33);
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @return
+	 */
 	public WB_M33 mul(final WB_M33 n) {
 		return new WB_M33(m11 * n.m11 + m12 * n.m21 + m13 * n.m31, m11 * n.m12 + m12 * n.m22 + m13 * n.m32,
 				m11 * n.m13 + m12 * n.m23 + m13 * n.m33, m21 * n.m11 + m22 * n.m21 + m23 * n.m31,
@@ -277,6 +430,12 @@ public class WB_M33 {
 				m31 * n.m13 + m32 * n.m23 + m33 * n.m33);
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @param result
+	 */
 	public void multInto(final WB_M33 n, final WB_M33 result) {
 		result.set(m11 * n.m11 + m12 * n.m21 + m13 * n.m31, m11 * n.m12 + m12 * n.m22 + m13 * n.m32,
 				m11 * n.m13 + m12 * n.m23 + m13 * n.m33, m21 * n.m11 + m22 * n.m21 + m23 * n.m31,
@@ -285,40 +444,90 @@ public class WB_M33 {
 				m31 * n.m13 + m32 * n.m23 + m33 * n.m33);
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 * @param v
+	 * @param result
+	 */
 	public static void mulInto(final WB_M33 m, final WB_Coord v, final WB_MutableCoord result) {
 		result.set(v.xd() * m.m11 + v.yd() * m.m12 + v.zd() * m.m13, v.xd() * m.m21 + v.yd() * m.m22 + v.zd() * m.m23,
 				v.xd() * m.m31 + v.yd() * m.m32 + v.zd() * m.m33);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param m
+	 * @param result
+	 */
 	public static void mulInto(final WB_Coord v, final WB_M33 m, final WB_MutableCoord result) {
 		result.set(v.xd() * m.m11 + v.yd() * m.m21 + v.zd() * m.m31, v.xd() * m.m12 + v.yd() * m.m22 + v.zd() * m.m32,
 				v.xd() * m.m13 + v.yd() * m.m23 + v.zd() * m.m33);
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 * @param v
+	 * @return
+	 */
 	public static WB_Point mulToPoint(final WB_M33 m, final WB_Coord v) {
 		return new WB_Point(v.xd() * m.m11 + v.yd() * m.m12 + v.zd() * m.m13,
 				v.xd() * m.m21 + v.yd() * m.m22 + v.zd() * m.m23, v.xd() * m.m31 + v.yd() * m.m32 + v.zd() * m.m33);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param m
+	 * @return
+	 */
 	public static WB_Point mulToPoint(final WB_Coord v, final WB_M33 m) {
 		return new WB_Point(v.xd() * m.m11 + v.yd() * m.m21 + v.zd() * m.m31,
 				v.xd() * m.m12 + v.yd() * m.m22 + v.zd() * m.m32, v.xd() * m.m13 + v.yd() * m.m23 + v.zd() * m.m33);
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 * @param v
+	 * @return
+	 */
 	public static WB_Vector mulToVector(final WB_M33 m, final WB_Coord v) {
 		return new WB_Vector(v.xd() * m.m11 + v.yd() * m.m12 + v.zd() * m.m13,
 				v.xd() * m.m21 + v.yd() * m.m22 + v.zd() * m.m23, v.xd() * m.m31 + v.yd() * m.m32 + v.zd() * m.m33);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param m
+	 * @return
+	 */
 	public static WB_Vector mulToVector(final WB_Coord v, final WB_M33 m) {
 		return new WB_Vector(v.xd() * m.m11 + v.yd() * m.m21 + v.zd() * m.m31,
 				v.xd() * m.m12 + v.yd() * m.m22 + v.zd() * m.m32, v.xd() * m.m13 + v.yd() * m.m23 + v.zd() * m.m33);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double det() {
 		return m11 * (m22 * m33 - m23 * m32) + m12 * (m23 * m31 - m21 * m33) + m13 * (m21 * m32 - m22 * m31);
 	}
 
+	/**
+	 *
+	 */
 	public void transpose() {
 		double tmp = m12;
 		m12 = m21;
@@ -331,14 +540,29 @@ public class WB_M33 {
 		m32 = tmp;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_M33 getTranspose() {
 		return new WB_M33(m11, m21, m31, m12, m22, m32, m13, m23, m33);
 	}
 
+	/**
+	 *
+	 *
+	 * @param result
+	 */
 	public void transposeInto(final WB_M33 result) {
 		result.set(m11, m21, m31, m12, m22, m32, m13, m23, m33);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_M33 inverse() {
 		final double d = det();
 		if (WB_Epsilon.isZero(d)) {
@@ -351,6 +575,23 @@ public class WB_M33 {
 		return I;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a1
+	 * @param b1
+	 * @param c1
+	 * @param d1
+	 * @param a2
+	 * @param b2
+	 * @param c2
+	 * @param d2
+	 * @param a3
+	 * @param b3
+	 * @param c3
+	 * @param d3
+	 * @return
+	 */
 	public static WB_Vector Cramer3(final double a1, final double b1, final double c1, final double d1, final double a2,
 			final double b2, final double c2, final double d2, final double a3, final double b3, final double c3,
 			final double d3) {
@@ -367,6 +608,14 @@ public class WB_M33 {
 		return new WB_Vector(x, y, m.det());
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param q
+	 * @param m
+	 * @return
+	 */
 	private double[] symSchur2(final int p, final int q, final double[][] m) {
 		final double[] result = new double[2];
 		if (!WB_Epsilon.isZero(WB_Math.fastAbs(m[p][q]))) {
@@ -386,6 +635,11 @@ public class WB_M33 {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_M33 Jacobi() {
 		int i, j, n, p, q;
 		double prevoff = 0;
@@ -444,16 +698,32 @@ public class WB_M33 {
 		return a;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double[][] toArray() {
 		return new double[][] { { m11, m12, m13 }, { m21, m22, m23 }, { m31, m32, m33 } };
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public String toString() {
 		return "M33: " + m11 + ", " + m12 + ", " + m13 + ", " + m21 + ", " + m22 + ", " + m23 + ", " + m31 + ", " + m32
 				+ ", " + m33;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static WB_M33 covarianceMatrix(final WB_Coord[] points) {
 		final int n = points.length;
 		final double oon = 1 / (double) n;
@@ -479,6 +749,12 @@ public class WB_M33 {
 		return cov;
 	}
 
+	/**
+	 *
+	 *
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public boolean equals(final Object o) {
 		if (o == null) {

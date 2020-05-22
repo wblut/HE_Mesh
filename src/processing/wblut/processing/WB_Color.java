@@ -2,6 +2,9 @@ package wblut.processing;
 
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class WB_Color {
 	// http://www.cs.uml.edu/~haim/ColorCenter/ColorCenter.htm
 	// ==============================================================================
@@ -12,6 +15,7 @@ public class WB_Color {
 	// AGG - Alexander Gee
 	//
 	// 041497 - created
+	/**  */
 	// ==============================================================================
 	static public int[] HEAT = new int[] { color(0, 0, 0), color(35, 0, 0), color(52, 0, 0), color(60, 0, 0),
 			color(63, 1, 0), color(64, 2, 0), color(68, 5, 0), color(69, 6, 0), color(72, 8, 0), color(74, 10, 0),
@@ -65,6 +69,7 @@ public class WB_Color {
 			color(255, 255, 207), color(255, 255, 211), color(255, 255, 218), color(255, 255, 222),
 			color(255, 255, 225), color(255, 255, 229), color(255, 255, 233), color(255, 255, 236),
 			color(255, 255, 240), color(255, 255, 244), color(255, 255, 247), color(255, 255, 255) };
+	/**  */
 	static public int[] HOTMETAL = new int[] { color(0, 0, 0), color(2, 0, 0), color(4, 0, 0), color(6, 0, 0),
 			color(8, 0, 0), color(10, 0, 0), color(12, 0, 0), color(14, 0, 0), color(16, 0, 0), color(18, 0, 0),
 			color(20, 0, 0), color(22, 0, 0), color(24, 0, 0), color(26, 0, 0), color(28, 0, 0), color(30, 0, 0),
@@ -114,6 +119,7 @@ public class WB_Color {
 			color(255, 232, 212), color(255, 234, 216), color(255, 236, 220), color(255, 238, 224),
 			color(255, 240, 228), color(255, 242, 232), color(255, 244, 236), color(255, 246, 240),
 			color(255, 248, 244), color(255, 250, 248), color(255, 252, 252), color(255, 255, 255) };
+	/**  */
 	static public int[] HOTMETALBLUE = new int[] { color(0, 0, 0), color(0, 0, 2), color(0, 0, 4), color(0, 0, 6),
 			color(0, 0, 8), color(0, 0, 10), color(0, 0, 12), color(0, 0, 14), color(0, 0, 16), color(0, 0, 17),
 			color(0, 0, 19), color(0, 0, 21), color(0, 0, 23), color(0, 0, 25), color(0, 0, 27), color(0, 0, 29),
@@ -173,6 +179,7 @@ public class WB_Color {
 	// AGG - Alexander Gee
 	//
 	// 041497 - created
+	/**  */
 	// ==============================================================================
 	static public int[] OPTIMAL = new int[] { color(0, 0, 0), color(0, 0, 0), color(0, 0, 0), color(1, 0, 0),
 			color(2, 0, 0), color(2, 0, 0), color(3, 0, 0), color(3, 0, 0), color(4, 0, 0), color(5, 0, 0),
@@ -233,6 +240,7 @@ public class WB_Color {
 	// AGG - Alexander Gee
 	//
 	// 041497 - created
+	/**  */
 	// ==============================================================================
 	static public int[] GRAY = new int[] { color(0, 0, 0), color(1, 1, 1), color(2, 2, 2), color(3, 3, 3),
 			color(4, 4, 4), color(5, 5, 5), color(6, 6, 6), color(7, 7, 7), color(8, 8, 8), color(9, 9, 9),
@@ -301,6 +309,7 @@ public class WB_Color {
 	// AGG - Alexander Gee
 	//
 	// 041497 - created
+	/**  */
 	// ==============================================================================
 	static public int[] LINGRAY = new int[] { color(0, 0, 0), color(0, 0, 0), color(0, 0, 0), color(0, 0, 0),
 			color(0, 0, 0), color(0, 0, 0), color(0, 0, 0), color(1, 1, 1), color(1, 1, 1), color(1, 1, 1),
@@ -364,6 +373,7 @@ public class WB_Color {
 	// AGG - Alexander Gee
 	//
 	// 041497 - created
+	/**  */
 	// ==============================================================================
 	static public int[] PLRAINBOW = new int[] { color(0, 0, 0), color(45, 0, 36), color(56, 0, 46), color(60, 0, 49),
 			color(67, 0, 54), color(70, 0, 59), color(71, 0, 61), color(75, 0, 68), color(74, 0, 73), color(74, 0, 77),
@@ -420,12 +430,14 @@ public class WB_Color {
 			color(255, 230, 230), color(255, 232, 232), color(255, 235, 235), color(255, 237, 237),
 			color(255, 240, 240), color(255, 243, 243), color(255, 246, 246), color(255, 249, 249),
 			color(255, 251, 251), color(255, 253, 253), color(255, 255, 255) };
+	/**  */
 	static public int[] SPECTRUM = new int[256];
 	static {
 		for (int i = 0; i < 256; i++) {
 			SPECTRUM[i] = spectralColor(400.0 + 300.0 / 255.0 * i);
 		}
 	}
+	/**  */
 	static public int[] MAGMA = new int[] { normColor(0.001462, 0.000466, 0.013866),
 			normColor(0.002258, 0.001295, 0.018331), normColor(0.003279, 0.002305, 0.023708),
 			normColor(0.004512, 0.003490, 0.029965), normColor(0.005950, 0.004843, 0.037130),
@@ -555,6 +567,7 @@ public class WB_Color {
 			normColor(0.988367, 0.962878, 0.719649), normColor(0.988033, 0.970012, 0.727077),
 			normColor(0.987691, 0.977154, 0.734536), normColor(0.987387, 0.984288, 0.742002),
 			normColor(0.987053, 0.991438, 0.749504) };
+	/**  */
 	static public int[] INFERNO = new int[] { normColor(0.001462, 0.000466, 0.013866),
 			normColor(0.002267, 0.001270, 0.018570), normColor(0.003299, 0.002249, 0.024239),
 			normColor(0.004547, 0.003392, 0.030909), normColor(0.006006, 0.004692, 0.038558),
@@ -684,6 +697,7 @@ public class WB_Color {
 			normColor(0.966249, 0.980678, 0.587206), normColor(0.971162, 0.985282, 0.602154),
 			normColor(0.976511, 0.989753, 0.616760), normColor(0.982257, 0.994109, 0.631017),
 			normColor(0.988362, 0.998364, 0.644924) };
+	/**  */
 	static public int[] PLASMA = new int[] { normColor(0.050383, 0.029803, 0.527975),
 			normColor(0.063536, 0.028426, 0.533124), normColor(0.075353, 0.027206, 0.538007),
 			normColor(0.086222, 0.026125, 0.542658), normColor(0.096379, 0.025165, 0.547103),
@@ -813,6 +827,7 @@ public class WB_Color {
 			normColor(0.949151, 0.948435, 0.152178), normColor(0.946602, 0.955190, 0.150328),
 			normColor(0.944152, 0.961916, 0.146861), normColor(0.941896, 0.968590, 0.140956),
 			normColor(0.940015, 0.975158, 0.131326) };
+	/**  */
 	static public int[] VIRIDIS = new int[] { normColor(0.267004, 0.004874, 0.329415),
 			normColor(0.268510, 0.009605, 0.335427), normColor(0.269944, 0.014625, 0.341379),
 			normColor(0.271305, 0.019942, 0.347269), normColor(0.272594, 0.025563, 0.353093),
@@ -943,6 +958,14 @@ public class WB_Color {
 			normColor(0.974417, 0.903590, 0.130215), normColor(0.983868, 0.904867, 0.136897),
 			normColor(0.993248, 0.906157, 0.143936) };
 
+	/**
+	 *
+	 *
+	 * @param v1
+	 * @param v2
+	 * @param v3
+	 * @return
+	 */
 	public static int color(int v1, int v2, int v3) {
 		if (v1 > 255) {
 			v1 = 255;
@@ -962,10 +985,24 @@ public class WB_Color {
 		return 0xff000000 | v1 << 16 | v2 << 8 | v3;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v1
+	 * @param v2
+	 * @param v3
+	 * @return
+	 */
 	public static int normColor(final double v1, final double v2, final double v3) {
 		return color((int) (256 * v1), (int) (256 * v2), (int) (256 * v3));
 	}
 
+	/**
+	 *
+	 *
+	 * @param wavelength
+	 * @return
+	 */
 	public static int spectralColor(final double wavelength) // RGB <0,1> <-
 																// lambda l
 	// <400,700>
@@ -1014,6 +1051,12 @@ public class WB_Color {
 		return color((int) (256 * r), (int) (256 * g), (int) (256 * b));
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	static double clamp(final double x) {
 		if (x > 1.0) {
 			return 1.0;
@@ -1024,6 +1067,13 @@ public class WB_Color {
 		return x;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param yoffset
+	 * @return
+	 */
 	static WB_Vector bump3y(final WB_Vector x, final WB_Vector yoffset) {
 		final WB_Vector y = new WB_Vector(1.0 - x.xd() * x.xd(), 1.0 - x.yd() * x.yd(), 1.0 - x.zd() * x.zd());
 		y.subSelf(yoffset);
@@ -1031,6 +1081,12 @@ public class WB_Color {
 		return y;
 	}
 
+	/**
+	 *
+	 *
+	 * @param wavelength
+	 * @return
+	 */
 	public static int spectralColorZucconi6(final double wavelength) {
 		final WB_Vector x = new WB_Vector(1.0, 1.0, 1.0).mulSelf((wavelength - 400.0) / 300.0);
 		final WB_Vector c1 = new WB_Vector(3.54585104, 2.93225262, 2.41593945);
@@ -1046,23 +1102,42 @@ public class WB_Color {
 	}
 	// http://planetpixelemporium.com/tutorialpages/light.html
 
+	/**  */
 	static public int Candle = color(255, 147, 41);
+	/**  */
 	static public int Tungsten40W = color(255, 197, 143);
+	/**  */
 	static public int Tungsten100W = color(255, 214, 170);
+	/**  */
 	static public int Halogen = color(255, 241, 224);
+	/**  */
 	static public int CarbonArc = color(255, 250, 244);
+	/**  */
 	static public int HighNoonSun = color(255, 255, 251);
+	/**  */
 	static public int DirectSunlight = color(255, 255, 255);
+	/**  */
 	static public int OvercastSky = color(201, 226, 255);
+	/**  */
 	static public int ClearBlueSky = color(64, 156, 255);
+	/**  */
 	static public int WarmFluorescent = color(255, 244, 229);
+	/**  */
 	static public int StandardFluorescent = color(244, 255, 250);
+	/**  */
 	static public int CoolWhiteFluorescent = color(212, 235, 255);
+	/**  */
 	static public int FullSpectrumFluorescent = color(255, 244, 242);
+	/**  */
 	static public int GrowLightFluorescent = color(255, 239, 247);
+	/**  */
 	static public int BlackLightFluorescent = color(167, 0, 255);
+	/**  */
 	static public int MercuryVapor = color(216, 247, 255);
+	/**  */
 	static public int SodiumVapor = color(255, 209, 178);
+	/**  */
 	static public int MetalHalide = color(242, 252, 255);
+	/**  */
 	static public int HighPressureSodium = color(255, 183, 76);
 }

@@ -6,89 +6,188 @@ import java.util.List;
 
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ *
+ * @param <T>
+ */
 public class WB_KDTreeInteger2D<T extends WB_Coord> {
+	/**  */
 	private final int _dim;
+	/**  */
 	private final int _maximumBinSize;
+	/**  */
 	private final WB_KDNodeInteger<T> root;
 
+	/**
+	 *
+	 */
 	public WB_KDTreeInteger2D() {
 		this._dim = 2;
 		this._maximumBinSize = 32;
 		this.root = new WB_KDNodeInteger<>();
 	}
 
+	/**
+	 *
+	 *
+	 * @param binsize
+	 */
 	public WB_KDTreeInteger2D(final int binsize) {
 		this._dim = 2;
 		this._maximumBinSize = binsize;
 		this.root = new WB_KDNodeInteger<>();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_AABB2D> getLeafBounds() {
 		final List<WB_AABB2D> leafs = new ArrayList<>();
 		root.addLeafBounds(leafs);
 		return leafs;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_AABB2D> getAllBounds() {
 		final List<WB_AABB2D> all = new ArrayList<>();
 		root.addBox(all, 0);
 		return all;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_AABB2D> getLeafRegions() {
 		final List<WB_AABB2D> leafs = new ArrayList<>();
 		root.addLeafRegion(leafs);
 		return leafs;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_AABB2D> getAllRegions() {
 		final List<WB_AABB2D> all = new ArrayList<>();
 		root.addRegion(all, 0);
 		return all;
 	}
 
+	/**
+	 *
+	 *
+	 * @param coord
+	 * @param val
+	 * @return
+	 */
 	public int add(final T coord, final int val) {
 		return root.add(new WB_KDEntryInteger<>(coord, val, -1));
 	}
 
+	/**
+	 *
+	 *
+	 * @param aabb
+	 * @return
+	 */
 	public WB_KDEntryInteger<T>[] getRange(final WB_AABB2D aabb) {
 		return root.range(aabb);
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param radius
+	 * @return
+	 */
 	public WB_KDEntryInteger<T>[] getRange(final WB_Coord center, final double radius) {
 		final double r2 = radius * radius;
 		return root.range(center, r2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param lower
+	 * @param upper
+	 * @return
+	 */
 	public WB_KDEntryInteger<T>[] getRange(final WB_Coord center, final double lower, final double upper) {
 		final double lower2 = lower * lower;
 		final double upper2 = upper * upper;
 		return root.range(center, lower2, upper2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param coord
+	 * @param num
+	 * @return
+	 */
 	public WB_KDEntryInteger<T>[] getNearestNeighbors(final WB_Coord coord, final int num) {
 		final QueryResultInteger<T> heap = new QueryResultInteger<>(num);
 		root.findNearest(heap, coord);
 		return heap.entries;
 	}
 
+	/**
+	 *
+	 *
+	 * @param coord
+	 * @return
+	 */
 	public WB_KDEntryInteger<T> getNearestNeighbor(final WB_Coord coord) {
 		final QueryResultInteger<T> heap = new QueryResultInteger<>(1);
 		root.findNearest(heap, coord);
 		return heap.entries[0];
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public WB_KDEntryInteger<T> getNearestNeighbor(final double x, final double y) {
 		final QueryResultInteger<T> heap = new QueryResultInteger<>(1);
 		root.findNearest(heap, new WB_Point(x, y));
 		return heap.entries[0];
 	}
 
+	/**
+	 *
+	 *
+	 * @param <T>
+	 */
 	public static class WB_KDEntryInteger<T extends WB_Coord> {
+		/**  */
 		public T coord;
+		/**  */
 		public int value;
+		/**  */
 		public double d2;
 
+		/**
+		 *
+		 *
+		 * @param coord
+		 * @param value
+		 * @param d2
+		 */
 		public WB_KDEntryInteger(final T coord, final int value, final double d2) {
 			this.coord = coord;
 			this.value = value;
@@ -96,18 +195,35 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param <T>
+	 */
 	@SuppressWarnings("hiding")
 	private class WB_KDNodeInteger<T extends WB_Coord> {
+		/**  */
 		private WB_AABB2D _limits;
+		/**  */
 		private WB_KDNodeInteger<T> _negative, _positive;
+		/**  */
 		private final WB_AABB2D _region;
+		/**  */
 		private WB_KDEntryInteger<T>[] _bin;
+		/**  */
 		private boolean _isLeaf;
+		/**  */
 		private int _binSize;
+		/**  */
 		private int _discriminator;
+		/**  */
 		private double _sliceValue;
+		/**  */
 		private int _id;
 
+		/**
+		 *
+		 */
 		@SuppressWarnings("unchecked")
 		private WB_KDNodeInteger() {
 			_bin = new WB_KDEntryInteger[_maximumBinSize];
@@ -123,6 +239,11 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			_id = 0;
 		}
 
+		/**
+		 *
+		 *
+		 * @param leafs
+		 */
 		private void addLeafBounds(final List<WB_AABB2D> leafs) {
 			if (_isLeaf) {
 				final WB_AABB2D box = _limits.get();
@@ -134,6 +255,11 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param leafs
+		 */
 		private void addLeafRegion(final List<WB_AABB2D> leafs) {
 			if (_isLeaf) {
 				final WB_AABB2D box = _region.get();
@@ -157,6 +283,12 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param leafs
+		 * @param level
+		 */
 		private void addBox(final List<WB_AABB2D> leafs, final int level) {
 			final WB_AABB2D box = _limits.get();
 			box.setId(_id);
@@ -167,6 +299,12 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param leafs
+		 * @param level
+		 */
 		private void addRegion(final List<WB_AABB2D> leafs, final int level) {
 			final WB_AABB2D box = _region.get();
 			if (box.getMinX() == Double.NEGATIVE_INFINITY) {
@@ -189,6 +327,12 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param entry
+		 * @return
+		 */
 		private int add(final WB_KDEntryInteger<T> entry) {
 			if (_isLeaf) {
 				return addInLeaf(entry);
@@ -202,6 +346,12 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param entry
+		 * @return
+		 */
 		private int addInLeaf(final WB_KDEntryInteger<T> entry) {
 			final int lookup = lookup(entry.coord);
 			if (lookup == -1) {
@@ -218,22 +368,34 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			return lookup;
 		}
 
+		/**
+		 *
+		 *
+		 * @param point
+		 * @return
+		 */
 		private int lookup(final WB_Coord point) {
 			for (int i = 0; i < _binSize; i++) {
-				if (WB_Epsilon.isZeroSq(WB_GeometryOp2D.getSqDistance2D(point, _bin[i].coord))) {
+				if (WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistance2D(point, _bin[i].coord))) {
 					return _bin[i].value;
 				}
 			}
 			return -1;
 		}
 
+		/**
+		 *
+		 *
+		 * @param heap
+		 * @param data
+		 */
 		private void findNearest(final QueryResultInteger<T> heap, final WB_Coord data) {
 			if (_binSize == 0) {
 				return;
 			}
 			if (_isLeaf) {
 				for (int i = 0; i < _binSize; i++) {
-					final double dist = WB_GeometryOp2D.getSqDistance2D(_bin[i].coord, data);
+					final double dist = WB_GeometryOp.getSqDistance2D(_bin[i].coord, data);
 					heap.tryToAdd(dist, _bin[i]);
 				}
 			} else {
@@ -259,6 +421,12 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param range
+		 * @return
+		 */
 		private WB_KDEntryInteger<T>[] range(final WB_AABB2D range) {
 			if (_bin == null) {
 				@SuppressWarnings("unchecked")
@@ -297,6 +465,13 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			return tmp2;
 		}
 
+		/**
+		 *
+		 *
+		 * @param center
+		 * @param r2
+		 * @return
+		 */
 		private WB_KDEntryInteger<T>[] range(final WB_Coord center, final double r2) {
 			if (_bin == null) {
 				@SuppressWarnings("unchecked")
@@ -325,7 +500,7 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			final WB_KDEntryInteger<T>[] tmp = new WB_KDEntryInteger[_binSize];
 			int n = 0;
 			for (int i = 0; i < _binSize; i++) {
-				final double d2 = WB_GeometryOp2D.getSqDistance2D(center, _bin[i].coord);
+				final double d2 = WB_GeometryOp.getSqDistance2D(center, _bin[i].coord);
 				if (d2 <= r2) {
 					_bin[i].d2 = d2;
 					tmp[n++] = _bin[i];
@@ -337,6 +512,14 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			return tmp2;
 		}
 
+		/**
+		 *
+		 *
+		 * @param center
+		 * @param lower2
+		 * @param upper2
+		 * @return
+		 */
 		private WB_KDEntryInteger<T>[] range(final WB_Coord center, final double lower2, final double upper2) {
 			if (_bin == null) {
 				@SuppressWarnings("unchecked")
@@ -365,7 +548,7 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			final WB_KDEntryInteger<T>[] tmp = new WB_KDEntryInteger[_binSize];
 			int n = 0;
 			for (int i = 0; i < _binSize; i++) {
-				final double d2 = WB_GeometryOp2D.getSqDistance2D(center, _bin[i].coord);
+				final double d2 = WB_GeometryOp.getSqDistance2D(center, _bin[i].coord);
 				if (d2 <= upper2 && d2 >= lower2) {
 					_bin[i].d2 = d2;
 					tmp[n++] = _bin[i];
@@ -377,6 +560,9 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			return tmp2;
 		}
 
+		/**
+		 *
+		 */
 		private void addLevel() {
 			_discriminator = _limits.maxOrdinate();
 			_negative = new WB_KDNodeInteger<>();
@@ -406,6 +592,11 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			_isLeaf = false;
 		}
 
+		/**
+		 *
+		 *
+		 * @param coord
+		 */
 		private void extendBounds(final WB_Coord coord) {
 			if (_limits == null) {
 				_limits = new WB_AABB2D(coord);
@@ -415,13 +606,27 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param <T>
+	 */
 	@SuppressWarnings("hiding")
 	public class QueryResultInteger<T extends WB_Coord> {
+		/**  */
 		private final WB_KDEntryInteger<T>[] entries;
+		/**  */
 		private final double[] distSqs;
+		/**  */
 		private final int capacity;
+		/**  */
 		private int size;
 
+		/**
+		 *
+		 *
+		 * @param capacity
+		 */
 		@SuppressWarnings("unchecked")
 		protected QueryResultInteger(final int capacity) {
 			this.entries = new WB_KDEntryInteger[capacity];
@@ -430,6 +635,12 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			this.size = 0;
 		}
 
+		/**
+		 *
+		 *
+		 * @param dist
+		 * @param entry
+		 */
 		protected void tryToAdd(final double dist, final WB_KDEntryInteger<T> entry) {
 			int i = size;
 			for (; i > 0 && distSqs[i - 1] > dist; --i) {
@@ -448,6 +659,12 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			entries[i] = entry;
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @return
+		 */
 		public WB_KDEntryInteger<T> getEntry(final int i) {
 			if (size == 0) {
 				return null;
@@ -455,6 +672,12 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			return entries[i];
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @return
+		 */
 		public double getDistanceSquare(final int i) {
 			if (size == 0) {
 				return Double.NaN;
@@ -462,6 +685,11 @@ public class WB_KDTreeInteger2D<T extends WB_Coord> {
 			return distSqs[i];
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public int size() {
 			return size;
 		}

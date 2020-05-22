@@ -1,11 +1,26 @@
 package wblut.math;
 
+/**
+ *
+ */
 public class WB_LinearScalarParameter implements WB_ScalarParameter {
+	/**  */
 	double lowT, highT;
+	/**  */
 	double lowValue, highValue;
+	/**  */
 	double rangeT, rangeValue;
+	/**  */
 	boolean clamp;
 
+	/**
+	 *
+	 *
+	 * @param lowT
+	 * @param highT
+	 * @param lowValue
+	 * @param highValue
+	 */
 	public WB_LinearScalarParameter(final double lowT, final double highT, final double lowValue,
 			final double highValue) {
 		if (lowT <= highT) {
@@ -24,6 +39,15 @@ public class WB_LinearScalarParameter implements WB_ScalarParameter {
 		clamp = false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param lowT
+	 * @param highT
+	 * @param lowValue
+	 * @param highValue
+	 * @param clamp
+	 */
 	public WB_LinearScalarParameter(final double lowT, final double highT, final double lowValue,
 			final double highValue, final boolean clamp) {
 		if (lowT <= highT) {
@@ -42,6 +66,12 @@ public class WB_LinearScalarParameter implements WB_ScalarParameter {
 		this.clamp = clamp;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	@Override
 	public double evaluate(final double... x) {
 		if (rangeT == 0) {

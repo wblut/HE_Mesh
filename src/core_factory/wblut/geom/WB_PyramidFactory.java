@@ -14,47 +14,98 @@ import org.twak.camp.Skeleton;
 import org.twak.utils.collections.Loop;
 import org.twak.utils.collections.LoopL;
 
+/**
+ *
+ */
 public class WB_PyramidFactory {
+	/**  */
 	private WB_CoordCollection points;
+	/**  */
 	private boolean cap;
+	/**  */
 	private WB_Map2D map;
 
+	/**
+	 *
+	 */
 	public WB_PyramidFactory() {
 		points = null;
 		cap = true;
 		map = new WB_DefaultMap2D();
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public WB_PyramidFactory setPoints(final WB_CoordCollection points) {
 		this.points = points;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param polygon
+	 * @return
+	 */
 	public WB_PyramidFactory setPoints(final WB_Polygon polygon) {
 		this.points = WB_CoordCollection.getCollection(polygon);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public WB_PyramidFactory setPoints(final Collection<? extends WB_Coord> points) {
 		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public WB_PyramidFactory setPoints(final WB_Coord[] points) {
 		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param cap
+	 * @return
+	 */
 	public WB_PyramidFactory setCap(final boolean cap) {
 		this.cap = cap;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param map
+	 * @return
+	 */
 	public WB_PyramidFactory setMap(final WB_Map2D map) {
 		this.map = map;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angles
+	 * @return
+	 */
 	public WB_SimpleMesh createPyramidWithAngle(final double... angles) {
 		WB_SimpleMesh output = new WB_SimpleMesh();
 		try {
@@ -130,6 +181,13 @@ public class WB_PyramidFactory {
 		return output;
 	}
 
+	/**
+	 *
+	 *
+	 * @param height
+	 * @param angles
+	 * @return
+	 */
 	public WB_SimpleMesh createPyramidWithHeightAndAngle(final double height, final double... angles) {
 		WB_SimpleMesh output = new WB_SimpleMesh();
 		try {
@@ -221,6 +279,12 @@ public class WB_PyramidFactory {
 		return output;
 	}
 
+	/**
+	 *
+	 *
+	 * @param height
+	 * @return
+	 */
 	public WB_SimpleMesh createPyramidWithHeight(final double height) {
 		WB_SimpleMesh output = new WB_SimpleMesh();
 		try {
@@ -289,6 +353,13 @@ public class WB_PyramidFactory {
 		return output;
 	}
 
+	/**
+	 *
+	 *
+	 * @param height
+	 * @param offset
+	 * @return
+	 */
 	public WB_SimpleMesh createPyramidWithHeightAndOffset(final double height, final double... offset) {
 		WB_SimpleMesh output = new WB_SimpleMesh();
 		if (offset.length == 0) {
@@ -404,6 +475,12 @@ public class WB_PyramidFactory {
 		return output;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angles
+	 * @return
+	 */
 	public WB_SimpleMesh createDipyramidWithAngle(final double... angles) {
 		WB_SimpleMesh output = new WB_SimpleMesh();
 		try {
@@ -507,6 +584,14 @@ public class WB_PyramidFactory {
 		return output;
 	}
 
+	/**
+	 *
+	 *
+	 * @param height
+	 * @param height2
+	 * @param angles
+	 * @return
+	 */
 	public WB_SimpleMesh createDipyramidWithHeightAndAngle(final double height, final double height2,
 			final double... angles) {
 		WB_SimpleMesh output = new WB_SimpleMesh();
@@ -639,6 +724,13 @@ public class WB_PyramidFactory {
 		return output;
 	}
 
+	/**
+	 *
+	 *
+	 * @param height
+	 * @param height2
+	 * @return
+	 */
 	public WB_SimpleMesh createDipyramidWithHeight(final double height, final double height2) {
 		WB_SimpleMesh output = new WB_SimpleMesh();
 		try {
@@ -728,6 +820,14 @@ public class WB_PyramidFactory {
 		return output;
 	}
 
+	/**
+	 *
+	 *
+	 * @param height
+	 * @param height2
+	 * @param offset
+	 * @return
+	 */
 	public WB_SimpleMesh createDipyramidWithHeightAndOffset(final double height, final double height2,
 			final double... offset) {
 		WB_SimpleMesh output = new WB_SimpleMesh();

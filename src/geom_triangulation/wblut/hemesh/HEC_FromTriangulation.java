@@ -7,41 +7,84 @@ import wblut.geom.WB_CoordCollection;
 import wblut.geom.WB_Triangulation2D;
 import wblut.geom.WB_Triangulation2DWithPoints;
 
+/**
+ *
+ */
 public class HEC_FromTriangulation extends HEC_Creator {
+	/**  */
 	WB_Triangulation2D tri;
+	/**  */
 	private WB_CoordCollection points;
 
+	/**
+	 *
+	 */
 	public HEC_FromTriangulation() {
 		super();
 		setOverride(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param tri
+	 * @return
+	 */
 	public HEC_FromTriangulation setTriangulation(final WB_Triangulation2D tri) {
 		this.tri = tri;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param tri
+	 * @return
+	 */
 	public HEC_FromTriangulation setTriangulation(final WB_Triangulation2DWithPoints tri) {
 		this.tri = tri;
 		this.points = tri.getPoints();
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEC_FromTriangulation setPoints(final WB_CoordCollection points) {
 		this.points = points;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEC_FromTriangulation setPoints(final Collection<? extends WB_Coord> points) {
 		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEC_FromTriangulation setPoints(final WB_Coord[] points) {
 		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final HEC_FromFacelist ffl = new HEC_FromFacelist().setVertices(points).setFaces(tri.getTriangles())

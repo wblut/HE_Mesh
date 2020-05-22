@@ -7,31 +7,63 @@ import wblut.geom.WB_Vector;
 import wblut.math.WB_ConstantScalarParameter;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class HEM_Noise extends HEM_Modifier {
+	/**  */
 	private WB_ScalarParameter d;
+	/**  */
 	private final WB_RandomOnSphere rs;
 
+	/**
+	 *
+	 */
 	public HEM_Noise() {
 		super();
 		setDistance(0);
 		rs = new WB_RandomOnSphere();
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEM_Noise setDistance(final double d) {
 		this.d = d == 0 ? WB_ScalarParameter.ZERO : new WB_ConstantScalarParameter(d);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param seed
+	 * @return
+	 */
 	public HEM_Noise setSeed(final long seed) {
 		rs.setSeed(seed);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEM_Noise setDistance(final WB_ScalarParameter d) {
 		this.d = d;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		rs.reset();
@@ -49,6 +81,12 @@ public class HEM_Noise extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		rs.reset();

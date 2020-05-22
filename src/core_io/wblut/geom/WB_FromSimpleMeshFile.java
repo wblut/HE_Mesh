@@ -4,10 +4,23 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ *
+ */
 public class WB_FromSimpleMeshFile {
+	/**
+	 *
+	 */
 	private WB_FromSimpleMeshFile() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param path
+	 * @param scale
+	 * @return
+	 */
 	public static WB_SimpleMesh createMesh(final String path, final double scale) {
 		if (path == null) {
 			return new WB_SimpleMesh();

@@ -6,15 +6,28 @@ import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
+/**
+ *
+ */
 public class HEC_SweepTube extends HEC_Creator {
+	/**  */
 	private double R;
+	/**  */
 	private int facets;
+	/**  */
 	private int steps;
+	/**  */
 	private WB_Curve curve;
+	/**  */
 	private boolean topcap;
+	/**  */
 	private boolean bottomcap;
+	/**  */
 	private double umin, umax, s;
 
+	/**
+	 *
+	 */
 	public HEC_SweepTube() {
 		super();
 		R = 100;
@@ -27,6 +40,14 @@ public class HEC_SweepTube extends HEC_Creator {
 		umax = 1;
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @param facets
+	 * @param steps
+	 * @param curve
+	 */
 	public HEC_SweepTube(final double R, final int facets, final int steps, final WB_Curve curve) {
 		this();
 		this.R = R;
@@ -38,38 +59,81 @@ public class HEC_SweepTube extends HEC_Creator {
 		umax = 1;
 	}
 
+	/**
+	 *
+	 *
+	 * @param umin
+	 * @param umax
+	 * @return
+	 */
 	public HEC_SweepTube setRange(final double umin, final double umax) {
 		this.umin = umin;
 		this.umax = umax;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @return
+	 */
 	public HEC_SweepTube setRadius(final double R) {
 		this.R = R;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param steps
+	 * @return
+	 */
 	public HEC_SweepTube setSteps(final int steps) {
 		this.steps = steps;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param facets
+	 * @return
+	 */
 	public HEC_SweepTube setFacets(final int facets) {
 		this.facets = facets;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param topcap
+	 * @param bottomcap
+	 * @return
+	 */
 	public HEC_SweepTube setCap(final boolean topcap, final boolean bottomcap) {
 		this.topcap = topcap;
 		this.bottomcap = bottomcap;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param curve
+	 * @return
+	 */
 	public HEC_SweepTube setCurve(final WB_Curve curve) {
 		this.curve = curve;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final WB_Point[] vertices = new WB_Point[(steps + 1) * facets];

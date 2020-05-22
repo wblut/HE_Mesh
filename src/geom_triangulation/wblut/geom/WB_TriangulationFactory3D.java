@@ -11,13 +11,26 @@ import wblut.external.ProGAL.CVertex;
 import wblut.external.ProGAL.DelaunayComplex;
 import wblut.external.ProGAL.Point;
 
+/**
+ *
+ */
 class WB_TriangulationFactory3D extends WB_TriangulationFactory2D {
+	/**  */
 	private static WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
+	/**
+	 *
+	 */
 	WB_TriangulationFactory3D() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static WB_Triangulation3D triangulate3D(final WB_CoordCollection points) {
 		// WB_Predicates predicates = new WB_Predicates();
 		final int n = points.size();
@@ -94,57 +107,138 @@ class WB_TriangulationFactory3D extends WB_TriangulationFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static WB_Triangulation3D triangulate3D(final WB_Coord[] points) {
 		return triangulate3D(WB_CoordCollection.getCollection(points));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static WB_Triangulation3D triangulate3D(final Collection<? extends WB_Coord> points) {
 		return triangulate3D(WB_CoordCollection.getCollection(points));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static WB_Network getNetwork(final WB_CoordCollection points) {
 		return triangulate3D(points).getNetwork();
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static WB_Network getNetwork(final WB_Coord[] points) {
 		return triangulate3D(WB_CoordCollection.getCollection(points)).getNetwork();
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static WB_Network getNetwork(final Collection<? extends WB_Coord> points) {
 		return triangulate3D(WB_CoordCollection.getCollection(points)).getNetwork();
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	private static WB_Point convert(final CVertex v) {
 		return geometryfactory.createPoint(v.x(), v.y(), v.z());
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	private static WB_Point convert(final Point v) {
 		return geometryfactory.createPoint(v.x(), v.y(), v.z());
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static WB_AlphaTriangulation3D alphaTriangulate3D(final WB_CoordCollection points) {
 		final WB_Triangulation3D tri = WB_TriangulationFactory3D.triangulate3D(points);
 		return new WB_AlphaTriangulation3D(tri.getTetrahedra(), points);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static WB_AlphaTriangulation3D alphaTriangulate3D(final WB_Coord[] points) {
 		return alphaTriangulate3D(WB_CoordCollection.getCollection(points));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static WB_AlphaTriangulation3D alphaTriangulate3D(final Collection<? extends WB_Coord> points) {
 		return alphaTriangulate3D(WB_CoordCollection.getCollection(points));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param jitter
+	 * @return
+	 */
 	public static WB_AlphaTriangulation3D alphaTriangulate3D(final WB_CoordCollection points, final double jitter) {
 		final WB_RandomOnSphere ros = new WB_RandomOnSphere().setRadius(jitter);
 		final WB_Triangulation3D tri = WB_TriangulationFactory3D.triangulate3D(points.noise(ros));
 		return new WB_AlphaTriangulation3D(tri.getTetrahedra(), points);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param jitter
+	 * @return
+	 */
 	public static WB_AlphaTriangulation3D alphaTriangulate3D(final WB_Coord[] points, final double jitter) {
 		return alphaTriangulate3D(WB_CoordCollection.getCollection(points), jitter);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param jitter
+	 * @return
+	 */
 	public static WB_AlphaTriangulation3D alphaTriangulate3D(final Collection<? extends WB_Coord> points,
 			final double jitter) {
 		return alphaTriangulate3D(WB_CoordCollection.getCollection(points), jitter);

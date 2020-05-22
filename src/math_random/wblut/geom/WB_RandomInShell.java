@@ -1,27 +1,52 @@
 package wblut.geom;
 
+/**
+ *
+ */
 public class WB_RandomInShell extends WB_RandomFactory {
+	/**  */
 	private double innerRadius;
+	/**  */
 	private double outerRadius;
 
+	/**
+	 *
+	 */
 	public WB_RandomInShell() {
 		super();
 		innerRadius = 0.5;
 		outerRadius = 1.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param seed
+	 */
 	public WB_RandomInShell(final long seed) {
 		super(seed);
 		innerRadius = 0.5;
 		outerRadius = 1.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param ir
+	 * @param or
+	 * @return
+	 */
 	public WB_RandomInShell setRadius(final double ir, final double or) {
 		innerRadius = Math.min(Math.abs(ir), Math.abs(or));
 		outerRadius = Math.max(Math.abs(ir), Math.abs(or));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_Point nextPointImp() {
 		final double elevation = Math.asin(2.0 * randomGen.nextDouble() - 1);
@@ -34,6 +59,11 @@ public class WB_RandomInShell extends WB_RandomFactory {
 				r * Math.sin(elevation));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_Vector nextVectorImp() {
 		final double elevation = Math.asin(2.0 * randomGen.nextDouble() - 1);

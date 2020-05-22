@@ -2,24 +2,49 @@ package wblut.hemesh;
 
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HEM_HideEdges extends HEM_Modifier {
+	/**  */
 	private double threshold;
 
+	/**
+	 *
+	 */
 	public HEM_HideEdges() {
 		super();
 		threshold = 0.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	public HEM_HideEdges setThreshold(final double t) {
 		threshold = t;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public HEM_HideEdges setThresholdAngle(final double a) {
 		threshold = 1.0 - Math.cos(a);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		final HE_EdgeIterator eItr = mesh.eItr();
@@ -33,6 +58,12 @@ public class HEM_HideEdges extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		final HE_EdgeIterator eItr = selection.eItr();

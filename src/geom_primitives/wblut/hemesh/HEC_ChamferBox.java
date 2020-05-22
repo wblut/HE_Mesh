@@ -2,7 +2,13 @@ package wblut.hemesh;
 
 import wblut.geom.WB_Coord;
 
+/**
+ *
+ */
 public class HEC_ChamferBox extends HEC_Creator {
+	/**
+	 *
+	 */
 	public HEC_ChamferBox() {
 		super();
 		parameters.set("width", 100);
@@ -16,6 +22,19 @@ public class HEC_ChamferBox extends HEC_Creator {
 		parameters.set("depthSegments", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param W
+	 * @param H
+	 * @param D
+	 * @param CW
+	 * @param CH
+	 * @param CD
+	 * @param L
+	 * @param M
+	 * @param N
+	 */
 	public HEC_ChamferBox(final double W, final double H, final double D, final double CW, final double CH,
 			final double CD, final int L, final int M, final int N) {
 		this();
@@ -30,6 +49,22 @@ public class HEC_ChamferBox extends HEC_Creator {
 		parameters.set("depthSegments", Math.max(1, N));
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param W
+	 * @param H
+	 * @param D
+	 * @param CW
+	 * @param CH
+	 * @param CD
+	 * @param L
+	 * @param M
+	 * @param N
+	 */
 	public HEC_ChamferBox(final double x, final double y, final double z, final double W, final double H,
 			final double D, final double CW, final double CH, final double CD, final int L, final int M, final int N) {
 		this();
@@ -45,6 +80,20 @@ public class HEC_ChamferBox extends HEC_Creator {
 		parameters.set("depthSegments", Math.max(1, N));
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param W
+	 * @param H
+	 * @param D
+	 * @param CW
+	 * @param CH
+	 * @param CD
+	 * @param L
+	 * @param M
+	 * @param N
+	 */
 	public HEC_ChamferBox(final WB_Coord center, final double W, final double H, final double D, final double CW,
 			final double CH, final double CD, final int L, final int M, final int N) {
 		this();
@@ -60,6 +109,14 @@ public class HEC_ChamferBox extends HEC_Creator {
 		parameters.set("depthSegments", Math.max(1, N));
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param M
+	 * @param N
+	 * @return
+	 */
 	public HEC_ChamferBox setSegments(final int L, final int M, final int N) {
 		parameters.set("widthSegments", Math.max(1, L));
 		parameters.set("heightSegments", Math.max(1, M));
@@ -67,36 +124,78 @@ public class HEC_ChamferBox extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param W
+	 * @return
+	 */
 	public HEC_ChamferBox setWidth(final double W) {
 		parameters.set("width", W);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param H
+	 * @return
+	 */
 	public HEC_ChamferBox setHeight(final double H) {
 		parameters.set("height", H);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param D
+	 * @return
+	 */
 	public HEC_ChamferBox setDepth(final double D) {
 		parameters.set("depth", D);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @return
+	 */
 	public HEC_ChamferBox setWidthSegments(final int L) {
 		parameters.set("widthSegments", Math.max(1, L));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param M
+	 * @return
+	 */
 	public HEC_ChamferBox setHeightSegments(final int M) {
 		parameters.set("heightSegments", Math.max(1, M));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param N
+	 * @return
+	 */
 	public HEC_ChamferBox setDepthSegments(final int N) {
 		parameters.set("depthSegments", Math.max(1, N));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param c
+	 * @return
+	 */
 	public HEC_ChamferBox setChamfer(final double c) {
 		parameters.set("chamferwidth", c);
 		parameters.set("chamferheight", c);
@@ -104,6 +203,14 @@ public class HEC_ChamferBox extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param CW
+	 * @param CH
+	 * @param CD
+	 * @return
+	 */
 	public HEC_ChamferBox setChamfer(final double CW, final double CH, final double CD) {
 		parameters.set("chamferwidth", CW);
 		parameters.set("chamferheight", CH);
@@ -111,57 +218,125 @@ public class HEC_ChamferBox extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param c
+	 * @return
+	 */
 	public HEC_ChamferBox setChamferWidth(final double c) {
 		parameters.set("chamferwidth", c);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param c
+	 * @return
+	 */
 	public HEC_ChamferBox setChamferHeight(final double c) {
 		parameters.set("chamferheight", c);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param c
+	 * @return
+	 */
 	public HEC_ChamferBox setChamferDepth(final double c) {
 		parameters.set("chamferdepth", c);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getWidth() {
 		return parameters.get("width", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getHeight() {
 		return parameters.get("height", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getDepth() {
 		return parameters.get("depth", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getChamferWidth() {
 		return parameters.get("chamferwidth", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getChamferHeight() {
 		return parameters.get("chamferheight", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getChamferDepth() {
 		return parameters.get("chamferdepth", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected int getWidthSegments() {
 		return parameters.get("widthSegments", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected int getHeightSegments() {
 		return parameters.get("heightSegments", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected int getDepthSegments() {
 		return parameters.get("depthSegments", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final double W = getWidth();
@@ -461,6 +636,11 @@ public class HEC_ChamferBox extends HEC_Creator {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param args
+	 */
 	public static void main(final String[] args) {
 		final HEC_ChamferBox creator = new HEC_ChamferBox();
 		creator.setWidth(400).setHeight(60).setDepth(200);

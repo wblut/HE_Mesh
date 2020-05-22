@@ -5,10 +5,20 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_PointHomogeneous;
 import wblut.math.WB_Bernstein;
 
+/**
+ *
+ */
 public class WB_RBezierSurface extends WB_BezierSurface {
+	/**  */
 	private final double[][] weights;
+	/**  */
 	protected WB_PointHomogeneous[][] wpoints;
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 */
 	public WB_RBezierSurface(final WB_Coord[][] controlPoints) {
 		super(controlPoints);
 		weights = new double[n + 1][m + 1];
@@ -25,6 +35,12 @@ public class WB_RBezierSurface extends WB_BezierSurface {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param weights
+	 */
 	public WB_RBezierSurface(final WB_Coord[][] controlPoints, final double[][] weights) {
 		super(controlPoints);
 		this.weights = weights;
@@ -36,6 +52,11 @@ public class WB_RBezierSurface extends WB_BezierSurface {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 */
 	public WB_RBezierSurface(final WB_PointHomogeneous[][] controlPoints) {
 		super(controlPoints);
 		weights = new double[n + 1][m + 1];
@@ -48,6 +69,13 @@ public class WB_RBezierSurface extends WB_BezierSurface {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @return
+	 */
 	@Override
 	public WB_Point surfacePoint(final double u, final double v) {
 		final WB_PointHomogeneous S = new WB_PointHomogeneous(0, 0, 0, 0);
@@ -83,41 +111,81 @@ public class WB_RBezierSurface extends WB_BezierSurface {
 		return new WB_Point(S.project());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_Coord[][] points() {
 		return points;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int n() {
 		return n;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int m() {
 		return m;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getLowerU() {
 		return 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getUpperU() {
 		return 1;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getLowerV() {
 		return 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getUpperV() {
 		return 1;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_RBezierSurface elevateUDegree() {
 		final WB_PointHomogeneous[][] npoints = new WB_PointHomogeneous[n + 2][m + 1];
@@ -132,6 +200,11 @@ public class WB_RBezierSurface extends WB_BezierSurface {
 		return new WB_RBezierSurface(npoints);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_RBezierSurface elevateVDegree() {
 		final WB_PointHomogeneous[][] npoints = new WB_PointHomogeneous[n + 1][m + 2];

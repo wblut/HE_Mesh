@@ -1,20 +1,30 @@
 package wblut.hemesh;
 
 import java.util.Iterator;
-import java.util.List;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_Point;
 
+/**
+ *
+ */
 public class HEM_TaubinSmooth extends HEM_Modifier {
+	/**  */
 	private boolean autoRescale;
+	/**  */
 	private boolean keepBoundary;
+	/**  */
 	private double lambda;
+	/**  */
 	private double mu;
+	/**  */
 	private int iter;
 
+	/**
+	 *
+	 */
 	public HEM_TaubinSmooth() {
 		lambda = 0.5;
 		mu = -0.52;
@@ -22,31 +32,67 @@ public class HEM_TaubinSmooth extends HEM_Modifier {
 		keepBoundary = false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_TaubinSmooth setAutoRescale(final boolean b) {
 		autoRescale = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HEM_TaubinSmooth setIterations(final int r) {
 		iter = r;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_TaubinSmooth setKeepBoundary(final boolean b) {
 		keepBoundary = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param lambda
+	 * @return
+	 */
 	public HEM_TaubinSmooth setLambda(final double lambda) {
 		this.lambda = lambda;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mu
+	 * @return
+	 */
 	public HEM_TaubinSmooth setMu(final double mu) {
 		this.mu = mu;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HEM_TaubinSmooth.");
@@ -64,7 +110,7 @@ public class HEM_TaubinSmooth extends HEM_Modifier {
 			final double f = r % 2 == 0 ? lambda : mu;
 			Iterator<HE_Vertex> vItr = mesh.vItr();
 			HE_Vertex v;
-			List<HE_Vertex> neighbors;
+			HE_VertexList neighbors;
 			int id = 0;
 			WB_Point p;
 			while (vItr.hasNext()) {
@@ -96,6 +142,12 @@ public class HEM_TaubinSmooth extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		tracker.setStartStatus(this, "Starting HEM_TaubinSmooth.");
@@ -115,7 +167,7 @@ public class HEM_TaubinSmooth extends HEM_Modifier {
 			Iterator<HE_Vertex> vItr = selection.vItr();
 			HE_Vertex v;
 			HE_Vertex n;
-			List<HE_Vertex> neighbors;
+			HE_VertexList neighbors;
 			int id = 0;
 			while (vItr.hasNext()) {
 				v = vItr.next();

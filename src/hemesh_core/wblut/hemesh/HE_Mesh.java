@@ -24,12 +24,14 @@ import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordCollection;
 import wblut.geom.WB_CoordList;
 import wblut.geom.WB_GeometryFactory3D;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_KDTree3D;
 import wblut.geom.WB_List;
 import wblut.geom.WB_Network;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_PointCollection;
+import wblut.geom.WB_PointSource;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_SimpleMesh;
@@ -37,22 +39,43 @@ import wblut.geom.WB_SimpleMeshCreator;
 import wblut.geom.WB_Transform2D;
 import wblut.geom.WB_Transform3D;
 import wblut.geom.WB_Transformable3D;
-import wblut.geom.WB_TriangleFactory;
+import wblut.geom.WB_TriangleSource;
 import wblut.geom.WB_Vector;
+import wblut.geom.WB_VectorCollection;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_MTRandom;
 
-public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_HalfedgeStructure, WB_Transformable3D {
+/**
+ *
+ */
+public class HE_Mesh extends HE_MeshElement
+		implements WB_PointSource, WB_TriangleSource, HE_HalfedgeStructure, WB_Transformable3D {
+	/**  */
 	protected final static WB_ProgressTracker tracker = WB_ProgressTracker.instance();
+	/**  */
 	protected WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
 
+	/**
+	 *
+	 */
 	class CreatorThread implements Callable<HE_Mesh> {
+		/**  */
 		HEC_Creator creator;
 
+		/**
+		 *
+		 *
+		 * @param creator
+		 */
 		CreatorThread(final HEC_Creator creator) {
 			this.creator = creator;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public HE_Mesh call() {
 			final HE_Mesh result = creator.create();
@@ -60,15 +83,31 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	class ModifierThread implements Callable<HE_Mesh> {
+		/**  */
 		HEM_Modifier machine;
+		/**  */
 		HE_Mesh mesh;
 
+		/**
+		 *
+		 *
+		 * @param machine
+		 * @param mesh
+		 */
 		ModifierThread(final HEM_Modifier machine, final HE_Mesh mesh) {
 			this.machine = machine;
 			this.mesh = mesh;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public HE_Mesh call() {
 			try {
@@ -79,15 +118,31 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	class SimplifierThread implements Callable<HE_Mesh> {
+		/**  */
 		HES_Simplifier machine;
+		/**  */
 		HE_Mesh mesh;
 
+		/**
+		 *
+		 *
+		 * @param machine
+		 * @param mesh
+		 */
 		SimplifierThread(final HES_Simplifier machine, final HE_Mesh mesh) {
 			this.machine = machine;
 			this.mesh = mesh;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public HE_Mesh call() {
 			try {
@@ -98,15 +153,31 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	class SubdividorThread implements Callable<HE_Mesh> {
+		/**  */
 		HES_Subdividor machine;
+		/**  */
 		HE_Mesh mesh;
 
+		/**
+		 *
+		 *
+		 * @param machine
+		 * @param mesh
+		 */
 		SubdividorThread(final HES_Subdividor machine, final HE_Mesh mesh) {
 			this.machine = machine;
 			this.mesh = mesh;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public HE_Mesh call() {
 			try {
@@ -117,28 +188,55 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**  */
 	String name;
+	/**  */
 	private HE_RAS<HE_Vertex> vertices;
+	/**  */
 	private HE_RAS<HE_Face> faces;
+	/**  */
 	private HE_RAS<HE_Halfedge> edges;
+	/**  */
 	private HE_RAS<HE_Halfedge> halfedges;
+	/**  */
 	private HE_RAS<HE_Halfedge> unpairedHalfedges;
+	/**  */
 	ExecutorService executor;
+	/**  */
 	LinkedList<Callable<HE_Mesh>> tasks;
+	/**  */
 	boolean finished;
+	/**  */
 	Future<HE_Mesh> future;
+	/**  */
 	Map<String, HE_Selection> selections;
+	/**  */
 	@SuppressWarnings("rawtypes")
 	Map<String, HE_Attribute> attributes;
+	/**  */
 	Map<String, HE_IntegerAttribute> integerAttributes;
+	/**  */
 	Map<String, HE_FloatAttribute> floatAttributes;
+	/**  */
 	Map<String, HE_DoubleAttribute> doubleAttributes;
+	/**  */
 	Map<String, HE_BooleanAttribute> booleanAttributes;
+	/**  */
 	Map<String, HE_StringAttribute> stringAttributes;
+	/**  */
+	Map<String, HE_PointAttribute> pointAttributes;
+	/**  */
+	Map<String, HE_VectorAttribute> vectorAttributes;
+	/**  */
 	int[] triangles;
+	/**  */
 	double uRepeat;
+	/**  */
 	double vRepeat;
 
+	/**
+	 *
+	 */
 	public HE_Mesh() {
 		super();
 		vertices = new HE_RAS<>();
@@ -152,6 +250,8 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		doubleAttributes = new HashMap<>();
 		booleanAttributes = new HashMap<>();
 		stringAttributes = new HashMap<>();
+		pointAttributes = new HashMap<>();
+		vectorAttributes = new HashMap<>();
 		attributes = new HashMap<>();
 		tasks = new LinkedList<>();
 		future = null;
@@ -160,30 +260,58 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		triangles = null;
 		uRepeat = 1.0;
 		vRepeat = 1.0;
+		addVectorAttribute("vertexNormal", null, false);
+		addVectorAttribute("faceNormal", null, false);
+		addPointAttribute("faceCenter", null, false);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	public HE_Mesh(final HE_Mesh mesh) {
 		this();
 		set(mesh);
 		triangles = null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param creator
+	 */
 	public HE_Mesh(final HEC_Creator creator) {
 		this();
 		setNoCopy(creator.create());
 		triangles = null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	public HE_Mesh(final WB_SimpleMesh mesh) {
 		this(new HEC_FromSimpleMesh(mesh));
 		triangles = null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	public HE_Mesh(final WB_SimpleMeshCreator mesh) {
 		this(new HEC_FromSimpleMesh(mesh.create()));
 		triangles = null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param el
+	 */
 	@Override
 	public void add(final HE_Element el) {
 		if (el instanceof HE_Face) {
@@ -195,11 +323,22 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 */
 	@Override
 	public void add(final HE_Face f) {
 		faces.add(f);
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @param el
+	 */
 	public void addDerivedElement(final HE_Face f, final HE_Element... el) {
 		add(f);
 		for (final HE_Selection sel : selections.values()) {
@@ -217,6 +356,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		addDerivedElementToAttributes(f, el);
 	}
 
+	/**
+	 *
+	 *
+	 * @param derived
+	 * @param el
+	 */
 	@SuppressWarnings("unchecked")
 	private void addDerivedElementToAttributes(final HE_Element derived, final HE_Element... el) {
 		for (@SuppressWarnings("rawtypes")
@@ -316,8 +461,45 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 				}
 			}
 		}
+		for (final HE_PointAttribute attribute : pointAttributes.values()) {
+			if (attribute.isPersistent()) {
+				boolean contains = false;
+				WB_Coord o = attribute.defaultValue;
+				for (final HE_Element element : el) {
+					contains |= attribute.attributeList.containsKey(element.getKey());
+					if (contains) {
+						o = attribute.get(element);
+						break;
+					}
+				}
+				if (contains) {
+					attribute.set(derived, o);
+				}
+			}
+		}
+		for (final HE_VectorAttribute attribute : vectorAttributes.values()) {
+			if (attribute.isPersistent()) {
+				boolean contains = false;
+				WB_Coord o = attribute.defaultValue;
+				for (final HE_Element element : el) {
+					contains |= attribute.attributeList.containsKey(element.getKey());
+					if (contains) {
+						o = attribute.get(element);
+						break;
+					}
+				}
+				if (contains) {
+					attribute.set(derived, o);
+				}
+			}
+		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param faces
+	 */
 	@Override
 	public void addFaces(final Collection<? extends HE_Face> faces) {
 		for (final HE_Face f : faces) {
@@ -325,6 +507,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param faces
+	 */
 	@Override
 	public void addFaces(final HE_Face[] faces) {
 		for (final HE_Face face : faces) {
@@ -332,11 +519,21 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param source
+	 */
 	@Override
 	public void addFaces(final HE_HalfedgeStructure source) {
 		faces.addAll(source.getFaces());
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 */
 	@Override
 	public void add(final HE_Halfedge he) {
 		if (he.getPair() == null) {
@@ -348,6 +545,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 * @param el
+	 */
 	public void addDerivedElement(final HE_Halfedge he, final HE_Element... el) {
 		add(he);
 		for (final HE_Selection sel : selections.values()) {
@@ -365,6 +568,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		addDerivedElementToAttributes(he, el);
 	}
 
+	/**
+	 *
+	 *
+	 * @param halfedges
+	 */
 	@Override
 	public void addHalfedges(final Collection<? extends HE_Halfedge> halfedges) {
 		for (final HE_Halfedge he : halfedges) {
@@ -372,6 +580,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param halfedges
+	 */
 	@Override
 	public void addHalfedges(final HE_Halfedge[] halfedges) {
 		for (final HE_Halfedge halfedge : halfedges) {
@@ -379,6 +592,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param source
+	 */
 	@Override
 	public void addHalfedges(final HE_HalfedgeStructure source) {
 		for (final HE_Halfedge he : source.getHalfedges()) {
@@ -386,11 +604,22 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 */
 	@Override
 	public void add(final HE_Vertex v) {
 		vertices.add(v);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param el
+	 */
 	public void addDerivedElement(final HE_Vertex v, final HE_Element... el) {
 		add(v);
 		for (final HE_Selection sel : selections.values()) {
@@ -408,6 +637,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		addDerivedElementToAttributes(v, el);
 	}
 
+	/**
+	 *
+	 *
+	 * @param vertices
+	 */
 	@Override
 	public void addVertices(final Collection<? extends HE_Vertex> vertices) {
 		for (final HE_Vertex v : vertices) {
@@ -415,11 +649,21 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param source
+	 */
 	@Override
 	public void addVertices(final HE_HalfedgeStructure source) {
 		vertices.addAll(source.getVertices());
 	}
 
+	/**
+	 *
+	 *
+	 * @param vertices
+	 */
 	@Override
 	public void addVertices(final HE_Vertex[] vertices) {
 		for (final HE_Vertex vertex : vertices) {
@@ -427,6 +671,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	@Override
 	public void add(final HE_Mesh mesh) {
 		addVertices(mesh.vertices);
@@ -443,6 +692,30 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	public void sub(HE_Mesh mesh) {
+		mesh = mesh.get();
+		HE_MeshOp.flipFaces(mesh);
+		addVertices(mesh.vertices);
+		addFaces(mesh.faces);
+		addHalfedges(mesh.edges);
+		addHalfedges(mesh.halfedges);
+		addHalfedges(mesh.unpairedHalfedges);
+		final String[] selections = mesh.getSelectionNames();
+		for (final String name : selections) {
+			final HE_Selection sourceSel = mesh.getSelection(name);
+			final HE_Selection currentSel = getSelection(name);
+			final HE_Selection sel = sourceSel.get();
+			currentSel.add(sel);
+		}
+	}
+
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param machine
+	 * @param sel
+	 */
 	void addSelection(final String name, final HE_Machine machine, final HE_Selection sel) {
 		if (sel.getParent() == this && sel != null) {
 			sel.createdBy = machine.getName();
@@ -460,6 +733,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param sel
+	 */
 	public void addSelection(final String name, final HE_Selection sel) {
 		if (sel.getParent() == this && sel != null) {
 			final HE_Selection prevsel = selections.get(name);
@@ -476,30 +755,60 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public HE_Mesh apply(final WB_Transform3D T) {
 		return new HEC_Transform3D(this, T).create();
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public HE_Mesh applySelf(final WB_Transform3D T) {
 		return modify(new HEM_Transform3D(T));
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public HE_Mesh apply2D(final WB_Transform2D T) {
 		return new HEC_Transform2D(this, T).create();
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public HE_Mesh apply2DSelf(final WB_Transform2D T) {
 		return modify(new HEM_Transform2D(T));
 	}
 
+	/**
+	 *
+	 */
 	public void clean() {
 		modify(new HEM_Clean());
 	}
 
+	/**
+	 *
+	 */
 	public void cleanSelections() {
 		final List<String> selToDel = new WB_List<>();
 		for (final Entry<String, HE_Selection> entry : selections.entrySet()) {
@@ -514,15 +823,28 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Deprecated
 	public HE_Mesh cleanUnusedElementsByFace() {
 		return removeUnconnectedElements();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Mesh removeUnconnectedElements() {
 		return HE_MeshOp.removeUnconnectedElements(this);
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void clear() {
 		selections = new HashMap<>();
@@ -531,6 +853,9 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		clearFaces();
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void clearEdges() {
 		edges = new HE_RAS<>();
@@ -539,6 +864,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 */
 	public void clearFace(final HE_Halfedge he) {
 		he.clearFace();
 		if (he.getPair() != null) {
@@ -546,6 +876,9 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void clearFaces() {
 		faces = new HE_RAS<>();
@@ -554,18 +887,34 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	void clearFacesNoSelectionCheck() {
 		faces = new HE_RAS<>();
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 */
 	public void clearHalfedge(final HE_Face f) {
 		f.clearHalfedge();
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 */
 	public void clearHalfedge(final HE_Vertex v) {
 		v.clearHalfedge();
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void clearHalfedges() {
 		halfedges = new HE_RAS<>();
@@ -576,6 +925,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 */
 	public void clearNext(final HE_Halfedge he) {
 		if (he.getNextInFace() != null) {
 			he.getNextInFace().clearPrev();
@@ -583,6 +937,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		he.clearNext();
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 */
 	public void clearPair(final HE_Halfedge he) {
 		if (he.getPair() == null) {
 			return;
@@ -596,21 +955,35 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		add(hep);
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void clearPrecomputed() {
 		triangles = null;
 		clearPrecomputedFaces();
 		clearPrecomputedVertices();
 		clearPrecomputedHalfedges();
+		
 	}
 
+	/**
+	 *
+	 */
 	public void clearPrecomputedFaces() {
 		final HE_FaceIterator fItr = fItr();
 		while (fItr.hasNext()) {
 			fItr.next().clearPrecomputed();
 		}
+		clearAttribute("faceNormal");
+		clearAttribute("faceCenter");
+		addVectorAttribute("faceNormal", null, false);
+		addPointAttribute("faceCenter", null, false);
 	}
 
+	/**
+	 *
+	 */
 	public void clearPrecomputedHalfedges() {
 		final HE_HalfedgeIterator heItr = heItr();
 		while (heItr.hasNext()) {
@@ -618,13 +991,24 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void clearPrecomputedVertices() {
 		final HE_VertexIterator vItr = vItr();
 		while (vItr.hasNext()) {
 			vItr.next().clearPrecomputed();
 		}
+		clearAttribute("vertexNormal");
+		addVectorAttribute("vertexNormal", null, false);
+
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 */
 	public void clearPrev(final HE_Halfedge he) {
 		if (he.getPrevInFace() != null) {
 			he.getPrevInFace().clearNext();
@@ -632,14 +1016,25 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		he.clearPrev();
 	}
 
+	/**
+	 *
+	 */
 	public void clearSelections() {
 		selections = new HashMap<>();
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 */
 	public void clearVertex(final HE_Halfedge he) {
 		he.clearVertex();
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void clearVertices() {
 		vertices = new HE_RAS<>();
@@ -648,10 +1043,16 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	void clearVerticesNoSelectionCheck() {
 		vertices = new HE_RAS<>();
 	}
 
+	/**
+	 *
+	 */
 	public void clearVisitedElements() {
 		final HE_FaceIterator fitr = fItr();
 		while (fitr.hasNext()) {
@@ -667,6 +1068,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param el
+	 * @return
+	 */
 	@Override
 	public boolean contains(final HE_Element el) {
 		if (el instanceof HE_Face) {
@@ -679,45 +1086,99 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	@Override
 	public boolean contains(final HE_Face f) {
 		return faces.contains(f);
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 * @return
+	 */
 	@Override
 	public boolean contains(final HE_Halfedge he) {
 		return edges.contains(he) || halfedges.contains(he) || unpairedHalfedges.contains(he);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	@Override
 	public boolean contains(final HE_Vertex v) {
 		return vertices.contains(v);
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public boolean containsEdge(final long key) {
 		return edges.containsKey(key);
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public boolean containsFace(final long key) {
 		return faces.containsKey(key);
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public boolean containsHalfedge(final long key) {
 		return halfedges.containsKey(key) || edges.containsKey(key) || unpairedHalfedges.containsKey(key);
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public boolean containsVertex(final long key) {
 		return vertices.containsKey(key);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Mesh copy() {
 		return new HE_Mesh(new HEC_Copy(this));
 	}
 
+	/**
+	 *
+	 *
+	 * @param from
+	 * @param to
+	 * @return
+	 */
 	public HE_Selection copySelection(final String from, final String to) {
 		final HE_Selection sel = selections.get(from);
 		if (sel == null) {
@@ -728,10 +1189,20 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return copy;
 	}
 
+	/**
+	 *
+	 *
+	 * @param creator
+	 */
 	public void createThreaded(final HEC_Creator creator) {
 		tasks.add(new CreatorThread(creator));
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 */
 	public void cutFace(final HE_Face f) {
 		HE_Halfedge he = f.getHalfedge();
 		do {
@@ -747,6 +1218,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		remove(f);
 	}
 
+	/**
+	 *
+	 *
+	 * @param e
+	 * @return
+	 */
 	public HE_Face deleteEdge(final HE_Halfedge e) {
 		HE_Face f = null;
 		final HE_Halfedge he1 = e.isEdge() ? e : e.getPair();
@@ -783,6 +1260,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return f;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 */
 	public void deleteFace(final HE_Face f) {
 		HE_Halfedge he = f.getHalfedge();
 		do {
@@ -792,6 +1274,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		remove(f);
 	}
 
+	/**
+	 *
+	 *
+	 * @param faces
+	 */
 	public void deleteFaces(final HE_Selection faces) {
 		HE_Face f;
 		final HE_FaceIterator fItr = faces.fItr();
@@ -803,11 +1290,21 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		HE_MeshOp.capHalfedges(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_EdgeIterator eItr() {
 		return new HE_EdgeIterator(edges);
 	}
 
+	/**
+	 *
+	 *
+	 * @param AABB
+	 */
 	public void fitInAABB(final WB_AABB AABB) {
 		final WB_AABB self = HE_MeshOp.getAABB(this);
 		moveSelf(new WB_Vector(self.getMin(), AABB.getMin()));
@@ -815,12 +1312,24 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 				AABB.getDepth() / self.getDepth(), new WB_Point(AABB.getMin()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param from
+	 * @param to
+	 */
 	public void fitInAABB(final WB_AABB from, final WB_AABB to) {
 		moveSelf(new WB_Vector(from.getMin(), to.getMin()));
 		scaleSelf(to.getWidth() / from.getWidth(), to.getHeight() / from.getHeight(), to.getDepth() / from.getDepth(),
 				new WB_Point(to.getMin()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param AABB
+	 * @return
+	 */
 	public double fitInAABBConstrained(final WB_AABB AABB) {
 		final WB_AABB self = HE_MeshOp.getAABB(this);
 		moveSelf(new WB_Vector(self.getCenter(), AABB.getCenter()));
@@ -830,6 +1339,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return f;
 	}
 
+	/**
+	 *
+	 *
+	 * @param from
+	 * @param to
+	 * @return
+	 */
 	public double fitInAABBConstrained(final WB_AABB from, final WB_AABB to) {
 		moveSelf(new WB_Vector(from.getCenter(), to.getCenter()));
 		double f = Math.min(to.getWidth() / from.getWidth(), to.getHeight() / from.getHeight());
@@ -838,12 +1354,22 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return f;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_FaceIterator fItr() {
-		final List<HE_Face> fs = new HE_FaceList(getFaces());
+		final HE_FaceList fs = new HE_FaceList(getFaces());
 		return new HE_FaceIterator(fs);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	public void fuse(final HE_Mesh mesh) {
 		addVertices(mesh.getVerticesAsArray());
 		addFaces(mesh.getFacesAsArray());
@@ -851,16 +1377,31 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		setNoCopy(new HE_Mesh(new HEC_FromPolygons().setPolygons(this.getPolygonList())));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Mesh get() {
 		return new HE_Mesh(new HEC_Copy(this));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point getCenter() {
 		return HE_MeshOp.getCenter(this);
 	}
 
-	public List<HE_Halfedge> getAllBoundaryHalfedges() {
-		final List<HE_Halfedge> boundaryHalfedges = new HE_HalfedgeList();
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_HalfedgeList getAllBoundaryHalfedges() {
+		final HE_HalfedgeList boundaryHalfedges = new HE_HalfedgeList();
 		HE_Halfedge he;
 		final Iterator<HE_Halfedge> heItr = heItr();
 		while (heItr.hasNext()) {
@@ -872,8 +1413,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return boundaryHalfedges;
 	}
 
-	public List<HE_Vertex> getAllBoundaryVertices() {
-		final List<HE_Vertex> boundaryVertices = new HE_VertexList();
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_VertexList getAllBoundaryVertices() {
+		final HE_VertexList boundaryVertices = new HE_VertexList();
 		HE_Halfedge he;
 		final Iterator<HE_Halfedge> heItr = heItr();
 		while (heItr.hasNext()) {
@@ -885,7 +1431,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return boundaryVertices;
 	}
 
-	public WB_Point[] getEdgeCenters() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_PointCollection getEdgeCenters() {
 		final WB_Point[] result = new WB_Point[getNumberOfEdges()];
 		int i = 0;
 		HE_Halfedge e;
@@ -895,10 +1446,15 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 			result[i] = HE_MeshOp.getHalfedgeCenter(e);
 			i++;
 		}
-		return result;
+		return WB_PointCollection.getCollection(result);
 	}
 
-	public WB_Vector[] getEdgeNormals() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_VectorCollection getEdgeNormals() {
 		final WB_Vector[] result = new WB_Vector[getNumberOfEdges()];
 		int i = 0;
 		HE_Halfedge e;
@@ -908,14 +1464,24 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 			result[i] = HE_MeshOp.getEdgeNormal(e);
 			i++;
 		}
-		return result;
+		return WB_VectorCollection.getCollection(result);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
-	public List<HE_Halfedge> getEdges() {
+	public HE_HalfedgeList getEdges() {
 		return new HE_HalfedgeList(edges.getObjects());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_Halfedge[] getEdgesAsArray() {
 		final HE_Halfedge[] edges = new HE_Halfedge[getNumberOfEdges()];
@@ -928,8 +1494,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return edges;
 	}
 
-	public int[][] getEdgesAsInt() {
-		final int[][] result = new int[getNumberOfEdges()][2];
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public int[] getEdgesAsInt() {
+		final int[] result = new int[2 * getNumberOfEdges()];
 		final HE_IntMap vertexKeys = new HE_IntMap();
 		final Iterator<HE_Vertex> vItr = vItr();
 		int i = 0;
@@ -942,14 +1513,19 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		i = 0;
 		while (eItr.hasNext()) {
 			he = eItr.next();
-			result[i][0] = vertexKeys.get(he.getVertex().getKey());
+			result[i++] = vertexKeys.get(he.getVertex().getKey());
 			he = he.getPair();
-			result[i][1] = vertexKeys.get(he.getVertex().getKey());
-			i++;
+			result[i++] = vertexKeys.get(he.getVertex().getKey());
 		}
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public HE_Halfedge getEdgeWithIndex(final int i) {
 		if (i < 0 || i >= edges.size()) {
@@ -958,6 +1534,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return edges.getWithIndex(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public HE_Halfedge getEdgeWithKey(final long key) {
 		HE_Halfedge he = edges.getWithKey(key);
@@ -971,27 +1553,53 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return unpairedHalfedges.getWithKey(key);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getEulerCharacteristic() {
 		return getNumberOfVertices() - getNumberOfEdges() + getNumberOfFaces();
 	}
 
-	public WB_Point getFaceCenter(final int id) {
-		return HE_MeshOp.getFaceCenter(getFaceWithIndex(id));
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
+	public WB_Coord getFaceCenter(final HE_Face f) {
+		WB_Coord center = getPointAttributeForElement(f, "faceCenter");
+		if (center == null) {
+			center = HE_MeshOp.getFaceCenter(f);
+			setPointAttribute(f, "faceCenter", center);
+		}
+		return center;
 	}
 
-	public WB_Point[] getFaceCenters() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_PointCollection getFaceCenters() {
 		final WB_Point[] result = new WB_Point[getNumberOfFaces()];
 		int i = 0;
 		HE_Face f;
 		final HE_FaceIterator fItr = fItr();
 		while (fItr.hasNext()) {
 			f = fItr.next();
-			result[i] = HE_MeshOp.getFaceCenter(f);
+			result[i] = new WB_Point(getFaceCenter(f));
 			i++;
 		}
-		return result;
+		return WB_PointCollection.getCollection(result);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getFaceColors() {
 		final int[] result = new int[getNumberOfFaces()];
 		final HE_FaceIterator fItr = fItr();
@@ -1005,6 +1613,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getFaceInternalLabels() {
 		final int[] result = new int[getNumberOfFaces()];
 		final HE_FaceIterator fItr = fItr();
@@ -1018,23 +1631,44 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
-	public WB_Vector getFaceNormal(final int id) {
-		return HE_MeshOp.getFaceNormal(getFaceWithIndex(id));
+	/**
+	 *
+	 *
+	 * @param id
+	 * @return
+	 */
+	public WB_Coord getFaceNormal(final HE_Face f) {
+		WB_Coord normal = getVectorAttributeForElement(f, "faceNormal");
+		if (normal == null) {
+			normal = HE_MeshOp.getFaceNormal(f);
+			setVectorAttribute(f, "faceNormal", normal);
+		}
+		return normal;
 	}
 
-	public WB_Vector[] getFaceNormals() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_VectorCollection getFaceNormals() {
 		final WB_Vector[] result = new WB_Vector[getNumberOfFaces()];
 		int i = 0;
 		HE_Face f;
 		final HE_FaceIterator fItr = fItr();
 		while (fItr.hasNext()) {
 			f = fItr.next();
-			result[i] = HE_MeshOp.getFaceNormal(f);
+			result[i] = new WB_Vector(getFaceNormal(f));
 			i++;
 		}
-		return result;
+		return WB_VectorCollection.getCollection(result);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Plane[] getFacePlanes() {
 		final WB_Plane[] result = new WB_Plane[getNumberOfFaces()];
 		int i = 0;
@@ -1047,12 +1681,24 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 		return result;
 	}
+	
 
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
-	public List<HE_Face> getFaces() {
+	public HE_FaceList getFaces() {
 		return new HE_FaceList(faces.getObjects());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_Face[] getFacesAsArray() {
 		final HE_Face[] faces = new HE_Face[getNumberOfFaces()];
@@ -1065,6 +1711,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return faces;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[][] getFacesAsInt() {
 		final int[][] result = new int[getNumberOfFaces()][];
 		final HE_IntMap vertexKeys = getVertexKeyToIndexMap();
@@ -1087,6 +1738,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getFaceTextureIds() {
 		final int[] result = new int[getNumberOfFaces()];
 		final HE_FaceIterator fItr = fItr();
@@ -1100,17 +1756,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
-	public WB_KDTree3D<WB_Point, Long> getFaceTree() {
-		final WB_KDTree3D<WB_Point, Long> tree = new WB_KDTree3D<>();
-		HE_Face f;
-		final HE_FaceIterator fItr = fItr();
-		while (fItr.hasNext()) {
-			f = fItr.next();
-			tree.add(HE_MeshOp.getFaceCenter(f), f.getKey());
-		}
-		return tree;
-	}
-
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getFaceLabels() {
 		final int[] result = new int[getNumberOfFaces()];
 		final HE_FaceIterator fItr = fItr();
@@ -1124,6 +1774,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean[] getFaceVisibility() {
 		final boolean[] result = new boolean[getNumberOfFaces()];
 		final HE_FaceIterator fItr = fItr();
@@ -1137,6 +1792,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public HE_Face getFaceWithIndex(final int i) {
 		if (i < 0 || i >= faces.size()) {
@@ -1145,13 +1806,26 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return faces.getWithIndex(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public HE_Face getFaceWithKey(final long key) {
 		return faces.getWithKey(key);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v0
+	 * @param v1
+	 * @return
+	 */
 	public HE_Halfedge getHalfedgeFromTo(final HE_Vertex v0, final HE_Vertex v1) {
-		final List<HE_Halfedge> hes = v0.getHalfedgeStar();
+		final HE_HalfedgeList hes = v0.getHalfedgeStar();
 		for (final HE_Halfedge he : hes) {
 			if (he.getEndVertex() == v1) {
 				return he;
@@ -1160,18 +1834,28 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
-	public List<HE_Halfedge> getHalfedges() {
-		final List<HE_Halfedge> halfedges = new HE_HalfedgeList();
+	public HE_HalfedgeList getHalfedges() {
+		final HE_HalfedgeList halfedges = new HE_HalfedgeList();
 		halfedges.addAll(this.halfedges);
 		halfedges.addAll(this.edges);
 		halfedges.addAll(this.unpairedHalfedges);
 		return halfedges;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_Halfedge[] getHalfedgesAsArray() {
-		final List<HE_Halfedge> hes = getHalfedges();
+		final HE_HalfedgeList hes = getHalfedges();
 		final HE_Halfedge[] halfedges = new HE_Halfedge[hes.size()];
 		int i = 0;
 		for (final HE_Halfedge he : hes) {
@@ -1181,6 +1865,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return halfedges;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public HE_Halfedge getHalfedgeWithIndex(final int i) {
 		if (i < 0 || i >= edges.size() + halfedges.size() + unpairedHalfedges.size()) {
@@ -1194,6 +1884,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return edges.getWithIndex(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public HE_Halfedge getHalfedgeWithKey(final long key) {
 		HE_Halfedge he = edges.getWithKey(key);
@@ -1207,21 +1903,44 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return unpairedHalfedges.getWithKey(key);
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	@Override
 	public int getIndex(final HE_Face f) {
 		return faces.indexOf(f);
 	}
 
+	/**
+	 *
+	 *
+	 * @param edge
+	 * @return
+	 */
 	@Override
 	public int getIndex(final HE_Halfedge edge) {
 		return edges.indexOf(edge);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	@Override
 	public int getIndex(final HE_Vertex v) {
 		return vertices.indexOf(v);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_ObjectMap<WB_Point> getKeyedEdgeCenters() {
 		final HE_ObjectMap<WB_Point> result = new HE_ObjectMap<>();
 		HE_Halfedge e;
@@ -1233,6 +1952,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_ObjectMap<WB_Vector> getKeyedEdgeNormals() {
 		final HE_ObjectMap<WB_Vector> result = new HE_ObjectMap<>();
 		HE_Halfedge e;
@@ -1244,39 +1968,59 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_ObjectMap<WB_Point> getKeyedFaceCenters() {
 		final HE_ObjectMap<WB_Point> result = new HE_ObjectMap<>();
 		HE_Face f;
 		final HE_FaceIterator fItr = fItr();
 		while (fItr.hasNext()) {
 			f = fItr.next();
-			result.put(f.getKey(), HE_MeshOp.getFaceCenter(f));
+			result.put(f.getKey(), new WB_Point(getFaceCenter(f)));
 		}
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_ObjectMap<WB_Vector> getKeyedFaceNormals() {
 		final HE_ObjectMap<WB_Vector> result = new HE_ObjectMap<>();
 		HE_Face f;
 		final HE_FaceIterator fItr = fItr();
 		while (fItr.hasNext()) {
 			f = fItr.next();
-			result.put(f.getKey(), HE_MeshOp.getFaceNormal(f));
+			result.put(f.getKey(), new WB_Vector(getFaceNormal(f)));
 		}
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_ObjectMap<WB_Vector> getKeyedVertexNormals() {
 		final HE_ObjectMap<WB_Vector> result = new HE_ObjectMap<>();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			result.put(v.getKey(), HE_MeshOp.getVertexNormal(v));
+			result.put(v.getKey(), new WB_Vector(getVertexNormal(v)));
 		}
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getMeanEdgeLength() {
 		double sum = 0;
 		final HE_EdgeIterator eItr = this.eItr();
@@ -1286,21 +2030,42 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sum / this.getNumberOfEdges();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection getNewSelection() {
 		return HE_Selection.getSelection(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_Selection getNewSelection(final String name) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		replaceSelection(name, sel);
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Network getNetwork() {
 		final WB_Network frame = new WB_Network(getVerticesAsCoord());
 		final HE_IntMap map = getVertexKeyToIndexMap();
@@ -1313,26 +2078,51 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return frame;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int getNumberOfEdges() {
 		return edges.size();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int getNumberOfFaces() {
 		return faces.size();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int getNumberOfHalfedges() {
 		return halfedges.size() + edges.size() + unpairedHalfedges.size();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int getNumberOfVertices() {
 		return vertices.size();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_CoordCollection getPoints() {
 		final List<WB_Coord> result = new WB_CoordList();
@@ -1340,8 +2130,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return WB_CoordCollection.getCollection(result);
 	}
 
-	public List<WB_Polygon> getPolygonList() {
-		final List<WB_Polygon> result = new WB_List<>();
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_List<WB_Polygon> getPolygonList() {
+		final WB_List<WB_Polygon> result = new WB_List<>();
 		final HE_FaceIterator fItr = fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -1351,6 +2146,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Polygon[] getPolygons() {
 		final WB_Polygon[] result = new WB_Polygon[getNumberOfFaces()];
 		final HE_FaceIterator fItr = fItr();
@@ -1364,6 +2164,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Segment[] getSegments() {
 		final WB_Segment[] result = new WB_Segment[getNumberOfEdges()];
 		final Iterator<HE_Halfedge> eItr = eItr();
@@ -1377,6 +2182,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_Selection getSelection(final String name) {
 		final HE_Selection sel = selections.get(name);
 		if (sel == null) {
@@ -1386,6 +2197,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public String[] getSelectionNames() {
 		final String[] names = new String[selections.size()];
 		selections.keySet().toArray(names);
@@ -1393,6 +2209,9 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return names;
 	}
 
+	/**
+	 *
+	 */
 	public void selectionCheck() {
 		for (final Map.Entry<String, HE_Selection> entry : selections.entrySet()) {
 			final HE_Selection sel = entry.getValue();
@@ -1418,9 +2237,16 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
-	public List<HE_Face> getSharedFaces(final HE_Vertex v1, final HE_Vertex v2) {
-		final List<HE_Face> result = v1.getFaceStar();
-		final List<HE_Face> compare = v2.getFaceStar();
+	/**
+	 *
+	 *
+	 * @param v1
+	 * @param v2
+	 * @return
+	 */
+	public HE_FaceList getSharedFaces(final HE_Vertex v1, final HE_Vertex v2) {
+		final HE_FaceList result = v1.getFaceStar();
+		final HE_FaceList compare = v2.getFaceStar();
 		final Iterator<HE_Face> it = result.iterator();
 		while (it.hasNext()) {
 			if (!compare.contains(it.next())) {
@@ -1430,6 +2256,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int[] getTriangles() {
 		if (triangles == null) {
@@ -1449,16 +2280,32 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return triangles;
 	}
 
-	public List<HE_Halfedge> getUnpairedHalfedges() {
-		final List<HE_Halfedge> halfedges = new HE_HalfedgeList();
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_HalfedgeList getUnpairedHalfedges() {
+		final HE_HalfedgeList halfedges = new HE_HalfedgeList();
 		halfedges.addAll(this.unpairedHalfedges);
 		return halfedges;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public WB_Coord getVertex(final int i) {
 		return getVertexWithIndex(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getVertexColors() {
 		final int[] result = new int[getNumberOfVertices()];
 		final Iterator<HE_Vertex> vItr = vItr();
@@ -1472,6 +2319,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getVertexInternalLabels() {
 		final int[] result = new int[getNumberOfVertices()];
 		final Iterator<HE_Vertex> vItr = vItr();
@@ -1485,6 +2337,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_IntMap getVertexKeyToIndexMap() {
 		final HE_IntMap map = new HE_IntMap();
 		int i = 0;
@@ -1496,23 +2353,43 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return map;
 	}
 
-	public WB_Vector getVertexNormal(final int i) {
-		return HE_MeshOp.getVertexNormal(getVertexWithIndex(i));
+	/**
+	 *
+	 * @param v
+	 * @return
+	 */
+	public WB_Coord getVertexNormal(final HE_Vertex v) {
+		WB_Coord normal = getVectorAttributeForElement(v, "vertexNormal");
+		if (normal == null) {
+			normal = HE_MeshOp.getVertexNormal(v);
+			setVectorAttribute(v, "vertexNormal", normal);
+		}
+		return normal;
 	}
 
-	public WB_Vector[] getVertexNormals() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_VectorCollection getVertexNormals() {
 		final WB_Vector[] result = new WB_Vector[getNumberOfVertices()];
 		int i = 0;
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			result[i] = HE_MeshOp.getVertexNormal(v);
+			result[i] = new WB_Vector(getVertexNormal(v));
 			i++;
 		}
-		return result;
+		return WB_VectorCollection.getCollection(result);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_KDTree3D<WB_Coord, Long> getVertexTree() {
 		final WB_KDTree3D<WB_Coord, Long> tree = new WB_KDTree3D<>();
 		HE_Vertex v;
@@ -1524,6 +2401,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return tree;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getVertexLabels() {
 		final int[] result = new int[getNumberOfVertices()];
 		final Iterator<HE_Vertex> vItr = vItr();
@@ -1537,6 +2419,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean[] getVertexVisibility() {
 		final boolean[] result = new boolean[getNumberOfVertices()];
 		final Iterator<HE_Vertex> vItr = vItr();
@@ -1550,6 +2437,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public HE_Vertex getVertexWithIndex(final int i) {
 		if (i < 0 || i >= vertices.size()) {
@@ -1558,6 +2451,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return vertices.getWithIndex(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public WB_Point getPositionWithIndex(final int i) {
 		if (i < 0 || i >= vertices.size()) {
 			throw new IndexOutOfBoundsException("Requested vertex index " + i + "not in range.");
@@ -1565,16 +2464,32 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return vertices.getWithIndex(i).getPosition();
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public HE_Vertex getVertexWithKey(final long key) {
 		return vertices.getWithKey(key);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
-	public List<HE_Vertex> getVertices() {
+	public HE_VertexList getVertices() {
 		return new HE_VertexList(vertices.getObjects());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_Vertex[] getVerticesAsArray() {
 		final HE_Vertex[] vertices = new HE_Vertex[getNumberOfVertices()];
@@ -1588,7 +2503,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return vertices;
 	}
 
-	public List<WB_Coord> getVerticesAsCoord() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public WB_CoordCollection getVerticesAsCoord() {
 		final WB_CoordList result = new WB_CoordList();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
@@ -1596,9 +2516,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 			v = vItr.next();
 			result.add(v);
 		}
-		return result.asUnmodifiable();
+		return WB_CoordCollection.getCollection(result);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double[][] getVerticesAsDouble() {
 		final double[][] result = new double[getNumberOfVertices()][3];
 		int i = 0;
@@ -1614,6 +2539,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public float[][] getVerticesAsFloat() {
 		final float[][] result = new float[getNumberOfVertices()][3];
 		int i = 0;
@@ -1629,15 +2559,32 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_HalfedgeIterator heItr() {
 		return HE_HalfedgeIterator.getIterator(edges, halfedges, unpairedHalfedges);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isFinished() {
 		return finished;
 	}
 
+	/**
+	 *
+	 *
+	 * @param partition1
+	 * @param partition2
+	 * @return
+	 */
 	boolean isNeighbor(final HE_RAS<HE_Face> partition1, final HE_RAS<HE_Face> partition2) {
 		HE_Halfedge he1, he2;
 		HE_Vertex v1;
@@ -1663,10 +2610,21 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return false;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isSurface() {
 		return this.getAllBoundaryHalfedges().size() > 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param modifier
+	 * @return
+	 */
 	@Override
 	public HE_Mesh modify(final HEM_Modifier modifier) {
 		if (finished) {
@@ -1678,10 +2636,23 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param modifier
+	 */
 	public void modifyThreaded(final HEM_Modifier modifier) {
 		tasks.add(new ModifierThread(modifier, this));
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public HE_Mesh move(final double x, final double y, final double z) {
 		final HE_Mesh result = copy();
 		final Iterator<HE_Vertex> vItr = result.vItr();
@@ -1692,10 +2663,24 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public HE_Mesh move(final WB_Coord v) {
 		return move(v.xd(), v.yd(), v.zd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public HE_Mesh moveSelf(final double x, final double y, final double z) {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
@@ -1705,10 +2690,24 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public HE_Mesh moveSelf(final WB_Coord v) {
 		return moveSelf(v.xd(), v.yd(), v.zd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public HE_Mesh moveTo(final double x, final double y, final double z) {
 		final HE_Mesh result = copy();
 		final WB_Point center = HE_MeshOp.getCenter(result);
@@ -1720,10 +2719,24 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public HE_Mesh moveTo(final WB_Coord v) {
 		return moveTo(v.xd(), v.yd(), v.zd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public HE_Mesh moveToSelf(final double x, final double y, final double z) {
 		final WB_Point center = HE_MeshOp.getCenter(this);
 		final Iterator<HE_Vertex> vItr = vItr();
@@ -1734,10 +2747,21 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public HE_Mesh moveToSelf(final WB_Coord v) {
 		return moveToSelf(v.xd(), v.yd(), v.zd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 */
 	@Override
 	public void remove(final HE_Face f) {
 		faces.remove(f);
@@ -1747,6 +2771,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		removeElementFromAttributes(f);
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 */
 	@Override
 	public void remove(final HE_Halfedge he) {
 		edges.remove(he);
@@ -1758,6 +2787,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		removeElementFromAttributes(he);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 */
 	@Override
 	public void remove(final HE_Vertex v) {
 		vertices.remove(v);
@@ -1767,6 +2801,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		removeElementFromAttributes(v);
 	}
 
+	/**
+	 *
+	 *
+	 * @param el
+	 */
 	@SuppressWarnings("rawtypes")
 	void removeElementFromAttributes(final HE_Element el) {
 		for (final HE_Attribute attribute : attributes.values()) {
@@ -1789,6 +2828,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param edges
+	 */
 	@Override
 	public void removeEdges(final Collection<? extends HE_Halfedge> edges) {
 		for (final HE_Halfedge e : edges) {
@@ -1796,6 +2840,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param edges
+	 */
 	@Override
 	public void removeEdges(final HE_Halfedge[] edges) {
 		for (final HE_Halfedge edge : edges) {
@@ -1803,6 +2852,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param faces
+	 */
 	@Override
 	public void removeFaces(final Collection<? extends HE_Face> faces) {
 		for (final HE_Face f : faces) {
@@ -1810,6 +2864,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param faces
+	 */
 	@Override
 	public void removeFaces(final HE_Face[] faces) {
 		for (final HE_Face face : faces) {
@@ -1817,6 +2876,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param halfedges
+	 */
 	@Override
 	public void removeHalfedges(final Collection<? extends HE_Halfedge> halfedges) {
 		for (final HE_Halfedge he : halfedges) {
@@ -1824,6 +2888,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param halfedges
+	 */
 	@Override
 	public void removeHalfedges(final HE_Halfedge[] halfedges) {
 		for (final HE_Halfedge halfedge : halfedges) {
@@ -1831,12 +2900,23 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 */
 	void removeNoSelectionCheck(final HE_Halfedge he) {
 		edges.remove(he);
 		halfedges.remove(he);
 		unpairedHalfedges.remove(he);
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_Selection removeSelection(final String name) {
 		final HE_Selection prevsel = selections.remove(name);
 		if (prevsel == null) {
@@ -1847,6 +2927,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return prevsel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param vertices
+	 */
 	@Override
 	public void removeVertices(final Collection<? extends HE_Vertex> vertices) {
 		for (final HE_Vertex v : vertices) {
@@ -1854,6 +2939,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param vertices
+	 */
 	@Override
 	public void removeVertices(final HE_Vertex[] vertices) {
 		for (final HE_Vertex vertice : vertices) {
@@ -1861,6 +2951,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param from
+	 * @param to
+	 * @return
+	 */
 	public boolean renameSelection(final String from, final String to) {
 		final HE_Selection sel = removeSelection(from);
 		if (sel == null) {
@@ -1872,11 +2969,21 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return true;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	private void replaceFaces(final HE_Mesh mesh) {
 		clearFaces();
 		addFaces(mesh.faces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	private void replaceHalfedges(final HE_Mesh mesh) {
 		clearHalfedges();
 		final HE_HalfedgeIterator heItr = mesh.heItr();
@@ -1885,6 +2992,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param machine
+	 * @param sel
+	 * @return
+	 */
 	HE_Selection replaceSelection(final String name, final HE_Machine machine, final HE_Selection sel) {
 		if (sel.getParent() == this && sel != null) {
 			sel.createdBy = machine.getName();
@@ -1905,6 +3020,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param sel
+	 * @return
+	 */
 	public HE_Selection replaceSelection(final String name, final HE_Selection sel) {
 		if (sel.getParent() == this && sel != null) {
 			final HE_Selection prevsel = selections.get(name);
@@ -1924,11 +3046,19 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	private void replaceVertices(final HE_Mesh mesh) {
 		clearVertices();
 		addVertices(mesh.vertices);
 	}
 
+	/**
+	 *
+	 */
 	protected void resetEdgeInternalLabels() {
 		final Iterator<HE_Halfedge> eItr = eItr();
 		while (eItr.hasNext()) {
@@ -1936,6 +3066,9 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void resetEdgeLabels() {
 		final Iterator<HE_Halfedge> eItr = eItr();
 		while (eItr.hasNext()) {
@@ -1943,6 +3076,9 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	protected void resetFaceInternalLabels() {
 		final HE_FaceIterator fItr = fItr();
 		while (fItr.hasNext()) {
@@ -1950,6 +3086,9 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void resetFaceLabels() {
 		final HE_FaceIterator fItr = fItr();
 		while (fItr.hasNext()) {
@@ -1957,6 +3096,9 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	protected void resetHalfedgeInternalLabels() {
 		final Iterator<HE_Halfedge> heItr = heItr();
 		while (heItr.hasNext()) {
@@ -1964,6 +3106,9 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void resetHalfedgeLabels() {
 		final Iterator<HE_Halfedge> heItr = heItr();
 		while (heItr.hasNext()) {
@@ -1971,18 +3116,27 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	protected void resetInternalLabels() {
 		resetVertexInternalLabels();
 		resetFaceInternalLabels();
 		resetHalfedgeInternalLabels();
 	}
 
+	/**
+	 *
+	 */
 	public void resetLabels() {
 		resetVertexLabels();
 		resetFaceLabels();
 		resetHalfedgeLabels();
 	}
 
+	/**
+	 *
+	 */
 	protected void resetVertexInternalLabels() {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
@@ -1990,6 +3144,9 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void resetVertexLabels() {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
@@ -1997,6 +3154,18 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param px
+	 * @param py
+	 * @param pz
+	 * @param ax
+	 * @param ay
+	 * @param az
+	 * @return
+	 */
 	public HE_Mesh rotateAboutAxis(final double angle, final double px, final double py, final double pz,
 			final double ax, final double ay, final double az) {
 		final HE_Mesh result = copy();
@@ -2012,6 +3181,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param p
+	 * @param a
+	 * @return
+	 */
 	public HE_Mesh rotateAboutAxis(final double angle, final WB_Coord p, final WB_Coord a) {
 		final HE_Mesh result = copy();
 		HE_Vertex v;
@@ -2026,6 +3203,18 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param p1x
+	 * @param p1y
+	 * @param p1z
+	 * @param p2x
+	 * @param p2y
+	 * @param p2z
+	 * @return
+	 */
 	public HE_Mesh rotateAboutAxis2P(final double angle, final double p1x, final double p1y, final double p1z,
 			final double p2x, final double p2y, final double p2z) {
 		final HE_Mesh result = copy();
@@ -2041,6 +3230,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	public HE_Mesh rotateAboutAxis2P(final double angle, final WB_Coord p1, final WB_Coord p2) {
 		final HE_Mesh result = copy();
 		HE_Vertex v;
@@ -2055,6 +3252,18 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param p1x
+	 * @param p1y
+	 * @param p1z
+	 * @param p2x
+	 * @param p2y
+	 * @param p2z
+	 * @return
+	 */
 	public HE_Mesh rotateAboutAxis2PSelf(final double angle, final double p1x, final double p1y, final double p1z,
 			final double p2x, final double p2y, final double p2z) {
 		HE_Vertex v;
@@ -2069,6 +3278,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	public HE_Mesh rotateAboutAxis2PSelf(final double angle, final WB_Coord p1, final WB_Coord p2) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
@@ -2082,6 +3299,18 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param px
+	 * @param py
+	 * @param pz
+	 * @param ax
+	 * @param ay
+	 * @param az
+	 * @return
+	 */
 	public HE_Mesh rotateAboutAxisSelf(final double angle, final double px, final double py, final double pz,
 			final double ax, final double ay, final double az) {
 		HE_Vertex v;
@@ -2096,6 +3325,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param p
+	 * @param a
+	 * @return
+	 */
 	public HE_Mesh rotateAboutAxisSelf(final double angle, final WB_Coord p, final WB_Coord a) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
@@ -2109,22 +3346,63 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param ax
+	 * @param ay
+	 * @param az
+	 * @return
+	 */
 	public HE_Mesh rotateAboutCenter(final double angle, final double ax, final double ay, final double az) {
 		return rotateAboutAxis(angle, HE_MeshOp.getCenter(this), new WB_Vector(ax, ay, az));
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param a
+	 * @return
+	 */
 	public HE_Mesh rotateAboutCenter(final double angle, final WB_Coord a) {
 		return rotateAboutAxis(angle, HE_MeshOp.getCenter(this), a);
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param ax
+	 * @param ay
+	 * @param az
+	 * @return
+	 */
 	public HE_Mesh rotateAboutCenterSelf(final double angle, final double ax, final double ay, final double az) {
 		return rotateAboutAxisSelf(angle, HE_MeshOp.getCenter(this), new WB_Vector(ax, ay, az));
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param a
+	 * @return
+	 */
 	public HE_Mesh rotateAboutCenterSelf(final double angle, final WB_Coord a) {
 		return rotateAboutAxisSelf(angle, HE_MeshOp.getCenter(this), a);
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param ax
+	 * @param ay
+	 * @param az
+	 * @return
+	 */
 	public HE_Mesh rotateAboutOrigin(final double angle, final double ax, final double ay, final double az) {
 		final HE_Mesh result = copy();
 		HE_Vertex v;
@@ -2139,6 +3417,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param a
+	 * @return
+	 */
 	public HE_Mesh rotateAboutOrigin(final double angle, final WB_Coord a) {
 		final HE_Mesh result = copy();
 		HE_Vertex v;
@@ -2153,6 +3438,15 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param ax
+	 * @param ay
+	 * @param az
+	 * @return
+	 */
 	public HE_Mesh rotateAboutOriginSelf(final double angle, final double ax, final double ay, final double az) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
@@ -2166,6 +3460,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param a
+	 * @return
+	 */
 	public HE_Mesh rotateAboutOriginSelf(final double angle, final WB_Coord a) {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
@@ -2179,10 +3480,24 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param scaleFactor
+	 * @return
+	 */
 	public HE_Mesh scale(final double scaleFactor) {
 		return scale(scaleFactor, scaleFactor, scaleFactor);
 	}
 
+	/**
+	 *
+	 *
+	 * @param scaleFactorx
+	 * @param scaleFactory
+	 * @param scaleFactorz
+	 * @return
+	 */
 	public HE_Mesh scale(final double scaleFactorx, final double scaleFactory, final double scaleFactorz) {
 		final HE_Mesh result = copy();
 		final WB_Point center = HE_MeshOp.getCenter(result);
@@ -2198,6 +3513,15 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param scaleFactorx
+	 * @param scaleFactory
+	 * @param scaleFactorz
+	 * @param c
+	 * @return
+	 */
 	public HE_Mesh scale(final double scaleFactorx, final double scaleFactory, final double scaleFactorz,
 			final WB_Coord c) {
 		final HE_Mesh result = copy();
@@ -2212,14 +3536,35 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param scaleFactor
+	 * @param c
+	 * @return
+	 */
 	public HE_Mesh scale(final double scaleFactor, final WB_Coord c) {
 		return scale(scaleFactor, scaleFactor, scaleFactor, c);
 	}
 
+	/**
+	 *
+	 *
+	 * @param scaleFactor
+	 * @return
+	 */
 	public HE_Mesh scaleSelf(final double scaleFactor) {
 		return scaleSelf(scaleFactor, scaleFactor, scaleFactor);
 	}
 
+	/**
+	 *
+	 *
+	 * @param scaleFactorx
+	 * @param scaleFactory
+	 * @param scaleFactorz
+	 * @return
+	 */
 	public HE_Mesh scaleSelf(final double scaleFactorx, final double scaleFactory, final double scaleFactorz) {
 		final WB_Point center = HE_MeshOp.getCenter(this);
 		HE_Vertex v;
@@ -2234,6 +3579,15 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param scaleFactorx
+	 * @param scaleFactory
+	 * @param scaleFactorz
+	 * @param c
+	 * @return
+	 */
 	public HE_Mesh scaleSelf(final double scaleFactorx, final double scaleFactory, final double scaleFactorz,
 			final WB_Coord c) {
 		HE_Vertex v;
@@ -2247,10 +3601,22 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param scaleFactor
+	 * @param c
+	 * @return
+	 */
 	public HE_Mesh scaleSelf(final double scaleFactor, final WB_Coord c) {
 		return scaleSelf(scaleFactor, scaleFactor, scaleFactor, c);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection selectAll() {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		sel.addFaces(this.faces);
@@ -2259,6 +3625,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_Selection selectAll(final String name) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		sel.addFaces(this.faces);
@@ -2268,12 +3640,23 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection selectAllEdges() {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		sel.addEdges(this.edges);
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_Selection selectAllEdges(final String name) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		sel.addEdges(this.edges);
@@ -2281,12 +3664,23 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection selectAllFaces() {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		sel.addFaces(this.faces);
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_Selection selectAllFaces(final String name) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		sel.addFaces(this.faces);
@@ -2294,6 +3688,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param start
+	 * @param stop
+	 * @return
+	 */
 	public HE_Selection selectFaces(final int start, final int stop) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		for (int i = start; i < stop; i++) {
@@ -2302,6 +3703,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param start
+	 * @param stop
+	 * @return
+	 */
 	public HE_Selection selectFaces(final String name, final int start, final int stop) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		for (int i = start; i < stop; i++) {
@@ -2311,6 +3720,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection selectAllHalfedges() {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		sel.addHalfedges(this.edges);
@@ -2319,6 +3733,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_Selection selectAllHalfedges(final String name) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		sel.addHalfedges(this.edges);
@@ -2328,6 +3748,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection selectAllInnerBoundaryHalfedges() {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final Iterator<HE_Halfedge> heItr = this.heItr();
@@ -2341,6 +3766,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_Selection selectAllInnerBoundaryHalfedges(final String name) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final Iterator<HE_Halfedge> heItr = this.heItr();
@@ -2355,6 +3786,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection selectAllOuterBoundaryHalfedges() {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final Iterator<HE_Halfedge> heItr = this.heItr();
@@ -2368,6 +3804,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_Selection selectAllOuterBoundaryHalfedges(final String name) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final Iterator<HE_Halfedge> heItr = this.heItr();
@@ -2382,12 +3824,23 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection selectAllVertices() {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		sel.addVertices(this.vertices);
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_Selection selectAllVertices(final String name) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		sel.addVertices(this.vertices);
@@ -2395,6 +3848,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectBackEdges(final String name, final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_EdgeIterator eitr = this.eItr();
@@ -2409,6 +3869,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectBackEdges(final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_EdgeIterator eitr = this.eItr();
@@ -2422,6 +3888,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectBackFaces(final String name, final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_FaceIterator fitr = this.fItr();
@@ -2436,6 +3909,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectBackFaces(final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_FaceIterator fitr = this.fItr();
@@ -2449,13 +3928,20 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectBackVertices(final String name, final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_VertexIterator vitr = this.vItr();
 		HE_Vertex v;
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			if (WB_GeometryOp3D.classifyPointToPlane3D(v, P) == WB_Classification.BACK) {
+			if (WB_GeometryOp.classifyPointToPlane3D(v, P) == WB_Classification.BACK) {
 				sel.add(v);
 			}
 		}
@@ -2463,19 +3949,30 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectBackVertices(final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_VertexIterator vitr = this.vItr();
 		HE_Vertex v;
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			if (WB_GeometryOp3D.classifyPointToPlane3D(v, P) == WB_Classification.BACK) {
+			if (WB_GeometryOp.classifyPointToPlane3D(v, P) == WB_Classification.BACK) {
 				sel.add(v);
 			}
 		}
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection selectBoundaryEdges() {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_EdgeIterator eItr = this.eItr();
@@ -2489,6 +3986,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_Selection selectBoundaryEdges(final String name) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_EdgeIterator eItr = this.eItr();
@@ -2503,6 +4006,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection selectBoundaryFaces() {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final Iterator<HE_Halfedge> heItr = this.heItr();
@@ -2516,6 +4024,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_Selection selectBoundaryFaces(final String name) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final Iterator<HE_Halfedge> heItr = this.heItr();
@@ -2530,6 +4044,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection selectBoundaryVertices() {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final Iterator<HE_Halfedge> heItr = this.heItr();
@@ -2543,6 +4062,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_Selection selectBoundaryVertices(final String name) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final Iterator<HE_Halfedge> heItr = this.heItr();
@@ -2557,6 +4082,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectCrossingEdges(final String name, final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_EdgeIterator eitr = this.eItr();
@@ -2571,6 +4103,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectCrossingEdges(final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_EdgeIterator eitr = this.eItr();
@@ -2584,6 +4122,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectCrossingFaces(final String name, final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_FaceIterator fitr = this.fItr();
@@ -2598,6 +4143,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectCrossingFaces(final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_FaceIterator fitr = this.fItr();
@@ -2611,6 +4162,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectEdgesWithLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge e;
@@ -2624,6 +4181,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectEdgesWithLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge e;
@@ -2638,6 +4202,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectEdgesWithOtherInternalLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge e;
@@ -2651,6 +4221,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectEdgesWithOtherInternalLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge e;
@@ -2665,6 +4242,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectEdgesWithOtherLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge e;
@@ -2678,6 +4261,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectEdgesWithOtherLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge e;
@@ -2692,6 +4282,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectEdgesWithInternalLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge e;
@@ -2705,6 +4301,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectEdgesWithInternalLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge e;
@@ -2719,6 +4322,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectFacesWithInternalLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Face f;
@@ -2732,6 +4341,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectFacesWithInternalLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Face f;
@@ -2746,6 +4362,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectFacesWithLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Face f;
@@ -2759,6 +4381,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectFacesWithLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Face f;
@@ -2773,6 +4402,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param v
+	 * @return
+	 */
 	public HE_Selection selectFacesWithNormal(final String name, final WB_Coord v) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final WB_Vector w = new WB_Vector(v);
@@ -2781,7 +4417,7 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		final HE_FaceIterator fItr = this.fItr();
 		while (fItr.hasNext()) {
 			f = fItr.next();
-			if (WB_Vector.dot(HE_MeshOp.getFaceNormal(f), v) > 1.0 - WB_Epsilon.EPSILON) {
+			if (WB_Vector.dot(getFaceNormal(f), v) > 1.0 - WB_Epsilon.EPSILON) {
 				sel.add(f);
 			}
 		}
@@ -2789,6 +4425,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param n
+	 * @param ta
+	 * @return
+	 */
 	public HE_Selection selectFacesWithNormal(final String name, final WB_Coord n, final double ta) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final WB_Vector nn = new WB_Vector(n);
@@ -2798,7 +4442,7 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		HE_Face f;
 		while (fItr.hasNext()) {
 			f = fItr.next();
-			if (nn.dot(HE_MeshOp.getFaceNormal(f)) > cta) {
+			if (nn.dot(getFaceNormal(f)) > cta) {
 				sel.add(f);
 			}
 		}
@@ -2806,6 +4450,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public HE_Selection selectFacesWithNormal(final WB_Coord v) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final WB_Vector w = new WB_Vector(v);
@@ -2814,13 +4464,20 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		final HE_FaceIterator fItr = this.fItr();
 		while (fItr.hasNext()) {
 			f = fItr.next();
-			if (WB_Vector.dot(HE_MeshOp.getFaceNormal(f), v) > 1.0 - WB_Epsilon.EPSILON) {
+			if (WB_Vector.dot(getFaceNormal(f), v) > 1.0 - WB_Epsilon.EPSILON) {
 				sel.add(f);
 			}
 		}
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @param ta
+	 * @return
+	 */
 	public HE_Selection selectFacesWithNormal(final WB_Coord n, final double ta) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final WB_Vector nn = new WB_Vector(n);
@@ -2830,13 +4487,19 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		HE_Face f;
 		while (fItr.hasNext()) {
 			f = fItr.next();
-			if (nn.dot(HE_MeshOp.getFaceNormal(f)) > cta) {
+			if (nn.dot(getFaceNormal(f)) > cta) {
 				sel.add(f);
 			}
 		}
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectFacesWithOtherInternalLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Face f;
@@ -2850,6 +4513,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectFacesWithOtherInternalLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Face f;
@@ -2864,6 +4534,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectFacesWithOtherLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Face f;
@@ -2877,6 +4553,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectFacesWithOtherLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Face f;
@@ -2891,6 +4574,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectFrontEdges(final String name, final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_EdgeIterator eitr = this.eItr();
@@ -2905,6 +4595,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectFrontEdges(final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_EdgeIterator eitr = this.eItr();
@@ -2918,6 +4614,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectFrontFaces(final String name, final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_FaceIterator fitr = this.fItr();
@@ -2932,6 +4635,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectFrontFaces(final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_FaceIterator fitr = this.fItr();
@@ -2945,13 +4654,20 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectFrontVertices(final String name, final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_VertexIterator vitr = this.vItr();
 		HE_Vertex v;
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			if (WB_GeometryOp3D.classifyPointToPlane3D(v, P) == WB_Classification.FRONT) {
+			if (WB_GeometryOp.classifyPointToPlane3D(v, P) == WB_Classification.FRONT) {
 				sel.add(v);
 			}
 		}
@@ -2959,19 +4675,31 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectFrontVertices(final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_VertexIterator vitr = this.vItr();
 		HE_Vertex v;
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			if (WB_GeometryOp3D.classifyPointToPlane3D(v, P) == WB_Classification.FRONT) {
+			if (WB_GeometryOp.classifyPointToPlane3D(v, P) == WB_Classification.FRONT) {
 				sel.add(v);
 			}
 		}
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectHalfedgesWithLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge he;
@@ -2985,6 +4713,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectHalfedgesWithLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge he;
@@ -2999,6 +4734,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectHalfedgesWithOtherInternalLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge he;
@@ -3012,6 +4753,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectHalfedgesWithOtherInternalLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge he;
@@ -3026,6 +4774,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectHalfedgesWithOtherLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge he;
@@ -3039,6 +4793,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectHalfedgesWithOtherLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge he;
@@ -3053,6 +4814,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectHalfedgeWithInternalLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge he;
@@ -3066,6 +4833,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectHalfedgeWithInternalLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Halfedge he;
@@ -3080,13 +4854,20 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectOnVertices(final String name, final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_VertexIterator vitr = this.vItr();
 		HE_Vertex v;
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			if (WB_GeometryOp3D.classifyPointToPlane3D(v, P) == WB_Classification.ON) {
+			if (WB_GeometryOp.classifyPointToPlane3D(v, P) == WB_Classification.ON) {
 				sel.add(v);
 			}
 		}
@@ -3094,19 +4875,31 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public HE_Selection selectOnVertices(final WB_Plane P) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_VertexIterator vitr = this.vItr();
 		HE_Vertex v;
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			if (WB_GeometryOp3D.classifyPointToPlane3D(v, P) == WB_Classification.ON) {
+			if (WB_GeometryOp.classifyPointToPlane3D(v, P) == WB_Classification.ON) {
 				sel.add(v);
 			}
 		}
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HE_Selection selectRandomEdges(final double r) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_EdgeIterator eItr = this.eItr();
@@ -3122,6 +4915,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @param seed
+	 * @return
+	 */
 	public HE_Selection selectRandomEdges(final double r, final long seed) {
 		final WB_MTRandom random = new WB_MTRandom(seed);
 		final HE_Selection sel = HE_Selection.getSelection(this);
@@ -3138,6 +4938,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param r
+	 * @return
+	 */
 	public HE_Selection selectRandomEdges(final String name, final double r) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_EdgeIterator eItr = this.eItr();
@@ -3154,6 +4961,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param r
+	 * @param seed
+	 * @return
+	 */
 	public HE_Selection selectRandomEdges(final String name, final double r, final long seed) {
 		final WB_MTRandom random = new WB_MTRandom(seed);
 		final HE_Selection sel = HE_Selection.getSelection(this);
@@ -3171,6 +4986,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HE_Selection selectRandomFaces(final double r) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_FaceIterator fItr = this.fItr();
@@ -3186,6 +5007,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @param seed
+	 * @return
+	 */
 	public HE_Selection selectRandomFaces(final double r, final long seed) {
 		final WB_MTRandom random = new WB_MTRandom(seed);
 		final HE_Selection sel = HE_Selection.getSelection(this);
@@ -3202,6 +5030,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param r
+	 * @return
+	 */
 	public HE_Selection selectRandomFaces(final String name, final double r) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_FaceIterator fItr = this.fItr();
@@ -3218,6 +5053,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param r
+	 * @param seed
+	 * @return
+	 */
 	public HE_Selection selectRandomFaces(final String name, final double r, final long seed) {
 		final WB_MTRandom random = new WB_MTRandom(seed);
 		final HE_Selection sel = HE_Selection.getSelection(this);
@@ -3235,6 +5078,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HE_Selection selectRandomVertices(final double r) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_VertexIterator vItr = this.vItr();
@@ -3250,6 +5099,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @param seed
+	 * @return
+	 */
 	public HE_Selection selectRandomVertices(final double r, final long seed) {
 		final WB_MTRandom random = new WB_MTRandom(seed);
 		final HE_Selection sel = HE_Selection.getSelection(this);
@@ -3266,6 +5122,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param r
+	 * @return
+	 */
 	public HE_Selection selectRandomVertices(final String name, final double r) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		final HE_VertexIterator vItr = this.vItr();
@@ -3282,6 +5145,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param r
+	 * @param seed
+	 * @return
+	 */
 	public HE_Selection selectRandomVertices(final String name, final double r, final long seed) {
 		final WB_MTRandom random = new WB_MTRandom(seed);
 		final HE_Selection sel = HE_Selection.getSelection(this);
@@ -3299,6 +5170,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectVerticesWithInternalLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Vertex v;
@@ -3312,6 +5189,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectVerticesWithInternalLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Vertex v;
@@ -3326,6 +5210,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectVerticesWithLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Vertex v;
@@ -3339,6 +5229,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectVerticesWithLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Vertex v;
@@ -3353,6 +5250,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectVerticesWithOtherInternalLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Vertex v;
@@ -3366,6 +5269,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectVerticesWithOtherInternalLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Vertex v;
@@ -3380,6 +5290,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectVerticesWithOtherLabel(final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Vertex v;
@@ -3393,6 +5309,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public HE_Selection selectVerticesWithOtherLabel(final String name, final int label) {
 		final HE_Selection sel = HE_Selection.getSelection(this);
 		HE_Vertex v;
@@ -3407,6 +5330,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return sel;
 	}
 
+	/**
+	 *
+	 *
+	 * @param target
+	 */
 	public void set(final HE_Mesh target) {
 		final HE_Mesh result = target.copy();
 		replaceVertices(result);
@@ -3421,6 +5349,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		attributes = target.attributes;
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 */
 	protected void setEdgeInternalLabels(final int label) {
 		final Iterator<HE_Halfedge> eItr = eItr();
 		while (eItr.hasNext()) {
@@ -3428,6 +5361,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 */
 	public void setEdgeLabels(final int label) {
 		final Iterator<HE_Halfedge> eItr = eItr();
 		while (eItr.hasNext()) {
@@ -3435,6 +5373,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 * @param f
+	 */
 	public void setFace(final HE_Halfedge he, final HE_Face f) {
 		he.setFace(f);
 		if (he.getPair() != null) {
@@ -3442,6 +5386,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 */
 	public void setFaceColor(final int color) {
 		final HE_FaceIterator fitr = fItr();
 		while (fitr.hasNext()) {
@@ -3449,6 +5398,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 * @param i
+	 */
 	public void setFaceColorWithInternalLabel(final int color, final int i) {
 		final HE_FaceIterator fitr = fItr();
 		HE_Face f;
@@ -3460,6 +5415,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 * @param i
+	 */
 	public void setFaceColorWithOtherInternalLabel(final int color, final int i) {
 		final HE_FaceIterator fitr = fItr();
 		HE_Face f;
@@ -3471,6 +5432,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 * @param i
+	 */
 	public void setFaceColorWithOtherLabel(final int color, final int i) {
 		final HE_FaceIterator fitr = fItr();
 		HE_Face f;
@@ -3482,6 +5449,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 * @param i
+	 */
 	public void setFaceColorWithLabel(final int color, final int i) {
 		final HE_FaceIterator fitr = fItr();
 		HE_Face f;
@@ -3493,6 +5466,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 */
 	protected void setFaceInternalLabels(final int label) {
 		final HE_FaceIterator fItr = fItr();
 		while (fItr.hasNext()) {
@@ -3500,6 +5478,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 */
 	public void setFaceLabels(final int label) {
 		final HE_FaceIterator fItr = fItr();
 		while (fItr.hasNext()) {
@@ -3507,14 +5490,31 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @param he
+	 */
 	public void setHalfedge(final HE_Face f, final HE_Halfedge he) {
 		f.setHalfedge(he);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param he
+	 */
 	public void setHalfedge(final HE_Vertex v, final HE_Halfedge he) {
 		v.setHalfedge(he);
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 */
 	public void setHalfedgeColor(final int color) {
 		final HE_HalfedgeIterator heitr = heItr();
 		while (heitr.hasNext()) {
@@ -3522,6 +5522,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 * @param i
+	 */
 	public void setHalfedgeColorWithInternalLabel(final int color, final int i) {
 		final HE_HalfedgeIterator fitr = heItr();
 		HE_Halfedge f;
@@ -3533,6 +5539,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 * @param i
+	 */
 	public void setHalfedgeColorWithOtherInternalLabel(final int color, final int i) {
 		final HE_HalfedgeIterator heitr = heItr();
 		HE_Halfedge f;
@@ -3544,6 +5556,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 * @param i
+	 */
 	public void setHalfedgeColorWithOtherLabel(final int color, final int i) {
 		final HE_HalfedgeIterator heitr = heItr();
 		HE_Halfedge he;
@@ -3555,6 +5573,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 * @param i
+	 */
 	public void setHalfedgeColorWithLabel(final int color, final int i) {
 		final HE_HalfedgeIterator fitr = heItr();
 		HE_Halfedge f;
@@ -3566,6 +5590,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 */
 	protected void setHalfedgeInternalLabels(final int label) {
 		final Iterator<HE_Halfedge> heItr = heItr();
 		while (heItr.hasNext()) {
@@ -3573,6 +5602,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 */
 	public void setHalfedgeLabels(final int label) {
 		final Iterator<HE_Halfedge> heItr = heItr();
 		while (heItr.hasNext()) {
@@ -3580,16 +5614,32 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 */
 	@Override
 	public void setName(final String name) {
 		this.name = name;
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 * @param hen
+	 */
 	public void setNext(final HE_Halfedge he, final HE_Halfedge hen) {
 		he.setNext(hen);
 		hen.setPrev(he);
 	}
 
+	/**
+	 *
+	 *
+	 * @param target
+	 */
 	void setNoCopy(final HE_Mesh target) {
 		synchronized (this) {
 			replaceVertices(target);
@@ -3612,6 +5662,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param he1
+	 * @param he2
+	 */
 	public void setPair(final HE_Halfedge he1, final HE_Halfedge he2) {
 		removeNoSelectionCheck(he1);
 		removeNoSelectionCheck(he2);
@@ -3621,6 +5677,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		addDerivedElement(he2, he1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param he1
+	 * @param he2
+	 */
 	public void setPairNoSelectionCheck(final HE_Halfedge he1, final HE_Halfedge he2) {
 		removeNoSelectionCheck(he1);
 		removeNoSelectionCheck(he2);
@@ -3628,22 +5690,54 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		he2.setPair(he1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 * @param v
+	 */
 	public void setVertex(final HE_Halfedge he, final HE_Vertex v) {
 		he.setVertex(v);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param x
+	 * @param y
+	 */
 	public void setVertex(final HE_Vertex v, final double x, final double y) {
 		v.set(x, y);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public void setVertex(final HE_Vertex v, final double x, final double y, final double z) {
 		v.set(x, y, z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param c
+	 */
 	public void setVertex(final HE_Vertex v, final WB_Coord c) {
 		v.set(c);
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 */
 	public void setVertexColor(final int color) {
 		final HE_VertexIterator vitr = vItr();
 		while (vitr.hasNext()) {
@@ -3651,6 +5745,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 * @param i
+	 */
 	public void setVertexColorWithInternalLabel(final int color, final int i) {
 		final HE_VertexIterator fitr = vItr();
 		HE_Vertex f;
@@ -3662,6 +5762,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 * @param i
+	 */
 	public void setVertexColorWithOtherInternalLabel(final int color, final int i) {
 		final HE_VertexIterator vitr = vItr();
 		HE_Vertex v;
@@ -3673,6 +5779,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 * @param i
+	 */
 	public void setVertexColorWithOtherLabel(final int color, final int i) {
 		final HE_VertexIterator fitr = vItr();
 		HE_Vertex f;
@@ -3684,6 +5796,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param color
+	 * @param i
+	 */
 	public void setVertexColorWithLabel(final int color, final int i) {
 		final HE_VertexIterator fitr = vItr();
 		HE_Vertex f;
@@ -3695,6 +5813,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 */
 	protected void setVertexInternalLabels(final int label) {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
@@ -3702,6 +5825,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param label
+	 */
 	public void setVertexLabels(final int label) {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
@@ -3709,6 +5837,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param index
+	 * @param x
+	 * @param y
+	 */
 	public void setVertexWithIndex(final int index, final double x, final double y) {
 		final HE_Vertex v = getVertexWithIndex(index);
 		if (v == null) {
@@ -3717,6 +5852,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		v.set(x, y);
 	}
 
+	/**
+	 *
+	 *
+	 * @param index
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public void setVertexWithIndex(final int index, final double x, final double y, final double z) {
 		final HE_Vertex v = getVertexWithIndex(index);
 		if (v == null) {
@@ -3725,6 +5868,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		v.set(x, y, z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param index
+	 * @param c
+	 */
 	public void setVertexWithIndex(final int index, final WB_Coord c) {
 		final HE_Vertex v = getVertexWithIndex(index);
 		if (v == null) {
@@ -3733,6 +5882,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		v.set(c);
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @param x
+	 * @param y
+	 */
 	public void setVertexWithKey(final long key, final double x, final double y) {
 		final HE_Vertex v = getVertexWithKey(key);
 		if (v == null) {
@@ -3741,6 +5897,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		v.set(x, y);
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public void setVertexWithKey(final long key, final double x, final double y, final double z) {
 		final HE_Vertex v = getVertexWithKey(key);
 		if (v == null) {
@@ -3749,6 +5913,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		v.set(x, y, z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @param c
+	 */
 	public void setVertexWithKey(final long key, final WB_Coord c) {
 		final HE_Vertex v = getVertexWithKey(key);
 		if (v == null) {
@@ -3757,6 +5927,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		v.set(c);
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 */
 	public void setVerticesFromDouble(final double[][] values) {
 		if (values.length != getNumberOfVertices()) {
 			return;
@@ -3772,6 +5947,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		clearPrecomputed();
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 */
 	public void setVerticesFromFloat(final double[] values) {
 		if (values.length != 3 * getNumberOfVertices()) {
 			return;
@@ -3787,6 +5967,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		clearPrecomputed();
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 */
 	public void setVerticesFromFloat(final float[] values) {
 		if (values.length != 3 * getNumberOfVertices()) {
 			return;
@@ -3802,6 +5987,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		clearPrecomputed();
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 */
 	public void setVerticesFromFloat(final float[][] values) {
 		if (values.length != getNumberOfVertices()) {
 			return;
@@ -3817,6 +6007,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		clearPrecomputed();
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 */
 	public void setVerticesFromFloat(final int[] values) {
 		if (values.length != 3 * getNumberOfVertices()) {
 			return;
@@ -3832,6 +6027,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		clearPrecomputed();
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 */
 	public void setVerticesFromInt(final int[][] values) {
 		if (values.length != getNumberOfVertices()) {
 			return;
@@ -3847,6 +6047,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		clearPrecomputed();
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 */
 	public void setVerticesFromPoint(final List<? extends WB_Coord> values) {
 		if (values.size() != getNumberOfVertices()) {
 			return;
@@ -3862,6 +6067,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		clearPrecomputed();
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 */
 	public void setVerticesFromPoint(final WB_Coord[] values) {
 		if (values.length != getNumberOfVertices()) {
 			return;
@@ -3877,6 +6087,12 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		clearPrecomputed();
 	}
 
+	/**
+	 *
+	 *
+	 * @param simplifier
+	 * @return
+	 */
 	@Override
 	public HE_Mesh simplify(final HES_Simplifier simplifier) {
 		if (finished) {
@@ -3888,10 +6104,18 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param simplifier
+	 */
 	public void simplifyThreaded(final HES_Simplifier simplifier) {
 		tasks.add(new SimplifierThread(simplifier, this));
 	}
 
+	/**
+	 *
+	 */
 	public void smooth() {
 		if (finished) {
 			subdivide(new HES_CatmullClark());
@@ -3900,6 +6124,11 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param rep
+	 */
 	public void smooth(final int rep) {
 		if (finished) {
 			subdivide(new HES_CatmullClark(), rep);
@@ -3910,32 +6139,47 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void sort() {
-		final List<HE_Face> sortedFaces = new HE_FaceList();
+		final HE_FaceList sortedFaces = new HE_FaceList();
 		sortedFaces.addAll(getFaces());
 		Collections.sort(sortedFaces);
 		clearFacesNoSelectionCheck();
 		addFaces(sortedFaces);
-		final List<HE_Vertex> sortedVertices = new HE_VertexList();
+		final HE_VertexList sortedVertices = new HE_VertexList();
 		sortedVertices.addAll(getVertices());
 		Collections.sort(sortedVertices);
 		clearVerticesNoSelectionCheck();
 		addVertices(sortedVertices);
 	}
 
+	/**
+	 *
+	 *
+	 * @param faceSort
+	 * @param vertexSort
+	 */
 	public void sort(final HE_FaceSort faceSort, final HE_VertexSort vertexSort) {
-		final List<HE_Face> sortedFaces = new HE_FaceList();
+		final HE_FaceList sortedFaces = new HE_FaceList();
 		sortedFaces.addAll(getFaces());
 		Collections.sort(sortedFaces);
 		clearFacesNoSelectionCheck();
 		addFaces(sortedFaces);
-		final List<HE_Vertex> sortedVertices = new HE_VertexList();
+		final HE_VertexList sortedVertices = new HE_VertexList();
 		sortedVertices.addAll(getVertices());
 		Collections.sort(sortedVertices);
 		clearVerticesNoSelectionCheck();
 		addVertices(sortedVertices);
 	}
 
+	/**
+	 *
+	 *
+	 * @param subdividor
+	 * @return
+	 */
 	@Override
 	public HE_Mesh subdivide(final HES_Subdividor subdividor) {
 		if (finished) {
@@ -3947,6 +6191,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param subdividor
+	 * @param rep
+	 * @return
+	 */
 	@Override
 	public HE_Mesh subdivide(final HES_Subdividor subdividor, final int rep) {
 		if (finished) {
@@ -3962,38 +6213,74 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param subdividor
+	 */
 	public void subdivideThreaded(final HES_Subdividor subdividor) {
 		tasks.add(new SubdividorThread(subdividor, this));
 	}
 
+	/**
+	 *
+	 *
+	 * @param subdividor
+	 * @param rep
+	 */
 	public void subdivideThreaded(final HES_Subdividor subdividor, final int rep) {
 		for (int i = 0; i < rep; i++) {
 			tasks.add(new SubdividorThread(subdividor, this));
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_SimpleMesh toSimpleMesh() {
 		return gf.createMesh(getVerticesAsCoord(), getFacesAsInt());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public String toString() {
 		final String s = "HE_Mesh key: " + getKey() + ". (" + getNumberOfVertices() + ", " + getNumberOfFaces() + ")";
 		return s;
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	public HE_Mesh transform(final WB_Transform3D T) {
 		return copy().modify(new HEM_Transform3D(T));
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	public HE_Mesh transformSelf(final WB_Transform3D T) {
 		return modify(new HEM_Transform3D(T));
 	}
 
+	/**
+	 *
+	 */
 	public void uncapBoundaryHalfedges() {
 		tracker.setStartStatus(this, "Uncapping boundary halfedges.");
 		final WB_ProgressCounter counter = new WB_ProgressCounter(getNumberOfHalfedges(), 10);
-		final List<HE_Halfedge> halfedges = getHalfedges();
+		final HE_HalfedgeList halfedges = getHalfedges();
 		final HE_RAS<HE_Halfedge> remove = new HE_RAS<>();
 		for (final HE_Halfedge he : halfedges) {
 			if (he.getFace() == null) {
@@ -4008,6 +6295,9 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		tracker.setStopStatus(this, "Removing outer boundary halfedges.");
 	}
 
+	/**
+	 *
+	 */
 	public void update() {
 		if (future == null) {
 			if (tasks.size() > 0) {
@@ -4040,15 +6330,28 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean validate() {
 		return HET_Diagnosis.validate(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_VertexIterator vItr() {
 		return new HE_VertexIterator(vertices);
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void stats() {
 		System.out.println("HE_Mesh: " + getKey());
@@ -4059,14 +6362,30 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		System.out.println("Number of boundary halfedges: " + this.getAllBoundaryHalfedges().size());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_AABB getAABB() {
 		return HE_MeshOp.getAABB(this);
 	}
 
+	/**
+	 *
+	 */
 	public void triangulate() {
 		HE_MeshOp.triangulate(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param defaultValue
+	 * @param persistent
+	 * @return
+	 */
 	public HE_IntegerAttribute addIntegerAttribute(final String name, final int defaultValue,
 			final boolean persistent) {
 		final HE_IntegerAttribute att = new HE_IntegerAttribute(name, defaultValue, persistent);
@@ -4074,12 +6393,28 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return att;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param defaultValue
+	 * @param persistent
+	 * @return
+	 */
 	public HE_FloatAttribute addFloatAttribute(final String name, final float defaultValue, final boolean persistent) {
 		final HE_FloatAttribute att = new HE_FloatAttribute(name, defaultValue, persistent);
 		floatAttributes.put(name, att);
 		return att;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param defaultValue
+	 * @param persistent
+	 * @return
+	 */
 	public HE_DoubleAttribute addDoubleAttribute(final String name, final double defaultValue,
 			final boolean persistent) {
 		final HE_DoubleAttribute att = new HE_DoubleAttribute(name, defaultValue, persistent);
@@ -4087,6 +6422,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return att;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param defaultValue
+	 * @param persistent
+	 * @return
+	 */
 	public HE_BooleanAttribute addBooleanAttribute(final String name, final boolean defaultValue,
 			final boolean persistent) {
 		final HE_BooleanAttribute att = new HE_BooleanAttribute(name, defaultValue, persistent);
@@ -4094,6 +6437,14 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return att;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param defaultValue
+	 * @param persistent
+	 * @return
+	 */
 	public HE_StringAttribute addStringAttribute(final String name, final String defaultValue,
 			final boolean persistent) {
 		final HE_StringAttribute att = new HE_StringAttribute(name, defaultValue, persistent);
@@ -4101,6 +6452,42 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return att;
 	}
 
+	/**
+	 *
+	 * @param name
+	 * @param defaultValue
+	 * @param persistent
+	 * @return
+	 */
+	public HE_PointAttribute addPointAttribute(final String name, final WB_Coord defaultValue,
+			final boolean persistent) {
+		final HE_PointAttribute att = new HE_PointAttribute(name, defaultValue, persistent);
+		pointAttributes.put(name, att);
+		return att;
+	}
+
+	/**
+	 *
+	 * @param name
+	 * @param defaultValue
+	 * @param persistent
+	 * @return
+	 */
+	public HE_VectorAttribute addVectorAttribute(final String name, final WB_Coord defaultValue,
+			final boolean persistent) {
+		final HE_VectorAttribute att = new HE_VectorAttribute(name, defaultValue, persistent);
+		vectorAttributes.put(name, att);
+		return att;
+	}
+
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param defaultValue
+	 * @param persistent
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public HE_Attribute addAttribute(final String name, final Object defaultValue, final boolean persistent) {
 		final HE_Attribute att = new HE_Attribute(name, defaultValue, persistent);
@@ -4108,6 +6495,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return att;
 	}
 
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @param value
+	 */
 	public void setIntegerAttribute(final HE_Element element, final String name, final int value) {
 		final HE_IntegerAttribute attribute = integerAttributes.get(name);
 		if (attribute == null) {
@@ -4116,6 +6510,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		attribute.set(element.getKey(), value);
 	}
 
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @param value
+	 */
 	public void setFloatAttribute(final HE_Element element, final String name, final float value) {
 		final HE_FloatAttribute attribute = floatAttributes.get(name);
 		if (attribute == null) {
@@ -4124,6 +6525,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		attribute.set(element.getKey(), value);
 	}
 
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @param value
+	 */
 	public void setDoubleAttribute(final HE_Element element, final String name, final double value) {
 		final HE_DoubleAttribute attribute = doubleAttributes.get(name);
 		if (attribute == null) {
@@ -4132,6 +6540,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		attribute.set(element.getKey(), value);
 	}
 
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @param value
+	 */
 	public void setBooleanAttribute(final HE_Element element, final String name, final boolean value) {
 		final HE_BooleanAttribute attribute = booleanAttributes.get(name);
 		if (attribute == null) {
@@ -4140,6 +6555,13 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		attribute.set(element.getKey(), value);
 	}
 
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @param value
+	 */
 	public void setStringAttribute(final HE_Element element, final String name, final String value) {
 		final HE_StringAttribute attribute = stringAttributes.get(name);
 		if (attribute == null) {
@@ -4148,6 +6570,43 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		attribute.set(element.getKey(), value);
 	}
 
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @param value
+	 */
+	public void setPointAttribute(final HE_Element element, final String name, final WB_Coord value) {
+		final HE_PointAttribute attribute = pointAttributes.get(name);
+		if (attribute == null) {
+			return;
+		}
+		attribute.set(element.getKey(), value);
+	}
+
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @param value
+	 */
+	public void setVectorAttribute(final HE_Element element, final String name, final WB_Coord value) {
+		final HE_VectorAttribute attribute = vectorAttributes.get(name);
+		if (attribute == null) {
+			return;
+		}
+		attribute.set(element.getKey(), value);
+	}
+
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @param value
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void setAttribute(final HE_Element element, final String name, final Object value) {
 		final HE_Attribute attribute = attributes.get(name);
@@ -4157,104 +6616,294 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		attribute.set(element.getKey(), value);
 	}
 
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @return
+	 */
 	public int getIntegerAttributeForElement(final HE_Element element, final String name) {
 		final HE_IntegerAttribute attribute = integerAttributes.get(name);
 		return attribute.get(element.getKey());
 	}
 
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @return
+	 */
 	public float getFloatAttributeForElement(final HE_Element element, final String name) {
 		final HE_FloatAttribute attribute = floatAttributes.get(name);
 		return attribute.get(element.getKey());
 	}
 
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @return
+	 */
 	public double getDoubleAttributeForElement(final HE_Element element, final String name) {
 		final HE_DoubleAttribute attribute = doubleAttributes.get(name);
 		return attribute.get(element.getKey());
 	}
 
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @return
+	 */
 	public boolean getBooleanAttributeForElement(final HE_Element element, final String name) {
 		final HE_BooleanAttribute attribute = booleanAttributes.get(name);
 		return attribute.get(element.getKey());
 	}
 
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @return
+	 */
 	public String getStringAttributeForElement(final HE_Element element, final String name) {
 		final HE_StringAttribute attribute = stringAttributes.get(name);
 		return attribute.get(element.getKey());
 	}
 
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @return
+	 */
+	public WB_Coord getPointAttributeForElement(final HE_Element element, final String name) {
+		final HE_PointAttribute attribute = pointAttributes.get(name);
+		return attribute.get(element.getKey());
+	}
+
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @return
+	 */
+	public WB_Coord getVectorAttributeForElement(final HE_Element element, final String name) {
+		final HE_VectorAttribute attribute = vectorAttributes.get(name);
+		return attribute.get(element.getKey());
+	}
+
+	/**
+	 *
+	 *
+	 * @param element
+	 * @param name
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
 	public Object getAttributeForElement(final HE_Element element, final String name) {
 		final HE_Attribute attribute = attributes.get(name);
 		return attribute.get(element.getKey());
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_IntegerAttribute getIntegerAttribute(final String name) {
 		return integerAttributes.get(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_FloatAttribute getFloatAttribute(final String name) {
 		return floatAttributes.get(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_DoubleAttribute getDoubleAttribute(final String name) {
 		return doubleAttributes.get(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_BooleanAttribute getBooleanAttribute(final String name) {
 		return booleanAttributes.get(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HE_StringAttribute getStringAttribute(final String name) {
 		return stringAttributes.get(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
+	public HE_PointAttribute getPointAttribute(final String name) {
+		return pointAttributes.get(name);
+	}
+
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
+	public HE_VectorAttribute getVectorAttribute(final String name) {
+		return vectorAttributes.get(name);
+	}
+
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
 	public HE_Attribute getAttribute(final String name) {
 		return attributes.get(name);
 	}
 
+	/**
+	 *
+	 */
 	public void clearAttributes() {
 		integerAttributes = new HashMap<>();
 		floatAttributes = new HashMap<>();
 		doubleAttributes = new HashMap<>();
 		booleanAttributes = new HashMap<>();
 		stringAttributes = new HashMap<>();
+		pointAttributes = new HashMap<>();
+		vectorAttributes = new HashMap<>();
 		attributes = new HashMap<>();
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 */
 	public void clearAttribute(final String name) {
 		integerAttributes.remove(name);
 		floatAttributes.remove(name);
 		doubleAttributes.remove(name);
 		booleanAttributes.remove(name);
 		stringAttributes.remove(name);
+		pointAttributes.remove(name);
+		vectorAttributes.remove(name);
 		attributes.remove(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public Set<String> getAttributeNames() {
 		return attributes.keySet();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public Set<String> getIntegerAttributeNames() {
 		return integerAttributes.keySet();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public Set<String> getFloatAttributeNames() {
 		return floatAttributes.keySet();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public Set<String> getDoubleAttributeNames() {
 		return doubleAttributes.keySet();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public Set<String> getBooleanAttributeNames() {
 		return booleanAttributes.keySet();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public Set<String> getStringAttributeNames() {
 		return stringAttributes.keySet();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public Set<String> getPointAttributeNames() {
+		return pointAttributes.keySet();
+	}
+
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public Set<String> getVectorAttributeNames() {
+		return vectorAttributes.keySet();
+	}
+
+	/**
+	 *
+	 *
+	 * @param attribute
+	 * @param min
+	 * @param max
+	 * @return
+	 */
 	public HE_Selection selectAttributeRange(final String attribute, final double min, final double max) {
 		final boolean dblAtt = getDoubleAttribute(attribute) != null;
 		final boolean fltAtt = getFloatAttribute(attribute) != null;
@@ -4312,6 +6961,15 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 		return selection;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @param attribute
+	 * @param min
+	 * @param max
+	 * @return
+	 */
 	public HE_Selection selectAttributeRange(final String name, final String attribute, final double min,
 			final double max) {
 		final boolean dblAtt = getDoubleAttribute(attribute) != null;
@@ -4368,5 +7026,9 @@ public class HE_Mesh extends HE_MeshElement implements WB_TriangleFactory, HE_Ha
 			}
 		}
 		return selection;
+	}
+
+	public static void main(final String[] args) {
+		final HE_Mesh resut = new HE_Mesh();
 	}
 }

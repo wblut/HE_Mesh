@@ -3,41 +3,79 @@ package wblut.hemesh;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HES_DooSabin extends HES_Subdividor {
+	/**  */
 	private double faceFactor;
+	/**  */
 	private double edgeFactor;
+	/**  */
 	private boolean absolute;
+	/**  */
 	private double d;
+	/**  */
 	public HE_Selection faceFaces;
+	/**  */
 	public HE_Selection edgeFaces;
+	/**  */
 	public HE_Selection vertexFaces;
 
+	/**
+	 *
+	 */
 	public HES_DooSabin() {
 		faceFactor = 1.0;
 		edgeFactor = 1.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param ff
+	 * @param ef
+	 * @return
+	 */
 	public HES_DooSabin setFactors(final double ff, final double ef) {
 		faceFactor = ff;
 		edgeFactor = ef;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HES_DooSabin setAbsolute(final boolean b) {
 		absolute = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HES_DooSabin setDistance(final double d) {
 		this.d = d;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		if (mesh.selectBoundaryEdges().getNumberOfEdges() > 0) {
@@ -60,7 +98,7 @@ public class HES_DooSabin extends HES_Subdividor {
 		while (fItr.hasNext()) {
 			f = fItr.next();
 			he = f.getHalfedge();
-			fc = new WB_Point(HE_MeshOp.getFaceCenter(f));
+			fc = new WB_Point(mesh.getFaceCenter(f));
 			do {
 				final WB_Point p = fc.mul(faceFactor);
 				p.addSelf(he.getVertex());
@@ -68,7 +106,7 @@ public class HES_DooSabin extends HES_Subdividor {
 				p.addSelf(WB_Vector.mul(HE_MeshOp.getHalfedgeCenter(he.getPrevInFace()), edgeFactor));
 				p.divSelf(div);
 				if (absolute) {
-					final double dcurrent = WB_GeometryOp3D.getDistance3D(p, he.getVertex());
+					final double dcurrent = WB_GeometryOp.getDistance3D(p, he.getVertex());
 					p.subSelf(he.getVertex());
 					p.mulSelf(d / dcurrent);
 					p.addSelf(he.getVertex());
@@ -151,6 +189,12 @@ public class HES_DooSabin extends HES_Subdividor {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		return selection.getParent();

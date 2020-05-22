@@ -8,13 +8,28 @@ import java.util.PriorityQueue;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressTracker;
 
+/**
+ *
+ */
 public class WB_IndexedAABBTree2D {
+	/**  */
 	private WB_IndexedAABBNode2D root;
+	/**  */
 	private final int maxLevel;
+	/**  */
 	private int depth;
+	/**  */
 	private final int maxNumberOfFaces;
+	/**  */
 	public static final WB_ProgressTracker tracker = WB_ProgressTracker.instance();
 
+	/**
+	 *
+	 *
+	 * @param triangles
+	 * @param points
+	 * @param mnof
+	 */
 	public WB_IndexedAABBTree2D(final int[] triangles, final WB_CoordCollection points, final int mnof) {
 		final List<WB_IndexedTriangle> mesh = new WB_List<>();
 		for (int i = 0; i < triangles.length; i += 3) {
@@ -26,6 +41,13 @@ public class WB_IndexedAABBTree2D {
 		buildTree(mesh);
 	}
 
+	/**
+	 *
+	 *
+	 * @param triangulation
+	 * @param points
+	 * @param mnof
+	 */
 	public WB_IndexedAABBTree2D(final WB_Triangulation2D triangulation, final WB_CoordCollection points,
 			final int mnof) {
 		final List<WB_IndexedTriangle> mesh = new WB_List<>();
@@ -38,6 +60,13 @@ public class WB_IndexedAABBTree2D {
 		buildTree(mesh);
 	}
 
+	/**
+	 *
+	 *
+	 * @param triangulation
+	 * @param alpha
+	 * @param mnof
+	 */
 	public WB_IndexedAABBTree2D(final WB_AlphaTriangulation2D triangulation, final double alpha, final int mnof) {
 		final List<WB_IndexedTriangle> mesh = new WB_List<>();
 		final int[] alphatri = triangulation.getAlphaTriangles(alpha);
@@ -50,6 +79,12 @@ public class WB_IndexedAABBTree2D {
 		buildTree(mesh);
 	}
 
+	/**
+	 *
+	 *
+	 * @param triangulation
+	 * @param mnof
+	 */
 	public WB_IndexedAABBTree2D(final WB_Triangulation2DWithPoints triangulation, final int mnof) {
 		final List<WB_IndexedTriangle> mesh = new WB_List<>();
 		for (int i = 0; i < triangulation.getTriangles().length; i += 3) {
@@ -61,6 +96,12 @@ public class WB_IndexedAABBTree2D {
 		buildTree(mesh);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param mnof
+	 */
 	public WB_IndexedAABBTree2D(final Collection<? extends WB_IndexedTriangle> mesh, final int mnof) {
 		maxLevel = 2 * (int) Math.ceil(Math.log(mesh.size()) / Math.log(2.0));
 		maxNumberOfFaces = Math.max(1, mnof);
@@ -68,6 +109,11 @@ public class WB_IndexedAABBTree2D {
 		buildTree(mesh);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	private void buildTree(final Collection<? extends WB_IndexedTriangle> mesh) {
 		tracker.setStartStatus(this,
 				"Starting WB_AABBTree construction. Max. number of faces per node: " + maxNumberOfFaces);
@@ -78,6 +124,14 @@ public class WB_IndexedAABBTree2D {
 		tracker.setStopStatus(this, "Exiting WB_AABBTree construction.");
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param faces
+	 * @param mesh
+	 * @param level
+	 */
 	private void buildNode(final WB_IndexedAABBNode2D node, final List<WB_IndexedTriangle> faces,
 			final Collection<? extends WB_IndexedTriangle> mesh, final int level) {
 		tracker.setDuringStatus(this, "Splitting WB_AABBNode level " + level + " with " + faces.size() + " faces.");
@@ -132,6 +186,16 @@ public class WB_IndexedAABBTree2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param bestSah
+	 * @param node
+	 * @param childA
+	 * @param childB
+	 * @param faces
+	 * @return
+	 */
 	private double findOptimalSubset(double bestSah, final WB_IndexedAABBNode2D node,
 			final List<WB_IndexedTriangle> childA, final List<WB_IndexedTriangle> childB,
 			final List<WB_IndexedTriangle> faces) {
@@ -170,19 +234,45 @@ public class WB_IndexedAABBTree2D {
 		return bestSah;
 	}
 
+	/**
+	 *
+	 *
+	 * @param denom
+	 * @param surfaceAreaA
+	 * @param numA
+	 * @param surfaceAreaB
+	 * @param numB
+	 * @return
+	 */
 	static private double getSAH(final double denom, final double surfaceAreaA, final int numA,
 			final double surfaceAreaB, final int numB) {
 		return (surfaceAreaA * numA + surfaceAreaB * numB) * denom;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_IndexedAABBNode2D getRoot() {
 		return root;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getDepth() {
 		return depth;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Coord getClosestPoint(final WB_Coord p) {
 		final PriorityQueue<Entry> entries = new PriorityQueue<>(new EntryOrder());
 		double closest2 = Double.POSITIVE_INFINITY;
@@ -200,6 +290,12 @@ public class WB_IndexedAABBTree2D {
 		return top.point;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public int[] getClosestFace(final WB_Coord p) {
 		final PriorityQueue<Entry> entries = new PriorityQueue<>(new EntryOrder());
 		double closest2 = Double.POSITIVE_INFINITY;
@@ -217,6 +313,12 @@ public class WB_IndexedAABBTree2D {
 		return top.face;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public Entry getClosestEntry(final WB_Coord p) {
 		final PriorityQueue<Entry> entries = new PriorityQueue<>(new EntryOrder());
 		double closest2 = Double.POSITIVE_INFINITY;
@@ -234,15 +336,24 @@ public class WB_IndexedAABBTree2D {
 		return top;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param node
+	 * @param entries
+	 * @param closest2
+	 * @return
+	 */
 	private double addNode(final WB_Coord p, final WB_IndexedAABBNode2D node, final PriorityQueue<Entry> entries,
 			double closest2) {
-		final double d2 = WB_GeometryOp2D.getSqDistance2D(p, node.aabb);
+		final double d2 = WB_GeometryOp.getSqDistance2D(p, node.aabb);
 		if (d2 <= closest2) {
 			entries.add(new Entry(null, d2, 0, null, node));
 			if (node.isLeaf()) {
 				for (final WB_IndexedTriangle f : node.faces) {
-					final WB_Coord q = WB_GeometryOp2D.getClosestPoint2D(p, f);
-					final double fd2 = WB_GeometryOp2D.getSqDistance2D(p, q);
+					final WB_Coord q = WB_GeometryOp.getClosestPoint2D(p, f);
+					final double fd2 = WB_GeometryOp.getSqDistance2D(p, q);
 					if (fd2 < closest2) {
 						entries.add(new Entry(q, fd2, 1, f, node));
 						closest2 = fd2;
@@ -253,20 +364,47 @@ public class WB_IndexedAABBTree2D {
 		return closest2;
 	}
 
+	/**
+	 *
+	 */
 	private class EntryOrder implements Comparator<Entry> {
+		/**
+		 *
+		 *
+		 * @param arg0
+		 * @param arg1
+		 * @return
+		 */
 		@Override
 		public int compare(final Entry arg0, final Entry arg1) {
 			return Double.compare(arg0.d2, arg1.d2);
 		}
 	}
 
+	/**
+	 *
+	 */
 	private class Entry {
+		/**  */
 		WB_Coord point;
+		/**  */
 		double d2;
+		/**  */
 		int type; // 0=aabb, 1=face
+		/**  */
 		WB_IndexedAABBNode2D node;
+		/**  */
 		int[] face;
 
+		/**
+		 *
+		 *
+		 * @param p
+		 * @param d2
+		 * @param type
+		 * @param f
+		 * @param node
+		 */
 		Entry(final WB_Coord p, final double d2, final int type, final WB_IndexedTriangle f,
 				final WB_IndexedAABBNode2D node) {
 			this.point = p;
@@ -277,47 +415,99 @@ public class WB_IndexedAABBTree2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 */
 	public void expandBy(final double d) {
 		root.expandBy(d);
 	}
 
+	/**
+	 *
+	 */
 	public class WB_IndexedAABBNode2D {
+		/**  */
 		protected int level;
+		/**  */
 		protected WB_AABB2D aabb = null;
+		/**  */
 		protected WB_IndexedAABBNode2D childA = null;
+		/**  */
 		protected WB_IndexedAABBNode2D childB = null;
+		/**  */
 		protected List<WB_IndexedTriangle> faces;
+		/**  */
 		protected boolean isLeaf;
 
+		/**
+		 *
+		 */
 		public WB_IndexedAABBNode2D() {
 			level = -1;
 			faces = new WB_List<>();
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public WB_AABB2D getAABB() {
 			return aabb;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public int getLevel() {
 			return level;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public boolean isLeaf() {
 			return isLeaf;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public List<WB_IndexedTriangle> getFaces() {
 			return faces;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public WB_IndexedAABBNode2D getChildA() {
 			return childA;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public WB_IndexedAABBNode2D getChildB() {
 			return childB;
 		}
 
+		/**
+		 *
+		 *
+		 * @param d
+		 */
 		public void expandBy(final double d) {
 			aabb.expandBy(d);
 			if (childB != null) {

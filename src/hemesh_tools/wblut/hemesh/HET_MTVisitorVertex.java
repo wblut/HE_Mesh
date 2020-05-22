@@ -11,18 +11,41 @@ import java.util.concurrent.Future;
 
 import wblut.geom.WB_List;
 
+/**
+ *
+ *
+ * @param <E>
+ */
 public class HET_MTVisitorVertex<E extends Object> {
+	/**  */
 	HET_InfoVertex<E> vertexInfo;
 
+	/**
+	 *
+	 *
+	 * @param vertexInfo
+	 */
 	public HET_MTVisitorVertex(final HET_InfoVertex<E> vertexInfo) {
 		this.vertexInfo = vertexInfo;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public List<E> getVertexInfo(final HE_HalfedgeStructure mesh) {
 		return visit(mesh.getVertices());
 	}
 
-	private List<E> visit(final List<HE_Vertex> vertices) {
+	/**
+	 *
+	 *
+	 * @param vertices
+	 * @return
+	 */
+	private List<E> visit(final HE_VertexList vertices) {
 		final List<E> result = new WB_List<>();
 		try {
 			final int threadCount = Runtime.getRuntime().availableProcessors();
@@ -49,19 +72,39 @@ public class HET_MTVisitorVertex<E extends Object> {
 		return result;
 	}
 
+	/**
+	 *
+	 */
 	class HET_VertexVisitor implements Callable<List<E>> {
+		/**  */
 		int start;
+		/**  */
 		int end;
+		/**  */
 		int id;
-		List<HE_Vertex> vertices;
+		/**  */
+		HE_VertexList vertices;
 
-		public HET_VertexVisitor(final int s, final int e, final int id, final List<HE_Vertex> vertices) {
+		/**
+		 *
+		 *
+		 * @param s
+		 * @param e
+		 * @param id
+		 * @param vertices
+		 */
+		public HET_VertexVisitor(final int s, final int e, final int id, final HE_VertexList vertices) {
 			start = s;
 			end = e;
 			this.id = id;
 			this.vertices = vertices;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public List<E> call() {
 			final ArrayList<E> result = new ArrayList<>();

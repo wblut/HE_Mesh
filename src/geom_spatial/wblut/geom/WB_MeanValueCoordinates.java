@@ -3,16 +3,28 @@ package wblut.geom;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_NeumaierSum;
 
+/**
+ *
+ */
 public class WB_MeanValueCoordinates {
-	public static double getValue(final WB_Coord x, final WB_Coord[] vertices, final double[] values,
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param vertices
+	 * @param values
+	 * @param triangles
+	 * @return
+	 */
+	public static double getValue(final WB_Coord x, final WB_CoordCollection vertices, final double[] values,
 			final int[] triangles) {
 		final WB_NeumaierSum totalF = new WB_NeumaierSum();
 		final WB_NeumaierSum totalW = new WB_NeumaierSum();
-		final int num = vertices.length;
+		final int num = vertices.size();
 		final double[] d = new double[num];
 		final WB_Vector[] u = new WB_Vector[num];
 		for (int j = 0; j < num; j++) {
-			u[j] = WB_Vector.sub(vertices[j], x);
+			u[j] = WB_Vector.sub(vertices.get(j), x);
 			d[j] = u[j].normalizeSelf();
 			if (WB_Epsilon.isZero(d[j])) {
 				return values[j];
@@ -46,7 +58,7 @@ public class WB_MeanValueCoordinates {
 				w3 = Math.sin(t3) * d[i2] * d[i1];
 				return (w1 * values[i1] + w2 * values[i2] + w3 * values[i3]) / (w1 + w2 + w3);
 			}
-			det = WB_Predicates.orient3D(vertices[i1], vertices[i2], vertices[i3], x);
+			det = WB_Predicates.orient3D(vertices.get(i1), vertices.get(i2), vertices.get(i3), x);
 			c1 = Math.min(Math.max(2 * Math.sin(h) * Math.sin(h - t1) / Math.sin(t2) / Math.sin(t3) - 1.0, -1.0), 1.0);
 			s1 = Math.signum(det) * Math.sqrt(1.0 - c1 * c1);
 			if (WB_Epsilon.isZero(s1)) {
@@ -71,14 +83,23 @@ public class WB_MeanValueCoordinates {
 		return totalF.getSum() / totalW.getSum();
 	}
 
-	public static double[] getValue(final WB_Coord x, final WB_Coord[] vertices, final double[][] values,
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param vertices
+	 * @param values
+	 * @param triangles
+	 * @return
+	 */
+	public static double[] getValue(final WB_Coord x, final WB_CoordCollection vertices, final double[][] values,
 			final int[] triangles) {
-		final int num = vertices.length;
+		final int num = vertices.size();
 		final int numv = values[0].length;
 		final double[] d = new double[num];
 		final WB_Vector[] u = new WB_Vector[num];
 		for (int j = 0; j < num; j++) {
-			u[j] = WB_Vector.sub(vertices[j], x);
+			u[j] = WB_Vector.sub(vertices.get(j), x);
 			d[j] = u[j].normalizeSelf();
 			if (WB_Epsilon.isZero(d[j])) {
 				return values[j];
@@ -122,7 +143,7 @@ public class WB_MeanValueCoordinates {
 				}
 				return result;
 			}
-			det = WB_Predicates.orient3D(vertices[i1], vertices[i2], vertices[i3], x);
+			det = WB_Predicates.orient3D(vertices.get(i1), vertices.get(i2), vertices.get(i3), x);
 			c1 = Math.min(Math.max(2 * Math.sin(h) * Math.sin(h - t1) / Math.sin(t2) / Math.sin(t3) - 1.0, -1.0), 1.0);
 			s1 = Math.signum(det) * Math.sqrt(1.0 - c1 * c1);
 			if (WB_Epsilon.isZero(s1)) {
@@ -154,16 +175,25 @@ public class WB_MeanValueCoordinates {
 		return result;
 	}
 
-	public static WB_Coord getValue(final WB_Coord x, final WB_Coord[] vertices, final WB_Coord[] values,
-			final int[] triangles) {
-		final int num = vertices.length;
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param vertices
+	 * @param values
+	 * @param triangles
+	 * @return
+	 */
+	public static WB_Coord getValue(final WB_Coord x, final WB_CoordCollection vertices,
+			final WB_CoordCollection values, final int[] triangles) {
+		final int num = vertices.size();
 		final double[] d = new double[num];
 		final WB_Vector[] u = new WB_Vector[num];
 		for (int j = 0; j < num; j++) {
-			u[j] = WB_Vector.sub(vertices[j], x);
+			u[j] = WB_Vector.sub(vertices.get(j), x);
 			d[j] = u[j].normalizeSelf();
 			if (WB_Epsilon.isZero(d[j])) {
-				return values[j];
+				return values.get(j);
 			}
 		}
 		final WB_NeumaierSum[] totalF = new WB_NeumaierSum[3];
@@ -198,11 +228,11 @@ public class WB_MeanValueCoordinates {
 				w1 = Math.sin(t1) * d[i3] * d[i2];
 				w2 = Math.sin(t2) * d[i1] * d[i3];
 				w3 = Math.sin(t3) * d[i2] * d[i1];
-				result.addMulSelf(w1, values[i1]).addMulSelf(w2, values[i2]).addMulSelf(w3, values[i3])
+				result.addMulSelf(w1, values.get(i1)).addMulSelf(w2, values.get(i2)).addMulSelf(w3, values.get(i3))
 						.divSelf(w1 + w2 + w3);
 				return result;
 			}
-			det = WB_Predicates.orient3D(vertices[i1], vertices[i2], vertices[i3], x);
+			det = WB_Predicates.orient3D(vertices.get(i1), vertices.get(i2), vertices.get(i3), x);
 			c1 = Math.min(Math.max(2 * Math.sin(h) * Math.sin(h - t1) / Math.sin(t2) / Math.sin(t3) - 1.0, -1.0), 1.0);
 			s1 = Math.signum(det) * Math.sqrt(1.0 - c1 * c1);
 			if (WB_Epsilon.isZero(s1)) {
@@ -221,9 +251,9 @@ public class WB_MeanValueCoordinates {
 			w1 = (t1 - c2 * t3 - c3 * t2) / (d[i1] * Math.sin(t2) * s3);
 			w2 = (t2 - c3 * t1 - c1 * t3) / (d[i2] * Math.sin(t3) * s1);
 			w3 = (t3 - c1 * t2 - c2 * t1) / (d[i3] * Math.sin(t1) * s2);
-			totalF[0].add(w1 * values[i1].xd() + w2 * values[i2].xd() + w3 * values[i3].xd());
-			totalF[1].add(w1 * values[i1].yd() + w2 * values[i2].yd() + w3 * values[i3].yd());
-			totalF[2].add(w1 * values[i1].zd() + w2 * values[i2].zd() + w3 * values[i3].zd());
+			totalF[0].add(w1 * values.getX(i1) + w2 * values.getX(i2) + w3 * values.getX(i2));
+			totalF[1].add(w1 * values.getY(i1) + w2 * values.getY(i2) + w3 * values.getY(i2));
+			totalF[2].add(w1 * values.getZ(i1) + w2 * values.getZ(i2) + w3 * values.getZ(i2));
 			totalW.add(w1 + w2 + w3);
 		}
 		final WB_Vector result = new WB_Vector(totalF[0].getSum(), totalF[1].getSum(), totalF[2].getSum());
@@ -231,15 +261,24 @@ public class WB_MeanValueCoordinates {
 		return result;
 	}
 
-	public static float getValue(final WB_Coord x, final WB_Coord[] vertices, final float[] values,
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param vertices
+	 * @param values
+	 * @param triangles
+	 * @return
+	 */
+	public static float getValue(final WB_Coord x, final WB_CoordCollection vertices, final float[] values,
 			final int[] triangles) {
 		final WB_NeumaierSum totalF = new WB_NeumaierSum();
 		final WB_NeumaierSum totalW = new WB_NeumaierSum();
-		final int num = vertices.length;
+		final int num = vertices.size();
 		final double[] d = new double[num];
 		final WB_Vector[] u = new WB_Vector[num];
 		for (int j = 0; j < num; j++) {
-			u[j] = WB_Vector.sub(vertices[j], x);
+			u[j] = WB_Vector.sub(vertices.get(j), x);
 			d[j] = u[j].normalizeSelf();
 			if (WB_Epsilon.isZero(d[j])) {
 				return values[j];
@@ -273,7 +312,7 @@ public class WB_MeanValueCoordinates {
 				w3 = Math.sin(t3) * d[i2] * d[i1];
 				return (float) ((w1 * values[i1] + w2 * values[i2] + w3 * values[i3]) / (w1 + w2 + w3));
 			}
-			det = WB_Predicates.orient3D(vertices[i1], vertices[i2], vertices[i3], x);
+			det = WB_Predicates.orient3D(vertices.get(i1), vertices.get(i2), vertices.get(i3), x);
 			c1 = Math.min(Math.max(2 * Math.sin(h) * Math.sin(h - t1) / Math.sin(t2) / Math.sin(t3) - 1.0, -1.0), 1.0);
 			s1 = Math.signum(det) * Math.sqrt(1.0 - c1 * c1);
 			if (WB_Epsilon.isZero(s1)) {
@@ -298,14 +337,23 @@ public class WB_MeanValueCoordinates {
 		return (float) (totalF.getSum() / totalW.getSum());
 	}
 
-	public static float[] getValue(final WB_Coord x, final WB_Coord[] vertices, final float[][] values,
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param vertices
+	 * @param values
+	 * @param triangles
+	 * @return
+	 */
+	public static float[] getValue(final WB_Coord x, final WB_CoordCollection vertices, final float[][] values,
 			final int[] triangles) {
-		final int num = vertices.length;
+		final int num = vertices.size();
 		final int numv = values[0].length;
 		final double[] d = new double[num];
 		final WB_Vector[] u = new WB_Vector[num];
 		for (int j = 0; j < num; j++) {
-			u[j] = WB_Vector.sub(vertices[j], x);
+			u[j] = WB_Vector.sub(vertices.get(j), x);
 			d[j] = u[j].normalizeSelf();
 			if (WB_Epsilon.isZero(d[j])) {
 				return values[j];
@@ -349,7 +397,7 @@ public class WB_MeanValueCoordinates {
 				}
 				return result;
 			}
-			det = WB_Predicates.orient3D(vertices[i1], vertices[i2], vertices[i3], x);
+			det = WB_Predicates.orient3D(vertices.get(i1), vertices.get(i2), vertices.get(i3), x);
 			c1 = Math.min(Math.max(2 * Math.sin(h) * Math.sin(h - t1) / Math.sin(t2) / Math.sin(t3) - 1.0, -1.0), 1.0);
 			s1 = Math.signum(det) * Math.sqrt(1.0 - c1 * c1);
 			if (WB_Epsilon.isZero(s1)) {

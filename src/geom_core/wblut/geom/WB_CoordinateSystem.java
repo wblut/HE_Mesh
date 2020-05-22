@@ -4,20 +4,48 @@ import lombok.ToString;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
+/**
+ *
+ */
+/**
+ *
+ *
+ * @return
+ */
 @ToString(includeFieldNames = true)
 public class WB_CoordinateSystem {
+	/**  */
 	private WB_CoordinateSystem parent;
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected final static WB_CoordinateSystem WORLD() {
 		return new WB_CoordinateSystem(true);
 	}
 
+	/**  */
 	private WB_Point origin;
+	/**  */
 	private WB_Vector xAxis;
+	/**  */
 	private WB_Vector yAxis;
+	/**  */
 	private WB_Vector zAxis;
+	/**  */
 	private boolean isWorld;
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param parent
+	 */
 	public WB_CoordinateSystem(final WB_Coord origin, final WB_Coord x, final WB_Coord y, final WB_Coord z,
 			final WB_CoordinateSystem parent) {
 		this.origin = new WB_Point(origin);
@@ -28,6 +56,14 @@ public class WB_CoordinateSystem {
 		isWorld = parent == null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public WB_CoordinateSystem(final WB_Coord origin, final WB_Coord x, final WB_Coord y, final WB_Coord z) {
 		this.origin = new WB_Point(origin);
 		xAxis = new WB_Vector(x);
@@ -37,10 +73,20 @@ public class WB_CoordinateSystem {
 		isWorld = parent == null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 */
 	public WB_CoordinateSystem(final WB_Plane P) {
 		this(P.getOrigin(), P.getU(), P.getV(), P.getW());
 	}
 
+	/**
+	 *
+	 *
+	 * @param world
+	 */
 	protected WB_CoordinateSystem(final boolean world) {
 		this.origin = new WB_Point(WB_Point.ZERO());
 		xAxis = new WB_Vector(WB_Vector.X());
@@ -50,10 +96,18 @@ public class WB_CoordinateSystem {
 		parent = world ? null : WORLD();
 	}
 
+	/**
+	 *
+	 */
 	public WB_CoordinateSystem() {
 		this(false);
 	}
 
+	/**
+	 *
+	 *
+	 * @param parent
+	 */
 	public WB_CoordinateSystem(final WB_CoordinateSystem parent) {
 		this.origin = new WB_Point(WB_Point.ZERO());
 		xAxis = new WB_Vector(WB_Vector.X());
@@ -63,10 +117,23 @@ public class WB_CoordinateSystem {
 		isWorld = parent == null;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_CoordinateSystem get() {
 		return new WB_CoordinateSystem(origin, xAxis, yAxis, zAxis, parent);
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	protected void set(final WB_Coord origin, final WB_Coord x, final WB_Coord y, final WB_Coord z) {
 		this.origin = new WB_Point(origin);
 		xAxis = new WB_Vector(x);
@@ -74,6 +141,15 @@ public class WB_CoordinateSystem {
 		zAxis = new WB_Vector(z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param CS
+	 */
 	protected void set(final WB_Coord origin, final WB_Coord x, final WB_Coord y, final WB_Coord z,
 			final WB_CoordinateSystem CS) {
 		this.origin = new WB_Point(origin);
@@ -83,22 +159,49 @@ public class WB_CoordinateSystem {
 		parent = CS;
 	}
 
+	/**
+	 *
+	 *
+	 * @param parent
+	 * @return
+	 */
 	public WB_CoordinateSystem setParent(final WB_CoordinateSystem parent) {
 		this.parent = parent;
 		isWorld = parent == null;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param o
+	 * @return
+	 */
 	public WB_CoordinateSystem setOrigin(final WB_Point o) {
 		origin.set(o);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param ox
+	 * @param oy
+	 * @param oz
+	 * @return
+	 */
 	public WB_CoordinateSystem setOrigin(final double ox, final double oy, final double oz) {
 		origin.set(ox, oy, oz);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param X
+	 * @param Y
+	 * @return
+	 */
 	public WB_CoordinateSystem setXY(final WB_Coord X, final WB_Coord Y) {
 		xAxis.set(X);
 		xAxis.normalizeSelf();
@@ -114,6 +217,13 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Y
+	 * @param X
+	 * @return
+	 */
 	public WB_CoordinateSystem setYX(final WB_Coord Y, final WB_Coord X) {
 		xAxis.set(X);
 		xAxis.normalizeSelf();
@@ -129,6 +239,13 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param X
+	 * @param Z
+	 * @return
+	 */
 	public WB_CoordinateSystem setXZ(final WB_Coord X, final WB_Coord Z) {
 		xAxis.set(X);
 		xAxis.normalizeSelf();
@@ -144,6 +261,13 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Z
+	 * @param X
+	 * @return
+	 */
 	public WB_CoordinateSystem setZX(final WB_Coord Z, final WB_Coord X) {
 		xAxis.set(X);
 		xAxis.normalizeSelf();
@@ -159,6 +283,13 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Y
+	 * @param Z
+	 * @return
+	 */
 	public WB_CoordinateSystem setYZ(final WB_Coord Y, final WB_Coord Z) {
 		yAxis.set(Y);
 		yAxis.normalizeSelf();
@@ -174,6 +305,13 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Z
+	 * @param Y
+	 * @return
+	 */
 	public WB_CoordinateSystem setZY(final WB_Coord Z, final WB_Coord Y) {
 		yAxis.set(Y);
 		yAxis.normalizeSelf();
@@ -189,30 +327,71 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Vector getX() {
 		return xAxis.copy();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Vector getY() {
 		return yAxis.copy();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Vector getZ() {
 		return zAxis.copy();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point getOrigin() {
 		return origin.copy();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_CoordinateSystem getParent() {
 		return parent;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isWorld() {
 		return isWorld;
 	}
 
+	/**
+	 *
+	 *
+	 * @param xx
+	 * @param xy
+	 * @param xz
+	 * @param yx
+	 * @param yy
+	 * @param yz
+	 * @return
+	 */
 	public WB_CoordinateSystem setXY(final double xx, final double xy, final double xz, final double yx,
 			final double yy, final double yz) {
 		xAxis.set(xx, xy, xz);
@@ -229,6 +408,17 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param yx
+	 * @param yy
+	 * @param yz
+	 * @param xx
+	 * @param xy
+	 * @param xz
+	 * @return
+	 */
 	public WB_CoordinateSystem setYX(final double yx, final double yy, final double yz, final double xx,
 			final double xy, final double xz) {
 		xAxis.set(xx, xy, xz);
@@ -245,6 +435,17 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param xx
+	 * @param xy
+	 * @param xz
+	 * @param zx
+	 * @param zy
+	 * @param zz
+	 * @return
+	 */
 	public WB_CoordinateSystem setXZ(final double xx, final double xy, final double xz, final double zx,
 			final double zy, final double zz) {
 		xAxis.set(xx, xy, xz);
@@ -261,6 +462,17 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param zx
+	 * @param zy
+	 * @param zz
+	 * @param xx
+	 * @param xy
+	 * @param xz
+	 * @return
+	 */
 	public WB_CoordinateSystem setZX(final double zx, final double zy, final double zz, final double xx,
 			final double xy, final double xz) {
 		xAxis.set(xx, xy, xz);
@@ -277,6 +489,17 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param yx
+	 * @param yy
+	 * @param yz
+	 * @param zx
+	 * @param zy
+	 * @param zz
+	 * @return
+	 */
 	public WB_CoordinateSystem setYZ(final double yx, final double yy, final double yz, final double zx,
 			final double zy, final double zz) {
 		yAxis.set(yx, yy, yz);
@@ -293,6 +516,17 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param zx
+	 * @param zy
+	 * @param zz
+	 * @param yx
+	 * @param yy
+	 * @param yz
+	 * @return
+	 */
 	public WB_CoordinateSystem setZY(final double zx, final double zy, final double zz, final double yx,
 			final double yy, final double yz) {
 		yAxis.set(yx, yy, yz);
@@ -309,6 +543,12 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param X
+	 * @return
+	 */
 	public WB_CoordinateSystem setX(final WB_Coord X) {
 		final WB_Vector lX = new WB_Vector(X);
 		lX.normalizeSelf();
@@ -321,6 +561,12 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Y
+	 * @return
+	 */
 	public WB_CoordinateSystem setY(final WB_Coord Y) {
 		final WB_Vector lY = new WB_Vector(Y);
 		lY.normalizeSelf();
@@ -333,6 +579,12 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Z
+	 * @return
+	 */
 	public WB_CoordinateSystem setZ(final WB_Coord Z) {
 		final WB_Vector lZ = new WB_Vector(Z);
 		lZ.normalizeSelf();
@@ -345,24 +597,49 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public WB_CoordinateSystem rotateX(final double a) {
 		yAxis.rotateAboutAxisSelf(a, origin, xAxis);
 		zAxis.rotateAboutAxisSelf(a, origin, xAxis);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public WB_CoordinateSystem rotateY(final double a) {
 		xAxis.rotateAboutAxisSelf(a, origin, yAxis);
 		zAxis.rotateAboutAxisSelf(a, origin, yAxis);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public WB_CoordinateSystem rotateZ(final double a) {
 		xAxis.rotateAboutAxisSelf(a, origin, zAxis);
 		yAxis.rotateAboutAxisSelf(a, origin, zAxis);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param v
+	 * @return
+	 */
 	public WB_CoordinateSystem rotate(final double a, final WB_Vector v) {
 		final WB_Vector lv = v.copy();
 		lv.normalizeSelf();
@@ -372,42 +649,82 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Transform3D getTransformFromParent() {
 		final WB_Transform3D result = new WB_Transform3D();
 		result.addFromParentToCS(this);
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Transform3D getTransformToParent() {
 		final WB_Transform3D result = new WB_Transform3D();
 		result.addFromCSToParent(this);
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Transform3D getTransformFromWorld() {
 		final WB_Transform3D result = new WB_Transform3D();
 		result.addFromWorldToCS(this);
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Transform3D getTransformToWorld() {
 		final WB_Transform3D result = new WB_Transform3D();
 		result.addFromCSToWorld(this);
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param CS
+	 * @return
+	 */
 	public WB_Transform3D getTransformFrom(final WB_CoordinateSystem CS) {
 		final WB_Transform3D result = new WB_Transform3D();
 		result.addFromCSToCS(CS, this);
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param CS
+	 * @return
+	 */
 	public WB_Transform3D getTransformTo(final WB_CoordinateSystem CS) {
 		final WB_Transform3D result = new WB_Transform3D();
 		result.addFromCSToCS(this, CS);
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param xx
+	 * @param xy
+	 * @param xz
+	 * @return
+	 */
 	public WB_CoordinateSystem setX(final double xx, final double xy, final double xz) {
 		final WB_Vector lX = new WB_Vector(xx, xy, xz);
 		lX.normalizeSelf();
@@ -420,6 +737,14 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param yx
+	 * @param yy
+	 * @param yz
+	 * @return
+	 */
 	public WB_CoordinateSystem setY(final double yx, final double yy, final double yz) {
 		final WB_Vector lY = new WB_Vector(yx, yy, yz);
 		lY.normalizeSelf();
@@ -432,6 +757,14 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param zx
+	 * @param zy
+	 * @param zz
+	 * @return
+	 */
 	public WB_CoordinateSystem setZ(final double zx, final double zy, final double zz) {
 		final WB_Vector lZ = new WB_Vector(zx, zy, zz);
 		lZ.normalizeSelf();
@@ -444,26 +777,48 @@ public class WB_CoordinateSystem {
 		return this;
 	}
 
+	/**
+	 *
+	 */
 	public void flipX() {
 		xAxis.mulSelf(-1);
 		yAxis.mulSelf(-1);
 	}
 
+	/**
+	 *
+	 */
 	public void flipY() {
 		xAxis.mulSelf(-1);
 		yAxis.mulSelf(-1);
 	}
 
+	/**
+	 *
+	 */
 	public void flipZ() {
 		zAxis.mulSelf(-1);
 		yAxis.mulSelf(-1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	WB_CoordinateSystem apply(final WB_Transform3D T) {
 		return new WB_CoordinateSystem(T.applyAsPoint(origin), T.applyAsVector(xAxis), T.applyAsVector(yAxis),
 				T.applyAsVector(zAxis), parent == null ? WORLD() : parent);
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @param parent
+	 * @return
+	 */
 	WB_CoordinateSystem apply(final WB_Transform3D T, final WB_CoordinateSystem parent) {
 		return new WB_CoordinateSystem(T.applyAsPoint(origin), T.applyAsVector(xAxis), T.applyAsVector(yAxis),
 				T.applyAsVector(zAxis), parent);

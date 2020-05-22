@@ -2,25 +2,51 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
+/**
+ *
+ */
 public class HEM_SmoothInset extends HEM_Modifier {
+	/**  */
 	private int rep;
+	/**  */
 	private double offset;
 
+	/**
+	 *
+	 */
 	public HEM_SmoothInset() {
 		rep = 1;
 		offset = 0.1;
 	}
 
+	/**
+	 *
+	 *
+	 * @param level
+	 * @return
+	 */
 	public HEM_SmoothInset setLevel(final int level) {
 		rep = level;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param offset
+	 * @return
+	 */
 	public HEM_SmoothInset setOffset(final double offset) {
 		this.offset = offset;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		final HEM_Extrude ext = new HEM_Extrude().setChamfer(offset).setRelative(false);
@@ -38,6 +64,12 @@ public class HEM_SmoothInset extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		final HEM_Extrude ext = new HEM_Extrude().setChamfer(offset).setRelative(false);

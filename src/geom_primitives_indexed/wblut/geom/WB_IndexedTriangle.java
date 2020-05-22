@@ -1,8 +1,20 @@
 package wblut.geom;
 
+/**
+ *
+ */
 public class WB_IndexedTriangle extends WB_Triangle {
+	/**  */
 	int i1, i2, i3;
 
+	/**
+	 *
+	 *
+	 * @param i1
+	 * @param i2
+	 * @param i3
+	 * @param points
+	 */
 	public WB_IndexedTriangle(final int i1, final int i2, final int i3, final WB_CoordCollection points) {
 		super(points.get(i1), points.get(i2), points.get(i3));
 		this.i1 = i1;
@@ -10,6 +22,13 @@ public class WB_IndexedTriangle extends WB_Triangle {
 		this.i3 = i3;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param tris
+	 * @param points
+	 */
 	public WB_IndexedTriangle(final int i, final int[] tris, final WB_CoordCollection points) {
 		super(points.get(tris[i]), points.get(tris[i + 1]), points.get(tris[i + 2]));
 		this.i1 = tris[i];
@@ -17,6 +36,9 @@ public class WB_IndexedTriangle extends WB_Triangle {
 		this.i3 = tris[i + 2];
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void cycle() {
 		final WB_Coord tmp = p1;
@@ -30,14 +52,29 @@ public class WB_IndexedTriangle extends WB_Triangle {
 		update();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int i1() {
 		return i1;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int i2() {
 		return i2;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int i3() {
 		return i3;
 	}

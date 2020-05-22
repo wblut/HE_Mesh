@@ -6,11 +6,23 @@ import java.util.List;
 
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class WB_AlphaTriangulation3D {
+	/**  */
 	private final int[] tetrahedra;
+	/**  */
 	private double[] alpha;
+	/**  */
 	private final WB_CoordList points;
 
+	/**
+	 *
+	 *
+	 * @param tetra
+	 * @param points
+	 */
 	public WB_AlphaTriangulation3D(final int[] tetra, final WB_CoordCollection points) {
 		tetrahedra = Arrays.copyOf(tetra, tetra.length);
 		this.points = new WB_CoordList();
@@ -20,6 +32,12 @@ public class WB_AlphaTriangulation3D {
 		setAlpha();
 	}
 
+	/**
+	 *
+	 *
+	 * @param tetra
+	 * @param points
+	 */
 	public WB_AlphaTriangulation3D(final int[][] tetra, final WB_CoordCollection points) {
 		tetrahedra = new int[tetra.length * 4];
 		for (int i = 0; i < tetra.length; i++) {
@@ -35,6 +53,12 @@ public class WB_AlphaTriangulation3D {
 		setAlpha();
 	}
 
+	/**
+	 *
+	 *
+	 * @param tetra
+	 * @param points
+	 */
 	public WB_AlphaTriangulation3D(final int[] tetra, final Collection<? extends WB_Coord> points) {
 		tetrahedra = Arrays.copyOf(tetra, tetra.length);
 		this.points = new WB_CoordList();
@@ -42,6 +66,12 @@ public class WB_AlphaTriangulation3D {
 		setAlpha();
 	}
 
+	/**
+	 *
+	 *
+	 * @param tetra
+	 * @param points
+	 */
 	public WB_AlphaTriangulation3D(final int[][] tetra, final Collection<? extends WB_Coord> points) {
 		tetrahedra = new int[tetra.length * 4];
 		for (int i = 0; i < tetra.length; i++) {
@@ -55,6 +85,12 @@ public class WB_AlphaTriangulation3D {
 		setAlpha();
 	}
 
+	/**
+	 *
+	 *
+	 * @param tetra
+	 * @param points
+	 */
 	public WB_AlphaTriangulation3D(final int[] tetra, final WB_Coord[] points) {
 		tetrahedra = Arrays.copyOf(tetra, tetra.length);
 		this.points = new WB_CoordList();
@@ -64,6 +100,12 @@ public class WB_AlphaTriangulation3D {
 		setAlpha();
 	}
 
+	/**
+	 *
+	 *
+	 * @param tetra
+	 * @param points
+	 */
 	public WB_AlphaTriangulation3D(final int[][] tetra, final WB_Coord[] points) {
 		tetrahedra = new int[tetra.length * 4];
 		for (int i = 0; i < tetra.length; i++) {
@@ -79,6 +121,9 @@ public class WB_AlphaTriangulation3D {
 		setAlpha();
 	}
 
+	/**
+	 *
+	 */
 	private void setAlpha() {
 		alpha = new double[tetrahedra.length / 4];
 		int index = 0;
@@ -88,18 +133,39 @@ public class WB_AlphaTriangulation3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getTetrahedra() {
 		return tetrahedra;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_Coord> getPoints() {
 		return points.asUnmodifiable();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double[] getAlpha() {
 		return Arrays.copyOf(alpha, alpha.length);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public int[] getAlphaTetrahedra(final double a) {
 		final int[] alphaTetrahedra = new int[tetrahedra.length];
 		int index = 0;
@@ -114,6 +180,12 @@ public class WB_AlphaTriangulation3D {
 		return Arrays.copyOf(alphaTetrahedra, index);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public int[] getAlphaTriangles(final double a) {
 		final WB_IndexedObjectMap<Triple> tris = new WB_IndexedObjectMap<>();
 		for (int i = 0; i < tetrahedra.length; i += 4) {
@@ -158,6 +230,13 @@ public class WB_AlphaTriangulation3D {
 		return Arrays.copyOf(alphaTriangles, index);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param tetrahedra
+	 * @return
+	 */
 	WB_Coord centroid(final int i, final int[] tetrahedra) {
 		final WB_Point c = new WB_Point(points.get(tetrahedra[i]));
 		c.addSelf(points.get(tetrahedra[i + 1]));
@@ -167,6 +246,12 @@ public class WB_AlphaTriangulation3D {
 		return c;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public int[] getAlphaTriangles(final WB_ScalarParameter a) {
 		final WB_IndexedObjectMap<Triple> tris = new WB_IndexedObjectMap<>();
 		WB_Coord c;
@@ -213,9 +298,20 @@ public class WB_AlphaTriangulation3D {
 		return Arrays.copyOf(alphaTriangles, index);
 	}
 
+	/**
+	 *
+	 */
 	private class Triple {
+		/**  */
 		int i, j, k;
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @param j
+		 * @param k
+		 */
 		Triple(final int i, final int j, final int k) {
 			this.i = i;
 			this.j = j;
@@ -223,9 +319,20 @@ public class WB_AlphaTriangulation3D {
 		}
 	}
 
+	/**
+	 *
+	 */
 	private class Key {
+		/**  */
 		int a, b, c;
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @param j
+		 * @param k
+		 */
 		public Key(final int i, final int j, final int k) {
 			a = Math.min(Math.min(i, j), k);
 			c = Math.max(Math.max(i, j), k);
@@ -244,11 +351,22 @@ public class WB_AlphaTriangulation3D {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int hashCode() {
 			return a << 10 ^ b << 5 ^ c;
 		}
 
+		/**
+		 *
+		 *
+		 * @param o
+		 * @return
+		 */
 		@Override
 		public boolean equals(final Object o) {
 			if (!(o instanceof Key)) {

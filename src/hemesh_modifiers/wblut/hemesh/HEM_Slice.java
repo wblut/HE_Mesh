@@ -4,53 +4,112 @@ import java.util.List;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_Classification;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_JTS;
 import wblut.geom.WB_Plane;
 
+/**
+ *
+ */
 public class HEM_Slice extends HEM_Modifier {
+	/**  */
 	private WB_Plane P;
+	/**  */
 	private boolean reverse = false;
+	/**  */
 	private boolean capHoles = true;
+	/**  */
 	private boolean optimizeCap = false;
+	/**  */
 	private double offset;
+	/**  */
 	HEM_SliceSurface ss;
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEM_Slice setOffset(final double d) {
 		offset = d;
 		return this;
 	}
 
+	/**
+	 *
+	 */
 	public HEM_Slice() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public HEM_Slice setPlane(final WB_Plane P) {
 		this.P = P;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param ox
+	 * @param oy
+	 * @param oz
+	 * @param nx
+	 * @param ny
+	 * @param nz
+	 * @return
+	 */
 	public HEM_Slice setPlane(final double ox, final double oy, final double oz, final double nx, final double ny,
 			final double nz) {
 		P = new WB_Plane(ox, oy, oz, nx, ny, nz);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_Slice setReverse(final Boolean b) {
 		reverse = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_Slice setCap(final Boolean b) {
 		capHoles = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_Slice setOptimizeCap(final boolean b) {
 		optimizeCap = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HEM_Slice.");
@@ -79,7 +138,7 @@ public class HEM_Slice extends HEM_Modifier {
 		final HE_FaceIterator fItr = mesh.fItr();
 		while (fItr.hasNext()) {
 			face = fItr.next();
-			final WB_Classification cptp = WB_GeometryOp3D.classifyPointToPlane3D(HE_MeshOp.getFaceCenter(face), lP);
+			final WB_Classification cptp = WB_GeometryOp.classifyPointToPlane3D(mesh.getFaceCenter(face), lP);
 			if (cptp == WB_Classification.FRONT) {// || cptp ==
 													// WB_Classification.ON) {
 				if (face.isDegenerate()) {
@@ -145,11 +204,22 @@ public class HEM_Slice extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		return applySelf(selection.getParent());
 	}
 
+	/**
+	 *
+	 *
+	 * @param args
+	 */
 	public static void main(final String[] args) {
 		final HEC_Torus creator = new HEC_Torus(80, 200, 6, 16);
 		final HE_Mesh mesh = new HE_Mesh(creator);

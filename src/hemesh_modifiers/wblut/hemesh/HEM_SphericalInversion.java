@@ -6,13 +6,24 @@ import wblut.geom.WB_Coord;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class HEM_SphericalInversion extends HEM_Modifier {
+	/**  */
 	private WB_Point center;
+	/**  */
 	private double r;
+	/**  */
 	private double r2;
+	/**  */
 	private double icutoff;
+	/**  */
 	private boolean linear;
 
+	/**
+	 *
+	 */
 	public HEM_SphericalInversion() {
 		super();
 		center = new WB_Point(0, 0, 0);
@@ -20,6 +31,14 @@ public class HEM_SphericalInversion extends HEM_Modifier {
 		linear = false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param r
+	 */
 	public HEM_SphericalInversion(final double x, final double y, final double z, final double r) {
 		super();
 		center = new WB_Point(x, y, z);
@@ -29,32 +48,70 @@ public class HEM_SphericalInversion extends HEM_Modifier {
 		linear = false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param c
+	 * @return
+	 */
 	public HEM_SphericalInversion setCenter(final WB_Coord c) {
 		center = new WB_Point(c);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public HEM_SphericalInversion setCenter(final double x, final double y, final double z) {
 		center = new WB_Point(x, y, z);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HEM_SphericalInversion setRadius(final double r) {
 		this.r = r;
 		r2 = r * r;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param cutoff
+	 * @return
+	 */
 	public HEM_SphericalInversion setCutoff(final double cutoff) {
 		icutoff = 1.0 / cutoff;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_SphericalInversion setLinear(final boolean b) {
 		linear = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		if (center == null) {
@@ -87,6 +144,12 @@ public class HEM_SphericalInversion extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		if (center == null) {

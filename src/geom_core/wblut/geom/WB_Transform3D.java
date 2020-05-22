@@ -4,22 +4,45 @@ import wblut.math.WB_Epsilon;
 import wblut.math.WB_M33;
 import wblut.math.WB_M44;
 
+/**
+ *
+ */
 public class WB_Transform3D {
+	/**  */
 	private double _xt, _yt, _zt;
+	/**  */
 	private final WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
+	/**  */
 	private WB_M44 T;
+	/**  */
 	private WB_M44 invT;
 
+	/**
+	 *
+	 */
 	public WB_Transform3D() {
 		T = new WB_M44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 		invT = new WB_M44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param Trans
+	 */
 	public WB_Transform3D(final WB_Transform3D Trans) {
 		T = Trans.T.get();
 		invT = Trans.invT.get();
 	}
 
+	/**
+	 *
+	 *
+	 * @param sourceOrigin
+	 * @param sourceDirection
+	 * @param targetOrigin
+	 * @param targetDirection
+	 */
 	public WB_Transform3D(final WB_Coord sourceOrigin, final WB_Coord sourceDirection, final WB_Coord targetOrigin,
 			final WB_Coord targetDirection) {
 		T = new WB_M44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
@@ -42,6 +65,12 @@ public class WB_Transform3D {
 		addTranslate(targetOrigin);
 	}
 
+	/**
+	 *
+	 *
+	 * @param sourceDirection
+	 * @param targetDirection
+	 */
 	public WB_Transform3D(final WB_Coord sourceDirection, final WB_Coord targetDirection) {
 		T = new WB_M44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 		invT = new WB_M44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
@@ -61,46 +90,96 @@ public class WB_Transform3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Transform3D get() {
 		return new WB_Transform3D(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @param transform
+	 * @return
+	 */
 	public WB_Transform3D addTransform(final WB_Transform3D transform) {
 		T = transform.T.mult(T);
 		invT = invT.mult(transform.T);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public WB_Transform3D addTranslate(final WB_Coord v) {
 		T = new WB_M44(1, 0, 0, v.xd(), 0, 1, 0, v.yd(), 0, 0, 1, v.zd(), 0, 0, 0, 1).mult(T);
 		invT = invT.mult(new WB_M44(1, 0, 0, -v.xd(), 0, 1, 0, -v.yd(), 0, 0, 1, -v.zd(), 0, 0, 0, 1));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @param v
+	 * @return
+	 */
 	public WB_Transform3D addTranslate(final double f, final WB_Coord v) {
 		T = new WB_M44(1, 0, 0, f * v.xd(), 0, 1, 0, f * v.yd(), 0, 0, 1, f * v.zd(), 0, 0, 0, 1).mult(T);
 		invT = invT.mult(new WB_M44(1, 0, 0, -f * v.xd(), 0, 1, 0, -f * v.yd(), 0, 0, 1, -f * v.zd(), 0, 0, 0, 1));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param s
+	 * @return
+	 */
 	public WB_Transform3D addScale(final WB_Coord s) {
 		T = new WB_M44(s.xd(), 0, 0, 0, 0, s.yd(), 0, 0, 0, 0, s.zd(), 0, 0, 0, 0, 1).mult(T);
 		invT = invT.mult(new WB_M44(1.0 / s.xd(), 0, 0, 0, 0, 1.0 / s.yd(), 0, 0, 0, 0, 1.0 / s.zd(), 0, 0, 0, 0, 1));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sx
+	 * @param sy
+	 * @param sz
+	 * @return
+	 */
 	public WB_Transform3D addScale(final double sx, final double sy, final double sz) {
 		T = new WB_M44(sx, 0, 0, 0, 0, sy, 0, 0, 0, 0, sz, 0, 0, 0, 0, 1).mult(T);
 		invT = invT.mult(new WB_M44(1.0 / sx, 0, 0, 0, 0, 1.0 / sy, 0, 0, 0, 0, 1.0 / sz, 0, 0, 0, 0, 1));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param s
+	 * @return
+	 */
 	public WB_Transform3D addScale(final double s) {
 		T = new WB_M44(s, 0, 0, 0, 0, s, 0, 0, 0, 0, s, 0, 0, 0, 0, 1).mult(T);
 		invT = invT.mult(new WB_M44(1 / s, 0, 0, 0, 0, 1 / s, 0, 0, 0, 0, 1 / s, 0, 0, 0, 0, 1));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @return
+	 */
 	public WB_Transform3D addRotateX(final double angle) {
 		final double s = Math.sin(angle);
 		final double c = Math.cos(angle);
@@ -110,6 +189,12 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @return
+	 */
 	public WB_Transform3D addRotateY(final double angle) {
 		final double s = Math.sin(angle);
 		final double c = Math.cos(angle);
@@ -119,6 +204,12 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @return
+	 */
 	public WB_Transform3D addRotateZ(final double angle) {
 		final double s = Math.sin(angle);
 		final double c = Math.cos(angle);
@@ -128,6 +219,13 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param axis
+	 * @return
+	 */
 	public WB_Transform3D addRotateAboutOrigin(final double angle, final WB_Coord axis) {
 		final WB_Vector a = new WB_Vector(axis);
 		a.normalizeSelf();
@@ -143,6 +241,14 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param p
+	 * @param axis
+	 * @return
+	 */
 	public WB_Transform3D addRotateAboutAxis(final double angle, final WB_Coord p, final WB_Coord axis) {
 		addTranslate(-1, p);
 		addRotateAboutOrigin(angle, axis);
@@ -150,6 +256,14 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param p
+	 * @param q
+	 * @return
+	 */
 	public WB_Transform3D addRotateAboutAxis2P(final double angle, final WB_Coord p, final WB_Coord q) {
 		addTranslate(-1, p);
 		addRotateAboutOrigin(angle, WB_Vector.sub(q, p));
@@ -157,6 +271,14 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param up
+	 * @param front
+	 * @return
+	 */
 	public WB_Transform3D addObjectToWorld(final WB_Coord origin, final WB_Coord up, final WB_Coord front) {
 		final WB_Vector dir = new WB_Vector(origin, front);
 		dir.normalizeSelf();
@@ -171,26 +293,52 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Transform3D addReflectX() {
 		addScale(-1, 1, 1);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Transform3D addReflectY() {
 		addScale(1, -1, 1);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Transform3D addReflectZ() {
 		addScale(1, 1, -1);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Transform3D addInvert() {
 		addScale(-1, -1, -1);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Transform3D addReflectX(final WB_Coord p) {
 		addTranslate(-1, p);
 		addScale(-1, 1, 1);
@@ -198,6 +346,12 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Transform3D addReflectY(final WB_Coord p) {
 		addTranslate(-1, p);
 		addScale(1, -1, 1);
@@ -205,6 +359,12 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Transform3D addReflectZ(final WB_Coord p) {
 		addTranslate(-1, p);
 		addScale(1, 1, -1);
@@ -212,6 +372,12 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Transform3D addInvert(final WB_Coord p) {
 		addTranslate(-1, p);
 		addScale(-1, -1, -1);
@@ -219,6 +385,12 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public WB_Transform3D addReflect(final WB_Plane P) {
 		final WB_M33 tmp = P.getNormal().tensor(P.getNormal());
 		final double Qn = P.getOrigin().dot(P.getNormal());
@@ -230,6 +402,14 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @param v
+	 * @param angle
+	 * @return
+	 */
 	public WB_Transform3D addShear(final WB_Plane P, final WB_Coord v, final double angle) {
 		addTranslate(-1, P.getOrigin());
 		final WB_Vector lv = new WB_Vector(v);
@@ -248,6 +428,13 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @param factor
+	 * @return
+	 */
 	public WB_Transform3D addStretch(final WB_Plane P, final double factor) {
 		final WB_CoordinateSystem CSP = new WB_CoordinateSystem(P);
 		addFromWorldToCS(CSP);
@@ -257,12 +444,25 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param CS1
+	 * @param CS2
+	 * @return
+	 */
 	public WB_Transform3D addFromCSToCS(final WB_CoordinateSystem CS1, final WB_CoordinateSystem CS2) {
 		addFromCSToWorld(CS1);
 		addFromWorldToCS(CS2);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param CS
+	 * @return
+	 */
 	public WB_Transform3D addFromCSToWorld(final WB_CoordinateSystem CS) {
 		WB_CoordinateSystem current = CS;
 		while (!current.isWorld()) {
@@ -272,6 +472,12 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param CS
+	 * @return
+	 */
 	public WB_Transform3D addFromWorldToCS(final WB_CoordinateSystem CS) {
 		final WB_Transform3D tmp = new WB_Transform3D();
 		tmp.addFromCSToWorld(CS);
@@ -280,6 +486,12 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param CS
+	 * @return
+	 */
 	public WB_Transform3D addFromCSToParent(final WB_CoordinateSystem CS) {
 		final WB_CoordinateSystem WCS = WB_CoordinateSystem.WORLD();
 		if (CS.isWorld()) {
@@ -306,6 +518,12 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param CS
+	 * @return
+	 */
 	public WB_Transform3D addFromParentToCS(final WB_CoordinateSystem CS) {
 		if (CS.isWorld()) {
 			return this;
@@ -317,6 +535,9 @@ public class WB_Transform3D {
 		return this;
 	}
 
+	/**
+	 *
+	 */
 	public void inverse() {
 		WB_M44 tmp;
 		tmp = T;
@@ -324,11 +545,20 @@ public class WB_Transform3D {
 		invT = tmp;
 	}
 
+	/**
+	 *
+	 */
 	public void clear() {
 		T = new WB_M44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 		invT = new WB_M44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Point applyAsPoint(final WB_Coord p) {
 		final double xp = T.m11 * p.xd() + T.m12 * p.yd() + T.m13 * p.zd() + T.m14;
 		final double yp = T.m21 * p.xd() + T.m22 * p.yd() + T.m23 * p.zd() + T.m24;
@@ -341,6 +571,11 @@ public class WB_Transform3D {
 		return new WB_Point(xp * wp, yp * wp, zp * wp);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 */
 	public void applyAsPointSelf(final WB_MutableCoord p) {
 		final double x = T.m11 * p.xd() + T.m12 * p.yd() + T.m13 * p.zd() + T.m14;
 		final double y = T.m21 * p.xd() + T.m22 * p.yd() + T.m23 * p.zd() + T.m24;
@@ -350,6 +585,12 @@ public class WB_Transform3D {
 		p.set(x * wp, y * wp, z * wp);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param result
+	 */
 	public void applyAsPointInto(final WB_Coord p, final WB_MutableCoord result) {
 		_xt = T.m11 * p.xd() + T.m12 * p.yd() + T.m13 * p.zd() + T.m14;
 		_yt = T.m21 * p.xd() + T.m22 * p.yd() + T.m23 * p.zd() + T.m24;
@@ -359,6 +600,14 @@ public class WB_Transform3D {
 		result.set(_xt * wp, _yt * wp, _zt * wp);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public WB_Point applyAsPoint(final double x, final double y, final double z) {
 		final double xp = T.m11 * x + T.m12 * y + T.m13 * z + T.m14;
 		final double yp = T.m21 * x + T.m22 * y + T.m23 * z + T.m24;
@@ -371,6 +620,14 @@ public class WB_Transform3D {
 		return new WB_Point(xp * wp, yp * wp, zp * wp);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param result
+	 */
 	public void applyAsPointInto(final double x, final double y, final double z, final WB_MutableCoord result) {
 		_xt = T.m11 * x + T.m12 * y + T.m13 * z + T.m14;
 		_yt = T.m21 * x + T.m22 * y + T.m23 * z + T.m24;
@@ -380,6 +637,12 @@ public class WB_Transform3D {
 		result.set(_xt * wp, _yt * wp, _zt * wp);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Point applyInvAsPoint(final WB_Coord p) {
 		_xt = invT.m11 * p.xd() + invT.m12 * p.yd() + invT.m13 * p.zd() + invT.m14;
 		_yt = invT.m21 * p.xd() + invT.m22 * p.yd() + invT.m23 * p.zd() + invT.m24;
@@ -389,6 +652,11 @@ public class WB_Transform3D {
 		return new WB_Point(_xt * wp, _yt * wp, _zt * wp);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 */
 	public void applyInvAsPointSelf(final WB_MutableCoord p) {
 		_xt = invT.m11 * p.xd() + invT.m12 * p.yd() + invT.m13 * p.zd() + invT.m14;
 		_yt = invT.m21 * p.xd() + invT.m22 * p.yd() + invT.m23 * p.zd() + invT.m24;
@@ -398,6 +666,12 @@ public class WB_Transform3D {
 		p.set(_xt * wp, _yt * wp, _zt * wp);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param result
+	 */
 	public void applyInvAsPointInto(final WB_Coord p, final WB_MutableCoord result) {
 		_xt = invT.m11 * p.xd() + invT.m12 * p.yd() + invT.m13 * p.zd() + invT.m14;
 		_yt = invT.m21 * p.xd() + invT.m22 * p.yd() + invT.m23 * p.zd() + invT.m24;
@@ -407,6 +681,14 @@ public class WB_Transform3D {
 		result.set(_xt * wp, _yt * wp, _zt * wp);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public WB_Point applyInvAsPoint(final double x, final double y, final double z) {
 		_xt = invT.m11 * x + invT.m12 * y + invT.m13 * z + invT.m14;
 		_yt = invT.m21 * x + invT.m22 * y + invT.m23 * z + invT.m24;
@@ -416,6 +698,14 @@ public class WB_Transform3D {
 		return new WB_Point(_xt * wp, _yt * wp, _zt * wp);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param result
+	 */
 	public void applyInvAsPointInto(final double x, final double y, final double z, final WB_MutableCoord result) {
 		_xt = invT.m11 * x + invT.m12 * y + invT.m13 * z + invT.m14;
 		_yt = invT.m21 * x + invT.m22 * y + invT.m23 * z + invT.m24;
@@ -425,6 +715,12 @@ public class WB_Transform3D {
 		result.set(_xt * wp, _yt * wp, _zt * wp);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Vector applyAsVector(final WB_Coord p) {
 		final double xp = T.m11 * p.xd() + T.m12 * p.yd() + T.m13 * p.zd();
 		final double yp = T.m21 * p.xd() + T.m22 * p.yd() + T.m23 * p.zd();
@@ -432,6 +728,11 @@ public class WB_Transform3D {
 		return new WB_Vector(xp, yp, zp);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 */
 	public void applyAsVectorSelf(final WB_MutableCoord p) {
 		final double x = T.m11 * p.xd() + T.m12 * p.yd() + T.m13 * p.zd();
 		final double y = T.m21 * p.xd() + T.m22 * p.yd() + T.m23 * p.zd();
@@ -439,6 +740,12 @@ public class WB_Transform3D {
 		p.set(x, y, z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param result
+	 */
 	public void applyAsVectorInto(final WB_Coord p, final WB_MutableCoord result) {
 		_xt = T.m11 * p.xd() + T.m12 * p.yd() + T.m13 * p.zd();
 		_yt = T.m21 * p.xd() + T.m22 * p.yd() + T.m23 * p.zd();
@@ -446,6 +753,14 @@ public class WB_Transform3D {
 		result.set(_xt, _yt, _zt);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public WB_Vector applyAsVector(final double x, final double y, final double z) {
 		final double xp = T.m11 * x + T.m12 * y + T.m13 * z;
 		final double yp = T.m21 * x + T.m22 * y + T.m23 * z;
@@ -453,6 +768,14 @@ public class WB_Transform3D {
 		return new WB_Vector(xp, yp, zp);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param result
+	 */
 	public void applyAsVectorInto(final double x, final double y, final double z, final WB_MutableCoord result) {
 		_xt = T.m11 * x + T.m12 * y + T.m13 * z;
 		_yt = T.m21 * x + T.m22 * y + T.m23 * z;
@@ -460,6 +783,12 @@ public class WB_Transform3D {
 		result.set(_xt, _yt, _zt);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Vector applyInvAsVector(final WB_Coord p) {
 		_xt = invT.m11 * p.xd() + invT.m12 * p.yd() + invT.m13 * p.zd();
 		_yt = invT.m21 * p.xd() + invT.m22 * p.yd() + invT.m23 * p.zd();
@@ -467,6 +796,11 @@ public class WB_Transform3D {
 		return new WB_Vector(_xt, _yt, _zt);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 */
 	public void applyInvAsVectorSelf(final WB_MutableCoord v) {
 		_xt = invT.m11 * v.xd() + invT.m12 * v.yd() + invT.m13 * v.zd();
 		_yt = invT.m21 * v.xd() + invT.m22 * v.yd() + invT.m23 * v.zd();
@@ -474,6 +808,12 @@ public class WB_Transform3D {
 		v.set(_xt, _yt, _zt);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param result
+	 */
 	public void applyInvAsVectorInto(final WB_Coord p, final WB_MutableCoord result) {
 		_xt = invT.m11 * p.xd() + invT.m12 * p.yd() + invT.m13 * p.zd();
 		_yt = invT.m21 * p.xd() + invT.m22 * p.yd() + invT.m23 * p.zd();
@@ -481,6 +821,14 @@ public class WB_Transform3D {
 		result.set(_xt, _yt, _zt);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public WB_Vector applyInvAsVector(final double x, final double y, final double z) {
 		_xt = invT.m11 * x + invT.m12 * y + invT.m13 * z;
 		_yt = invT.m21 * x + invT.m22 * y + invT.m23 * z;
@@ -488,6 +836,14 @@ public class WB_Transform3D {
 		return new WB_Vector(_xt, _yt, _zt);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param result
+	 */
 	public void applyInvAsVectorInto(final double x, final double y, final double z, final WB_MutableCoord result) {
 		_xt = invT.m11 * x + invT.m12 * y + invT.m13 * z;
 		_yt = invT.m21 * x + invT.m22 * y + invT.m23 * z;
@@ -495,6 +851,12 @@ public class WB_Transform3D {
 		result.set(_xt, _yt, _zt);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Vector applyAsNormal(final WB_Coord p) {
 		final double nx = invT.m11 * p.xd() + invT.m21 * p.yd() + invT.m31 * p.zd();
 		final double ny = invT.m12 * p.xd() + invT.m22 * p.yd() + invT.m32 * p.zd();
@@ -502,6 +864,11 @@ public class WB_Transform3D {
 		return new WB_Vector(nx, ny, nz);
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 */
 	public void applyAsNormalSelf(final WB_MutableCoord n) {
 		final double x = invT.m11 * n.xd() + invT.m21 * n.yd() + invT.m31 * n.zd();
 		final double y = invT.m12 * n.xd() + invT.m22 * n.yd() + invT.m32 * n.zd();
@@ -509,6 +876,12 @@ public class WB_Transform3D {
 		n.set(x, y, z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @param result
+	 */
 	public void applyAsNormalInto(final WB_Coord n, final WB_MutableCoord result) {
 		_xt = invT.m11 * n.xd() + invT.m21 * n.yd() + invT.m31 * n.zd();
 		_yt = invT.m12 * n.xd() + invT.m22 * n.yd() + invT.m32 * n.zd();
@@ -516,6 +889,14 @@ public class WB_Transform3D {
 		result.set(_xt, _yt, _zt);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public WB_Vector applyAsNormal(final double x, final double y, final double z) {
 		final double nx = invT.m11 * x + invT.m21 * y + invT.m31 * z;
 		final double ny = invT.m12 * x + invT.m22 * y + invT.m32 * z;
@@ -523,6 +904,14 @@ public class WB_Transform3D {
 		return new WB_Vector(nx, ny, nz);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param result
+	 */
 	public void applyAsNormalInto(final double x, final double y, final double z, final WB_MutableCoord result) {
 		_xt = invT.m11 * x + invT.m21 * y + invT.m31 * z;
 		_yt = invT.m12 * x + invT.m22 * y + invT.m32 * z;
@@ -530,6 +919,12 @@ public class WB_Transform3D {
 		result.set(_xt, _yt, _zt);
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @return
+	 */
 	public WB_Vector applyInvAsNormal(final WB_Coord n) {
 		_xt = T.m11 * n.xd() + T.m21 * n.yd() + T.m31 * n.zd();
 		_yt = T.m12 * n.xd() + T.m22 * n.yd() + T.m32 * n.zd();
@@ -537,6 +932,11 @@ public class WB_Transform3D {
 		return new WB_Vector(_xt, _yt, _zt);
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 */
 	public void applyInvAsNormalSelf(final WB_MutableCoord n) {
 		_xt = T.m11 * n.xd() + T.m21 * n.yd() + T.m31 * n.zd();
 		_yt = T.m12 * n.xd() + T.m22 * n.yd() + T.m32 * n.zd();
@@ -544,6 +944,12 @@ public class WB_Transform3D {
 		n.set(_xt, _yt, _zt);
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @param result
+	 */
 	public void applyInvAsNormalInto(final WB_Coord n, final WB_MutableCoord result) {
 		_xt = T.m11 * n.xd() + T.m21 * n.yd() + T.m31 * n.zd();
 		_yt = T.m12 * n.xd() + T.m22 * n.yd() + T.m32 * n.zd();
@@ -551,6 +957,14 @@ public class WB_Transform3D {
 		result.set(_xt, _yt, _zt);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public WB_Vector applyInvAsNormal(final double x, final double y, final double z) {
 		_xt = T.m11 * x + T.m21 * y + T.m31 * z;
 		_yt = T.m12 * x + T.m22 * y + T.m32 * z;
@@ -558,6 +972,14 @@ public class WB_Transform3D {
 		return new WB_Vector(_xt, _yt, _zt);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param result
+	 */
 	public void applyInvAsNormalInto(final double x, final double y, final double z, final WB_MutableCoord result) {
 		_xt = T.m11 * x + T.m21 * y + T.m31 * z;
 		_yt = T.m12 * x + T.m22 * y + T.m32 * z;
@@ -565,6 +987,11 @@ public class WB_Transform3D {
 		result.set(_xt, _yt, _zt);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public String toString() {
 		final String s = "WB_Transform T:" + "\n" + "[" + T.m11 + ", " + T.m12 + ", " + T.m13 + ", " + T.m14 + "]"
@@ -574,6 +1001,11 @@ public class WB_Transform3D {
 		return s;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Vector getEulerAnglesXYZ() {
 		double theta, phi, psi;
 		if (WB_Epsilon.isEqualAbs(Math.abs(T.m31), 1.0)) {

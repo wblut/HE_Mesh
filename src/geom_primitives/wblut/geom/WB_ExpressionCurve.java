@@ -3,17 +3,37 @@ package wblut.geom;
 import com.fathzer.soft.javaluator.DoubleEvaluator;
 import com.fathzer.soft.javaluator.StaticVariableSet;
 
+/**
+ *
+ */
 public class WB_ExpressionCurve implements WB_Curve {
+	/**  */
 	String expressionX;
+	/**  */
 	String expressionY;
+	/**  */
 	String expressionZ;
+	/**  */
 	StaticVariableSet<Double> variables;
+	/**  */
 	String var;
+	/**  */
 	boolean is3D;
+	/**  */
 	double lowerU, upperU;
+	/**  */
 	double h;
+	/**  */
 	DoubleEvaluator eval;
 
+	/**
+	 *
+	 *
+	 * @param equationX
+	 * @param equationY
+	 * @param equationZ
+	 * @param var
+	 */
 	public WB_ExpressionCurve(final String equationX, final String equationY, final String equationZ,
 			final String var) {
 		eval = new DoubleEvaluator();
@@ -28,6 +48,13 @@ public class WB_ExpressionCurve implements WB_Curve {
 		h = 0.00001;
 	}
 
+	/**
+	 *
+	 *
+	 * @param equationX
+	 * @param equationY
+	 * @param var
+	 */
 	public WB_ExpressionCurve(final String equationX, final String equationY, final String var) {
 		eval = new DoubleEvaluator();
 		expressionX = equationX;
@@ -41,6 +68,16 @@ public class WB_ExpressionCurve implements WB_Curve {
 		h = 0.00001;
 	}
 
+	/**
+	 *
+	 *
+	 * @param equationX
+	 * @param equationY
+	 * @param equationZ
+	 * @param var
+	 * @param minU
+	 * @param maxU
+	 */
 	public WB_ExpressionCurve(final String equationX, final String equationY, final String equationZ, final String var,
 			final double minU, final double maxU) {
 		eval = new DoubleEvaluator();
@@ -55,6 +92,15 @@ public class WB_ExpressionCurve implements WB_Curve {
 		h = 0.00001;
 	}
 
+	/**
+	 *
+	 *
+	 * @param equationX
+	 * @param equationY
+	 * @param var
+	 * @param minU
+	 * @param maxU
+	 */
 	public WB_ExpressionCurve(final String equationX, final String equationY, final String var, final double minU,
 			final double maxU) {
 		eval = new DoubleEvaluator();
@@ -69,6 +115,12 @@ public class WB_ExpressionCurve implements WB_Curve {
 		h = 0.00001;
 	}
 
+	/**
+	 *
+	 *
+	 * @param value
+	 * @return
+	 */
 	private WB_Point evaluate2D(final double value) {
 		variables.set(var, value);
 		final double x = eval.evaluate(expressionX, variables);
@@ -76,6 +128,12 @@ public class WB_ExpressionCurve implements WB_Curve {
 		return new WB_Point(x, y, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param value
+	 * @return
+	 */
 	private WB_Point evaluate3D(final double value) {
 		variables.set(var, value);
 		final double x = eval.evaluate(expressionX, variables);
@@ -84,6 +142,12 @@ public class WB_ExpressionCurve implements WB_Curve {
 		return new WB_Point(x, y, z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_Point getPointOnCurve(final double u) {
 		if ((u < lowerU) || (u > upperU)) {
@@ -95,16 +159,32 @@ public class WB_ExpressionCurve implements WB_Curve {
 		return evaluate2D(u);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getLowerU() {
 		return lowerU;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getUpperU() {
 		return upperU;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_Vector getDirectionOnCurve(double u) {
 		if ((u < lowerU) || (u > upperU)) {
@@ -127,6 +207,12 @@ public class WB_ExpressionCurve implements WB_Curve {
 		return v;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_Vector getDerivative(final double u) {
 		if ((u < lowerU) || (u > upperU)) {

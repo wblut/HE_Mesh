@@ -2,15 +2,30 @@ package wblut.geom;
 
 import wblut.math.WB_DoubleDouble;
 
+/**
+ *
+ */
 public class WB_Predicates {
+	/**
+	 *
+	 */
 	public WB_Predicates() {
 	}
 
+	/**  */
 	private static double orientErrorBound = -1;
+	/**  */
 	private static double insphereErrorBound = -1;
+	/**  */
 	private static double orientErrorBound2D = -1;
+	/**  */
 	private static double incircleErrorBound2D = -1;
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	private static double findMachEpsilon() {
 		double epsilon, check, lastcheck;
 		epsilon = 1.0;
@@ -23,6 +38,9 @@ public class WB_Predicates {
 		return epsilon;
 	}
 
+	/**
+	 *
+	 */
 	private static void init() {
 		final double epsilon = findMachEpsilon();
 		orientErrorBound = (7.0 + 56.0 * epsilon) * epsilon;
@@ -33,6 +51,14 @@ public class WB_Predicates {
 
 	// >0 if pa,pb,pc ccw
 	// <0 if pa,pb,pc cw
+	/**
+	 *
+	 *
+	 * @param pa
+	 * @param pb
+	 * @param pc
+	 * @return
+	 */
 	// =0 if colinear
 	public static double orient2D(final WB_Coord pa, final WB_Coord pb, final WB_Coord pc) {
 		if (orientErrorBound2D == -1) {
@@ -65,6 +91,14 @@ public class WB_Predicates {
 		return orientDD2D(pa, pb, pc);
 	}
 
+	/**
+	 *
+	 *
+	 * @param pa
+	 * @param pb
+	 * @param pc
+	 * @return
+	 */
 	private static double orientDD2D(final WB_Coord pa, final WB_Coord pb, final WB_Coord pc) {
 		WB_DoubleDouble ax, ay, bx, by, cx, cy;
 		WB_DoubleDouble acx, bcx, acy, bcy;
@@ -88,6 +122,15 @@ public class WB_Predicates {
 
 	// >0 if pd inside circle through pa,pb,pc (if ccw)
 	// <0 if pd outside circle through pa,pb,pc (if ccw)
+	/**
+	 *
+	 *
+	 * @param pa
+	 * @param pb
+	 * @param pc
+	 * @param pd
+	 * @return
+	 */
 	// =0 if on circle
 	public static double inCircle2D(final WB_Coord pa, final WB_Coord pb, final WB_Coord pc, final WB_Coord pd) {
 		if (incircleErrorBound2D == -1) {
@@ -140,6 +183,15 @@ public class WB_Predicates {
 		return incircleDD2D(pa, pb, pc, pd);
 	}
 
+	/**
+	 *
+	 *
+	 * @param pa
+	 * @param pb
+	 * @param pc
+	 * @param pd
+	 * @return
+	 */
 	private static double incircleDD2D(final WB_Coord pa, final WB_Coord pb, final WB_Coord pc, final WB_Coord pd) {
 		WB_DoubleDouble ax, ay, bx, by, cx, cy, dx, dy;
 		WB_DoubleDouble adx, ady, bdx, bdy, cdx, cdy;
@@ -187,6 +239,15 @@ public class WB_Predicates {
 
 	// >0 if pd below plane defined by pa,pb,pc
 	// <0 if above (pa,pb,pc are ccw viewed from above)
+	/**
+	 *
+	 *
+	 * @param pa
+	 * @param pb
+	 * @param pc
+	 * @param pd
+	 * @return
+	 */
 	// = 0 if on plane
 	public static double orient3D(final WB_Coord pa, final WB_Coord pb, final WB_Coord pc, final WB_Coord pd) {
 		if (orientErrorBound == -1) {
@@ -243,6 +304,15 @@ public class WB_Predicates {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param pa
+	 * @param pb
+	 * @param pc
+	 * @param pd
+	 * @return
+	 */
 	private static double orientDD3D(final WB_Coord pa, final WB_Coord pb, final WB_Coord pc, final WB_Coord pd) {
 		WB_DoubleDouble ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz;
 		WB_DoubleDouble adx, bdx, cdx, ady, bdy, cdy, adz, bdz, cdz;
@@ -279,6 +349,16 @@ public class WB_Predicates {
 
 	// >0 if pe inside sphere through pa,pb,pc,pd (if orient3d(pa,pb,pc,pd)>0))
 	// <0 if pe outside sphere through pa,pb,pc,pd (if orient3d(pa,pb,pc,pd)>0))
+	/**
+	 *
+	 *
+	 * @param pa
+	 * @param pb
+	 * @param pc
+	 * @param pd
+	 * @param pe
+	 * @return
+	 */
 	// =0 if on sphere
 	public static double inSphere3D(final WB_Coord pa, final WB_Coord pb, final WB_Coord pc, final WB_Coord pd,
 			final WB_Coord pe) {
@@ -369,6 +449,16 @@ public class WB_Predicates {
 		return insphereDD3D(pa, pb, pc, pd, pe);
 	}
 
+	/**
+	 *
+	 *
+	 * @param pa
+	 * @param pb
+	 * @param pc
+	 * @param pd
+	 * @param pe
+	 * @return
+	 */
 	private static double insphereDD3D(final WB_Coord pa, final WB_Coord pb, final WB_Coord pc, final WB_Coord pd,
 			final WB_Coord pe) {
 		WB_DoubleDouble ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez;
@@ -439,16 +529,44 @@ public class WB_Predicates {
 		return det.compareTo(WB_DoubleDouble.ZERO);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @param q
+	 * @return
+	 */
 	public static boolean inTriangle2D(final WB_Coord p1, final WB_Coord p2, final WB_Coord p3, final WB_Coord q) {
 		return !diffSideOfLine2D(p1, p2, q, p3) && !diffSideOfLine2D(p2, p3, q, p1) && !diffSideOfLine2D(p3, p1, q, p2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @param p4
+	 * @param q
+	 * @return
+	 */
 	public static boolean inTetrahedron3D(final WB_Coord p1, final WB_Coord p2, final WB_Coord p3, final WB_Coord p4,
 			final WB_Coord q) {
 		return !diffSideOfPlane3D(p1, p2, p3, q, p4) && !diffSideOfPlane3D(p2, p3, p4, q, p1)
 				&& !diffSideOfPlane3D(p1, p2, p4, q, p3) && !diffSideOfPlane3D(p1, p3, p4, q, p2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param q0
+	 * @param q1
+	 * @return
+	 */
 	public static WB_Classification relativeSideOfLine2D(final WB_Coord p0, final WB_Coord p1, final WB_Coord q0,
 			final WB_Coord q1) {
 		double a, b;
@@ -472,6 +590,16 @@ public class WB_Predicates {
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 * @param q0
+	 * @param q1
+	 * @return
+	 */
 	public static WB_Classification relativeSideOfPlane3D(final WB_Coord p0, final WB_Coord p1, final WB_Coord p2,
 			final WB_Coord q0, final WB_Coord q1) {
 		double a, b;
@@ -496,6 +624,15 @@ public class WB_Predicates {
 	}
 
 	// diffsides returns true if q1 and q2 are NOT on the same side of the line
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @param q1
+	 * @param q2
+	 * @return
+	 */
 	// expanded by p1 and p2.
 	public static boolean diffSideOfLine2D(final WB_Coord p1, final WB_Coord p2, final WB_Coord q1, final WB_Coord q2) {
 		double a, b;
@@ -505,6 +642,16 @@ public class WB_Predicates {
 	}
 
 	// diffsides returns true if q1 and q2 are NOT on the same side of the plane
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @param q1
+	 * @param q2
+	 * @return
+	 */
 	// expanded by p1,p2, and p3.
 	public static boolean diffSideOfPlane3D(final WB_Coord p1, final WB_Coord p2, final WB_Coord p3, final WB_Coord q1,
 			final WB_Coord q2) {
@@ -514,6 +661,14 @@ public class WB_Predicates {
 		return a > 0 && b < 0 || a < 0 && b > 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	public static boolean onLine2D(final WB_Coord p0, final WB_Coord p1, final WB_Coord p2) {
 		if (orient2D(p0, p1, p2) == 0) {
 			return true;
@@ -522,6 +677,15 @@ public class WB_Predicates {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @return
+	 */
 	public static boolean onPlane3D(final WB_Coord p0, final WB_Coord p1, final WB_Coord p2, final WB_Coord p3) {
 		if (orient3D(p0, p1, p2, p3) == 0) {
 			return true;
@@ -530,6 +694,14 @@ public class WB_Predicates {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @return
+	 */
 	public static double[] circumcenter2D(final double[] a, final double[] b, final double[] c) {
 		double xba, yba, zba, xca, yca, zca;
 		double balength, calength;
@@ -561,6 +733,14 @@ public class WB_Predicates {
 		return circumcenter;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @return
+	 */
 	public static double[] circumcenter2D(final WB_Coord a, final WB_Coord b, final WB_Coord c) {
 		double xba, yba, zba, xca, yca, zca;
 		double balength, calength;
@@ -592,14 +772,44 @@ public class WB_Predicates {
 		return circumcenter;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param d
+	 * @return
+	 */
 	public static double[] circumcenter3D(final double[] a, final double[] b, final double[] c, final double[] d) {
 		return circumcenter3D(a, b, c, d, null, null, null);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param d
+	 * @return
+	 */
 	public static double[] circumcenter3D(final WB_Coord a, final WB_Coord b, final WB_Coord c, final WB_Coord d) {
 		return circumcenter3D(a, b, c, d, null, null, null);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param d
+	 * @param xi
+	 * @param eta
+	 * @param zeta
+	 * @return
+	 */
 	public static double[] circumcenter3D(final double[] a, final double[] b, final double[] c, final double[] d,
 			final double[] xi, final double[] eta, final double[] zeta) {
 		double xba, yba, zba, xca, yca, zca, xda, yda, zda;
@@ -647,6 +857,18 @@ public class WB_Predicates {
 		return circumcenter;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param d
+	 * @param xi
+	 * @param eta
+	 * @param zeta
+	 * @return
+	 */
 	public static double[] circumcenter3D(final WB_Coord a, final WB_Coord b, final WB_Coord c, final WB_Coord d,
 			final double[] xi, final double[] eta, final double[] zeta) {
 		double xba, yba, zba, xca, yca, zca, xda, yda, zda;
@@ -694,6 +916,14 @@ public class WB_Predicates {
 		return circumcenter;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	public static double circumradius2D(final double[] p0, final double[] p1, final double[] p2) {
 		double t1, t2, t3;
 		final double[] circumcenter = circumcenter2D(p0, p1, p2);
@@ -706,6 +936,14 @@ public class WB_Predicates {
 		return Math.sqrt(t1 + t2 + t3);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	public static double circumradius2D(final WB_Coord p0, final WB_Coord p1, final WB_Coord p2) {
 		double t1, t2, t3;
 		final double[] circumcenter = circumcenter2D(p0, p1, p2);
@@ -718,6 +956,15 @@ public class WB_Predicates {
 		return Math.sqrt(t1 + t2 + t3);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @return
+	 */
 	public static double circumradius3D(final double[] p0, final double[] p1, final double[] p2, final double[] p3) {
 		double t1, t2, t3;
 		final double[] circumcenter = circumcenter3D(p0, p1, p2, p3, null, null, null);
@@ -730,6 +977,15 @@ public class WB_Predicates {
 		return Math.sqrt(t1 + t2 + t3);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @return
+	 */
 	public static double circumradius3D(final WB_Coord p0, final WB_Coord p1, final WB_Coord p2, final WB_Coord p3) {
 		double t1, t2, t3;
 		final double[] circumcenter = circumcenter3D(p0, p1, p2, p3, null, null, null);
@@ -742,6 +998,14 @@ public class WB_Predicates {
 		return Math.sqrt(t1 + t2 + t3);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	public static WB_Circle circumcircle2D(final double[] p0, final double[] p1, final double[] p2) {
 		double t1, t2, t3;
 		final double[] circumcenter = circumcenter2D(p0, p1, p2);
@@ -754,6 +1018,14 @@ public class WB_Predicates {
 		return new WB_Circle(new WB_Point(circumcenter), Math.sqrt(t1 + t2 + t3));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	public static WB_Circle circumcircle2D(final WB_Coord p0, final WB_Coord p1, final WB_Coord p2) {
 		double t1, t2, t3;
 		final double[] circumcenter = circumcenter2D(p0, p1, p2);
@@ -766,6 +1038,15 @@ public class WB_Predicates {
 		return new WB_Circle(new WB_Point(circumcenter), Math.sqrt(t1 + t2 + t3));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @return
+	 */
 	public static WB_Sphere circumsphere3D(final double[] p0, final double[] p1, final double[] p2, final double[] p3) {
 		double t1, t2, t3;
 		final double[] circumcenter = circumcenter3D(p0, p1, p2, p3, null, null, null);
@@ -778,6 +1059,15 @@ public class WB_Predicates {
 		return new WB_Sphere(new WB_Point(circumcenter), Math.sqrt(t1 + t2 + t3));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @return
+	 */
 	public static WB_Sphere circumsphere3D(final WB_Coord p0, final WB_Coord p1, final WB_Coord p2, final WB_Coord p3) {
 		double t1, t2, t3;
 		final double[] circumcenter = circumcenter3D(p0, p1, p2, p3, null, null, null);
@@ -790,6 +1080,15 @@ public class WB_Predicates {
 		return new WB_Sphere(new WB_Point(circumcenter), Math.sqrt(t1 + t2 + t3));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param d
+	 * @return
+	 */
 	public static boolean getIntersectionProper2D(final WB_Coord a, final WB_Coord b, final WB_Coord c,
 			final WB_Coord d) {
 		if (orient2D(a, b, c) == 0 || orient2D(a, b, d) == 0 || orient2D(c, d, a) == 0 || orient2D(c, d, b) == 0) {
@@ -801,6 +1100,11 @@ public class WB_Predicates {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param args
+	 */
 	public static void main(final String[] args) {
 		System.out.println(WB_Predicates.inCircle2D(new WB_Point(0, 1.0000000000033), new WB_Point(0, -1.0000000000033),
 				new WB_Point(1.0000000000033, 0), new WB_Point(-1.0000000000033, 0)));

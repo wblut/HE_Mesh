@@ -2,15 +2,30 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
+/**
+ *
+ */
 public class HE_FaceFaceCirculator implements Iterator<HE_Face> {
+	/**  */
 	private final HE_Halfedge _start;
+	/**  */
 	private HE_Halfedge _current;
 
+	/**
+	 *
+	 *
+	 * @param f
+	 */
 	HE_FaceFaceCirculator(final HE_Face f) {
 		_start = f.getHalfedge();
 		_current = null;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public boolean hasNext() {
 		if (_start == null) {
@@ -19,6 +34,11 @@ public class HE_FaceFaceCirculator implements Iterator<HE_Face> {
 		return (_current == null || _current.getNextInFace() != _start) && _start != null;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_Face next() {
 		if (_current == null) {
@@ -29,6 +49,9 @@ public class HE_FaceFaceCirculator implements Iterator<HE_Face> {
 		return _current.getPair().getFace();
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void remove() {
 		throw new UnsupportedOperationException();

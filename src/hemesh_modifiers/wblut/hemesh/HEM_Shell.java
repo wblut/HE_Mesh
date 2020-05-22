@@ -4,31 +4,63 @@ import wblut.math.WB_ConstantScalarParameter;
 import wblut.math.WB_FactorScalarParameter;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class HEM_Shell extends HEM_Modifier {
+	/**  */
 	private WB_ScalarParameter d;
+	/**  */
 	private boolean twosided;
 
+	/**
+	 *
+	 */
 	public HEM_Shell() {
 		super();
 		d = WB_ScalarParameter.ZERO;
 		twosided = false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEM_Shell setThickness(final double d) {
 		this.d = d == 0.0 ? WB_ScalarParameter.ZERO : new WB_ConstantScalarParameter(d);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEM_Shell setThickness(final WB_ScalarParameter d) {
 		this.d = d;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_Shell setTwoSided(final boolean b) {
 		twosided = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		if (d == WB_ScalarParameter.ZERO) {
@@ -91,6 +123,12 @@ public class HEM_Shell extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		return applySelf(selection.getParent());

@@ -3,7 +3,13 @@ package wblut.hemesh;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Coord;
 
+/**
+ *
+ */
 public class HEC_Box extends HEC_Creator {
+	/**
+	 *
+	 */
 	public HEC_Box() {
 		super();
 		parameters.set("width", 100.0);
@@ -14,6 +20,16 @@ public class HEC_Box extends HEC_Creator {
 		parameters.set("depthSegments", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param W
+	 * @param H
+	 * @param D
+	 * @param L
+	 * @param M
+	 * @param N
+	 */
 	public HEC_Box(final double W, final double H, final double D, final int L, final int M, final int N) {
 		this();
 		parameters.set("width", W);
@@ -24,6 +40,19 @@ public class HEC_Box extends HEC_Creator {
 		parameters.set("depthSegments", Math.max(1, N));
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param W
+	 * @param H
+	 * @param D
+	 * @param L
+	 * @param M
+	 * @param N
+	 */
 	public HEC_Box(final double x, final double y, final double z, final double W, final double H, final double D,
 			final int L, final int M, final int N) {
 		this();
@@ -36,6 +65,17 @@ public class HEC_Box extends HEC_Creator {
 		parameters.set("depthSegments", Math.max(1, N));
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param W
+	 * @param H
+	 * @param D
+	 * @param L
+	 * @param M
+	 * @param N
+	 */
 	public HEC_Box(final WB_Coord center, final double W, final double H, final double D, final int L, final int M,
 			final int N) {
 		this();
@@ -48,6 +88,13 @@ public class HEC_Box extends HEC_Creator {
 		parameters.set("depthSegments", Math.max(1, N));
 	}
 
+	/**
+	 *
+	 *
+	 * @param AABB
+	 * @param padding
+	 * @return
+	 */
 	public HEC_Box setFromAABB(final WB_AABB AABB, final double padding) {
 		parameters.set("width", AABB.getWidth() + 2 * padding);
 		parameters.set("height", AABB.getHeight() + 2 * padding);
@@ -56,6 +103,12 @@ public class HEC_Box extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param AABB
+	 * @return
+	 */
 	public HEC_Box setFromAABB(final WB_AABB AABB) {
 		parameters.set("width", AABB.getWidth());
 		parameters.set("height", AABB.getHeight());
@@ -64,6 +117,13 @@ public class HEC_Box extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param min
+	 * @param max
+	 * @return
+	 */
 	public HEC_Box setFromCorners(final WB_Coord min, final WB_Coord max) {
 		parameters.set("width", max.xd() - min.xd());
 		parameters.set("height", max.yd() - min.yd());
@@ -72,6 +132,17 @@ public class HEC_Box extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param minx
+	 * @param miny
+	 * @param minz
+	 * @param maxx
+	 * @param maxy
+	 * @param maxz
+	 * @return
+	 */
 	public HEC_Box setFromCorners(final double minx, final double miny, final double minz, final double maxx,
 			final double maxy, final double maxz) {
 		parameters.set("width", maxx - minx);
@@ -81,6 +152,14 @@ public class HEC_Box extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param M
+	 * @param N
+	 * @return
+	 */
 	public HEC_Box setSegments(final int L, final int M, final int N) {
 		parameters.set("widthSegments", Math.max(1, L));
 		parameters.set("heightSegments", Math.max(1, M));
@@ -88,21 +167,47 @@ public class HEC_Box extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param W
+	 * @return
+	 */
 	public HEC_Box setWidth(final double W) {
 		parameters.set("width", W);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param H
+	 * @return
+	 */
 	public HEC_Box setHeight(final double H) {
 		parameters.set("height", H);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param D
+	 * @return
+	 */
 	public HEC_Box setDepth(final double D) {
 		parameters.set("depth", D);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param W
+	 * @param H
+	 * @param D
+	 * @return
+	 */
 	public HEC_Box setSize(final double W, final double H, final double D) {
 		parameters.set("width", W);
 		parameters.set("height", H);
@@ -110,45 +215,98 @@ public class HEC_Box extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @return
+	 */
 	public HEC_Box setWidthSegments(final int L) {
 		parameters.set("widthSegments", Math.max(1, L));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param M
+	 * @return
+	 */
 	public HEC_Box setHeightSegments(final int M) {
 		parameters.set("heightSegments", Math.max(1, M));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param N
+	 * @return
+	 */
 	public HEC_Box setDepthSegments(final int N) {
 		parameters.set("depthSegments", Math.max(1, N));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getWidth() {
 		return parameters.get("width", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getHeight() {
 		return parameters.get("height", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getDepth() {
 		return parameters.get("depth", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected int getWidthSegments() {
 		return parameters.get("widthSegments", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected int getHeightSegments() {
 		return parameters.get("heightSegments", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected int getDepthSegments() {
 		return parameters.get("depthSegments", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final double W = getWidth();

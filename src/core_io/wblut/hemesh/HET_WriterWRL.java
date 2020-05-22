@@ -5,10 +5,19 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
+/**
+ *
+ */
 class HET_WriterWRL {
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param path
+	 * @param name
+	 */
 	public static void saveMeshWithFaceColor(final HE_Mesh mesh, final String path, final String name) {
 		try {
 			saveMeshWithFaceColor(mesh, createOutputStream(new File(path, name + ".wrl")));
@@ -17,6 +26,12 @@ class HET_WriterWRL {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param stream
+	 */
 	public static void saveMeshWithFaceColor(final HE_Mesh mesh, final OutputStream stream) {
 		try {
 			final BufferedOutputStream out = new BufferedOutputStream(stream, 0x20000);
@@ -49,7 +64,7 @@ class HET_WriterWRL {
 			counter = 0;
 			HE_FaceIterator fItr = mesh.fItr();
 			HE_Face f;
-			List<HE_Vertex> vlist;
+			HE_VertexList vlist;
 			while (fItr.hasNext()) {
 				f = fItr.next();
 				vlist = f.getFaceVertices();
@@ -83,18 +98,43 @@ class HET_WriterWRL {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param what
+	 * @return
+	 */
 	public static final int red(final int what) {
 		return what >> 16 & 0xff;
 	}
 
+	/**
+	 *
+	 *
+	 * @param what
+	 * @return
+	 */
 	public static final int green(final int what) {
 		return what >> 8 & 0xff;
 	}
 
+	/**
+	 *
+	 *
+	 * @param what
+	 * @return
+	 */
 	public static final int blue(final int what) {
 		return what & 0xff;
 	}
 
+	/**
+	 *
+	 *
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
 	static public OutputStream createOutputStream(final File file) throws IOException {
 		if (file == null) {
 			throw new IllegalArgumentException("file can't be null");
@@ -107,6 +147,11 @@ class HET_WriterWRL {
 		return stream;
 	}
 
+	/**
+	 *
+	 *
+	 * @param file
+	 */
 	static public void createDirectories(final File file) {
 		try {
 			final String parentName = file.getParent();
@@ -121,6 +166,12 @@ class HET_WriterWRL {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param stream
+	 */
 	public static void saveMesh(final HE_Mesh mesh, final OutputStream stream) {
 		try {
 			final BufferedOutputStream out = new BufferedOutputStream(stream, 0x20000);
@@ -153,7 +204,7 @@ class HET_WriterWRL {
 			counter = 0;
 			final HE_FaceIterator fItr = mesh.fItr();
 			HE_Face f;
-			List<HE_Vertex> vlist;
+			HE_VertexList vlist;
 			while (fItr.hasNext()) {
 				f = fItr.next();
 				vlist = f.getFaceVertices();
@@ -172,6 +223,13 @@ class HET_WriterWRL {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param path
+	 * @param name
+	 */
 	public static void saveMesh(final HE_Mesh mesh, final String path, final String name) {
 		try {
 			saveMesh(mesh, createOutputStream(new File(path, name + ".wrl")));
@@ -180,6 +238,13 @@ class HET_WriterWRL {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param path
+	 * @param name
+	 */
 	public static void saveMeshWithVertexColor(final HE_Mesh mesh, final String path, final String name) {
 		try {
 			saveMeshWithVertexColor(mesh, createOutputStream(new File(path, name + ".wrl")));
@@ -188,6 +253,12 @@ class HET_WriterWRL {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param stream
+	 */
 	public static void saveMeshWithVertexColor(final HE_Mesh mesh, final OutputStream stream) {
 		try {
 			final BufferedOutputStream out = new BufferedOutputStream(stream, 0x20000);
@@ -220,7 +291,7 @@ class HET_WriterWRL {
 			counter = 0;
 			final HE_FaceIterator fItr = mesh.fItr();
 			HE_Face f;
-			List<HE_Vertex> vlist;
+			HE_VertexList vlist;
 			while (fItr.hasNext()) {
 				f = fItr.next();
 				vlist = f.getFaceVertices();

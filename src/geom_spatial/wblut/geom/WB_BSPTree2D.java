@@ -6,15 +6,29 @@ import java.util.List;
 
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class WB_BSPTree2D {
+	/**  */
 	private WB_BSPNode2D root;
+	/**  */
 	private final WB_PolygonSplitter ps;
 
+	/**
+	 *
+	 */
 	public WB_BSPTree2D() {
 		ps = new WB_PolygonSplitter();
 		root = null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param tree
+	 * @param segs
+	 */
 	private void build(final WB_BSPNode2D tree, final List<WB_Segment> segs) {
 		WB_Segment cseg = null;
 		final Iterator<WB_Segment> S2DItr = segs.iterator();
@@ -29,7 +43,7 @@ public class WB_BSPTree2D {
 		WB_Segment seg = null;
 		while (S2DItr.hasNext()) {
 			seg = S2DItr.next();
-			final WB_Classification result = WB_GeometryOp2D.classifySegmentToLine2D(seg, tree.partition);
+			final WB_Classification result = WB_GeometryOp.classifySegmentToLine2D(seg, tree.partition);
 			if (result == WB_Classification.FRONT) {
 				pos_list.add(seg);
 			} else if (result == WB_Classification.BACK) {
@@ -59,6 +73,11 @@ public class WB_BSPTree2D {
 		tree.segments.addAll(_segs);
 	}
 
+	/**
+	 *
+	 *
+	 * @param segments
+	 */
 	public void build(final List<WB_Segment> segments) {
 		if (root == null) {
 			root = new WB_BSPNode2D();
@@ -66,6 +85,11 @@ public class WB_BSPTree2D {
 		build(root, segments);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 */
 	public void build(final WB_Polygon poly) {
 		if (root == null) {
 			root = new WB_BSPNode2D();
@@ -73,16 +97,36 @@ public class WB_BSPTree2D {
 		build(root, poly.toSegments());
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public int pointLocation(final WB_Coord p) {
 		return pointLocation(root, p);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public int pointLocation(final double x, final double y) {
 		return pointLocation(root, new WB_Point(x, y));
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param p
+	 * @return
+	 */
 	private int pointLocation(final WB_BSPNode2D node, final WB_Coord p) {
-		final WB_Classification type = WB_GeometryOp2D.classifyPointToLine2D(p, node.partition);
+		final WB_Classification type = WB_GeometryOp.classifyPointToLine2D(p, node.partition);
 		if (type == WB_Classification.FRONT) {
 			if (node.pos != null) {
 				return pointLocation(node.pos, p);
@@ -97,7 +141,7 @@ public class WB_BSPTree2D {
 			}
 		} else {
 			for (final WB_Segment element : node.segments) {
-				if (WB_Epsilon.isZero(WB_GeometryOp2D.getDistance2D(p, element))) {
+				if (WB_Epsilon.isZero(WB_GeometryOp.getDistance2D(p, element))) {
 					return 0;
 				}
 			}
@@ -111,14 +155,33 @@ public class WB_BSPTree2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param S
+	 * @param pos
+	 * @param neg
+	 * @param coSame
+	 * @param coDiff
+	 */
 	public void partitionSegment(final WB_Segment S, final List<WB_Segment> pos, final List<WB_Segment> neg,
 			final List<WB_Segment> coSame, final List<WB_Segment> coDiff) {
 		partitionSegment(root, S, pos, neg, coSame, coDiff);
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param S
+	 * @param pos
+	 * @param neg
+	 * @param coSame
+	 * @param coDiff
+	 */
 	private void partitionSegment(final WB_BSPNode2D node, final WB_Segment S, final List<WB_Segment> pos,
 			final List<WB_Segment> neg, final List<WB_Segment> coSame, final List<WB_Segment> coDiff) {
-		final WB_Classification type = WB_GeometryOp2D.classifySegmentToLine2D(S, node.partition);
+		final WB_Classification type = WB_GeometryOp.classifySegmentToLine2D(S, node.partition);
 		if (type == WB_Classification.CROSSING) {
 			final WB_Segment[] split = splitSegment2D(S, node.partition);
 			if (split != null) {
@@ -134,6 +197,16 @@ public class WB_BSPTree2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param S
+	 * @param pos
+	 * @param neg
+	 * @param coSame
+	 * @param coDiff
+	 */
 	private void partitionCoincidentSegments(final WB_BSPNode2D node, final WB_Segment S, final List<WB_Segment> pos,
 			final List<WB_Segment> neg, final List<WB_Segment> coSame, final List<WB_Segment> coDiff) {
 		WB_List<WB_Segment> partSegments = new WB_List<>();
@@ -190,6 +263,16 @@ public class WB_BSPTree2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param S
+	 * @param pos
+	 * @param neg
+	 * @param coSame
+	 * @param coDiff
+	 */
 	private void getSegmentPosPartition(final WB_BSPNode2D node, final WB_Segment S, final List<WB_Segment> pos,
 			final List<WB_Segment> neg, final List<WB_Segment> coSame, final List<WB_Segment> coDiff) {
 		if (node.pos != null) {
@@ -199,6 +282,16 @@ public class WB_BSPTree2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param S
+	 * @param pos
+	 * @param neg
+	 * @param coSame
+	 * @param coDiff
+	 */
 	private void getSegmentNegPartition(final WB_BSPNode2D node, final WB_Segment S, final List<WB_Segment> pos,
 			final List<WB_Segment> neg, final List<WB_Segment> coSame, final List<WB_Segment> coDiff) {
 		if (node.neg != null) {
@@ -208,12 +301,23 @@ public class WB_BSPTree2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public ArrayList<WB_Segment> toSegments() {
 		final ArrayList<WB_Segment> segments = new ArrayList<>();
 		addSegments(root, segments);
 		return segments;
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param segments
+	 */
 	private void addSegments(final WB_BSPNode2D node, final ArrayList<WB_Segment> segments) {
 		segments.addAll(node.segments);
 		if (node.pos != null) {
@@ -224,12 +328,23 @@ public class WB_BSPTree2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_BSPTree2D negate() {
 		final WB_BSPTree2D negTree = new WB_BSPTree2D();
 		negTree.root = negate(root);
 		return negTree;
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @return
+	 */
 	private WB_BSPNode2D negate(final WB_BSPNode2D node) {
 		final WB_BSPNode2D negNode = new WB_BSPNode2D();
 		negNode.partition = new WB_Line(node.partition.getOrigin(), WB_Vector.mul(node.partition.getDirection(), -1));
@@ -246,21 +361,35 @@ public class WB_BSPTree2D {
 		return negNode;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @param pos
+	 * @param neg
+	 */
 	public void partitionPolygon(final WB_Polygon P, final List<WB_Polygon> pos, final List<WB_Polygon> neg) {
 		partitionPolygon(root, P, pos, neg);
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param P
+	 * @param pos
+	 * @param neg
+	 */
 	private void partitionPolygon(final WB_BSPNode2D node, final WB_Polygon P, final List<WB_Polygon> pos,
 			final List<WB_Polygon> neg) {
 		if (P.getNumberOfPoints() > 2) {
-			final WB_Classification type = WB_GeometryOp2D.classifyPolygonToLine2D(P, node.partition);
+			final WB_Classification type = WB_GeometryOp.classifyPolygonToLine2D(P, node.partition);
 			if (type == WB_Classification.CROSSING) {
 				final List<WB_Polygon> splits = ps.splitSimplePolygon2D(P, node.partition);
 				for (final WB_Polygon split : splits) {
-					if (WB_GeometryOp2D.classifyPolygonToLine2D(split, node.partition) == WB_Classification.FRONT) {
+					if (WB_GeometryOp.classifyPolygonToLine2D(split, node.partition) == WB_Classification.FRONT) {
 						getPolygonPosPartition(node, split, pos, neg);
-					} else if (WB_GeometryOp2D.classifyPolygonToLine2D(split,
-							node.partition) == WB_Classification.BACK) {
+					} else if (WB_GeometryOp.classifyPolygonToLine2D(split, node.partition) == WB_Classification.BACK) {
 						getPolygonNegPartition(node, split, pos, neg);
 					}
 				}
@@ -272,6 +401,14 @@ public class WB_BSPTree2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param P
+	 * @param pos
+	 * @param neg
+	 */
 	private void getPolygonPosPartition(final WB_BSPNode2D node, final WB_Polygon P, final List<WB_Polygon> pos,
 			final List<WB_Polygon> neg) {
 		if (node.pos != null) {
@@ -281,6 +418,14 @@ public class WB_BSPTree2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param P
+	 * @param pos
+	 * @param neg
+	 */
 	private void getPolygonNegPartition(final WB_BSPNode2D node, final WB_Polygon P, final List<WB_Polygon> pos,
 			final List<WB_Polygon> neg) {
 		if (node.neg != null) {
@@ -290,17 +435,24 @@ public class WB_BSPTree2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param S
+	 * @param L
+	 * @return
+	 */
 	private WB_Segment[] splitSegment2D(final WB_Segment S, final WB_Line L) {
 		final WB_Segment[] result = new WB_Segment[2];
-		final WB_IntersectionResult ir2D = closestPoint2D(S, L);
+		final WB_Intersection ir2D = closestPoint2D(S, L);
 		if (!ir2D.intersection) {
 			return null;
 		}
 		if (ir2D.dimension == 0) {
-			if (WB_GeometryOp2D.classifyPointToLine2D(S.getOrigin(), L) == WB_Classification.FRONT) {
+			if (WB_GeometryOp.classifyPointToLine2D(S.getOrigin(), L) == WB_Classification.FRONT) {
 				result[0] = new WB_Segment(S.getOrigin(), (WB_Coord) ir2D.object);
 				result[1] = new WB_Segment((WB_Coord) ir2D.object, S.getEndpoint());
-			} else if (WB_GeometryOp2D.classifyPointToLine2D(S.getOrigin(), L) == WB_Classification.BACK) {
+			} else if (WB_GeometryOp.classifyPointToLine2D(S.getOrigin(), L) == WB_Classification.BACK) {
 				result[1] = new WB_Segment(S.getOrigin(), (WB_Coord) ir2D.object);
 				result[0] = new WB_Segment((WB_Coord) ir2D.object, S.getEndpoint());
 			}
@@ -308,8 +460,15 @@ public class WB_BSPTree2D {
 		return result;
 	}
 
-	private WB_IntersectionResult closestPoint2D(final WB_Segment S, final WB_Line L) {
-		final WB_IntersectionResult i = closestPoint2D(L, new WB_Line(S.getOrigin(), S.getDirection()));
+	/**
+	 *
+	 *
+	 * @param S
+	 * @param L
+	 * @return
+	 */
+	private WB_Intersection closestPoint2D(final WB_Segment S, final WB_Line L) {
+		final WB_Intersection i = closestPoint2D(L, new WB_Line(S.getOrigin(), S.getDirection()));
 		if (i.dimension == 0) {
 			return i;
 		}
@@ -330,6 +489,15 @@ public class WB_BSPTree2D {
 		return i;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u0
+	 * @param u1
+	 * @param v0
+	 * @param v1
+	 * @return
+	 */
 	private double[] intervalIntersection(final double u0, final double u1, final double v0, final double v1) {
 		if ((u0 >= u1) || (v0 >= v1)) {
 			throw new IllegalArgumentException("Interval degenerate or reversed.");
@@ -362,7 +530,14 @@ public class WB_BSPTree2D {
 		return result;
 	}
 
-	private WB_IntersectionResult closestPoint2D(final WB_Line L1, final WB_Line L2) {
+	/**
+	 *
+	 *
+	 * @param L1
+	 * @param L2
+	 * @return
+	 */
+	private WB_Intersection closestPoint2D(final WB_Line L1, final WB_Line L2) {
 		final double a = WB_Vector.dot2D(L1.getDirection(), L1.getDirection());
 		final double b = WB_Vector.dot2D(L1.getDirection(), L2.getDirection());
 		final WB_Point r = WB_Point.sub(L1.getOrigin(), L2.getOrigin());
@@ -374,7 +549,7 @@ public class WB_BSPTree2D {
 			final double t2 = r.dot(L1.getDirection());
 			final WB_Point p2 = new WB_Point(L2.getPoint(t2));
 			final double d2 = p2.getSqDistance2D(L1.getOrigin());
-			final WB_IntersectionResult i = new WB_IntersectionResult();
+			final WB_Intersection i = new WB_Intersection();
 			i.intersection = false;
 			i.t1 = 0;
 			i.t2 = t2;
@@ -389,7 +564,7 @@ public class WB_BSPTree2D {
 		final WB_Point p1 = new WB_Point(L1.getPoint(t1));
 		final WB_Point p2 = new WB_Point(L2.getPoint(t2));
 		final double d2 = p1.getSqDistance2D(p2);
-		final WB_IntersectionResult i = new WB_IntersectionResult();
+		final WB_Intersection i = new WB_Intersection();
 		i.intersection = true;
 		i.t1 = t1;
 		i.t2 = t2;

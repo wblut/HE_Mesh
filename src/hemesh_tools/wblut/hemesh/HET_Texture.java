@@ -12,7 +12,15 @@ import wblut.math.WB_MTRandom;
 import wblut.processing.WB_Color;
 import wblut.processing.WB_Render3D;
 
+/**
+ *
+ */
 public class HET_Texture {
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	public static void setVertexColorFromVertexNormal(final HE_Mesh mesh) {
 		final HE_VertexIterator vitr = mesh.vItr();
 		HE_Vertex v;
@@ -20,12 +28,18 @@ public class HET_Texture {
 		int color;
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			n = HE_MeshOp.getVertexNormal(v);
+			n = mesh.getVertexNormal(v);
 			color = WB_Color.color((int) (128 * (n.xd() + 1)), (int) (128 * (n.yd() + 1)), (int) (128 * (n.zd() + 1)));
 			v.setColor(color);
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param palette
+	 */
 	public static void setVertexColorFromPalette(final HE_Mesh mesh, final int[] palette) {
 		final HE_VertexIterator vitr = mesh.vItr();
 		HE_Vertex v;
@@ -39,6 +53,12 @@ public class HET_Texture {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param palette
+	 */
 	public static void setRandomVertexColorFromPalette(final HE_Mesh mesh, final int[] palette) {
 		final HE_VertexIterator vitr = mesh.vItr();
 		HE_Vertex v;
@@ -52,6 +72,13 @@ public class HET_Texture {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param palette
+	 * @param seed
+	 */
 	public static void setRandomVertexColorFromPalette(final HE_Mesh mesh, final int[] palette, final long seed) {
 		final HE_VertexIterator vitr = mesh.vItr();
 		HE_Vertex v;
@@ -66,6 +93,14 @@ public class HET_Texture {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param minrange
+	 * @param maxrange
+	 * @param palette
+	 */
 	public static void setVertexColorFromVertexUmbrella(final HE_Mesh mesh, final double minrange,
 			final double maxrange, final int[] palette) {
 		final HE_VertexIterator vitr = mesh.vItr();
@@ -80,6 +115,14 @@ public class HET_Texture {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param minrange
+	 * @param maxrange
+	 * @param palette
+	 */
 	public static void setVertexColorFromVertexCurvature(final HE_Mesh mesh, final double minrange,
 			final double maxrange, final int[] palette) {
 		final HE_VertexIterator vitr = mesh.vItr();
@@ -94,6 +137,11 @@ public class HET_Texture {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	public static void setFaceColorFromFaceNormal(final HE_Mesh mesh) {
 		final HE_FaceIterator fitr = mesh.fItr();
 		HE_Face f;
@@ -101,12 +149,18 @@ public class HET_Texture {
 		int color;
 		while (fitr.hasNext()) {
 			f = fitr.next();
-			n = HE_MeshOp.getFaceNormal(f);
+			n = mesh.getFaceNormal(f);
 			color = WB_Color.color((int) (128 * (n.xd() + 1)), (int) (128 * (n.yd() + 1)), (int) (128 * (n.zd() + 1)));
 			f.setColor(color);
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param palette
+	 */
 	public static void setFaceColorFromPalette(final HE_Mesh mesh, final int[] palette) {
 		final HE_FaceIterator fitr = mesh.fItr();
 		HE_Face f;
@@ -120,6 +174,12 @@ public class HET_Texture {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param palette
+	 */
 	public static void setRandomFaceColorFromPalette(final HE_Mesh mesh, final int[] palette) {
 		final HE_FaceIterator fitr = mesh.fItr();
 		HE_Face f;
@@ -133,6 +193,13 @@ public class HET_Texture {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param palette
+	 * @param seed
+	 */
 	public static void setRandomFaceColorFromPalette(final HE_Mesh mesh, final int[] palette, final long seed) {
 		final HE_FaceIterator fitr = mesh.fItr();
 		HE_Face f;
@@ -147,6 +214,12 @@ public class HET_Texture {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param texture
+	 */
 	public static void setFaceColorFromTexture(final HE_Mesh mesh, final PImage texture) {
 		final HE_FaceIterator fitr = mesh.fItr();
 		HE_Face f;
@@ -168,6 +241,12 @@ public class HET_Texture {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param texture
+	 */
 	public static void setHalfedgeColorFromTexture(final HE_Mesh mesh, final PImage texture) {
 		final HE_FaceIterator fitr = mesh.fItr();
 		HE_Face f;
@@ -184,6 +263,12 @@ public class HET_Texture {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param texture
+	 */
 	public static void setVertexColorFromTexture(final HE_Mesh mesh, final PImage texture) {
 		final HE_VertexIterator vitr = mesh.vItr();
 		HE_Vertex v;
@@ -195,8 +280,19 @@ public class HET_Texture {
 		}
 	}
 
+	/**  */
 	public static double uWrapThreshold = 0.25;
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param origin
+	 * @param uDirection
+	 * @param vDirection
+	 * @param uSize
+	 * @param vSize
+	 */
 	public static void setUVWPlanar(final HE_HalfedgeStructure mesh, final WB_Coord origin, final WB_Coord uDirection,
 			final WB_Coord vDirection, final double uSize, final double vSize) {
 		final WB_CoordinateSystem CS = new WB_CoordinateSystem();
@@ -214,6 +310,17 @@ public class HET_Texture {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param origin
+	 * @param distance
+	 * @param uDirection
+	 * @param vDirection
+	 * @param uSize
+	 * @param vSize
+	 */
 	public static void setUVWProjection(final HE_HalfedgeStructure mesh, final WB_Coord origin, final double distance,
 			final WB_Coord uDirection, final WB_Coord vDirection, final double uSize, final double vSize) {
 		final WB_CoordinateSystem CS = new WB_CoordinateSystem();
@@ -231,6 +338,14 @@ public class HET_Texture {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param origin
+	 * @param direction
+	 * @param height
+	 */
 	public static void setUVWCylindrical(final HE_HalfedgeStructure mesh, final WB_Coord origin,
 			final WB_Coord direction, final double height) {
 		final WB_CoordinateSystem CS = new WB_CoordinateSystem(new WB_Plane(origin, direction));
@@ -272,6 +387,13 @@ public class HET_Texture {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param origin
+	 * @param direction
+	 */
 	public static void setUVWSpherical(final HE_HalfedgeStructure mesh, final WB_Coord origin,
 			final WB_Coord direction) {
 		final WB_CoordinateSystem CS = new WB_CoordinateSystem(new WB_Plane(origin, direction));

@@ -7,12 +7,25 @@ import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 
 import wblut.hemesh.HE_ObjectMap;
 
-public class WB_AlphaTriangulation2D implements WB_TriangleFactory {
+/**
+ *
+ */
+public class WB_AlphaTriangulation2D implements WB_TriangleSource {
+	/**  */
 	private final int[] triangles;
+	/**  */
 	private int[] edges;
+	/**  */
 	private double[] alpha;
+	/**  */
 	private final WB_CoordList points;
 
+	/**
+	 *
+	 *
+	 * @param tris
+	 * @param points
+	 */
 	public WB_AlphaTriangulation2D(final int[] tris, final Collection<? extends WB_Coord> points) {
 		triangles = Arrays.copyOf(tris, tris.length);
 		this.points = new WB_CoordList();
@@ -25,6 +38,12 @@ public class WB_AlphaTriangulation2D implements WB_TriangleFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param tris
+	 * @param points
+	 */
 	public WB_AlphaTriangulation2D(final int[][] tris, final Collection<? extends WB_Coord> points) {
 		triangles = new int[tris.length * 4];
 		for (int i = 0; i < tris.length; i++) {
@@ -43,6 +62,12 @@ public class WB_AlphaTriangulation2D implements WB_TriangleFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param tris
+	 * @param points
+	 */
 	public WB_AlphaTriangulation2D(final int[] tris, final WB_Coord[] points) {
 		triangles = Arrays.copyOf(tris, tris.length);
 		this.points = new WB_CoordList();
@@ -57,6 +82,12 @@ public class WB_AlphaTriangulation2D implements WB_TriangleFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param tris
+	 * @param points
+	 */
 	public WB_AlphaTriangulation2D(final int[][] tris, final WB_Coord[] points) {
 		triangles = new int[tris.length * 3];
 		for (int i = 0; i < tris.length; i++) {
@@ -76,6 +107,9 @@ public class WB_AlphaTriangulation2D implements WB_TriangleFactory {
 		}
 	}
 
+	/**
+	 *
+	 */
 	private void setAlpha() {
 		alpha = new double[triangles.length / 3];
 		int index = 0;
@@ -85,15 +119,30 @@ public class WB_AlphaTriangulation2D implements WB_TriangleFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int[] getTriangles() {
 		return triangles;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getEdges() {
 		return edges;
 	}
 
+	/**
+	 *
+	 *
+	 * @param tris
+	 */
 	private void extractEdges(final int[] tris) {
 		final int f = tris.length;
 		final HE_ObjectMap<int[]> map = new HE_ObjectMap<>();
@@ -118,19 +167,43 @@ public class WB_AlphaTriangulation2D implements WB_TriangleFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param f
+	 * @return
+	 */
 	private long getIndex(final int i, final int j, final int f) {
 		return i > j ? j + i * f : i + j * f;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_CoordCollection getPoints() {
 		return WB_CoordCollection.getCollection(points);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double[] getAlpha() {
 		return Arrays.copyOf(alpha, alpha.length);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public int[] getAlphaTriangles(final double a) {
 		final int[] alphaTriangles = new int[triangles.length];
 		int index = 0;
@@ -144,6 +217,12 @@ public class WB_AlphaTriangulation2D implements WB_TriangleFactory {
 		return Arrays.copyOf(alphaTriangles, index);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public int[] getAlphaEdges(final double a) {
 		final UnifiedMap<Key, Tuple> edges = new UnifiedMap<>();
 		for (int i = 0; i < triangles.length; i += 3) {
@@ -180,28 +259,59 @@ public class WB_AlphaTriangulation2D implements WB_TriangleFactory {
 		return Arrays.copyOf(alphaEdges, index);
 	}
 
+	/**
+	 *
+	 */
 	private class Tuple {
+		/**  */
 		int i, j;
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @param j
+		 */
 		Tuple(final int i, final int j) {
 			this.i = i;
 			this.j = j;
 		}
 	}
 
+	/**
+	 *
+	 */
 	private class Key {
+		/**  */
 		int a, b;
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @param j
+		 */
 		public Key(final int i, final int j) {
 			a = Math.min(i, j);
 			b = Math.max(i, j);
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int hashCode() {
 			return a << 5 ^ b;
 		}
 
+		/**
+		 *
+		 *
+		 * @param o
+		 * @return
+		 */
 		@Override
 		public boolean equals(final Object o) {
 			if (!(o instanceof Key)) {

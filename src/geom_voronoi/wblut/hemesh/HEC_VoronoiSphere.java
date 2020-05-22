@@ -2,11 +2,10 @@ package wblut.hemesh;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_CoordList;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_CoordCollection;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_KDTreeInteger3D;
 import wblut.geom.WB_KDTreeInteger3D.WB_KDEntryInteger;
 import wblut.geom.WB_Plane;
@@ -15,19 +14,36 @@ import wblut.geom.WB_RandomOnSphere;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HEC_VoronoiSphere extends HEC_Creator {
-	private List<WB_Coord> points;
+	/**  */
+	private WB_CoordCollection points;
+	/**  */
 	private int numberOfPoints;
+	/**  */
 	private int cellIndex;
+	/**  */
 	private int level;
+	/**  */
 	private double cutoff;
+	/**  */
 	private WB_Vector[] dir;
+	/**  */
 	private boolean approx;
+	/**  */
 	private int numTracers;
+	/**  */
 	private double traceStep;
+	/**  */
 	private final WB_RandomOnSphere randomGen;
+	/**  */
 	private double offset;
 
+	/**
+	 *
+	 */
 	public HEC_VoronoiSphere() {
 		super();
 		level = 1;
@@ -37,46 +53,99 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 		randomGen = new WB_RandomOnSphere();
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public HEC_VoronoiSphere setCellIndex(final int i) {
 		cellIndex = i;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param l
+	 * @return
+	 */
 	public HEC_VoronoiSphere setLevel(final int l) {
 		level = l;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @return
+	 */
 	public HEC_VoronoiSphere setNumTracers(final int n) {
 		numTracers = n;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEC_VoronoiSphere setTraceStep(final double d) {
 		traceStep = d;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param c
+	 * @return
+	 */
 	public HEC_VoronoiSphere setCutoff(final double c) {
 		cutoff = Math.abs(c);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public HEC_VoronoiSphere setApprox(final boolean a) {
 		approx = a;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param seed
+	 * @return
+	 */
 	public HEC_VoronoiSphere setSeed(final long seed) {
 		randomGen.setSeed(seed);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param o
+	 * @return
+	 */
 	public HEC_VoronoiSphere setOffset(final double o) {
 		offset = o;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_Mesh createBase() {
 		randomGen.reset();
@@ -136,6 +205,13 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param tracers
+	 * @param index
+	 * @param offset
+	 */
 	private void grow(final WB_Point[] tracers, final int index, final double offset) {
 		final WB_KDTreeInteger3D<WB_Coord> kdtree = new WB_KDTreeInteger3D<>();
 		for (int i = 0; i < numberOfPoints; i++) {
@@ -154,7 +230,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 			while (stepSize > WB_Epsilon.EPSILON) {
 				while (j == index && d2self < cutoff * cutoff) {
 					p.addSelf(stepSize * r.xd(), stepSize * r.yd(), stepSize * r.zd());
-					d2self = WB_GeometryOp3D.getSqDistance3D(p, c);
+					d2self = WB_GeometryOp.getSqDistance3D(p, c);
 					final WB_KDEntryInteger<WB_Coord>[] closest = kdtree.getNearestNeighbors(p, 1);
 					j = closest[0].value;
 				}
@@ -171,35 +247,52 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 		}
 	}
 
+	public HEC_VoronoiSphere setPoints(final WB_CoordCollection points) {
+		this.points = points;
+		return this;
+	}
+
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEC_VoronoiSphere setPoints(final Collection<? extends WB_Coord> points) {
-		this.points = new WB_CoordList();
-		this.points.addAll(points);
+		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEC_VoronoiSphere setPoints(final double[][] points) {
-		final int n = points.length;
-		this.points = new WB_CoordList();
-		for (int i = 0; i < n; i++) {
-			this.points.add(new WB_Point(points[i][0], points[i][1], points[i][2]));
-		}
+		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEC_VoronoiSphere setPoints(final float[][] points) {
-		final int n = points.length;
-		this.points = new WB_CoordList();
-		for (int i = 0; i < n; i++) {
-			this.points.add(new WB_Point(points[i][0], points[i][1], points[i][2]));
-		}
+		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEC_VoronoiSphere setPoints(final WB_Coord[] points) {
-		this.points = new WB_CoordList();
-		for (final WB_Coord p : points) {
-			this.points.add(p);
-		}
+		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 }

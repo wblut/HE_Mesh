@@ -4,28 +4,58 @@ import java.security.InvalidParameterException;
 
 import wblut.geom.WB_Geodesic.Type;
 
+/**
+ *
+ */
 class WB_GeodesicII {
+	/**  */
 	private final double[][] centralanglesabc;
+	/**  */
 	private static double PI = Math.PI;
+	/**  */
 	private static double[][] surfaceanglesABC = new double[][] { { PI / 3.0, PI / 3.0, PI / 2.0 },
 			{ PI / 3.0, PI / 4.0, PI / 2.0 }, { PI / 4.0, PI / 3.0, PI / 2.0 }, { PI / 5.0, PI / 3.0, PI / 2.0 },
 			{ PI / 3.0, PI / 5.0, PI / 2.0 } };
+	/**  */
 	private WB_Point[][] LCDPoints;
+	/**  */
 	private WB_Point[] triacon;
+	/**  */
 	private WB_Point[] points;
+	/**  */
 	private int[][] faces;
+	/**  */
 	private final int v, hv;
+	/**  */
 	private WB_SimpleMesh mesh;
+	/**  */
 	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	/**  */
 	private final double radius;
+	/**  */
 	private final Type type;
+	/**  */
 	private int vertexoffset;
+	/**  */
 	private int faceoffset;
 
+	/**
+	 *
+	 *
+	 * @param radius
+	 * @param v
+	 */
 	public WB_GeodesicII(final double radius, final int v) {
 		this(radius, v, Type.ICOSAHEDRON);
 	}
 
+	/**
+	 *
+	 *
+	 * @param radius
+	 * @param v
+	 * @param type
+	 */
 	public WB_GeodesicII(final double radius, final int v, final Type type) {
 		if (v <= 0) {
 			throw new InvalidParameterException("v should be 1 or larger.");
@@ -63,11 +93,19 @@ class WB_GeodesicII {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_SimpleMesh getMesh() {
 		createMesh();
 		return mesh;
 	}
 
+	/**
+	 *
+	 */
 	private void createMesh() {
 		LCDPoints = new WB_Point[hv + 1][hv + 1];
 		final double[][] subtrianglesabc = new double[hv][3];
@@ -337,6 +375,11 @@ class WB_GeodesicII {
 		mesh = gf.createUniqueMesh(gf.createMesh(points, faces), threshold);
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 */
 	private void addTransformedFaces(final WB_Transform3D T) {
 		int index = faceoffset;
 		for (int i = 0; i < hv; i++) {
@@ -355,6 +398,14 @@ class WB_GeodesicII {
 		faceoffset += 2 * hv * hv;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param hv
+	 * @return
+	 */
 	private int index(final double i, final double j, final int hv) {
 		return (int) i + (int) j * (hv + 1);
 	}

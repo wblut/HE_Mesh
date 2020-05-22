@@ -1,10 +1,19 @@
 package wblut.geom;
 
+/**
+ *
+ */
 public class WB_RandomCone extends WB_RandomFactory {
+	/**  */
 	private double radius;
+	/**  */
 	private double ca;
+	/**  */
 	private WB_Transform3D T;
 
+	/**
+	 *
+	 */
 	public WB_RandomCone() {
 		super();
 		radius = 1.0;
@@ -13,6 +22,11 @@ public class WB_RandomCone extends WB_RandomFactory {
 		T = new WB_Transform3D();
 	}
 
+	/**
+	 *
+	 *
+	 * @param seed
+	 */
 	public WB_RandomCone(final long seed) {
 		super(seed);
 		radius = 1.0;
@@ -21,16 +35,34 @@ public class WB_RandomCone extends WB_RandomFactory {
 		T = new WB_Transform3D();
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public WB_RandomCone setRadius(final double r) {
 		radius = r;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public WB_RandomCone setAngle(final double a) {
 		ca = Math.cos(0.5 * a);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param dir
+	 * @return
+	 */
 	public WB_RandomCone setDirection(final WB_Coord dir) {
 		final WB_Plane P = new WB_Plane(new WB_Point(), dir);
 		final WB_CoordinateSystem CS = new WB_CoordinateSystem(P);
@@ -39,6 +71,11 @@ public class WB_RandomCone extends WB_RandomFactory {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_Point nextPointImp() {
 		final double eps = randomGen.nextDouble();
@@ -48,6 +85,11 @@ public class WB_RandomCone extends WB_RandomFactory {
 		return T.applyAsPoint(new WB_Point(r * Math.cos(t), r * Math.sin(t), radius * z));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_Vector nextVectorImp() {
 		final double eps = randomGen.nextDouble();

@@ -9,10 +9,23 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+/**
+ *
+ */
 public class WB_FromOBJFile {
+	/**
+	 *
+	 */
 	private WB_FromOBJFile() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param path
+	 * @param scale
+	 * @return
+	 */
 	public static WB_SimpleMesh createMesh(final String path, final double scale) {
 		if (path == null) {
 			return new WB_SimpleMesh();
@@ -58,6 +71,12 @@ public class WB_FromOBJFile {
 		return new WB_SimpleMesh();
 	}
 
+	/**
+	 *
+	 *
+	 * @param file
+	 * @return
+	 */
 	// Code excerpts from processing.core
 	private static InputStream createInputStream(final File file) {
 		if (file == null) {

@@ -13,19 +13,32 @@ import java.util.concurrent.Future;
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_List;
 
+/**
+ *
+ */
 public class HEM_TriangulateMT extends HEM_Modifier {
+	/**  */
 	public HE_Selection triangles;
 
+	/**
+	 *
+	 */
 	public HEM_TriangulateMT() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		triangles = HE_Selection.getSelection(mesh);
 		tracker.setStartStatus(this, "Starting HEM_Triangulate.");
 		final int n = mesh.getNumberOfFaces();
-		final List<HE_Face> faces = mesh.getFaces();
+		final HE_FaceList faces = mesh.getFaces();
 		final List<int[]> trisPerFace = triangulate(faces);
 		final WB_ProgressCounter counter = new WB_ProgressCounter(n, 10);
 		tracker.setCounterStatus(this, "Triangulating faces.", counter);
@@ -41,12 +54,18 @@ public class HEM_TriangulateMT extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		triangles = HE_Selection.getSelection(selection.getParent());
 		tracker.setStartStatus(this, "Starting HEM_Triangulate.");
 		final int n = selection.getNumberOfFaces();
-		final List<HE_Face> faces = selection.getFaces();
+		final HE_FaceList faces = selection.getFaces();
 		final List<int[]> trisPerFace = triangulate(faces);
 		final WB_ProgressCounter counter = new WB_ProgressCounter(n, 10);
 		tracker.setCounterStatus(this, "Triangulating faces.", counter);
@@ -64,13 +83,20 @@ public class HEM_TriangulateMT extends HEM_Modifier {
 		return selection.getParent();
 	}
 
+	/**
+	 *
+	 *
+	 * @param face
+	 * @param mesh
+	 * @param tris
+	 */
 	private void triangulateNoPairing(final HE_Face face, final HE_Mesh mesh, final int[] tris) {
 		if (tris.length == 3) {
 			triangles.add(face);
 		} else if (tris.length > 3) {
-			final List<HE_Vertex> vertices = face.getFaceVertices();
+			final HE_VertexList vertices = face.getFaceVertices();
 			final int n = vertices.size();
-			final List<HE_Halfedge> halfedges = face.getFaceHalfedges();
+			final HE_HalfedgeList halfedges = face.getFaceHalfedges();
 			final List<HE_TextureCoordinate> UVWs = face.getFaceUVWs();
 			for (int i = 0; i < tris.length; i += 3) {
 				final HE_Face f = new HE_Face();
@@ -106,7 +132,13 @@ public class HEM_TriangulateMT extends HEM_Modifier {
 		}
 	}
 
-	private List<int[]> triangulate(final List<HE_Face> faces) {
+	/**
+	 *
+	 *
+	 * @param faces
+	 * @return
+	 */
+	private List<int[]> triangulate(final HE_FaceList faces) {
 		final List<int[]> tris = new WB_List<>();
 		try {
 			int threadCount = Runtime.getRuntime().availableProcessors();
@@ -137,20 +169,41 @@ public class HEM_TriangulateMT extends HEM_Modifier {
 		return tris;
 	}
 
+	/**
+	 *
+	 */
 	class TriangulateRunner implements Callable<ArrayList<int[]>> {
+		/**  */
 		int start;
+		/**  */
 		int end;
+		/**  */
 		int id;
+		/**  */
 		int[] triangles;
-		List<HE_Face> faces;
+		/**  */
+		HE_FaceList faces;
 
-		TriangulateRunner(final int s, final int e, final int id, final List<HE_Face> faces) {
+		/**
+		 *
+		 *
+		 * @param s
+		 * @param e
+		 * @param id
+		 * @param faces
+		 */
+		TriangulateRunner(final int s, final int e, final int id, final HE_FaceList faces) {
 			start = s;
 			end = e;
 			this.id = id;
 			this.faces = faces;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public ArrayList<int[]> call() {
 			final ArrayList<int[]> tris = new ArrayList<>();

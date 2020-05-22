@@ -1,6 +1,16 @@
 package wblut.core;
 
+/**
+ *
+ */
 public class WB_HashCode {
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public static int calculateHashCode(final double x, final double y) {
 		int result = 17;
 		final long a = Double.doubleToLongBits(x);
@@ -10,6 +20,14 @@ public class WB_HashCode {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public static int calculateHashCode(final double x, final double y, final double z) {
 		int result = 17;
 		final long a = Double.doubleToLongBits(x);
@@ -21,6 +39,15 @@ public class WB_HashCode {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param w
+	 * @return
+	 */
 	public static int calculateHashCode(final double x, final double y, final double z, final double w) {
 		int result = 17;
 		final long a = Double.doubleToLongBits(x);

@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import processing.core.PApplet;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_HashGridDouble3D;
 import wblut.geom.WB_IndexedDoubleMap;
 import wblut.geom.WB_IndexedObjectMap;
@@ -19,16 +19,27 @@ import wblut.geom.WB_Segment;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class HEC_IsoSurface3D extends HEC_Creator {
+	/**  */
 	final static int ONVERTEX = 0;
+	/**  */
 	final static int ONEDGE = 1;
+	/**  */
 	final static int NEGATIVE = 0;
+	/**  */
 	final static int EQUAL = 1;
+	/**  */
 	final static int POSITIVE = 2;
+	/**  */
 	int[] digits = new int[8];
+	/**  */
 	final static WB_Point[] gridvertices = new WB_Point[] { new WB_Point(0, 0, 0), new WB_Point(1, 0, 0),
 			new WB_Point(0, 1, 0), new WB_Point(1, 1, 0), new WB_Point(0, 0, 1), new WB_Point(1, 0, 1),
 			new WB_Point(0, 1, 1), new WB_Point(1, 1, 1), };
+	/**  */
 	// EDGES: 2 vertices per edge
 	final static int[][] edges = { { 0, 1 }, // x
 												// ijk
@@ -57,29 +68,51 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 	};
 	// ISOVERTICES: 20
 	// type=ONVERTEX iso vertex on vertex, index in vertex list
+	/**  */
 	// type=ONEDGE iso vertex on edge, index in edge list
 	final static int[][] isovertices = new int[][] { { 0, 0 }, { 0, 1 }, { 0, 2 }, { 0, 3 }, { 0, 4 }, { 0, 5 },
 			{ 0, 6 }, { 0, 7 }, { 1, 0 }, { 1, 1 }, { 1, 2 }, { 1, 3 }, { 1, 4 }, { 1, 5 }, { 1, 6 }, { 1, 7 },
 			{ 1, 8 }, { 1, 9 }, { 1, 10 }, { 1, 11 } };
+	/**  */
 	int[][] entries;
+	/**  */
 	private WB_IsoValues3D values;
+	/**  */
 	private int resx, resy, resz;
+	/**  */
 	private double cx, cy, cz;
+	/**  */
 	private double dx, dy, dz;
+	/**  */
 	private double isolevel;
+	/**  */
 	private double boundary;
+	/**  */
 	private WB_IndexedObjectMap<HE_Vertex> xedges;
+	/**  */
 	private WB_IndexedObjectMap<HE_Vertex> yedges;
+	/**  */
 	private WB_IndexedObjectMap<HE_Vertex> zedges;
+	/**  */
 	private WB_IndexedObjectMap<HE_Vertex> vertices;
+	/**  */
 	private WB_IndexedObjectMap<VertexRemap> vertexremaps;
+	/**  */
 	private WB_IndexedDoubleMap valueremaps;
+	/**  */
 	private double gamma;
+	/**  */
 	HE_Mesh mesh;
+	/**  */
 	private boolean invert;
+	/**  */
 	WB_ScalarParameter valueFactor;
+	/**  */
 	WB_ScalarParameter valueShift;
 
+	/**
+	 *
+	 */
 	public HEC_IsoSurface3D() {
 		super();
 		String line = "";
@@ -125,11 +158,25 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		setCheckManifold(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param gamma
+	 * @return
+	 */
 	public HEC_IsoSurface3D setGamma(final double gamma) {
 		this.gamma = gamma;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param resx
+	 * @param resy
+	 * @param resz
+	 * @return
+	 */
 	public HEC_IsoSurface3D setResolution(final int resx, final int resy, final int resz) {
 		this.resx = resx;
 		this.resy = resy;
@@ -137,6 +184,14 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 * @return
+	 */
 	public HEC_IsoSurface3D setSize(final double dx, final double dy, final double dz) {
 		this.dx = dx;
 		this.dy = dy;
@@ -144,21 +199,45 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public HEC_IsoSurface3D setIsolevel(final double v) {
 		isolevel = v;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public HEC_IsoSurface3D setValueFactor(final WB_ScalarParameter v) {
 		valueFactor = v;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public HEC_IsoSurface3D setValueShift(final WB_ScalarParameter v) {
 		valueShift = v;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public HEC_IsoSurface3D setValues(final double[][][] values) {
 		this.values = new WB_IsoValues3D.GridRaw3D(values);
 		resx = values.length - 1;
@@ -167,6 +246,12 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public HEC_IsoSurface3D setValues(final float[][][] values) {
 		this.values = new WB_IsoValues3D.Grid3D(values);
 		resx = values.length - 1;
@@ -175,6 +260,21 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param function
+	 * @param xi
+	 * @param yi
+	 * @param zi
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 * @param sizeI
+	 * @param sizeJ
+	 * @param sizeK
+	 * @return
+	 */
 	public HEC_IsoSurface3D setValues(final WB_ScalarParameter function, final double xi, final double yi,
 			final double zi, final double dx, final double dy, final double dz, final int sizeI, final int sizeJ,
 			final int sizeK) {
@@ -185,6 +285,12 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public HEC_IsoSurface3D setValues(final WB_HashGridDouble3D values) {
 		this.values = new WB_IsoValues3D.HashGrid3D(values);
 		resx = values.getSizeI() - 1;
@@ -193,6 +299,16 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param images
+	 * @param home
+	 * @param sizeI
+	 * @param sizeJ
+	 * @param sizeK
+	 * @return
+	 */
 	public HEC_IsoSurface3D setValues(final String[] images, final PApplet home, final int sizeI, final int sizeJ,
 			final int sizeK) {
 		this.values = new WB_IsoValues3D.ImageStack3D(images, home, sizeI, sizeJ, sizeK);
@@ -202,6 +318,17 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param images
+	 * @param home
+	 * @param sizeI
+	 * @param sizeJ
+	 * @param sizeK
+	 * @param mode
+	 * @return
+	 */
 	public HEC_IsoSurface3D setValues(final String[] images, final PApplet home, final int sizeI, final int sizeJ,
 			final int sizeK, final WB_IsoValues3D.Mode mode) {
 		this.values = new WB_IsoValues3D.ImageStack3D(images, home, sizeI, sizeJ, sizeK, mode);
@@ -211,6 +338,12 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public HEC_IsoSurface3D setValues(final WB_IsoValues3D values) {
 		this.values = values;
 		resx = values.getSizeI() - 1;
@@ -219,21 +352,43 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public HEC_IsoSurface3D setBoundary(final double v) {
 		boundary = v;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HEC_IsoSurface3D clearBoundary() {
 		boundary = Double.NaN;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param invert
+	 * @return
+	 */
 	public HEC_IsoSurface3D setInvert(final boolean invert) {
 		this.invert = invert;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final WB_Point center = getCenter();
@@ -255,11 +410,14 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 			polygonise();
 		}
 		HE_MeshOp.pairHalfedges(mesh);
-		HE_MeshOp.capHalfedges(mesh);
 		HE_MeshOp.removeUnconnectedElements(mesh);
+		HE_MeshOp.capHalfedges(mesh);
 		return mesh;
 	}
 
+	/**
+	 *
+	 */
 	private void mapvertices() {
 		vertexremaps = new WB_IndexedObjectMap<>();
 		valueremaps = new WB_IndexedDoubleMap();
@@ -289,6 +447,9 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		}
 	}
 
+	/**
+	 *
+	 */
 	void setvalues() {
 		VertexRemap vr;
 		for (final Object o : vertexremaps.values()) {
@@ -298,6 +459,9 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		}
 	}
 
+	/**
+	 *
+	 */
 	private void polygonise() {
 		final WB_Point offset = new WB_Point(cx - 0.5 * resx * dx, cy - 0.5 * resy * dy, cz - 0.5 * resz * dz);
 		if (Double.isNaN(boundary)) {
@@ -325,6 +489,9 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		}
 	}
 
+	/**
+	 *
+	 */
 	void snapvertices() {
 		VertexRemap vr;
 		for (final Object o : vertexremaps.values()) {
@@ -333,6 +500,16 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param cubeindex
+	 * @param offset
+	 * @param dummyrun
+	 */
 	private void getPolygons(final int i, final int j, final int k, final int cubeindex, final WB_Point offset,
 			final boolean dummyrun) {
 		final int[] indices = entries[cubeindex];
@@ -368,6 +545,14 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	private int classifyCell(final int i, final int j, final int k) {
 		if (Double.isNaN(boundary)) {
 			if (i < 0 || j < 0 || k < 0 || i >= resx || j >= resy || k >= resz) {
@@ -509,6 +694,17 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return cubeindex;
 	}
 
+	/**
+	 *
+	 *
+	 * @param isopointindex
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @param dummyrun
+	 * @return
+	 */
 	HE_Vertex getIsoVertex(final int isopointindex, final int i, final int j, final int k, final WB_Point offset,
 			final boolean dummyrun) {
 		if (isovertices[isopointindex][0] == ONVERTEX) {
@@ -565,6 +761,15 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @return
+	 */
 	private HE_Vertex vertex(final int i, final int j, final int k, final WB_Point offset) {
 		HE_Vertex vertex = vertices.get(index(i, j, k));
 		if (vertex != null) {
@@ -578,6 +783,16 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return vertex;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @param dummyrun
+	 * @return
+	 */
 	private HE_Vertex xedge(final int i, final int j, final int k, final WB_Point offset, final boolean dummyrun) {
 		final WB_Point p0 = new WB_Point(i * dx, j * dy, k * dz);
 		final WB_Point p1 = new WB_Point(i * dx + dx, j * dy, k * dz);
@@ -650,6 +865,16 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return xedge;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @param dummyrun
+	 * @return
+	 */
 	private HE_Vertex yedge(final int i, final int j, final int k, final WB_Point offset, final boolean dummyrun) {
 		HE_Vertex yedge = yedges.get(index(i, j, k));
 		if (yedge != null) {
@@ -722,6 +947,16 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return yedge;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @param dummyrun
+	 * @return
+	 */
 	private HE_Vertex zedge(final int i, final int j, final int k, final WB_Point offset, final boolean dummyrun) {
 		HE_Vertex zedge = zedges.get(index(i, j, k));
 		if (zedge != null) {
@@ -794,6 +1029,16 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return zedge;
 	}
 
+	/**
+	 *
+	 *
+	 * @param isolevel
+	 * @param p1
+	 * @param p2
+	 * @param valp1
+	 * @param valp2
+	 * @return
+	 */
 	private WB_Point interp(final double isolevel, final WB_Point p1, final WB_Point p2, final double valp1,
 			final double valp2) {
 		double mu;
@@ -811,10 +1056,26 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 				p1.zd() + mu * (p2.zd() - p1.zd()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	private int index(final int i, final int j, final int k) {
 		return i + 1 + (resx + 2) * (j + 1) + (resx + 2) * (resy + 2) * (k + 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	private double value(final int i, final int j, final int k) {
 		if (valueremaps != null) {
 			final double val = valueremaps.getIfAbsent(index(i, j, k), Double.NaN);
@@ -832,14 +1093,27 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 		return values.getValue(i, j, k) * valueFactor.evaluate(i, j, k) + valueShift.evaluate(i, j, k);
 	}
 
+	/**
+	 *
+	 */
 	class VertexRemap {
+		/**  */
 		int i, j, k;
+		/**  */
 		double closestd;
+		/**  */
 		WB_Point p;
+		/**  */
 		double originalvalue;
+		/**  */
 		HE_Vertex snapvertex;
 	}
 
+	/**
+	 *
+	 *
+	 * @param args
+	 */
 	public static void main(final String[] args) {
 		final float[][][] values = new float[121][121][201];
 		for (int i = 0; i < 121; i++) {
@@ -857,7 +1131,7 @@ public class HEC_IsoSurface3D extends HEC_Creator {
 				for (int j = 0; j < 121; j++) {
 					for (int k = 0; k < 201; k++) {
 						final float r = 1.0f;
-						final float d = (float) WB_GeometryOp3D.getDistance3D(new WB_Point(i, j, k), seg);
+						final float d = (float) WB_GeometryOp.getDistance3D(new WB_Point(i, j, k), seg);
 						final float e = PApplet.max(r - PApplet.abs(values[i][j][k] - d), 0);
 						values[i][j][k] = PApplet.min(values[i][j][k], d) - e * e * 0.25f / r;
 					}

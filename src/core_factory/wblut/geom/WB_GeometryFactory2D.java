@@ -14,16 +14,35 @@ import java.util.List;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
+/**
+ *
+ */
 public class WB_GeometryFactory2D {
+	/**  */
 	private WB_JTS.ShapeReader shapereader;
 
+	/**
+	 *
+	 */
 	public WB_GeometryFactory2D() {
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_CoordinateSystem WORLD() {
 		return WB_CoordinateSystem.WORLD();
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param X
+	 * @return
+	 */
 	public WB_CoordinateSystem createCSFromOriginAndX2D(final WB_Coord origin, final WB_Coord X) {
 		final WB_Point lOrigin = createPoint2D(origin.xd(), origin.yd());
 		final WB_Vector lX = createNormalizedVector2D(X.xd(), X.yd());
@@ -31,6 +50,14 @@ public class WB_GeometryFactory2D {
 		return createCSFromOriginAndXY2D(lOrigin, lX, lY);
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param X
+	 * @param parent
+	 * @return
+	 */
 	public WB_CoordinateSystem createCSFromOriginAndX2D(final WB_Coord origin, final WB_Coord X,
 			final WB_CoordinateSystem parent) {
 		final WB_Point lOrigin = createPoint2D(origin.xd(), origin.yd());
@@ -39,6 +66,14 @@ public class WB_GeometryFactory2D {
 		return createCSFromOriginAndXY2D(lOrigin, lX, lY, parent);
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param X
+	 * @param Y
+	 * @return
+	 */
 	public WB_CoordinateSystem createCSFromOriginAndXY2D(final WB_Coord origin, final WB_Coord X, final WB_Coord Y) {
 		final WB_Vector lX = createNormalizedVector2D(X);
 		WB_Vector lY = createNormalizedVector2D(Y);
@@ -50,6 +85,15 @@ public class WB_GeometryFactory2D {
 		return new WB_CoordinateSystem(origin, lX, lY, lZ, WORLD());
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param X
+	 * @param Y
+	 * @param parent
+	 * @return
+	 */
 	public WB_CoordinateSystem createCSFromOriginAndXY2D(final WB_Coord origin, final WB_Coord X, final WB_Coord Y,
 			final WB_CoordinateSystem parent) {
 		final WB_Vector lX = createNormalizedVector2D(X);
@@ -62,57 +106,148 @@ public class WB_GeometryFactory2D {
 		return new WB_CoordinateSystem(origin, lX, lY, lZ, parent);
 	}
 
+	/**
+	 *
+	 *
+	 * @param CS
+	 * @param T
+	 * @param parent
+	 * @return
+	 */
 	public WB_CoordinateSystem createTransformedCS(final WB_CoordinateSystem CS, final WB_Transform3D T,
 			final WB_CoordinateSystem parent) {
 		return CS.apply(T, parent);
 	}
 
+	/**
+	 *
+	 *
+	 * @param CS
+	 * @param T
+	 * @return
+	 */
 	public WB_CoordinateSystem createTransformedCS(final WB_CoordinateSystem CS, final WB_Transform3D T) {
 		return CS.apply(T);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point createPoint2D() {
 		return new WB_Point(0, 0, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Point createPoint2D(final WB_Coord p) {
 		return new WB_Point(p.xd(), p.yd(), 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public WB_Point createPoint2D(final double x, final double y) {
 		return new WB_Point(x, y, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param q
+	 * @param f
+	 * @return
+	 */
 	public WB_Point createInterpolatedPoint2D(final WB_Coord p, final WB_Coord q, final double f) {
 		return new WB_Point((1.0 - f) * p.xd() + f * q.xd(), (1.0 - f) * p.yd() + f * q.yd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @param phi
+	 * @return
+	 */
 	public WB_Point createPointFromPolar(final double r, final double phi) {
 		return createPoint2D(r * Math.cos(phi), r * Math.sin(phi));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param sigma
+	 * @param tau
+	 * @return
+	 */
 	public WB_Point createPointFromBipolar(final double a, final double sigma, final double tau) {
 		double invdenom = Math.cosh(tau) - Math.cos(sigma);
 		invdenom = WB_Epsilon.isZero(invdenom) ? 0.0 : a / invdenom;
 		return createPoint2D(Math.sinh(tau) * invdenom, Math.sin(sigma) * invdenom);
 	}
 
+	/**
+	 *
+	 *
+	 * @param sigma
+	 * @param tau
+	 * @return
+	 */
 	public WB_Point createPointFromParabolic(final double sigma, final double tau) {
 		return createPoint2D(sigma * tau, 0.5 * (tau * tau - sigma * sigma));
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @return
+	 */
 	public WB_Point createPointFromHyperbolic(final double u, final double v) {
 		return createPoint2D(v * Math.exp(u), v * Math.exp(-u));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param sigma
+	 * @param tau
+	 * @return
+	 */
 	public WB_Point createPointFromElliptic(final double a, final double sigma, final double tau) {
 		return createPoint2D(a * sigma * tau, Math.sqrt(a * a * (sigma * sigma - 1) * (1 - tau * tau)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param tri
+	 * @return
+	 */
 	public WB_Point createIncenter2D(final WB_Triangle tri) {
 		return createPointFromTrilinearCoordinates2D(1, 1, 1, tri);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param L
+	 * @return
+	 */
 	public WB_Point createClosestPointOnLine2D(final WB_Coord p, final WB_Line L) {
 		if (WB_Epsilon.isZero(L.getDirection().xd())) {
 			return createPoint2D(L.getOrigin().xd(), p.yd());
@@ -127,6 +262,13 @@ public class WB_GeometryFactory2D {
 		return createPoint2D(x, y);
 	}
 
+	/**
+	 *
+	 *
+	 * @param L1
+	 * @param L2
+	 * @return
+	 */
 	public List<WB_Point> createClosestPoint(final WB_Line L1, final WB_Line L2) {
 		final List<WB_Point> result = new ArrayList<>();
 		final double a = WB_Vector.dot2D(L1.getDirection(), L1.getDirection());
@@ -148,6 +290,13 @@ public class WB_GeometryFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param C0
+	 * @param C1
+	 * @return
+	 */
 	public List<WB_Point> createIntersectionPoints2D(final WB_Circle C0, final WB_Circle C1) {
 		final List<WB_Point> result = new ArrayList<>();
 		final WB_Vector u = createVector2D(C1.getCenter()).sub(C0.getCenter());
@@ -179,6 +328,13 @@ public class WB_GeometryFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param C
+	 * @return
+	 */
 	public List<WB_Point> createIntersectionPoints2D(final WB_Line L, final WB_Circle C) {
 		final List<WB_Point> result = new ArrayList<>();
 		final double b = 2 * (L.getDirection().xd() * (L.getOrigin().xd() - C.getCenter().xd())
@@ -200,6 +356,13 @@ public class WB_GeometryFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param L1
+	 * @param L2
+	 * @return
+	 */
 	public WB_Point createIntersectionPoint2D(final WB_Line L1, final WB_Line L2) {
 		final double a = WB_Vector.dot(L1.getDirection(), L1.getDirection());
 		final double b = WB_Vector.dot(L1.getDirection(), L2.getDirection());
@@ -219,6 +382,16 @@ public class WB_GeometryFactory2D {
 		return p1.mulAddMul(0.5, 0.5, p2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param x0
+	 * @param y0
+	 * @param x1
+	 * @param y1
+	 * @return
+	 */
 	public WB_Point createMirrorPoint2D(final WB_Coord p, final double x0, final double y0, final double x1,
 			final double y1) {
 		double dx, dy, a, b;
@@ -232,6 +405,13 @@ public class WB_GeometryFactory2D {
 		return createPoint2D(x2, y2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param L
+	 * @return
+	 */
 	public WB_Point createMirrorPoint2D(final WB_Coord p, final WB_Line L) {
 		double dx, dy, a, b;
 		double x2, y2;
@@ -244,14 +424,30 @@ public class WB_GeometryFactory2D {
 		return createPoint2D(x2, y2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @param w
+	 * @param tri
+	 * @return
+	 */
 	public WB_Point createPointFromBarycentricCoordinates2D(final double u, final double v, final double w,
 			final WB_Triangle tri) {
 		return createPointFromTrilinearCoordinates2D(u / tri.a(), v / tri.b(), w / tri.c(), tri);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param inversionCircle
+	 * @return
+	 */
 	public WB_Point createInversionPoint2D(final WB_Coord p, final WB_Circle inversionCircle) {
 		final double r2 = inversionCircle.getRadius() * inversionCircle.getRadius();
-		final double OP = WB_GeometryOp2D.getDistance2D(inversionCircle.getCenter(), p);
+		final double OP = WB_GeometryOp.getDistance2D(inversionCircle.getCenter(), p);
 		if (WB_Epsilon.isZero(OP)) {
 			return null;
 		}
@@ -260,10 +456,22 @@ public class WB_GeometryFactory2D {
 		return createPoint2D(WB_Point.addMul(inversionCircle.getCenter(), OPp, v));
 	}
 
+	/**
+	 *
+	 *
+	 * @param tri
+	 * @return
+	 */
 	public WB_Point createCentroid2D(final WB_Triangle tri) {
 		return createPointFromTrilinearCoordinates2D(tri.b() * tri.c(), tri.c() * tri.a(), tri.a() * tri.b(), tri);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public WB_Point createCentroid2D(final WB_Coord... points) {
 		final WB_Point c = new WB_Point();
 		for (final WB_Coord point : points) {
@@ -273,10 +481,22 @@ public class WB_GeometryFactory2D {
 		return c;
 	}
 
+	/**
+	 *
+	 *
+	 * @param tri
+	 * @return
+	 */
 	public WB_Point createCircumcenter2D(final WB_Triangle tri) {
 		return createPointFromTrilinearCoordinates2D(tri.cosA(), tri.cosB(), tri.cosC(), tri);
 	}
 
+	/**
+	 *
+	 *
+	 * @param tri
+	 * @return
+	 */
 	public WB_Point createOrthocenter2D(final WB_Triangle tri) {
 		final double a2 = tri.a() * tri.a();
 		final double b2 = tri.b() * tri.b();
@@ -285,6 +505,15 @@ public class WB_GeometryFactory2D {
 				(a2 + b2 - c2) * (-a2 + b2 + c2), (a2 - b2 + c2) * (-a2 + b2 + c2), tri);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @param w
+	 * @param tri
+	 * @return
+	 */
 	public WB_Point createPointFromTrilinearCoordinates2D(final double u, final double v, final double w,
 			final WB_Triangle tri) {
 		final double invabc = 1.0 / (tri.a() * u + tri.b() * v + tri.c() * w);
@@ -297,10 +526,23 @@ public class WB_GeometryFactory2D {
 		return createPoint2D(eax, eay);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param q
+	 * @return
+	 */
 	public WB_Point createMidpoint2D(final WB_Coord p, final WB_Coord q) {
 		return createPoint2D((p.xd() + q.xd()) * 0.5, (p.yd() + q.yd()) * 0.5);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Point createMidpoint2D(final WB_Coord... p) {
 		final WB_Point m = createPoint2D();
 		for (final WB_Coord point : p) {
@@ -310,98 +552,246 @@ public class WB_GeometryFactory2D {
 		return m;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Vector createVector2D() {
 		return new WB_Vector(0, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param q
+	 * @return
+	 */
 	public WB_Vector createVectorFromTo2D(final WB_Coord p, final WB_Coord q) {
 		return createVector2D(q.xd() - p.xd(), q.yd() - p.yd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Vector createVector2D(final WB_Coord p) {
 		return new WB_Vector(p.xd(), p.yd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param _x
+	 * @param _y
+	 * @return
+	 */
 	public WB_Vector createVector2D(final double _x, final double _y) {
 		return new WB_Vector(_x, _y);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Vector createNormalizedVector2D(final WB_Coord p) {
 		final WB_Vector vec = createVector2D(p);
 		vec.normalizeSelf();
 		return vec;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param q
+	 * @return
+	 */
 	public WB_Vector createNormalizedVectorFromTo2D(final WB_Coord p, final WB_Coord q) {
 		final WB_Vector vec = createVector2D(q.xd() - p.xd(), q.yd() - p.yd());
 		vec.normalizeSelf();
 		return vec;
 	}
 
+	/**
+	 *
+	 *
+	 * @param _x
+	 * @param _y
+	 * @return
+	 */
 	public WB_Vector createNormalizedVector2D(final double _x, final double _y) {
 		final WB_Vector vec = createVector2D(_x, _y);
 		vec.normalizeSelf();
 		return vec;
 	}
 
+	/**
+	 *
+	 *
+	 * @param _x
+	 * @param _y
+	 * @return
+	 */
 	public WB_Vector createNormalizedPerpendicularVector2D(final double _x, final double _y) {
 		final WB_Vector vec = createVector2D(-_y, _x);
 		vec.normalizeSelf();
 		return vec;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public WB_Vector createNormalizedPerpendicularVector2D(final WB_Coord v) {
 		final WB_Vector vec = createVector2D(-v.yd(), v.xd());
 		vec.normalizeSelf();
 		return vec;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @param phi
+	 * @return
+	 */
 	public WB_Vector createVectorFromPolar(final double r, final double phi) {
 		return createVector2D(r * Math.cos(phi), r * Math.sin(phi));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param sigma
+	 * @param tau
+	 * @return
+	 */
 	public WB_Vector createVectorFromBipolar(final double a, final double sigma, final double tau) {
 		double invdenom = Math.cosh(tau) - Math.cos(sigma);
 		invdenom = WB_Epsilon.isZero(invdenom) ? 0.0 : a / invdenom;
 		return createVector2D(Math.sinh(tau) * invdenom, Math.sin(sigma) * invdenom);
 	}
 
+	/**
+	 *
+	 *
+	 * @param sigma
+	 * @param tau
+	 * @return
+	 */
 	public WB_Vector createVectorFromParabolic(final double sigma, final double tau) {
 		return createVector2D(sigma * tau, 0.5 * (tau * tau - sigma * sigma));
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @return
+	 */
 	public WB_Vector createVectorFromHyperbolic(final double u, final double v) {
 		return createVector2D(v * Math.exp(u), v * Math.exp(-u));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param mu
+	 * @param nu
+	 * @return
+	 */
 	public WB_Vector createVectorFromElliptic(final double a, final double mu, final double nu) {
 		return createVector2D(a * Math.cosh(mu) * Math.cos(nu), a * Math.sinh(mu) * Math.cos(nu));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	public WB_Line createLineThroughPoints2D(final WB_Coord p1, final WB_Coord p2) {
 		return createLineWithDirection2D(p1, createVectorFromTo2D(p1, p2));
 	}
 
+	/**
+	 *
+	 *
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @return
+	 */
 	public WB_Line createLineThroughPoints2D(final double x1, final double y1, final double x2, final double y2) {
 		return createLineWithDirection2D(createPoint2D(x1, y1), createVector2D(x2 - x1, y2 - y1));
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param direction
+	 * @return
+	 */
 	public WB_Line createLineWithDirection2D(final WB_Coord origin, final WB_Coord direction) {
 		return new WB_Line(createPoint2D(origin), createVector2D(direction));
 	}
 
+	/**
+	 *
+	 *
+	 * @param ox
+	 * @param oy
+	 * @param dx
+	 * @param dy
+	 * @return
+	 */
 	public WB_Line createLineWithDirection2D(final double ox, final double oy, final double dx, final double dy) {
 		return createLineWithDirection2D(createPoint2D(ox, oy), createVector2D(dx, dy));
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param p
+	 * @return
+	 */
 	public WB_Line createParallelLineThroughPoint2D(final WB_Line L, final WB_Coord p) {
 		return createLineWithDirection2D(p, L.getDirection());
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param p
+	 * @return
+	 */
 	public WB_Line createPerpendicularLineThroughPoint2D(final WB_Line L, final WB_Coord p) {
 		return createLineWithDirection2D(p, createVector2D(-L.getDirection().yd(), L.getDirection().xd()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param d
+	 * @return
+	 */
 	public List<WB_Line> createParallelLines2D(final WB_Line L, final double d) {
 		final List<WB_Line> result = new ArrayList<>(2);
 		result.add(createLineWithDirection2D(createPoint2D(L.getOrigin().xd() - d * L.getDirection().yd(),
@@ -411,11 +801,25 @@ public class WB_GeometryFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param q
+	 * @return
+	 */
 	public WB_Line createBisector2D(final WB_Coord p, final WB_Coord q) {
 		return createLineWithDirection2D(createPoint2D(p).mulAddMulSelf(0.5, 0.5, q),
 				createVector2D(p.yd() - q.yd(), q.xd() - p.xd()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param L1
+	 * @param L2
+	 * @return
+	 */
 	public List<WB_Line> createAngleBisector2D(final WB_Line L1, final WB_Line L2) {
 		final WB_Point intersection = createIntersectionPoint2D(L1, L2);
 		final List<WB_Line> result = new ArrayList<>(2);
@@ -442,14 +846,28 @@ public class WB_GeometryFactory2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param C
+	 * @param p
+	 * @return
+	 */
 	public WB_Line createLineTangentToCircleInPoint(final WB_Circle C, final WB_Coord p) {
 		final WB_Vector v = createVector2D(p).sub(C.getCenter());
 		return createLineWithDirection2D(p, createVector2D(-v.yd(), v.xd()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param C
+	 * @param p
+	 * @return
+	 */
 	public List<WB_Line> createLinesTangentToCircleThroughPoint(final WB_Circle C, final WB_Coord p) {
 		final List<WB_Line> result = new ArrayList<>(2);
-		final double dcp = WB_GeometryOp2D.getDistance2D(C.getCenter(), p);
+		final double dcp = WB_GeometryOp.getDistance2D(C.getCenter(), p);
 		final WB_Vector u = createVector2D(p).sub(C.getCenter());
 		if (WB_Epsilon.isZero(dcp - C.getRadius())) {
 			result.add(createLineWithDirection2D(p, createVector2D(-u.yd(), u.xd())));
@@ -485,6 +903,13 @@ public class WB_GeometryFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param C0
+	 * @param C1
+	 * @return
+	 */
 	public List<WB_Line> createLinesTangentTo2Circles(final WB_Circle C0, final WB_Circle C1) {
 		final List<WB_Line> result = new ArrayList<>(4);
 		final WB_Vector w = createVector2D(C1.getCenter()).sub(C0.getCenter());
@@ -566,6 +991,13 @@ public class WB_GeometryFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param w
+	 * @param a
+	 * @return
+	 */
 	private List<WB_Vector> getDirections2D(final WB_Coord w, final double a) {
 		final List<WB_Vector> dir = new ArrayList<>(2);
 		final double asqr = a * a;
@@ -597,6 +1029,13 @@ public class WB_GeometryFactory2D {
 		return dir;
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param C
+	 * @return
+	 */
 	public List<WB_Line> createPerpendicularLinesTangentToCircle(final WB_Line L, final WB_Circle C) {
 		final List<WB_Line> result = new ArrayList<>(2);
 		result.add(createLineWithDirection2D(
@@ -610,99 +1049,225 @@ public class WB_GeometryFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	public WB_Ray createRayThroughPoints2D(final WB_Coord p1, final WB_Coord p2) {
 		return createRayWithDirection2D(createPoint2D(p1), createVectorFromTo2D(p1, p2));
 	}
 
+	/**
+	 *
+	 *
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @return
+	 */
 	public WB_Ray createRayThroughPoints2D(final double x1, final double y1, final double x2, final double y2) {
 		return createRayWithDirection2D(createPoint2D(x1, y1), createVector2D(x2 - x1, y2 - y1));
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param direction
+	 * @return
+	 */
 	public WB_Ray createRayWithDirection2D(final WB_Coord origin, final WB_Coord direction) {
 		return new WB_Ray(createPoint2D(origin), createVector2D(direction));
 	}
 
+	/**
+	 *
+	 *
+	 * @param ox
+	 * @param oy
+	 * @param dx
+	 * @param dy
+	 * @return
+	 */
 	public WB_Ray createRayWithDirection2D(final double ox, final double oy, final double dx, final double dy) {
 		return createRayWithDirection2D(createPoint2D(ox, oy), createVector2D(dx, dy));
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param p
+	 * @return
+	 */
 	public WB_Ray createParallelRayThroughPoint2D(final WB_Line L, final WB_Coord p) {
 		return createRayWithDirection2D(p, L.getDirection());
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	public WB_Segment createSegment2D(final WB_Coord p1, final WB_Coord p2) {
 		return new WB_Segment(createPoint2D(p1), createPoint2D(p2));
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param direction
+	 * @param length
+	 * @return
+	 */
 	public WB_Segment createSegmentWithLength2D(final WB_Coord origin, final WB_Coord direction, final double length) {
 		return createSegment2D(createPoint2D(origin),
 				createPoint2D(origin).addMulSelf(length, createNormalizedVector2D(direction)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @return
+	 */
 	public WB_Segment createSegment2D(final double x1, final double y1, final double x2, final double y2) {
 		return createSegment2D(createPoint2D(x1, y1), createVector2D(x2, y2));
 	}
 
+	/**
+	 *
+	 *
+	 * @param ox
+	 * @param oy
+	 * @param dx
+	 * @param dy
+	 * @param length
+	 * @return
+	 */
 	public WB_Segment createSegmentWithLength2D(final double ox, final double oy, final double dx, final double dy,
 			final double length) {
 		return createSegment2D(createPoint2D(ox, oy),
 				createPoint2D(ox, oy).addMul(length, createNormalizedVector2D(dx, dy)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public WB_PolyLine createPolyLine(final WB_Coord[] points) {
 		return new WB_PolyLine(points);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public WB_PolyLine createPolyLine(final Collection<? extends WB_Coord> points) {
 		return new WB_PolyLine(points);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public WB_Ring createRing(final WB_Coord[] points) {
 		return new WB_Ring(points);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public WB_Ring createRing(final List<? extends WB_Coord> points) {
 		return new WB_Ring(points);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public WB_Polygon createSimplePolygon(final WB_Coord... points) {
 		return new WB_Polygon(points);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public WB_Polygon createSimplePolygon(final WB_CoordCollection points) {
 		return new WB_Polygon(points);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @return
+	 */
 	public WB_Polygon createSimplePolygon(final WB_Polygon poly) {
 		return new WB_JTS.PolygonTriangulatorJTS().makeSimplePolygon(poly);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public WB_Polygon createSimplePolygon(final Collection<? extends WB_Coord> points) {
 		return new WB_Polygon(points);
 	}
 
+	/**
+	 *
+	 *
+	 * @param triangle
+	 * @return
+	 */
 	public WB_Polygon createSimplePolygon(final WB_Triangle triangle) {
 		return new WB_Polygon(triangle.p1, triangle.p2, triangle.p3);
 	}
 
+	/**
+	 *
+	 *
+	 * @param quad
+	 * @return
+	 */
 	public WB_Polygon createSimplePolygon(final WB_Quad quad) {
 		return new WB_Polygon(quad.getP1(), quad.getP2(), quad.getP3(), quad.getP4());
 	}
 
-	public WB_Polygon createSimplePolygon(final WB_Pentagon pentagon) {
-		return new WB_Polygon(pentagon.getP1(), pentagon.getP2(), pentagon.getP3(), pentagon.getP4(), pentagon.getP5());
-	}
-
-	public WB_Polygon createSimplePolygon(final WB_Hexagon hexagon) {
-		return new WB_Polygon(hexagon.getP1(), hexagon.getP2(), hexagon.getP3(), hexagon.getP4(), hexagon.getP5(),
-				hexagon.getP6());
-	}
-
-	public WB_Polygon createSimplePolygon(final WB_Octagon octagon) {
-		return new WB_Polygon(octagon.getP1(), octagon.getP2(), octagon.getP3(), octagon.getP4(), octagon.getP5(),
-				octagon.getP6(), octagon.getP7(), octagon.getP8());
-	}
-
+	/**
+	 *
+	 *
+	 * @param tuples
+	 * @param indices
+	 * @return
+	 */
 	public WB_Polygon createSimplePolygon(final List<? extends WB_Coord> tuples, final int[] indices) {
 		final List<WB_Coord> coords = new WB_CoordList();
 		for (final int indice : indices) {
@@ -711,62 +1276,158 @@ public class WB_GeometryFactory2D {
 		return createSimplePolygon(coords);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param innerpoints
+	 * @return
+	 */
 	public WB_Polygon createPolygonWithHole(final WB_Coord[] points, final WB_Coord[] innerpoints) {
 		return new WB_Polygon(points, innerpoints);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param innerpoints
+	 * @return
+	 */
 	public WB_Polygon createPolygonWithHole(final Collection<? extends WB_Coord> points,
 			final Collection<? extends WB_Coord> innerpoints) {
 		return new WB_Polygon(points, innerpoints);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param innerpoints
+	 * @return
+	 */
 	public WB_Polygon createPolygonWithHoles(final WB_Coord[] points, final WB_Coord[][] innerpoints) {
 		return new WB_Polygon(points, innerpoints);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param innerpoints
+	 * @return
+	 */
 	public WB_Polygon createPolygonWithHoles(final Collection<? extends WB_Coord> points,
 			final List<? extends WB_Coord>[] innerpoints) {
 		return new WB_Polygon(points, innerpoints);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @return
+	 */
 	public WB_Polygon createPolygonConvexHull2D(final WB_Polygon poly) {
 		return WB_JTS.createPolygonConvexHull2D(poly);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @return
+	 */
 	public List<WB_Polygon> createConvexPolygonDecomposition2D(final WB_Polygon poly) {
 		return WB_PolygonDecomposer.decomposePolygon2D(poly);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @return
+	 */
 	public List<WB_Polygon> createBufferedPolygons2D(final WB_Polygon poly, final double d) {
 		return WB_JTS.createBufferedPolygons2D(poly, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @return
+	 */
 	public List<WB_Polygon> createBufferedPolygons2D(final Collection<? extends WB_Polygon> poly, final double d) {
 		return WB_JTS.createBufferedPolygons2D(poly, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @param n
+	 * @return
+	 */
 	public List<WB_Polygon> createBufferedPolygons2D(final WB_Polygon poly, final double d, final int n) {
 		return WB_JTS.createBufferedPolygons2D(poly, d, n);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @return
+	 */
 	public List<WB_Polygon> createBufferedPolygonsStraight2D(final WB_Polygon poly, final double d) {
 		return WB_JTS.createBufferedPolygonsStraight2D(poly, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @param n
+	 * @return
+	 */
 	public List<WB_Polygon> createBufferedPolygons2D(final Collection<? extends WB_Polygon> poly, final double d,
 			final int n) {
 		return WB_JTS.createBufferedPolygons2D(poly, d, n);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @return
+	 */
 	public List<WB_Polygon> createBufferedPolygonsStraight2D(final Collection<? extends WB_Polygon> poly,
 			final double d) {
 		return WB_JTS.createBufferedPolygonsStraight2D(poly, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @return
+	 */
 	public List<WB_Polygon> createBoundaryPolygons2D(final WB_Polygon poly) {
 		return WB_JTS.createBoundaryPolygons2D(poly);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @return
+	 */
 	public List<WB_Polygon> createBoundaryPolygons2D(final Collection<? extends WB_Polygon> poly) {
 		List<WB_Polygon> result = new ArrayList<>();
 		if (poly.size() < 1) {
@@ -783,110 +1444,293 @@ public class WB_GeometryFactory2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @return
+	 */
 	public List<WB_Polygon> createRibbonPolygons2D(final WB_Polygon poly, final double d) {
 		return WB_JTS.createRibbonPolygons2D(poly, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @return
+	 */
 	public List<WB_Polygon> createRibbonPolygons2D(final Collection<? extends WB_Polygon> poly, final double d) {
 		return WB_JTS.createRibbonPolygons2D(poly, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param o
+	 * @param i
+	 * @return
+	 */
 	public List<WB_Polygon> createRibbonPolygons2D(final WB_Polygon poly, final double o, final double i) {
 		return WB_JTS.createRibbonPolygons2D(poly, o, i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param o
+	 * @param i
+	 * @return
+	 */
 	public List<WB_Polygon> createRibbonPolygons2D(final Collection<? extends WB_Polygon> poly, final double o,
 			final double i) {
 		return WB_JTS.createRibbonPolygons2D(poly, o, i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param tol
+	 * @return
+	 */
 	public List<WB_Polygon> createSimplifiedPolygon2D(final WB_Polygon poly, final double tol) {
 		return WB_JTS.createSimplifiedPolygon2D(poly, tol);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param max
+	 * @return
+	 */
 	public List<WB_Polygon> createDensifiedPolygon2D(final WB_Polygon poly, final double max) {
 		return WB_JTS.createDensifiedPolygon2D(poly, max);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return
+	 */
 	public List<WB_Polygon> unionPolygons2D(final WB_Polygon poly1, final WB_Polygon poly2) {
 		return WB_JTS.unionPolygons2D(poly1, poly2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return
+	 */
 	public List<WB_Polygon> unionPolygons2D(final WB_Polygon poly1, final Collection<? extends WB_Polygon> poly2) {
 		return WB_JTS.unionPolygons2D(poly1, poly2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return
+	 */
 	public List<WB_Polygon> unionPolygons2D(final Collection<? extends WB_Polygon> poly1,
 			final Collection<? extends WB_Polygon> poly2) {
 		return WB_JTS.unionPolygons2D(poly1, poly2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return
+	 */
 	public List<WB_Polygon> subtractPolygons2D(final WB_Polygon poly1, final WB_Polygon poly2) {
 		return WB_JTS.subtractPolygons2D(poly1, poly2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return
+	 */
 	public List<WB_Polygon> subtractPolygons2D(final WB_Polygon poly1, final Collection<? extends WB_Polygon> poly2) {
 		return WB_JTS.subtractPolygons2D(poly1, poly2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return
+	 */
 	public List<WB_Polygon> subtractPolygons2D(final Collection<? extends WB_Polygon> poly1,
 			final Collection<? extends WB_Polygon> poly2) {
 		return WB_JTS.subtractPolygons2D(poly1, poly2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return
+	 */
 	public List<WB_Polygon> subtractPolygons2D(final Collection<? extends WB_Polygon> poly1, final WB_Polygon poly2) {
 		return WB_JTS.subtractPolygons2D(poly1, poly2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return
+	 */
 	public List<WB_Polygon> intersectPolygons2D(final WB_Polygon poly1, final WB_Polygon poly2) {
 		return WB_JTS.intersectPolygons2D(poly1, poly2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return
+	 */
 	public List<WB_Polygon> intersectPolygons2D(final WB_Polygon poly1, final Collection<? extends WB_Polygon> poly2) {
 		return WB_JTS.intersectPolygons2D(poly1, poly2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return
+	 */
 	public List<WB_Polygon> intersectPolygons2D(final Collection<? extends WB_Polygon> poly1,
 			final Collection<? extends WB_Polygon> poly2) {
 		return WB_JTS.intersectPolygons2D(poly1, poly2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return
+	 */
 	public List<WB_Polygon> symDifferencePolygons2D(final WB_Polygon poly1, final WB_Polygon poly2) {
 		return WB_JTS.symDifferencePolygons2D(poly1, poly2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return
+	 */
 	public List<WB_Polygon> symDifferencePolygons2D(final WB_Polygon poly1,
 			final Collection<? extends WB_Polygon> poly2) {
 		return WB_JTS.symDifferencePolygons2D(poly1, poly2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly1
+	 * @param poly2
+	 * @return
+	 */
 	public List<WB_Polygon> symDifferencePolygons2D(final Collection<? extends WB_Polygon> poly1,
 			final Collection<? extends WB_Polygon> poly2) {
 		return WB_JTS.symDifferencePolygons2D(poly1, poly2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param container
+	 * @return
+	 */
 	public List<WB_Polygon> constrainPolygons2D(final WB_Polygon poly, final WB_Polygon container) {
 		return WB_JTS.constrainPolygons2D(poly, container);
 	}
 
+	/**
+	 *
+	 *
+	 * @param polygons
+	 * @param container
+	 * @return
+	 */
 	public List<WB_Polygon> constrainPolygons2D(final WB_Polygon[] polygons, final WB_Polygon container) {
 		return WB_JTS.constrainPolygons2D(polygons, container);
 	}
 
+	/**
+	 *
+	 *
+	 * @param polygons
+	 * @param container
+	 * @return
+	 */
 	public List<WB_Polygon> constrainPolygons2D(final List<WB_Polygon> polygons, final WB_Polygon container) {
 		return WB_JTS.constrainPolygons2D(polygons, container);
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param pointSize
+	 * @return
+	 */
 	public List<WB_Polygon> createTextWithTrueTypeFont(final String text, final String fontName,
 			final float pointSize) {
 		return createTextWithTrueTypeFont(text, fontName, 0, pointSize, 400.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param pointSize
+	 * @param flatness
+	 * @return
+	 */
 	public List<WB_Polygon> createTextWithTrueTypeFont(final String text, final String fontName, final float pointSize,
 			final double flatness) {
 		return createTextWithTrueTypeFont(text, fontName, 0, pointSize, flatness);
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param style
+	 * @param pointSize
+	 * @param flatness
+	 * @return
+	 */
 	public List<WB_Polygon> createTextWithTrueTypeFont(final String text, final String fontName, final int style,
 			final float pointSize, final double flatness) {
 		try {
@@ -899,15 +1743,42 @@ public class WB_GeometryFactory2D {
 		return new WB_List<>();
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param pointSize
+	 * @return
+	 */
 	public List<WB_Polygon> createTextWithFont(final String text, final String fontName, final float pointSize) {
 		return createTextWithFont(text, fontName, 0, pointSize, 400.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param pointSize
+	 * @param flatness
+	 * @return
+	 */
 	public List<WB_Polygon> createTextWithFont(final String text, final String fontName, final float pointSize,
 			final double flatness) {
 		return createTextWithFont(text, fontName, 0, pointSize, flatness);
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param style
+	 * @param pointSize
+	 * @param flatness
+	 * @return
+	 */
 	public List<WB_Polygon> createTextWithFont(final String text, final String fontName, final int style,
 			final float pointSize, final double flatness) {
 		InputStream is = null;
@@ -932,16 +1803,43 @@ public class WB_GeometryFactory2D {
 		return new WB_List<>();
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param pointSize
+	 * @return
+	 */
 	public List<WB_Polygon> createTextWithOpenTypeFont(final String text, final String fontName,
 			final float pointSize) {
 		return createTextWithOpenTypeFont(text, fontName, 0, pointSize, 400.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param pointSize
+	 * @param flatness
+	 * @return
+	 */
 	public List<WB_Polygon> createTextWithOpenTypeFont(final String text, final String fontName, final float pointSize,
 			final double flatness) {
 		return createTextWithOpenTypeFont(text, fontName, 0, pointSize, flatness);
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param style
+	 * @param pointSize
+	 * @param flatness
+	 * @return
+	 */
 	public List<WB_Polygon> createTextWithOpenTypeFont(final String text, final String fontName, final int style,
 			final float pointSize, final double flatness) {
 		try {
@@ -954,15 +1852,42 @@ public class WB_GeometryFactory2D {
 		return new WB_List<>();
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param pointSize
+	 * @return
+	 */
 	public List<WB_Polygon> createTextWithType1Font(final String text, final String fontName, final float pointSize) {
 		return createTextWithType1Font(text, fontName, 0, pointSize, 400.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param pointSize
+	 * @param flatness
+	 * @return
+	 */
 	public List<WB_Polygon> createTextWithType1Font(final String text, final String fontName, final float pointSize,
 			final double flatness) {
 		return createTextWithType1Font(text, fontName, 0, pointSize, flatness);
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param style
+	 * @param pointSize
+	 * @param flatness
+	 * @return
+	 */
 	public List<WB_Polygon> createTextWithType1Font(final String text, final String fontName, final int style,
 			final float pointSize, final double flatness) {
 		try {
@@ -975,29 +1900,74 @@ public class WB_GeometryFactory2D {
 		return new WB_List<>();
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param pointSize
+	 * @return
+	 */
 	public List<WB_Polygon> createText(final String text, final String fontName, final float pointSize) {
 		final Font font = new Font(fontName, 0, (int) pointSize);
 		return createText(text, font, 400.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param pointSize
+	 * @param flatness
+	 * @return
+	 */
 	public List<WB_Polygon> createText(final String text, final String fontName, final float pointSize,
 			final double flatness) {
 		final Font font = new Font(fontName, 0, (int) pointSize);
 		return createText(text, font, flatness);
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param fontName
+	 * @param style
+	 * @param pointSize
+	 * @param flatness
+	 * @return
+	 */
 	public List<WB_Polygon> createText(final String text, final String fontName, final int style, final float pointSize,
 			final double flatness) {
 		final Font font = new Font(fontName, style, (int) pointSize);
 		return createText(text, font, flatness);
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param font
+	 * @param style
+	 * @param pointSize
+	 * @param flatness
+	 * @return
+	 */
 	public List<WB_Polygon> createText(final String text, final Font font, final int style, final float pointSize,
 			final double flatness) {
 		final Font nfont = font.deriveFont(style, pointSize);
 		return createText(text, nfont, flatness);
 	}
 
+	/**
+	 *
+	 *
+	 * @param text
+	 * @param font
+	 * @param flatness
+	 * @return
+	 */
 	public List<WB_Polygon> createText(final String text, final Font font, final double flatness) {
 		try {
 			if (shapereader == null) {
@@ -1017,6 +1987,13 @@ public class WB_GeometryFactory2D {
 		return new WB_List<>();
 	}
 
+	/**
+	 *
+	 *
+	 * @param shape
+	 * @param flatness
+	 * @return
+	 */
 	public List<WB_Polygon> createShape(final Shape shape, final double flatness) {
 		if (shapereader == null) {
 			shapereader = new WB_JTS.ShapeReader();
@@ -1024,53 +2001,131 @@ public class WB_GeometryFactory2D {
 		return shapereader.read(shape, flatness);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1x
+	 * @param p1y
+	 * @param p2x
+	 * @param p2y
+	 * @param p3x
+	 * @param p3y
+	 * @return
+	 */
 	public WB_Triangle createTriangle2D(final double p1x, final double p1y, final double p2x, final double p2y,
 			final double p3x, final double p3y) {
 		return createTriangle2D(createPoint2D(p1x, p1y), createPoint2D(p2x, p2y), createPoint2D(p3x, p3y));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @return
+	 */
 	public WB_Triangle createTriangle2D(final WB_Coord p1, final WB_Coord p2, final WB_Coord p3) {
 		return new WB_Triangle(createPoint2D(p1), createPoint2D(p2), createPoint2D(p3));
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param normal
+	 * @param diameter
+	 * @return
+	 */
 	public WB_Circle createCircleWithDiameter(final WB_Coord center, final WB_Coord normal, final double diameter) {
 		return new WB_Circle(center, normal, 0.5 * diameter);
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param normal
+	 * @param radius
+	 * @return
+	 */
 	public WB_Circle createCircleWithRadius(final WB_Coord center, final WB_Coord normal, final double radius) {
 		return new WB_Circle(center, normal, radius);
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param radius
+	 * @return
+	 */
 	public WB_Circle createCircleWithRadius(final WB_Coord center, final double radius) {
 		return new WB_Circle(center, radius);
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param diameter
+	 * @return
+	 */
 	public WB_Circle createCircleWithDiameter(final WB_Coord center, final double diameter) {
 		return createCircleWithRadius(center, .5 * diameter);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param radius
+	 * @return
+	 */
 	public WB_Circle createCircleWithRadius(final double x, final double y, final double radius) {
 		return createCircleWithRadius(createPoint2D(x, y), radius);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param diameter
+	 * @return
+	 */
 	public WB_Circle createCircleWithDiameter(final double x, final double y, final double diameter) {
 		return createCircleWithRadius(createPoint2D(x, y), .5 * diameter);
 	}
 
+	/**
+	 *
+	 *
+	 * @param C
+	 * @param inversionCircle
+	 * @return
+	 */
 	public WB_Circle createInversionCircle2D(final WB_Circle C, final WB_Circle inversionCircle) {
-		if (WB_GeometryOp2D.classifyPointToCircle2D(inversionCircle.getCenter(), C) == WB_Classification.ON) {
+		if (WB_GeometryOp.classifyPointToCircle2D(inversionCircle.getCenter(), C) == WB_Classification.ON) {
 			return null;
 		}
 		final double x0 = inversionCircle.getCenter().xd();
 		final double y0 = inversionCircle.getCenter().yd();
 		final double k = inversionCircle.getRadius();
 		final double k2 = k * k;
-		final double s = k2 / (WB_GeometryOp3D.getSqDistance3D(C.getCenter(), inversionCircle.getCenter())
+		final double s = k2 / (WB_GeometryOp.getSqDistance3D(C.getCenter(), inversionCircle.getCenter())
 				- C.getRadius() * C.getRadius());
 		return createCircleWithRadius(x0 + s * (C.getCenter().xd() - x0), y0 + s * (C.getCenter().yd() - y0),
 				Math.abs(s) * C.getRadius());
 	}
 
+	/**
+	 *
+	 *
+	 * @param tri
+	 * @return
+	 */
 	// 3D
 	public WB_Circle createCircumcircle2D(final WB_Triangle tri) {
 		final double a = tri.a();
@@ -1094,6 +2149,12 @@ public class WB_GeometryFactory2D {
 		return createCircleWithRadius(createPoint2D(x + tri.p1().xd(), y + tri.p1().yd()), radius);
 	}
 
+	/**
+	 *
+	 *
+	 * @param tri
+	 * @return
+	 */
 	public WB_Circle createIncircle2D(final WB_Triangle tri) {
 		final double a = tri.a();
 		final double b = tri.b();
@@ -1105,43 +2166,59 @@ public class WB_GeometryFactory2D {
 		return createCircleWithRadius(createPoint2D(x, y), radius);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	public WB_Circle createCirclePPP(final WB_Coord p0, final WB_Coord p1, final WB_Coord p2) {
 		final double[] circumcenter = WB_Predicates.circumcenter2D(toDouble(p0), toDouble(p1), toDouble(p2));
 		final WB_Point center = createPoint2D(circumcenter[0], circumcenter[1]);
 		return createCircleWithRadius(center, center.getDistance2D(p0));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param q
+	 * @param L
+	 * @return
+	 */
 	public List<WB_Circle> createCirclePPL(final WB_Coord p, final WB_Coord q, final WB_Line L) {
 		final List<WB_Circle> result = new ArrayList<>();
-		if (!WB_GeometryOp2D.sameSideOfLine2D(p, q, L)) {
+		if (!WB_GeometryOp.sameSideOfLine2D(p, q, L)) {
 			return result;
 		}
-		if (WB_GeometryOp2D.classifyPointToLine2D(p, L) == WB_Classification.ON
-				&& WB_GeometryOp2D.classifyPointToLine2D(q, L) == WB_Classification.ON) {
+		if (WB_GeometryOp.classifyPointToLine2D(p, L) == WB_Classification.ON
+				&& WB_GeometryOp.classifyPointToLine2D(q, L) == WB_Classification.ON) {
 			return result;
 		}
 		final WB_Line PQ = createLineThroughPoints2D(p, q);
-		if (WB_GeometryOp2D.classifyPointToLine2D(p, L) == WB_Classification.ON) {
+		if (WB_GeometryOp.classifyPointToLine2D(p, L) == WB_Classification.ON) {
 			if (WB_Epsilon.isZeroSq(createClosestPointOnLine2D(q, L).getSqDistance(p))) {
 				result.add(createCircleWithRadius(createPoint2D(p).mulAddMul(0.5, 0.5, q),
-						0.5 * WB_GeometryOp2D.getDistanceToPoint2D(p, q)));
+						0.5 * WB_GeometryOp.getDistanceToPoint2D(p, q)));
 			} else {
 				final WB_Line perp = createPerpendicularLineThroughPoint2D(L, p);
 				final WB_Line PQbis = createBisector2D(p, q);
 				final WB_Point intersect = createIntersectionPoint2D(perp, PQbis);
-				result.add(createCircleWithRadius(intersect, WB_GeometryOp2D.getDistanceToPoint2D(p, intersect)));
+				result.add(createCircleWithRadius(intersect, WB_GeometryOp.getDistanceToPoint2D(p, intersect)));
 			}
 			return result;
 		}
-		if (WB_GeometryOp2D.classifyPointToLine2D(q, L) == WB_Classification.ON) {
+		if (WB_GeometryOp.classifyPointToLine2D(q, L) == WB_Classification.ON) {
 			if (WB_Epsilon.isZeroSq(createClosestPointOnLine2D(p, L).getSqDistance(q))) {
 				result.add(createCircleWithRadius(createPoint2D(p).mulAddMulSelf(0.5, 0.5, q),
-						0.5 * WB_GeometryOp2D.getDistanceToPoint2D(p, q)));
+						0.5 * WB_GeometryOp.getDistanceToPoint2D(p, q)));
 			} else {
 				final WB_Line perp = createPerpendicularLineThroughPoint2D(L, q);
 				final WB_Line PQbis = createBisector2D(p, q);
 				final WB_Point intersect = createIntersectionPoint2D(perp, PQbis);
-				result.add(createCircleWithRadius(intersect, WB_GeometryOp2D.getDistanceToPoint2D(p, intersect)));
+				result.add(createCircleWithRadius(intersect, WB_GeometryOp.getDistanceToPoint2D(p, intersect)));
 			}
 			return result;
 		}
@@ -1151,7 +2228,7 @@ public class WB_GeometryFactory2D {
 					createPoint2D(0.5 * p.xd() + 0.5 * q.xd(), 0.5 * p.yd() + 0.5 * q.yd()), L);
 			result.add(createCirclePPP(p, q, r));
 		} else {
-			double d = WB_GeometryOp2D.getDistanceToPoint2D(p, q);
+			double d = WB_GeometryOp.getDistanceToPoint2D(p, q);
 			final WB_Circle OPQ = createCircleThrough2Points(p, q, d).get(0);
 			final WB_Point center = F.mulAddMul(0.5, 0.5, OPQ.getCenter());
 			final WB_Circle STF = createCircleWithRadius(center, center.getDistance2D(F));
@@ -1165,12 +2242,20 @@ public class WB_GeometryFactory2D {
 		return uniqueOnly(result);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param L1
+	 * @param L2
+	 * @return
+	 */
 	public List<WB_Circle> createCirclePLL(final WB_Coord p, final WB_Line L1, final WB_Line L2) {
 		final List<WB_Circle> result = new ArrayList<>(2);
 		final WB_Point A = createIntersectionPoint2D(L1, L2);
 		final List<WB_Line> bis = createAngleBisector2D(L1, L2);
 		if (A == null) {
-			final double r = WB_GeometryOp2D.getDistanceToLine2D(L1.getOrigin(), bis.get(0));
+			final double r = WB_GeometryOp.getDistanceToLine2D(L1.getOrigin(), bis.get(0));
 			final WB_Circle C = createCircleWithRadius(p, r);
 			final List<WB_Point> intersections = createIntersectionPoints2D(bis.get(0), C);
 			for (final WB_Point point : intersections) {
@@ -1180,8 +2265,8 @@ public class WB_GeometryFactory2D {
 			final List<WB_Circle> circles = createCircleTangentTo2Lines(L1, L2, 100.0);
 			final List<WB_Circle> selcircles = new ArrayList<>();
 			for (final WB_Circle C : circles) {
-				if (WB_GeometryOp2D.sameSideOfLine2D(p, C.getCenter(), L1)
-						&& WB_GeometryOp2D.sameSideOfLine2D(p, C.getCenter(), L2)) {
+				if (WB_GeometryOp.sameSideOfLine2D(p, C.getCenter(), L1)
+						&& WB_GeometryOp.sameSideOfLine2D(p, C.getCenter(), L2)) {
 					selcircles.add(C);
 				}
 			}
@@ -1197,7 +2282,7 @@ public class WB_GeometryFactory2D {
 					final double AK = AD / AG * AE;
 					final WB_Vector v = createNormalizedVector2D(E.sub(A));
 					final WB_Point K = createPoint2D(A.addMul(AK, v));
-					result.add(createCircleWithRadius(K, WB_GeometryOp2D.getDistanceToLine2D(K, L1)));
+					result.add(createCircleWithRadius(K, WB_GeometryOp.getDistanceToLine2D(K, L1)));
 				} else if (intersections.size() == 2) {
 					final WB_Point G = intersections.get(0);
 					final WB_Point H = intersections.get(1);
@@ -1210,19 +2295,27 @@ public class WB_GeometryFactory2D {
 					final WB_Vector v = createNormalizedVector2D(E.sub(A));
 					final WB_Point I = createPoint2D(A.addMul(AI, v));
 					final WB_Point K = createPoint2D(A.addMul(AK, v));
-					result.add(createCircleWithRadius(I, WB_GeometryOp2D.getDistanceToLine2D(I, L1)));
-					result.add(createCircleWithRadius(K, WB_GeometryOp2D.getDistanceToLine2D(K, L1)));
+					result.add(createCircleWithRadius(I, WB_GeometryOp.getDistanceToLine2D(I, L1)));
+					result.add(createCircleWithRadius(K, WB_GeometryOp.getDistanceToLine2D(K, L1)));
 				}
 			}
 		}
 		return uniqueOnly(result);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param q
+	 * @param C
+	 * @return
+	 */
 	public List<WB_Circle> createCirclePPC(final WB_Coord p, final WB_Coord q, final WB_Circle C) {
 		final List<WB_Circle> result = new ArrayList<>();
-		final WB_Classification pType = WB_GeometryOp2D.classifyPointToCircle2D(p, C);
-		final WB_Classification qType = WB_GeometryOp2D.classifyPointToCircle2D(q, C);
-		if (WB_Epsilon.isZero(WB_GeometryOp2D.getDistanceToPoint2D(p, q))) {
+		final WB_Classification pType = WB_GeometryOp.classifyPointToCircle2D(p, C);
+		final WB_Classification qType = WB_GeometryOp.classifyPointToCircle2D(q, C);
+		if (WB_Epsilon.isZero(WB_GeometryOp.getDistanceToPoint2D(p, q))) {
 			return result;
 		}
 		// Both points on circle: only solution is circle itself
@@ -1292,14 +2385,14 @@ public class WB_GeometryFactory2D {
 			final WB_Circle iC;
 			final WB_Circle iC2;
 			final double k2;
-			final boolean dp = WB_Epsilon.isZero(WB_GeometryOp2D.getDistance2D(C.getCenter(), p));
-			final boolean dq = WB_Epsilon.isZero(WB_GeometryOp2D.getDistance2D(C.getCenter(), q));
+			final boolean dp = WB_Epsilon.isZero(WB_GeometryOp.getDistance2D(C.getCenter(), p));
+			final boolean dq = WB_Epsilon.isZero(WB_GeometryOp.getDistance2D(C.getCenter(), q));
 			if (dp || dq) {
 				final WB_Vector v = createNormalizedVector2D(-p.yd() - q.yd(), p.xd() + q.xd());
 				iC = createCircleWithRadius(WB_Point.addMul(C.getCenter(), 0.5 * C.getRadius(), v), C.getRadius() * 3);
 				k2 = iC.getRadius() * iC.getRadius();
-				final double s = k2 / (WB_GeometryOp2D.getDistance2D(C.getCenter(), iC.getCenter())
-						- C.getRadius() * C.getRadius());
+				final double s = k2
+						/ (WB_GeometryOp.getDistance2D(C.getCenter(), iC.getCenter()) - C.getRadius() * C.getRadius());
 				iC2 = createCircleWithRadius(iC.getCenter().xd() + s * (C.getCenter().xd() - iC.getCenter().xd()),
 						iC.getCenter().yd() + s * (C.getCenter().yd() - iC.getCenter().yd()),
 						Math.abs(s) * C.getRadius());
@@ -1343,7 +2436,7 @@ public class WB_GeometryFactory2D {
 				}
 			}
 			for (final WB_Circle circle : iresult) {
-				final double s = k2 / (WB_GeometryOp3D.getSqDistance3D(circle.getCenter(), iC.getCenter())
+				final double s = k2 / (WB_GeometryOp.getSqDistance3D(circle.getCenter(), iC.getCenter())
 						- circle.getRadius() * circle.getRadius());
 				result.add(createCircleWithRadius(
 						iC.getCenter().xd() + s * (circle.getCenter().xd() - iC.getCenter().xd()),
@@ -1354,32 +2447,40 @@ public class WB_GeometryFactory2D {
 		return uniqueOnly(result);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param C1
+	 * @param C2
+	 * @return
+	 */
 	public List<WB_Circle> createCirclePCC(final WB_Coord p, final WB_Circle C1, final WB_Circle C2) {
 		final List<WB_Circle> result = new ArrayList<>();
 		if (C1.equals(C2)) {
 			return result;
 		}
 		// p on C1
-		if (WB_GeometryOp2D.classifyPointToCircle2D(p, C1) == WB_Classification.ON) {
+		if (WB_GeometryOp.classifyPointToCircle2D(p, C1) == WB_Classification.ON) {
 			final WB_Line tangent = createLineTangentToCircleInPoint(C1, p);
 			return createCirclePLC(p, tangent, C2);
 		}
 		// p on C2
-		if (WB_GeometryOp2D.classifyPointToCircle2D(p, C2) == WB_Classification.ON) {
+		if (WB_GeometryOp.classifyPointToCircle2D(p, C2) == WB_Classification.ON) {
 			final WB_Line tangent = createLineTangentToCircleInPoint(C2, p);
 			return createCirclePLC(p, tangent, C1);
 		}
-		final WB_Classification C1toC2 = WB_GeometryOp2D.classifyCircleToCircle2D(C1, C2);
+		final WB_Classification C1toC2 = WB_GeometryOp.classifyCircleToCircle2D(C1, C2);
 		// C1 tangent to C2
-		if (WB_GeometryOp2D.isTangent2D(C1, C2)) {
+		if (WB_GeometryOp.isTangent2D(C1, C2)) {
 			final WB_Point q = createIntersectionPoints2D(C1, C2).get(0);
 			result.addAll(createCirclePPC(p, q, C1));
 			// C1 inside C2, transform to outside case
 		} else if (C1toC2 == WB_Classification.INSIDE) {
-			if (WB_GeometryOp2D.classifyPointToCircle2D(p, C1) == WB_Classification.INSIDE) {
+			if (WB_GeometryOp.classifyPointToCircle2D(p, C1) == WB_Classification.INSIDE) {
 				return result;
 			}
-			final WB_Vector v = !WB_Epsilon.isZero(WB_GeometryOp2D.getDistance2D(C1.getCenter(), C2.getCenter()))
+			final WB_Vector v = !WB_Epsilon.isZero(WB_GeometryOp.getDistance2D(C1.getCenter(), C2.getCenter()))
 					? createNormalizedVectorFromTo2D(C1.getCenter(), C2.getCenter())
 					: WB_VectorFactory.X();
 			WB_Point invcenter = WB_Point.addMul(C1.getCenter(), 0.5 * (C1.getRadius() + C2.getRadius()), v);
@@ -1399,10 +2500,10 @@ public class WB_GeometryFactory2D {
 			}
 			// C2 inside C1, transfrom to outside case
 		} else if (C1toC2 == WB_Classification.CONTAINING) {
-			if (WB_GeometryOp2D.classifyPointToCircle2D(p, C2) == WB_Classification.INSIDE) {
+			if (WB_GeometryOp.classifyPointToCircle2D(p, C2) == WB_Classification.INSIDE) {
 				return result;
 			}
-			final WB_Vector v = !WB_Epsilon.isZero(WB_GeometryOp2D.getDistance2D(C1.getCenter(), C2.getCenter()))
+			final WB_Vector v = !WB_Epsilon.isZero(WB_GeometryOp.getDistance2D(C1.getCenter(), C2.getCenter()))
 					? createNormalizedVectorFromTo2D(C2.getCenter(), C1.getCenter())
 					: WB_VectorFactory.X();
 			WB_Point invcenter = WB_Point.addMul(C2.getCenter(), 0.5 * (C1.getRadius() + C2.getRadius()), v);
@@ -1424,8 +2525,8 @@ public class WB_GeometryFactory2D {
 		// C1 and C2 outside or C1 and C2 crossing with p in intersection or
 		// completely outside
 		else if (C1toC2 == WB_Classification.OUTSIDE || C1toC2 == WB_Classification.CROSSING
-				&& !(WB_GeometryOp2D.classifyPointToCircle2D(p, C1) == WB_Classification.OUTSIDE)
-						^ WB_GeometryOp2D.classifyPointToCircle2D(p, C2) == WB_Classification.OUTSIDE) {
+				&& !(WB_GeometryOp.classifyPointToCircle2D(p, C1) == WB_Classification.OUTSIDE)
+						^ WB_GeometryOp.classifyPointToCircle2D(p, C2) == WB_Classification.OUTSIDE) {
 			final List<WB_Line> tangents = createLinesTangentTo2Circles(C1, C2);
 			// if ((WB_Classify.classifyPointToCircle2D(p, C1) ==
 			// WB_Classification.INSIDE)
@@ -1433,11 +2534,11 @@ public class WB_GeometryFactory2D {
 			// WB_Classification.INSIDE)) {
 			// return result;
 			// }
-			if (WB_GeometryOp2D.classifyPointToCircle2D(p, C1) == WB_Classification.ON) {
+			if (WB_GeometryOp.classifyPointToCircle2D(p, C1) == WB_Classification.ON) {
 				final WB_Line L = createLineTangentToCircleInPoint(C1, p);
 				return createCirclePLC(p, L, C2);
 			}
-			if (WB_GeometryOp2D.classifyPointToCircle2D(p, C2) == WB_Classification.ON) {
+			if (WB_GeometryOp.classifyPointToCircle2D(p, C2) == WB_Classification.ON) {
 				final WB_Line L = createLineTangentToCircleInPoint(C2, p);
 				return createCirclePLC(p, L, C1);
 			}
@@ -1485,8 +2586,8 @@ public class WB_GeometryFactory2D {
 						final List<WB_Circle> filter = new ArrayList<>();
 						for (int i = 0; i < result.size(); i++) {
 							final WB_Circle C = result.get(i);
-							if (WB_GeometryOp2D.isTangent2D(C, C1) && WB_GeometryOp2D.isTangent2D(C, C2)
-									&& WB_GeometryOp2D.classifyPointToCircle2D(p, C) == WB_Classification.ON) {
+							if (WB_GeometryOp.isTangent2D(C, C1) && WB_GeometryOp.isTangent2D(C, C2)
+									&& WB_GeometryOp.classifyPointToCircle2D(p, C) == WB_Classification.ON) {
 								filter.add(C);
 							}
 						}
@@ -1518,9 +2619,9 @@ public class WB_GeometryFactory2D {
 		}
 		// C1 and C2 crossing and p in only one of the two circles
 		else {
-			if (WB_GeometryOp2D.classifyPointToCircle2D(p, C1) == WB_Classification.INSIDE) {
-				final double r1 = C1.getRadius() - WB_GeometryOp2D.getDistance2D(C1.getCenter(), p);
-				final double r2 = WB_GeometryOp2D.getDistance2D(C2.getCenter(), p) - C2.getRadius();
+			if (WB_GeometryOp.classifyPointToCircle2D(p, C1) == WB_Classification.INSIDE) {
+				final double r1 = C1.getRadius() - WB_GeometryOp.getDistance2D(C1.getCenter(), p);
+				final double r2 = WB_GeometryOp.getDistance2D(C2.getCenter(), p) - C2.getRadius();
 				WB_Circle invC;
 				if (r1 <= r2) {
 					final WB_Coord v = createLineThroughPoints2D(C1.getCenter(), p).getDirection();
@@ -1540,8 +2641,8 @@ public class WB_GeometryFactory2D {
 					}
 				}
 			} else {
-				final double r1 = -C1.getRadius() + WB_GeometryOp2D.getDistance2D(C1.getCenter(), p);
-				final double r2 = -WB_GeometryOp2D.getDistance2D(C2.getCenter(), p) + C2.getRadius();
+				final double r1 = -C1.getRadius() + WB_GeometryOp.getDistance2D(C1.getCenter(), p);
+				final double r2 = -WB_GeometryOp.getDistance2D(C2.getCenter(), p) + C2.getRadius();
 				WB_Circle invC;
 				if (r1 <= r2) {
 					final WB_Coord v = createLineThroughPoints2D(C1.getCenter(), p).getDirection();
@@ -1565,18 +2666,26 @@ public class WB_GeometryFactory2D {
 		return uniqueOnly(result);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param L
+	 * @param C
+	 * @return
+	 */
 	public List<WB_Circle> createCirclePLC(final WB_Coord p, final WB_Line L, final WB_Circle C) {
 		final List<WB_Circle> result = new ArrayList<>();
 		createIntersectionPoints2D(L, C).size();
 		WB_Line Lperp = createPerpendicularLineThroughPoint2D(L, C.getCenter());
-		if (WB_GeometryOp2D.classifyPointToCircle2D(p, C) == WB_Classification.ON) {
+		if (WB_GeometryOp.classifyPointToCircle2D(p, C) == WB_Classification.ON) {
 			final WB_Line tangent = createLineTangentToCircleInPoint(C, p);
 			result.addAll(createCirclePLL(p, tangent, L));
-		} else if (WB_GeometryOp2D.classifyPointToLine2D(p, L) == WB_Classification.ON) {
+		} else if (WB_GeometryOp.classifyPointToLine2D(p, L) == WB_Classification.ON) {
 			List<WB_Point> points = createIntersectionPoints2D(Lperp, C);
 			final WB_Point A1 = points.get(0);
 			final WB_Point A2 = points.get(1);
-			if (WB_GeometryOp2D.classifyPointToLine2D(p, Lperp) != WB_Classification.ON) {
+			if (WB_GeometryOp.classifyPointToLine2D(p, Lperp) != WB_Classification.ON) {
 				final WB_Point B = createIntersectionPoint2D(L, Lperp);
 				if (WB_Epsilon.isZero(A2.getDistance2D(B))) {
 					final WB_Line A1P = createLineThroughPoints2D(A1, p);
@@ -1637,21 +2746,21 @@ public class WB_GeometryFactory2D {
 					}
 				}
 			} else {
-				double d = WB_GeometryOp2D.getDistanceToLine2D(A1, L);
+				double d = WB_GeometryOp.getDistanceToLine2D(A1, L);
 				if (!WB_Epsilon.isZero(d)) {
 					result.add(createCircleWithRadius(createInterpolatedPoint2D(p, A1, 0.5), 0.5 * d));
 				}
-				d = WB_GeometryOp2D.getDistanceToLine2D(A2, L);
+				d = WB_GeometryOp.getDistanceToLine2D(A2, L);
 				if (!WB_Epsilon.isZero(d)) {
 					result.add(createCircleWithRadius(createInterpolatedPoint2D(p, A2, 0.5), 0.5 * d));
 				}
 			}
 		} else {
-			final boolean tangentcircle = WB_GeometryOp2D.classifyCircleToLine2D(C, L) == WB_Classification.TANGENT;
+			final boolean tangentcircle = WB_GeometryOp.classifyCircleToLine2D(C, L) == WB_Classification.TANGENT;
 			if (tangentcircle) {
 				result.addAll(createCirclePPL(p, createClosestPointOnLine2D(C.getCenter(), L), L));
-				if (WB_GeometryOp2D.classifyPointToLine2D(p, L) == WB_GeometryOp2D.classifyPointToLine2D(C.getCenter(),
-						L) && WB_GeometryOp2D.classifyPointToCircle2D(p, C) != WB_Classification.INSIDE) {
+				if (WB_GeometryOp.classifyPointToLine2D(p, L) == WB_GeometryOp.classifyPointToLine2D(C.getCenter(), L)
+						&& WB_GeometryOp.classifyPointToCircle2D(p, C) != WB_Classification.INSIDE) {
 					final WB_Circle inversion = createCircleWithRadius(p, 100.0);
 					WB_Point p1 = createInversionPoint2D(L.getOrigin(), inversion);
 					WB_Point p2 = createInversionPoint2D(L.getPoint(100.0), inversion);
@@ -1700,6 +2809,14 @@ public class WB_GeometryFactory2D {
 		return uniqueOnly(filter);
 	}
 
+	/**
+	 *
+	 *
+	 * @param L1
+	 * @param L2
+	 * @param L3
+	 * @return
+	 */
 	public List<WB_Circle> createCircleLLL(final WB_Line L1, final WB_Line L2, final WB_Line L3) {
 		final List<WB_Circle> result = new ArrayList<>();
 		final List<WB_Line> lines12 = createAngleBisector2D(L1, L2);
@@ -1736,6 +2853,14 @@ public class WB_GeometryFactory2D {
 		return uniqueOnly(result);
 	}
 
+	/**
+	 *
+	 *
+	 * @param L1
+	 * @param L2
+	 * @param C
+	 * @return
+	 */
 	public List<WB_Circle> createCircleLLC(final WB_Line L1, final WB_Line L2, final WB_Circle C) {
 		final List<WB_Circle> result = new ArrayList<>();
 		final WB_Point p = createPoint2D(C.getCenter());
@@ -1743,7 +2868,7 @@ public class WB_GeometryFactory2D {
 		final List<WB_Line> bis = createAngleBisector2D(L1, L2);
 		if (A == null) {
 			final WB_Line bisec = bis.get(0);
-			final double d = 0.5 * WB_GeometryOp2D.getDistanceToLine2D(L1.getOrigin(), L2);
+			final double d = 0.5 * WB_GeometryOp.getDistanceToLine2D(L1.getOrigin(), L2);
 			final WB_Circle C1 = createCircleWithRadius(C.getCenter(), d + C.getRadius());
 			final WB_Circle C2 = createCircleWithRadius(C.getCenter(), d - C.getRadius());
 			final List<WB_Point> points = createIntersectionPoints2D(bisec, C1);
@@ -1767,7 +2892,7 @@ public class WB_GeometryFactory2D {
 			List<WB_Circle> tmp = createCirclePLL(p, L1s, L2s);
 			for (final WB_Circle circle : tmp) {
 				result.add(createCircleWithRadius(circle.getCenter(),
-						WB_GeometryOp2D.getDistanceToLine2D(circle.getCenter(), L1)));
+						WB_GeometryOp.getDistanceToLine2D(circle.getCenter(), L1)));
 			}
 			L1s = createLineWithDirection2D(new WB_Point(L1.getOrigin()).addMulSelf(C.getRadius(), v1),
 					L1.getDirection());
@@ -1776,7 +2901,7 @@ public class WB_GeometryFactory2D {
 			tmp = createCirclePLL(p, L1s, L2s);
 			for (final WB_Circle circle : tmp) {
 				result.add(createCircleWithRadius(circle.getCenter(),
-						WB_GeometryOp2D.getDistanceToLine2D(circle.getCenter(), L1)));
+						WB_GeometryOp.getDistanceToLine2D(circle.getCenter(), L1)));
 			}
 			L1s = createLineWithDirection2D(new WB_Point(L1.getOrigin()).addMulSelf(-C.getRadius(), v1),
 					L1.getDirection());
@@ -1785,7 +2910,7 @@ public class WB_GeometryFactory2D {
 			tmp = createCirclePLL(p, L1s, L2s);
 			for (final WB_Circle circle : tmp) {
 				result.add(createCircleWithRadius(circle.getCenter(),
-						WB_GeometryOp2D.getDistanceToLine2D(circle.getCenter(), L1)));
+						WB_GeometryOp.getDistanceToLine2D(circle.getCenter(), L1)));
 			}
 			L1s = createLineWithDirection2D(new WB_Point(L1.getOrigin()).addMulSelf(C.getRadius(), v1),
 					L1.getDirection());
@@ -1794,22 +2919,30 @@ public class WB_GeometryFactory2D {
 			tmp = createCirclePLL(p, L1s, L2s);
 			for (final WB_Circle circle : tmp) {
 				result.add(createCircleWithRadius(circle.getCenter(),
-						WB_GeometryOp2D.getDistanceToLine2D(circle.getCenter(), L1)));
+						WB_GeometryOp.getDistanceToLine2D(circle.getCenter(), L1)));
 			}
 		}
 		final List<WB_Circle> filter = new ArrayList<>();
 		for (int i = 0; i < result.size(); i++) {
 			if (!result.get(i).equals(C)
 					&& WB_Epsilon.isEqualAbs(result.get(i).getRadius(),
-							WB_GeometryOp2D.getDistanceToLine2D(result.get(i).getCenter(), L1))
+							WB_GeometryOp.getDistanceToLine2D(result.get(i).getCenter(), L1))
 					&& WB_Epsilon.isEqualAbs(result.get(i).getRadius(),
-							WB_GeometryOp2D.getDistanceToLine2D(result.get(i).getCenter(), L2))) {
+							WB_GeometryOp.getDistanceToLine2D(result.get(i).getCenter(), L2))) {
 				filter.add(result.get(i));
 			}
 		}
 		return uniqueOnly(filter);
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param C1
+	 * @param C2
+	 * @return
+	 */
 	public List<WB_Circle> createCircleLCC(final WB_Line L, final WB_Circle C1, final WB_Circle C2) {
 		final List<WB_Circle> result = new ArrayList<>();
 		final List<WB_Circle> tmp;
@@ -1854,8 +2987,8 @@ public class WB_GeometryFactory2D {
 		}
 		for (final WB_Circle circle : tmp) {
 			final WB_Circle newC = createCircleWithRadius(circle.getCenter(),
-					WB_GeometryOp2D.getDistanceToLine2D(circle.getCenter(), L));
-			if (WB_GeometryOp2D.isTangent2D(newC, C1) && WB_GeometryOp2D.isTangent2D(newC, C2)) {
+					WB_GeometryOp.getDistanceToLine2D(circle.getCenter(), L));
+			if (WB_GeometryOp.isTangent2D(newC, C1) && WB_GeometryOp.isTangent2D(newC, C2)) {
 				result.add(newC);
 			}
 		}
@@ -1868,6 +3001,14 @@ public class WB_GeometryFactory2D {
 		return uniqueOnly(filter);
 	}
 
+	/**
+	 *
+	 *
+	 * @param C1
+	 * @param C2
+	 * @param C3
+	 * @return
+	 */
 	public List<WB_Circle> createCircleCCC(WB_Circle C1, WB_Circle C2, WB_Circle C3) {
 		final List<WB_Circle> result = new ArrayList<>();
 		if (C1.equals(C2) || C2.equals(C3) || C1.equals(C3)) {
@@ -1978,8 +3119,8 @@ public class WB_GeometryFactory2D {
 		for (int i = 0; i < result.size(); i++) {
 			C = result.get(i);
 			if (!C.equals(C1) && !C.equals(C2) && !C.equals(C3)) {
-				if (WB_GeometryOp2D.isTangent2D(C, C1) && WB_GeometryOp2D.isTangent2D(C, C2)
-						&& WB_GeometryOp2D.isTangent2D(C, C3)) {
+				if (WB_GeometryOp.isTangent2D(C, C1) && WB_GeometryOp.isTangent2D(C, C2)
+						&& WB_GeometryOp.isTangent2D(C, C3)) {
 					filter.add(result.get(i));
 				}
 			}
@@ -1987,10 +3128,22 @@ public class WB_GeometryFactory2D {
 		return uniqueOnly(filter);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	private double[] toDouble(final WB_Coord p) {
 		return new double[] { p.xd(), p.yd(), 0 };
 	}
 
+	/**
+	 *
+	 *
+	 * @param circles
+	 * @return
+	 */
 	private List<WB_Circle> uniqueOnly(final List<WB_Circle> circles) {
 		final List<WB_Circle> uniqcircles = new ArrayList<>();
 		for (int i = 0; i < circles.size(); i++) {
@@ -2008,6 +3161,14 @@ public class WB_GeometryFactory2D {
 		return uniqcircles;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param r
+	 * @return
+	 */
 	public List<WB_Circle> createCircleThrough2Points(final WB_Coord p0, final WB_Coord p1, final double r) {
 		final List<WB_Circle> result = new ArrayList<>();
 		final WB_Circle C0 = createCircleWithRadius(p0, r);
@@ -2019,6 +3180,14 @@ public class WB_GeometryFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param p
+	 * @param r
+	 * @return
+	 */
 	public List<WB_Circle> createCircleTangentToLineThroughPoint(final WB_Line L, final WB_Coord p, final double r) {
 		final List<WB_Circle> result = new ArrayList<>();
 		double cPrime = L.c() + L.a() * p.xd() + L.b() * p.yd();
@@ -2052,6 +3221,14 @@ public class WB_GeometryFactory2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param L0
+	 * @param L1
+	 * @param r
+	 * @return
+	 */
 	public List<WB_Circle> createCircleTangentTo2Lines(final WB_Line L0, final WB_Line L1, final double r) {
 		final List<WB_Circle> result = new ArrayList<>(4);
 		final double discrm0 = r;
@@ -2072,6 +3249,14 @@ public class WB_GeometryFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param C
+	 * @param p
+	 * @param r
+	 * @return
+	 */
 	public List<WB_Circle> createCircleTangentToCircleThroughPoint(final WB_Circle C, final WB_Coord p,
 			final double r) {
 		final List<WB_Circle> result = new ArrayList<>(4);
@@ -2096,9 +3281,17 @@ public class WB_GeometryFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param C
+	 * @param r
+	 * @return
+	 */
 	public List<WB_Circle> createCircleTangentToLineAndCircle(final WB_Line L, final WB_Circle C, final double r) {
 		final List<WB_Circle> result = new ArrayList<>(8);
-		final double d = WB_GeometryOp2D.getDistanceToLine2D(C.getCenter(), L);
+		final double d = WB_GeometryOp.getDistanceToLine2D(C.getCenter(), L);
 		if (d > 2 * r + C.getRadius()) {
 			return result;
 		}
@@ -2121,10 +3314,18 @@ public class WB_GeometryFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param C0
+	 * @param C1
+	 * @param r
+	 * @return
+	 */
 	public List<WB_Circle> createCircleTangentTo2CirclesNonCollinear(final WB_Circle C0, final WB_Circle C1,
 			final double r) {
 		final List<WB_Circle> result = new ArrayList<>(2);
-		final double d = WB_GeometryOp2D.getDistance2D(C0.getCenter(), C1.getCenter());
+		final double d = WB_GeometryOp.getDistance2D(C0.getCenter(), C1.getCenter());
 		if (WB_Epsilon.isZero(d)) {
 			return result;
 		}
@@ -2148,9 +3349,16 @@ public class WB_GeometryFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param C0
+	 * @param C1
+	 * @return
+	 */
 	public List<WB_Circle> createCircleTangentTo2CirclesCollinear(final WB_Circle C0, final WB_Circle C1) {
 		final List<WB_Circle> result = new ArrayList<>(2);
-		final double d = WB_GeometryOp2D.getDistance2D(C0.getCenter(), C1.getCenter());
+		final double d = WB_GeometryOp.getDistance2D(C0.getCenter(), C1.getCenter());
 		if (WB_Epsilon.isZero(d)) {
 			return result;
 		}
@@ -2189,12 +3397,29 @@ public class WB_GeometryFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param C0
+	 * @param C1
+	 * @param r
+	 * @return
+	 */
 	public List<WB_Circle> createCircleTangentTo2Circles(final WB_Circle C0, final WB_Circle C1, final double r) {
 		final List<WB_Circle> result = createCircleTangentTo2CirclesNonCollinear(C0, C1, r);
 		result.addAll(createCircleTangentTo2CirclesCollinear(C0, C1));
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @return
+	 */
 	public WB_Point createClosestPointOnTriangle2D(final WB_Coord p, final WB_Coord a, final WB_Coord b,
 			final WB_Coord c) {
 		final WB_Vector ab = createVectorFromTo2D(a, b);
@@ -2238,6 +3463,13 @@ public class WB_GeometryFactory2D {
 		return createPoint2D(a).addSelf(ab.mul(v)).addSelf(ac.mul(w));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param poly
+	 * @return
+	 */
 	public WB_Point createClosestPointOnPolygon2D(final WB_Coord p, final WB_Polygon poly) {
 		final int[] triangles = poly.getTriangles();
 		final int n = triangles.length;
@@ -2259,6 +3491,13 @@ public class WB_GeometryFactory2D {
 		return closest;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param threshold
+	 * @return
+	 */
 	public List<WB_Coord> createUniquePoints2D(final List<WB_Coord> points, final double threshold) {
 		final List<WB_Coord> uniqueVertices = new WB_CoordList();
 		final WB_KDTreeInteger2D<WB_Coord> kdtree = new WB_KDTreeInteger2D<>();

@@ -6,38 +6,82 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class HEC_RevolvePolygon extends HEC_Creator {
+	/**  */
 	private WB_Polygon polygon;
+	/**  */
 	private WB_Line axis;
+	/**  */
 	private int facets;
 
+	/**
+	 *
+	 */
 	public HEC_RevolvePolygon() {
 		super();
 		setOverride(true);
 		facets = 6;
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @return
+	 */
 	public HEC_RevolvePolygon setPolygon(final WB_Polygon poly) {
 		polygon = poly;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param v
+	 * @return
+	 */
 	public HEC_RevolvePolygon setAxisOfRevolution(final WB_Coord p, final WB_Coord v) {
 		axis = new WB_Line(p, v);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param ox
+	 * @param oy
+	 * @param oz
+	 * @param vx
+	 * @param vy
+	 * @param vz
+	 * @return
+	 */
 	public HEC_RevolvePolygon setAxisOfRevolution(final double ox, final double oy, final double oz, final double vx,
 			final double vy, final double vz) {
 		axis = new WB_Line(new WB_Point(ox, oy, oz), new WB_Vector(vx, vy, vz));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @return
+	 */
 	public HEC_RevolvePolygon setFacets(final int n) {
 		facets = n;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		if (polygon == null || axis == null) {

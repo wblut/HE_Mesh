@@ -5,15 +5,24 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.List;
 
 import wblut.hemesh.HE_Mesh;
 
+/**
+ *
+ */
 public class WB_SimpleMeshWriter {
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param path
+	 * @param name
+	 */
 	public static void saveAsSimpleMesh(final HE_Mesh mesh, final String path, final String name) {
 		final Writer hem = new Writer();
 		hem.beginSave(path, name);
-		final List<WB_Coord> points = mesh.getVerticesAsCoord();
+		final WB_CoordCollection points = mesh.getVerticesAsCoord();
 		hem.intValue(mesh.getNumberOfVertices());
 		hem.vertices(points);
 		final int[][] faces = mesh.getFacesAsInt();
@@ -22,10 +31,20 @@ public class WB_SimpleMeshWriter {
 		hem.endSave();
 	}
 
+	/**
+	 *
+	 */
 	static class Writer {
+		/**  */
 		protected OutputStream simpleMeshStream;
+		/**  */
 		protected PrintWriter simpleMeshWriter;
 
+		/**
+		 *
+		 *
+		 * @param stream
+		 */
 		public void beginSave(final OutputStream stream) {
 			try {
 				simpleMeshStream = stream;
@@ -35,6 +54,11 @@ public class WB_SimpleMeshWriter {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param file
+		 */
 		static private void createDirectories(final File file) {
 			try {
 				final String parentName = file.getParent();
@@ -49,6 +73,12 @@ public class WB_SimpleMeshWriter {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param fn
+		 * @param name
+		 */
 		public void beginSave(final String fn, final String name) {
 			try {
 				final File file = new File(fn, name + ".txt");
@@ -60,6 +90,9 @@ public class WB_SimpleMeshWriter {
 			}
 		}
 
+		/**
+		 *
+		 */
 		public void endSave() {
 			try {
 				simpleMeshWriter.flush();
@@ -71,6 +104,11 @@ public class WB_SimpleMeshWriter {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param f
+		 */
 		public void faces(final int[][] f) {
 			int i = 0;
 			for (i = 0; i < f.length; i++) {
@@ -78,6 +116,11 @@ public class WB_SimpleMeshWriter {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param f
+		 */
 		public void face(final int[] f) {
 			int i = 0;
 			final int fl = f.length;
@@ -88,10 +131,18 @@ public class WB_SimpleMeshWriter {
 			simpleMeshWriter.println(f[i]);
 		}
 
+		/**
+		 *
+		 */
 		protected void handleBeginSave() {
 			simpleMeshWriter = new PrintWriter(simpleMeshStream);
 		}
 
+		/**
+		 *
+		 *
+		 * @param v
+		 */
 		public void vertices(final WB_Coord[] v) {
 			int i = 0;
 			for (i = 0; i < v.length; i++) {
@@ -99,13 +150,22 @@ public class WB_SimpleMeshWriter {
 			}
 		}
 
-		public void vertices(final List<? extends WB_Coord> v) {
+		/**
+		 *
+		 *
+		 * @param v
+		 */
+		public void vertices(final WB_CoordCollection v) {
 			for (int i = 0; i < v.size(); i++) {
-				final WB_Coord p = v.get(i);
-				simpleMeshWriter.println(p.xd() + " " + p.yd() + " " + p.zd());
+				simpleMeshWriter.println(v.getX(i) + " " + v.getY(i) + " " + v.getZ(i));
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param v
+		 */
 		public void intValue(final int v) {
 			simpleMeshWriter.println(v);
 		}

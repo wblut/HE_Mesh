@@ -1,9 +1,15 @@
 package wblut.math;
 
-public class WB_SNoise implements WB_Noise { // Simplex noise in 2D, 3D and 4D
+/**
+ *
+ */
+public class WB_SNoise implements WB_Noise {
+	/**  */
+	// Simplex noise in 2D, 3D and 4D
 	private static Grad grad3[] = { new Grad(1, 1, 0), new Grad(-1, 1, 0), new Grad(1, -1, 0), new Grad(-1, -1, 0),
 			new Grad(1, 0, 1), new Grad(-1, 0, 1), new Grad(1, 0, -1), new Grad(-1, 0, -1), new Grad(0, 1, 1),
 			new Grad(0, -1, 1), new Grad(0, 1, -1), new Grad(0, -1, -1) };
+	/**  */
 	private static Grad grad4[] = { new Grad(0, 1, 1, 1), new Grad(0, 1, 1, -1), new Grad(0, 1, -1, 1),
 			new Grad(0, 1, -1, -1), new Grad(0, -1, 1, 1), new Grad(0, -1, 1, -1), new Grad(0, -1, -1, 1),
 			new Grad(0, -1, -1, -1), new Grad(1, 0, 1, 1), new Grad(1, 0, 1, -1), new Grad(1, 0, -1, 1),
@@ -13,23 +19,40 @@ public class WB_SNoise implements WB_Noise { // Simplex noise in 2D, 3D and 4D
 			new Grad(-1, -1, 0, -1), new Grad(1, 1, 1, 0), new Grad(1, 1, -1, 0), new Grad(1, -1, 1, 0),
 			new Grad(1, -1, -1, 0), new Grad(-1, 1, 1, 0), new Grad(-1, 1, -1, 0), new Grad(-1, -1, 1, 0),
 			new Grad(-1, -1, -1, 0) };
+	/**  */
 	private final short p[] = new short[256];
 	// To remove the need for index wrapping, double the permutation table
+	/**  */
 	// length
 	private final short perm[] = new short[512];
+	/**  */
 	private final short permMod12[] = new short[512];
+	/**  */
 	private double sx, sy, sz, sw;
 
+	/**
+	 *
+	 */
 	public WB_SNoise() {
 		this(System.currentTimeMillis());
 		sx = sy = sz = sw = 1.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param seed
+	 */
 	public WB_SNoise(final long seed) {
 		setSeed(seed);
 		sx = sy = sz = sw = 1.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param seed
+	 */
 	@Override
 	public void setSeed(long seed) {
 		for (short i = 0; i < 256; i++) {
@@ -52,37 +75,89 @@ public class WB_SNoise implements WB_Noise { // Simplex noise in 2D, 3D and 4D
 		}
 	}
 
+	/**  */
 	// Skewing and unskewing factors for 2, 3, and 4 dimensions
 	private static final double F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
+	/**  */
 	private static final double G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
+	/**  */
 	private static final double F3 = 1.0 / 3.0;
+	/**  */
 	private static final double G3 = 1.0 / 6.0;
+	/**  */
 	private static final double F4 = (Math.sqrt(5.0) - 1.0) / 4.0;
+	/**  */
 	private static final double G4 = (5.0 - Math.sqrt(5.0)) / 20.0;
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	// This method is a *lot* faster than using (int)Math.floor(x)
 	private static int fastfloor(final double x) {
 		final int xi = (int) x;
 		return x < xi ? xi - 1 : xi;
 	}
 
+	/**
+	 *
+	 *
+	 * @param g
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private static double dot(final Grad g, final double x, final double y) {
 		return (g.x * x) + (g.y * y);
 	}
 
+	/**
+	 *
+	 *
+	 * @param g
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	private static double dot(final Grad g, final double x, final double y, final double z) {
 		return (g.x * x) + (g.y * y) + (g.z * z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param g
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param w
+	 * @return
+	 */
 	private static double dot(final Grad g, final double x, final double y, final double z, final double w) {
 		return (g.x * x) + (g.y * y) + (g.z * z) + (g.w * w);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	@Override
 	public double value1D(final double x) {
 		return value2D(x, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	// 2D simplex noise
 	@Override
 	public double value2D(final double x, final double y) {
@@ -153,6 +228,14 @@ public class WB_SNoise implements WB_Noise { // Simplex noise in 2D, 3D and 4D
 		return 70.0 * (n0 + n1 + n2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	@Override
 	public double value3D(final double x, final double y, final double z) {
 		final double xin = sx * x;
@@ -288,6 +371,15 @@ public class WB_SNoise implements WB_Noise { // Simplex noise in 2D, 3D and 4D
 		return 32.0 * (n0 + n1 + n2 + n3);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param w
+	 * @return
+	 */
 	// 4D simplex noise, better simplex rank ordering method 2012-03-09
 	@Override
 	public double value4D(final double x, final double y, final double z, final double w) {
@@ -452,16 +544,35 @@ public class WB_SNoise implements WB_Noise { // Simplex noise in 2D, 3D and 4D
 	}
 
 	// Inner class to speed upp gradient computations
+	/**
+	 *
+	 */
 	// (array access is a lot slower than member access)
 	private static class Grad {
+		/**  */
 		double x, y, z, w;
 
+		/**
+		 *
+		 *
+		 * @param x
+		 * @param y
+		 * @param z
+		 */
 		Grad(final double x, final double y, final double z) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
 		}
 
+		/**
+		 *
+		 *
+		 * @param x
+		 * @param y
+		 * @param z
+		 * @param w
+		 */
 		Grad(final double x, final double y, final double z, final double w) {
 			this.x = x;
 			this.y = y;
@@ -470,6 +581,11 @@ public class WB_SNoise implements WB_Noise { // Simplex noise in 2D, 3D and 4D
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param sx
+	 */
 	@Override
 	public void setScale(final double sx) {
 		this.sx = sx;
@@ -478,12 +594,25 @@ public class WB_SNoise implements WB_Noise { // Simplex noise in 2D, 3D and 4D
 		this.sw = sx;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sx
+	 * @param sy
+	 */
 	@Override
 	public void setScale(final double sx, final double sy) {
 		this.sx = sx;
 		this.sy = sy;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sx
+	 * @param sy
+	 * @param sz
+	 */
 	@Override
 	public void setScale(final double sx, final double sy, final double sz) {
 		this.sx = sx;
@@ -491,6 +620,14 @@ public class WB_SNoise implements WB_Noise { // Simplex noise in 2D, 3D and 4D
 		this.sz = sz;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sx
+	 * @param sy
+	 * @param sz
+	 * @param sw
+	 */
 	@Override
 	public void setScale(final double sx, final double sy, final double sz, final double sw) {
 		this.sx = sx;

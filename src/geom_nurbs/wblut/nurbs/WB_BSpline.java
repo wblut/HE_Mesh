@@ -12,16 +12,33 @@ import wblut.geom.WB_Vector;
 import wblut.math.WB_Binomial;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class WB_BSpline implements WB_Curve {
+	/**  */
 	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	/**  */
 	protected WB_NurbsKnot knot;
+	/**  */
 	protected WB_Coord[] points;
+	/**  */
 	protected int p;
+	/**  */
 	protected int n;
 
+	/**
+	 *
+	 */
 	public WB_BSpline() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param knot
+	 */
 	public WB_BSpline(final WB_Coord[] controlPoints, final WB_NurbsKnot knot) {
 		if (knot.n != controlPoints.length - 1) {
 			throw new IllegalArgumentException("Knot size and/or order doesn't match number of control points.");
@@ -32,6 +49,12 @@ public class WB_BSpline implements WB_Curve {
 		points = controlPoints;
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param knot
+	 */
 	public WB_BSpline(final WB_PointHomogeneous[] controlPoints, final WB_NurbsKnot knot) {
 		if (knot.n != controlPoints.length - 1) {
 			throw new IllegalArgumentException("Knot size and/or order doesn't match number of control points.");
@@ -45,6 +68,12 @@ public class WB_BSpline implements WB_Curve {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param order
+	 */
 	public WB_BSpline(final WB_Coord[] controlPoints, final int order) {
 		knot = new WB_NurbsKnot(controlPoints.length, order);
 		p = knot.p();
@@ -52,6 +81,12 @@ public class WB_BSpline implements WB_Curve {
 		points = controlPoints;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_Point getPointOnCurve(final double u) {
 		final int span = knot.span(u);
@@ -65,6 +100,12 @@ public class WB_BSpline implements WB_Curve {
 		return C;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_Vector getDirectionOnCurve(final double u) {
 		final WB_Vector v = firstDerivative(u);
@@ -72,20 +113,45 @@ public class WB_BSpline implements WB_Curve {
 		return v;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_Vector getDerivative(final double u) {
 		return firstDerivative(u);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	public WB_BSpline insertKnot(final double u) {
 		return insertKnot(u, 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	public WB_BSpline insertKnotMax(final double u) {
 		final int k = knot.multiplicity(u);
 		return insertKnot(u, p - k);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param r
+	 * @return
+	 */
 	public WB_BSpline insertKnot(final double u, final int r) {
 		final int mp = n + p + 1;
 		final int nq = n + r;
@@ -131,6 +197,12 @@ public class WB_BSpline implements WB_Curve {
 		return new WB_BSpline(Q, UQ);
 	}
 
+	/**
+	 *
+	 *
+	 * @param K
+	 * @return
+	 */
 	public WB_BSpline refineKnot(final WB_NurbsKnot K) {
 		final double[][] multVal = K.multVal();
 		final List<Double> newVal = new ArrayList<>();
@@ -152,6 +224,12 @@ public class WB_BSpline implements WB_Curve {
 		return refineKnotRestricted(fX);
 	}
 
+	/**
+	 *
+	 *
+	 * @param X
+	 * @return
+	 */
 	private WB_BSpline refineKnotRestricted(final double[] X) {
 		final int r = X.length - 1;
 		final int a = knot.span(X[0]);
@@ -196,22 +274,48 @@ public class WB_BSpline implements WB_Curve {
 		return new WB_BSpline(Q, Ubar);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Coord[] points() {
 		return points;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int p() {
 		return p;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int n() {
 		return n;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_NurbsKnot knot() {
 		return knot;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	public WB_BSpline[] split(final double u) {
 		final WB_BSpline newBSpline = insertKnotMax(u);
 		final int k = newBSpline.knot().span(u);
@@ -244,6 +348,12 @@ public class WB_BSpline implements WB_Curve {
 		return splitCurves;
 	}
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	public WB_BSpline elevateDegree(final int t) {
 		final int m = n + p + 1;
 		final int ph = p + t;
@@ -387,6 +497,14 @@ public class WB_BSpline implements WB_Curve {
 		return new WB_BSpline(Q, Uh);
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @param r1
+	 * @param r2
+	 * @return
+	 */
 	public WB_Coord[][] curveDerivCPoints(final int d, final int r1, final int r2) {
 		final WB_Coord[][] PK = new WB_Point[d + 1][r2 - r1 + 1];
 		final int r = r2 - r1;
@@ -403,6 +521,13 @@ public class WB_BSpline implements WB_Curve {
 		return PK;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param d
+	 * @return
+	 */
 	public WB_Coord[] curveDerivs(final double u, final int d) {
 		final WB_Point[] CK = new WB_Point[d + 1];
 		final int du = Math.min(d, p);
@@ -421,6 +546,13 @@ public class WB_BSpline implements WB_Curve {
 		return CK;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param d
+	 * @return
+	 */
 	public WB_Point[] curveDerivsNorm(final double u, final int d) {
 		final WB_Point[] CK = new WB_Point[d + 1];
 		final int du = Math.min(d, p);
@@ -440,6 +572,12 @@ public class WB_BSpline implements WB_Curve {
 		return CK;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	public WB_Vector firstDerivative(final double u) {
 		final WB_Vector[] CK = new WB_Vector[2];
 		if (p == 0) {
@@ -458,11 +596,21 @@ public class WB_BSpline implements WB_Curve {
 		return CK[1];
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getLowerU() {
 		return knot.value(0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getUpperU() {
 		return knot.value(knot.m);

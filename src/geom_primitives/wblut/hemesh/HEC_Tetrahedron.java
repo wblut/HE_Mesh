@@ -4,45 +4,92 @@ import wblut.geom.WB_Coord;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Tetrahedron;
 
+/**
+ *
+ */
 public class HEC_Tetrahedron extends HEC_Creator {
+	/**  */
 	private double R;
+	/**  */
 	private WB_Coord[] points;
 
+	/**
+	 *
+	 */
 	public HEC_Tetrahedron() {
 		super();
 		R = 100;
 	}
 
+	/**
+	 *
+	 *
+	 * @param E
+	 * @return
+	 */
 	public HEC_Tetrahedron setEdge(final double E) {
 		R = 0.612372 * E;
 		points = null;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @return
+	 */
 	public HEC_Tetrahedron setInnerRadius(final double R) {
 		this.R = R * 3;
 		points = null;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @return
+	 */
 	public HEC_Tetrahedron setOuterRadius(final double R) {
 		this.R = R;
 		points = null;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @return
+	 */
 	public HEC_Tetrahedron setRadius(final double R) {
 		this.R = R;
 		points = null;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @return
+	 */
 	public HEC_Tetrahedron setMidRadius(final double R) {
 		this.R = R * 1.732060;
 		points = null;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @return
+	 */
 	public HEC_Tetrahedron setPoints(final WB_Coord p0, final WB_Coord p1, final WB_Coord p2, final WB_Coord p3) {
 		points = new WB_Coord[4];
 		points[0] = new WB_Point(p0);
@@ -52,6 +99,12 @@ public class HEC_Tetrahedron extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param tetra
+	 * @return
+	 */
 	public HEC_Tetrahedron setPoints(final WB_Tetrahedron tetra) {
 		points = new WB_Coord[4];
 		points[0] = new WB_Point(tetra.p1());
@@ -61,6 +114,11 @@ public class HEC_Tetrahedron extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		if (points == null) {

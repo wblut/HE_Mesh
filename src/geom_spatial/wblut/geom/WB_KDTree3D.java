@@ -6,89 +6,191 @@ import java.util.List;
 
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ *
+ * @param <T>
+ * @param <V>
+ */
 public class WB_KDTree3D<T extends WB_Coord, V> {
+	/**  */
 	private final int _dim;
+	/**  */
 	private final int _maximumBinSize;
+	/**  */
 	private final WB_KDNode<T, V> root;
 
+	/**
+	 *
+	 */
 	public WB_KDTree3D() {
 		this._dim = 3;
 		this._maximumBinSize = 32;
 		this.root = new WB_KDNode<>();
 	}
 
+	/**
+	 *
+	 *
+	 * @param binsize
+	 */
 	public WB_KDTree3D(final int binsize) {
 		this._dim = 3;
 		this._maximumBinSize = binsize;
 		this.root = new WB_KDNode<>();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_AABB> getLeafBounds() {
 		final List<WB_AABB> leafs = new ArrayList<>();
 		root.addLeafBounds(leafs);
 		return leafs;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_AABB> getAllBounds() {
 		final List<WB_AABB> all = new ArrayList<>();
 		root.addBox(all, 0);
 		return all;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_AABB> getLeafRegions() {
 		final List<WB_AABB> leafs = new ArrayList<>();
 		root.addLeafRegion(leafs);
 		return leafs;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_AABB> getAllRegions() {
 		final List<WB_AABB> all = new ArrayList<>();
 		root.addRegion(all, 0);
 		return all;
 	}
 
+	/**
+	 *
+	 *
+	 * @param coord
+	 * @param val
+	 * @return
+	 */
 	public V add(final T coord, final V val) {
 		return root.add(new WB_KDEntry<>(coord, val, -1));
 	}
 
+	/**
+	 *
+	 *
+	 * @param aabb
+	 * @return
+	 */
 	public WB_KDEntry<T, V>[] getRange(final WB_AABB aabb) {
 		return root.range(aabb);
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param radius
+	 * @return
+	 */
 	public WB_KDEntry<T, V>[] getRange(final WB_Coord center, final double radius) {
 		final double r2 = radius * radius;
 		return root.range(center, r2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param lower
+	 * @param upper
+	 * @return
+	 */
 	public WB_KDEntry<T, V>[] getRange(final WB_Coord center, final double lower, final double upper) {
 		final double lower2 = lower * lower;
 		final double upper2 = upper * upper;
 		return root.range(center, lower2, upper2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param coord
+	 * @param num
+	 * @return
+	 */
 	public WB_KDEntry<T, V>[] getNearestNeighbors(final WB_Coord coord, final int num) {
 		final QueryResult<T, V> heap = new QueryResult<>(num);
 		root.findNearest(heap, coord);
 		return heap.entries;
 	}
 
+	/**
+	 *
+	 *
+	 * @param coord
+	 * @return
+	 */
 	public WB_KDEntry<T, V> getNearestNeighbor(final WB_Coord coord) {
 		final QueryResult<T, V> heap = new QueryResult<>(1);
 		root.findNearest(heap, coord);
 		return heap.entries[0];
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public WB_KDEntry<T, V> getNearestNeighbor(final double x, final double y, final double z) {
 		final QueryResult<T, V> heap = new QueryResult<>(1);
 		root.findNearest(heap, new WB_Point(x, y, z));
 		return heap.entries[0];
 	}
 
+	/**
+	 *
+	 *
+	 * @param <T>
+	 * @param <V>
+	 */
 	public static class WB_KDEntry<T extends WB_Coord, V> {
+		/**  */
 		public T coord;
+		/**  */
 		public V value;
+		/**  */
 		public double d2;
 
+		/**
+		 *
+		 *
+		 * @param coord
+		 * @param value
+		 * @param d2
+		 */
 		public WB_KDEntry(final T coord, final V value, final double d2) {
 			this.coord = coord;
 			this.value = value;
@@ -96,18 +198,36 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param <T>
+	 * @param <V>
+	 */
 	@SuppressWarnings("hiding")
 	private class WB_KDNode<T extends WB_Coord, V> {
+		/**  */
 		private WB_AABB _limits;
+		/**  */
 		private WB_KDNode<T, V> _negative, _positive;
+		/**  */
 		private final WB_AABB _region;
+		/**  */
 		private WB_KDEntry<T, V>[] _bin;
+		/**  */
 		private boolean _isLeaf;
+		/**  */
 		private int _binSize;
+		/**  */
 		private int _discriminator;
+		/**  */
 		private double _sliceValue;
+		/**  */
 		private int _id;
 
+		/**
+		 *
+		 */
 		@SuppressWarnings("unchecked")
 		private WB_KDNode() {
 			_bin = new WB_KDEntry[_maximumBinSize];
@@ -123,6 +243,11 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			_id = 0;
 		}
 
+		/**
+		 *
+		 *
+		 * @param leafs
+		 */
 		private void addLeafBounds(final List<WB_AABB> leafs) {
 			if (_isLeaf) {
 				final WB_AABB box = _limits.get();
@@ -134,6 +259,11 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param leafs
+		 */
 		private void addLeafRegion(final List<WB_AABB> leafs) {
 			if (_isLeaf) {
 				final WB_AABB box = _region.get();
@@ -163,6 +293,12 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param leafs
+		 * @param level
+		 */
 		private void addBox(final List<WB_AABB> leafs, final int level) {
 			final WB_AABB box = _limits.get();
 			box.setId(_id);
@@ -173,6 +309,12 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param leafs
+		 * @param level
+		 */
 		private void addRegion(final List<WB_AABB> leafs, final int level) {
 			final WB_AABB box = _region.get();
 			if (box.getMinX() == Double.NEGATIVE_INFINITY) {
@@ -201,6 +343,12 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param entry
+		 * @return
+		 */
 		private V add(final WB_KDEntry<T, V> entry) {
 			if (_isLeaf) {
 				return addInLeaf(entry);
@@ -214,6 +362,12 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param entry
+		 * @return
+		 */
 		private V addInLeaf(final WB_KDEntry<T, V> entry) {
 			final V lookup = lookup(entry.coord);
 			if (lookup == null) {
@@ -230,22 +384,34 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			return lookup;
 		}
 
+		/**
+		 *
+		 *
+		 * @param point
+		 * @return
+		 */
 		private V lookup(final WB_Coord point) {
 			for (int i = 0; i < _binSize; i++) {
-				if (WB_Epsilon.isZeroSq(WB_GeometryOp3D.getSqDistance3D(point, _bin[i].coord))) {
+				if (WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistance3D(point, _bin[i].coord))) {
 					return _bin[i].value;
 				}
 			}
 			return null;
 		}
 
+		/**
+		 *
+		 *
+		 * @param heap
+		 * @param data
+		 */
 		private void findNearest(final QueryResult<T, V> heap, final WB_Coord data) {
 			if (_binSize == 0) {
 				return;
 			}
 			if (_isLeaf) {
 				for (int i = 0; i < _binSize; i++) {
-					final double dist = WB_GeometryOp3D.getSqDistance3D(_bin[i].coord, data);
+					final double dist = WB_GeometryOp.getSqDistance3D(_bin[i].coord, data);
 					heap.tryToAdd(dist, _bin[i]);
 				}
 			} else {
@@ -271,6 +437,12 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param range
+		 * @return
+		 */
 		private WB_KDEntry<T, V>[] range(final WB_AABB range) {
 			if (_bin == null) {
 				@SuppressWarnings("unchecked")
@@ -309,6 +481,13 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			return tmp2;
 		}
 
+		/**
+		 *
+		 *
+		 * @param center
+		 * @param r2
+		 * @return
+		 */
 		private WB_KDEntry<T, V>[] range(final WB_Coord center, final double r2) {
 			if (_bin == null) {
 				@SuppressWarnings("unchecked")
@@ -337,7 +516,7 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			final WB_KDEntry<T, V>[] tmp = new WB_KDEntry[_binSize];
 			int n = 0;
 			for (int i = 0; i < _binSize; i++) {
-				final double d2 = WB_GeometryOp3D.getSqDistance3D(center, _bin[i].coord);
+				final double d2 = WB_GeometryOp.getSqDistance3D(center, _bin[i].coord);
 				if (d2 <= r2) {
 					_bin[i].d2 = d2;
 					tmp[n++] = _bin[i];
@@ -349,6 +528,14 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			return tmp2;
 		}
 
+		/**
+		 *
+		 *
+		 * @param center
+		 * @param lower2
+		 * @param upper2
+		 * @return
+		 */
 		private WB_KDEntry<T, V>[] range(final WB_Coord center, final double lower2, final double upper2) {
 			if (_bin == null) {
 				@SuppressWarnings("unchecked")
@@ -377,7 +564,7 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			final WB_KDEntry<T, V>[] tmp = new WB_KDEntry[_binSize];
 			int n = 0;
 			for (int i = 0; i < _binSize; i++) {
-				final double d2 = WB_GeometryOp3D.getSqDistance3D(center, _bin[i].coord);
+				final double d2 = WB_GeometryOp.getSqDistance3D(center, _bin[i].coord);
 				if (d2 <= upper2 && d2 >= lower2) {
 					_bin[i].d2 = d2;
 					tmp[n++] = _bin[i];
@@ -389,6 +576,9 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			return tmp2;
 		}
 
+		/**
+		 *
+		 */
 		private void addLevel() {
 			_discriminator = _limits.maxOrdinate();
 			_negative = new WB_KDNode<>();
@@ -418,6 +608,11 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			_isLeaf = false;
 		}
 
+		/**
+		 *
+		 *
+		 * @param coord
+		 */
 		private void extendBounds(final WB_Coord coord) {
 			if (_limits == null) {
 				_limits = new WB_AABB(coord);
@@ -427,13 +622,28 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param <T>
+	 * @param <V>
+	 */
 	@SuppressWarnings("hiding")
 	public class QueryResult<T extends WB_Coord, V> {
+		/**  */
 		private final WB_KDEntry<T, V>[] entries;
+		/**  */
 		private final double[] distSqs;
+		/**  */
 		private final int capacity;
+		/**  */
 		private int size;
 
+		/**
+		 *
+		 *
+		 * @param capacity
+		 */
 		@SuppressWarnings("unchecked")
 		protected QueryResult(final int capacity) {
 			this.entries = new WB_KDEntry[capacity];
@@ -442,6 +652,12 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			this.size = 0;
 		}
 
+		/**
+		 *
+		 *
+		 * @param dist
+		 * @param entry
+		 */
 		protected void tryToAdd(final double dist, final WB_KDEntry<T, V> entry) {
 			int i = size;
 			for (; i > 0 && distSqs[i - 1] > dist; --i) {
@@ -460,6 +676,12 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			entries[i] = entry;
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @return
+		 */
 		public WB_KDEntry<T, V> getEntry(final int i) {
 			if (size == 0) {
 				return null;
@@ -467,6 +689,12 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			return entries[i];
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @return
+		 */
 		public double getDistanceSquare(final int i) {
 			if (size == 0) {
 				return Double.NaN;
@@ -474,6 +702,11 @@ public class WB_KDTree3D<T extends WB_Coord, V> {
 			return distSqs[i];
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public int size() {
 			return size;
 		}

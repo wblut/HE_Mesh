@@ -6,10 +6,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.DeflaterOutputStream;
 
+/**
+ *
+ */
 class HET_WriterBinaryHemesh {
+	/**  */
 	protected FileOutputStream hemeshStream;
+	/**  */
 	protected DataOutputStream hemeshWriter;
 
+	/**
+	 *
+	 *
+	 * @param stream
+	 */
 	public void beginSave(final FileOutputStream stream) {
 		try {
 			hemeshStream = stream;
@@ -19,6 +29,11 @@ class HET_WriterBinaryHemesh {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param file
+	 */
 	static private void createDirectories(final File file) {
 		try {
 			final String parentName = file.getParent();
@@ -33,6 +48,12 @@ class HET_WriterBinaryHemesh {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param fn
+	 * @param name
+	 */
 	public void beginSave(final String fn, final String name) {
 		try {
 			final File file = new File(fn, name + ".binhemesh");
@@ -44,6 +65,9 @@ class HET_WriterBinaryHemesh {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void endSave() {
 		try {
 			hemeshWriter.flush();
@@ -55,10 +79,19 @@ class HET_WriterBinaryHemesh {
 		}
 	}
 
+	/**
+	 *
+	 */
 	protected void handleBeginSave() {
 		hemeshWriter = new DataOutputStream(new DeflaterOutputStream(hemeshStream));
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param heid
+	 */
 	public void vertex(final HE_Vertex v, final int heid) {
 		try {
 			hemeshWriter.writeDouble(v.xd());
@@ -73,6 +106,15 @@ class HET_WriterBinaryHemesh {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 * @param vid
+	 * @param henextid
+	 * @param hepairid
+	 * @param faceid
+	 */
 	public void halfedge(final HE_Halfedge he, final int vid, final int henextid, final int hepairid,
 			final int faceid) {
 		try {
@@ -96,6 +138,12 @@ class HET_WriterBinaryHemesh {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @param heid
+	 */
 	public void face(final HE_Face f, final int heid) {
 		try {
 			hemeshWriter.writeInt(heid);
@@ -108,6 +156,13 @@ class HET_WriterBinaryHemesh {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param v1
+	 * @param v2
+	 * @param v3
+	 */
 	public void sizes(final int v1, final int v2, final int v3) {
 		try {
 			hemeshWriter.writeInt(v1);

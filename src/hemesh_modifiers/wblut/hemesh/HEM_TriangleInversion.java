@@ -3,23 +3,39 @@ package wblut.hemesh;
 import java.util.Iterator;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class HEM_TriangleInversion extends HEM_Modifier {
+	/**  */
 	private WB_Triangle triangle;
+	/**  */
 	private double r, r2;
+	/**  */
 	private double icutoff;
+	/**  */
 	private boolean linear;
 
+	/**
+	 *
+	 */
 	public HEM_TriangleInversion() {
 		super();
 		icutoff = 0.0001;
 		linear = false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param triangle
+	 * @param r
+	 */
 	public HEM_TriangleInversion(final WB_Triangle triangle, final double r) {
 		super();
 		this.triangle = triangle;
@@ -29,32 +45,70 @@ public class HEM_TriangleInversion extends HEM_Modifier {
 		linear = false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param triangle
+	 * @return
+	 */
 	public HEM_TriangleInversion setTriangle(final WB_Triangle triangle) {
 		this.triangle = triangle;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @return
+	 */
 	public HEM_TriangleInversion setTriangle(final WB_Coord p1, final WB_Coord p2, final WB_Coord p3) {
 		triangle = new WB_Triangle(p1, p2, p3);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HEM_TriangleInversion setRadius(final double r) {
 		this.r = r;
 		r2 = r * r;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param cutoff
+	 * @return
+	 */
 	public HEM_TriangleInversion setCutoff(final double cutoff) {
 		icutoff = 1.0 / cutoff;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_TriangleInversion setLinear(final boolean b) {
 		linear = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		if (triangle == null) {
@@ -71,7 +125,7 @@ public class HEM_TriangleInversion extends HEM_Modifier {
 		double ri, rf;
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			q = WB_GeometryOp3D.getClosestPoint3D(v, triangle);
+			q = WB_GeometryOp.getClosestPoint3D(v, triangle);
 			if (linear) {
 				d = WB_Vector.subToVector3D(v, q);
 				d.normalizeSelf();
@@ -89,6 +143,12 @@ public class HEM_TriangleInversion extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		if (triangle == null) {
@@ -105,7 +165,7 @@ public class HEM_TriangleInversion extends HEM_Modifier {
 		double ri, rf;
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			q = WB_GeometryOp3D.getClosestPoint3D(v, triangle);
+			q = WB_GeometryOp.getClosestPoint3D(v, triangle);
 			if (linear) {
 				d = WB_Vector.subToVector3D(v, q);
 				d.normalizeSelf();

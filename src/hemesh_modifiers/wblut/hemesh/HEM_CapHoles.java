@@ -1,22 +1,33 @@
 package wblut.hemesh;
 
-import java.util.List;
-
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 
+/**
+ *
+ */
 public class HEM_CapHoles extends HEM_Modifier {
+	/**  */
 	private HE_Selection caps;
 
+	/**
+	 *
+	 */
 	public HEM_CapHoles() {
 		super();
 		caps = null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HEM_CapHoles.");
 		caps = HE_Selection.getSelection(mesh);
-		final List<HE_Halfedge> unpairedEdges = mesh.getUnpairedHalfedges();
+		final HE_HalfedgeList unpairedEdges = mesh.getUnpairedHalfedges();
 		HE_RAS<HE_Halfedge> loopedHalfedges;
 		HE_Halfedge start;
 		HE_Halfedge he;
@@ -103,6 +114,12 @@ public class HEM_CapHoles extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		return applySelf(selection.getParent());

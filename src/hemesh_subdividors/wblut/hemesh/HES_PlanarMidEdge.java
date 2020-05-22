@@ -1,13 +1,19 @@
 package wblut.hemesh;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ *
+ */
 public class HES_PlanarMidEdge extends HES_Subdividor {
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		HE_MeshOp.splitEdges(mesh);
-		final ArrayList<HE_Face> newFaces = new ArrayList<>();
+		final HE_FaceList newFaces = new HE_FaceList();
 		HE_Face face;
 		final HE_FaceIterator fItr = mesh.fItr();
 		while (fItr.hasNext()) {
@@ -18,7 +24,7 @@ public class HES_PlanarMidEdge extends HES_Subdividor {
 			newFaces.add(centerFace);
 			mesh.addDerivedElement(centerFace, face);
 			centerFace.copyProperties(face);
-			final ArrayList<HE_Halfedge> faceHalfedges = new ArrayList<>();
+			final HE_HalfedgeList faceHalfedges = new HE_HalfedgeList();
 			do {
 				final HE_Face newFace = new HE_Face();
 				newFace.copyProperties(face);
@@ -53,7 +59,7 @@ public class HES_PlanarMidEdge extends HES_Subdividor {
 			HE_MeshOp.cycleHalfedges(mesh, faceHalfedges);
 		}
 		HE_MeshOp.pairHalfedges(mesh);
-		final List<HE_Face> faces = mesh.getFaces();
+		final HE_FaceList faces = mesh.getFaces();
 		for (final HE_Face f : faces) {
 			if (!newFaces.contains(f)) {
 				mesh.remove(f);
@@ -62,12 +68,18 @@ public class HES_PlanarMidEdge extends HES_Subdividor {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		final HE_Mesh mesh = selection.getParent();
 		selection.collectEdgesByFace();
 		HE_MeshOp.splitEdges(selection);
-		final ArrayList<HE_Face> newFaces = new ArrayList<>();
+		final HE_FaceList newFaces = new HE_FaceList();
 		HE_Face face;
 		final HE_FaceIterator fItr = selection.fItr();
 		while (fItr.hasNext()) {
@@ -78,7 +90,7 @@ public class HES_PlanarMidEdge extends HES_Subdividor {
 			newFaces.add(centerFace);
 			mesh.addDerivedElement(centerFace, face);
 			centerFace.copyProperties(face);
-			final ArrayList<HE_Halfedge> faceHalfedges = new ArrayList<>();
+			final HE_HalfedgeList faceHalfedges = new HE_HalfedgeList();
 			do {
 				final HE_Face newFace = new HE_Face();
 				newFaces.add(newFace);

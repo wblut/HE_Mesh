@@ -8,44 +8,79 @@ import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_Point;
 
+/**
+ *
+ */
 public class HES_Smooth extends HES_Subdividor {
+	/**  */
 	private boolean keepEdges = true;
+	/**  */
 	private boolean keepBoundary = false;
+	/**  */
 	private double origWeight;
+	/**  */
 	private double neigWeight;
 
+	/**
+	 *
+	 */
 	public HES_Smooth() {
 		super();
 		origWeight = 1.0;
 		neigWeight = 1.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HES_Smooth setKeepEdges(final boolean b) {
 		keepEdges = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HES_Smooth setKeepBoundary(final boolean b) {
 		keepBoundary = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param origWeight
+	 * @param neigWeight
+	 * @return
+	 */
 	public HES_Smooth setWeight(final double origWeight, final double neigWeight) {
 		this.origWeight = origWeight;
 		this.neigWeight = neigWeight;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		HE_MeshOp.splitFacesQuad(mesh);
 		final WB_Coord[] newPositions = new WB_Coord[mesh.getNumberOfVertices()];
 		final HE_Selection all = mesh.selectAllFaces();
-		final List<HE_Vertex> boundary = all.getOuterVertices();
-		final List<HE_Vertex> inner = all.getInnerVertices();
+		final HE_VertexList boundary = all.getOuterVertices();
+		final HE_VertexList inner = all.getInnerVertices();
 		HE_Vertex v;
 		HE_Vertex n;
-		List<HE_Vertex> neighbors;
+		HE_VertexList neighbors;
 		int id = 0;
 		Iterator<HE_Vertex> vItr = inner.iterator();
 		while (vItr.hasNext()) {
@@ -73,8 +108,8 @@ public class HES_Smooth extends HES_Subdividor {
 				p.mulSelf(origWeight);
 				double c = origWeight;
 				int nc = 0;
-				for (int i = 0; i < neighbors.size(); i++) {
-					n = neighbors.get(i);
+				for (final HE_Vertex neighbor : neighbors) {
+					n = neighbor;
 					if (boundary.contains(n)) {
 						p.addSelf(neigWeight * n.xd(), neigWeight * n.yd(), neigWeight * n.zd());
 						c += neigWeight;
@@ -99,14 +134,20 @@ public class HES_Smooth extends HES_Subdividor {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		HE_MeshOp.splitFacesQuad(selection);
 		final List<WB_Coord> newPositions = new ArrayList<>();
-		final List<HE_Vertex> boundary = selection.getAllBoundaryVertices();
-		final List<HE_Vertex> inner = selection.getInnerVertices();
-		final List<HE_Vertex> outer = selection.getOuterVertices();
-		List<HE_Face> sharedFaces;
+		final HE_VertexList boundary = selection.getAllBoundaryVertices();
+		final HE_VertexList inner = selection.getInnerVertices();
+		final HE_VertexList outer = selection.getOuterVertices();
+		HE_FaceList sharedFaces;
 		HE_Vertex v;
 		Iterator<HE_Vertex> vItr = outer.iterator();
 		while (vItr.hasNext()) {
@@ -116,7 +157,7 @@ public class HES_Smooth extends HES_Subdividor {
 			}
 		}
 		HE_Vertex n;
-		List<HE_Vertex> neighbors;
+		HE_VertexList neighbors;
 		int id = 0;
 		vItr = inner.iterator();
 		while (vItr.hasNext()) {
@@ -144,8 +185,8 @@ public class HES_Smooth extends HES_Subdividor {
 				p.mulSelf(origWeight);
 				double c = origWeight;
 				int nc = 0;
-				for (int i = 0; i < neighbors.size(); i++) {
-					n = neighbors.get(i);
+				for (final HE_Vertex neighbor : neighbors) {
+					n = neighbor;
 					if (boundary.contains(n)) {
 						p.addSelf(neigWeight * n.xd(), neigWeight * n.yd(), neigWeight * n.zd());
 						c += neigWeight;
@@ -167,8 +208,8 @@ public class HES_Smooth extends HES_Subdividor {
 				p.mulSelf(origWeight);
 				double c = origWeight;
 				int nc = 0;
-				for (int i = 0; i < neighbors.size(); i++) {
-					n = neighbors.get(i);
+				for (final HE_Vertex neighbor : neighbors) {
+					n = neighbor;
 					if (outer.contains(n)) {
 						sharedFaces = selection.getParent().getSharedFaces(v, n);
 						boolean singleFaceGap = true;

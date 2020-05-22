@@ -6,24 +6,47 @@ import java.io.IOException;
 
 import wblut.geom.WB_Point;
 
+/**
+ *
+ */
 public class HEC_FromSimpleMeshFile extends HEC_Creator {
+	/**  */
 	private String path;
 
+	/**
+	 *
+	 */
 	public HEC_FromSimpleMeshFile() {
 		super();
 		setOverride(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param path
+	 */
 	public HEC_FromSimpleMeshFile(final String path) {
 		this();
 		this.path = path;
 	}
 
+	/**
+	 *
+	 *
+	 * @param path
+	 * @return
+	 */
 	public HEC_FromSimpleMeshFile setPath(final String path) {
 		this.path = path;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		if (path == null) {

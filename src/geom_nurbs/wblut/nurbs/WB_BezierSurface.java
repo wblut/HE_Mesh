@@ -9,21 +9,41 @@ import wblut.hemesh.HEC_FromFacelist;
 import wblut.hemesh.HE_Mesh;
 import wblut.math.WB_Bernstein;
 
+/**
+ *
+ */
 public class WB_BezierSurface implements WB_Surface {
+	/**  */
 	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	/**  */
 	protected WB_Coord[][] points;
+	/**  */
 	protected int n;
+	/**  */
 	protected int m;
 
+	/**
+	 *
+	 */
 	public WB_BezierSurface() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 */
 	public WB_BezierSurface(final WB_Coord[][] controlPoints) {
 		n = controlPoints.length - 1;
 		m = controlPoints[0].length - 1;
 		points = controlPoints;
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 */
 	public WB_BezierSurface(final WB_PointHomogeneous[][] controlPoints) {
 		n = controlPoints.length;
 		m = controlPoints[0].length;
@@ -35,6 +55,13 @@ public class WB_BezierSurface implements WB_Surface {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @return
+	 */
 	@Override
 	public WB_Point surfacePoint(final double u, final double v) {
 		final WB_Point S = new WB_Point();
@@ -70,38 +97,78 @@ public class WB_BezierSurface implements WB_Surface {
 		return S;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Coord[][] points() {
 		return points;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int n() {
 		return n;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int m() {
 		return m;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getLowerU() {
 		return 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getUpperU() {
 		return 1;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getLowerV() {
 		return 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getUpperV() {
 		return 1;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_BezierSurface elevateUDegree() {
 		final WB_Coord[][] npoints = new WB_Point[n + 2][m + 1];
 		for (int j = 0; j <= m; j++) {
@@ -115,6 +182,11 @@ public class WB_BezierSurface implements WB_Surface {
 		return new WB_BezierSurface(npoints);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_BezierSurface elevateVDegree() {
 		final WB_Coord[][] npoints = new WB_Point[n + 1][m + 2];
 		for (int i = 0; i <= n; i++) {
@@ -128,6 +200,11 @@ public class WB_BezierSurface implements WB_Surface {
 		return new WB_BezierSurface(npoints);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Mesh toControlHemesh() {
 		final WB_Coord[] cpoints = new WB_Point[(n + 1) * (m + 1)];
 		for (int i = 0; i <= n; i++) {

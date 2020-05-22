@@ -8,19 +8,40 @@ import wblut.geom.WB_Surface;
 import wblut.hemesh.HEC_FromFacelist;
 import wblut.hemesh.HE_Mesh;
 
+/**
+ *
+ */
 public class WB_BSplineSurface implements WB_Surface {
+	/**  */
 	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	/**  */
 	protected WB_NurbsKnot uknot;
+	/**  */
 	protected WB_NurbsKnot vknot;
+	/**  */
 	protected WB_Coord[][] points;
+	/**  */
 	protected int p;
+	/**  */
 	protected int n;
+	/**  */
 	protected int q;
+	/**  */
 	protected int m;
 
+	/**
+	 *
+	 */
 	public WB_BSplineSurface() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param uknot
+	 * @param vknot
+	 */
 	public WB_BSplineSurface(final WB_Coord[][] controlPoints, final WB_NurbsKnot uknot, final WB_NurbsKnot vknot) {
 		if (uknot.n != controlPoints.length - 1) {
 			throw new IllegalArgumentException("U knot size and/or degree doesn't match number of control points.");
@@ -41,6 +62,13 @@ public class WB_BSplineSurface implements WB_Surface {
 		// }
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param uknot
+	 * @param vknot
+	 */
 	public WB_BSplineSurface(final WB_PointHomogeneous[][] controlPoints, final WB_NurbsKnot uknot,
 			final WB_NurbsKnot vknot) {
 		if (uknot.n != controlPoints.length - 1) {
@@ -63,6 +91,13 @@ public class WB_BSplineSurface implements WB_Surface {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param udegree
+	 * @param vdegree
+	 */
 	public WB_BSplineSurface(final WB_Coord[][] controlPoints, final int udegree, final int vdegree) {
 		uknot = new WB_NurbsKnot(controlPoints.length, udegree);
 		vknot = new WB_NurbsKnot(controlPoints[0].length, vdegree);
@@ -73,6 +108,14 @@ public class WB_BSplineSurface implements WB_Surface {
 		points = controlPoints;
 	}
 
+	/**
+	 *
+	 *
+	 * @param point00
+	 * @param point10
+	 * @param point01
+	 * @param point11
+	 */
 	public WB_BSplineSurface(final WB_Coord point00, final WB_Coord point10, final WB_Coord point01,
 			final WB_Coord point11) {
 		uknot = new WB_NurbsKnot(2, 1);
@@ -88,6 +131,13 @@ public class WB_BSplineSurface implements WB_Surface {
 		points[1][1] = point11;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @return
+	 */
 	@Override
 	public WB_Point surfacePoint(final double u, final double v) {
 		final int uspan = uknot.span(u);
@@ -109,6 +159,11 @@ public class WB_BSplineSurface implements WB_Surface {
 		return S;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Mesh toControlHemesh() {
 		final WB_Coord[] cpoints = new WB_Point[(n + 1) * (m + 1)];
 		for (int i = 0; i <= n; i++) {
@@ -130,15 +185,34 @@ public class WB_BSplineSurface implements WB_Surface {
 		return new HE_Mesh(fl);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	public WB_BSplineSurface insertUKnot(final double u) {
 		return insertUKnot(u, 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	public WB_BSplineSurface insertUKnotMax(final double u) {
 		final int k = uknot.multiplicity(u);
 		return insertUKnot(u, p - k);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param r
+	 * @return
+	 */
 	public WB_BSplineSurface insertUKnot(final double u, final int r) {
 		final int nq = n + r;
 		final int k = uknot.span(u);
@@ -191,15 +265,34 @@ public class WB_BSplineSurface implements WB_Surface {
 		return new WB_BSplineSurface(Q, UQ, vknot);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public WB_BSplineSurface insertVKnot(final double v) {
 		return insertVKnot(v, 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public WB_BSplineSurface insertVKnotMax(final double v) {
 		final int k = vknot.multiplicity(v);
 		return insertVKnot(v, q - k);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param r
+	 * @return
+	 */
 	public WB_BSplineSurface insertVKnot(final double v, final int r) {
 		final int mq = m + r;
 		final int k = vknot.span(v);
@@ -252,6 +345,12 @@ public class WB_BSplineSurface implements WB_Surface {
 		return new WB_BSplineSurface(Q, uknot, VQ);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	public WB_BSpline isoCurveU(final double u) {
 		final WB_Point[] cpoints = new WB_Point[m + 1];
 		final int span = uknot.span(u);
@@ -267,6 +366,12 @@ public class WB_BSplineSurface implements WB_Surface {
 		return new WB_BSpline(cpoints, vknot);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public WB_BSpline isoCurveV(final double v) {
 		final WB_Point[] cpoints = new WB_Point[n + 1];
 		final int span = vknot.span(v);
@@ -282,34 +387,75 @@ public class WB_BSplineSurface implements WB_Surface {
 		return new WB_BSpline(cpoints, uknot);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Coord[][] points() {
 		return points;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int p() {
 		return p;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int n() {
 		return n;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int q() {
 		return q;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int m() {
 		return m;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_NurbsKnot uknot() {
 		return uknot;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_NurbsKnot vknot() {
 		return vknot;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	public WB_BSplineSurface[] splitU(final double u) {
 		final WB_BSplineSurface newBSplineSurface = insertUKnotMax(u);
 		final int k = newBSplineSurface.uknot().span(u);
@@ -346,6 +492,12 @@ public class WB_BSplineSurface implements WB_Surface {
 		return splitSurfaces;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public WB_BSplineSurface[] splitV(final double v) {
 		final WB_BSplineSurface newBSplineSurface = insertVKnotMax(v);
 		final int k = newBSplineSurface.vknot().span(v);
@@ -382,6 +534,13 @@ public class WB_BSplineSurface implements WB_Surface {
 		return splitSurfaces;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @return
+	 */
 	public WB_BSplineSurface[] split(final double u, final double v) {
 		final WB_BSplineSurface[] splitSurfaces = new WB_BSplineSurface[4];
 		WB_BSplineSurface[] tmp = new WB_BSplineSurface[2];
@@ -397,21 +556,41 @@ public class WB_BSplineSurface implements WB_Surface {
 		return splitSurfaces;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getLowerU() {
 		return uknot.value(0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getUpperU() {
 		return uknot.value(uknot.m);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getLowerV() {
 		return vknot.value(0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getUpperV() {
 		return vknot.value(vknot.m);

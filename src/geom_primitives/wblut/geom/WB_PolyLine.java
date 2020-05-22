@@ -5,14 +5,29 @@ import java.util.List;
 
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
+	/**  */
 	List<WB_Point> points;
+	/**  */
 	List<WB_Vector> directions;
+	/**  */
 	double[] incLengths;
+	/**  */
 	int numberOfPoints;
+	/**  */
 	int hashcode;
+	/**  */
 	private final WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public WB_Point getPoint(final int i) {
 		if (i < 0 || i > numberOfPoints - 1) {
 			throw new IllegalArgumentException("Parameter " + i + " must between 0 and " + (numberOfPoints - 1) + ".");
@@ -20,6 +35,13 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return points.get(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @return
+	 */
 	public double getd(final int i, final int j) {
 		if (i < 0 || i > numberOfPoints - 1) {
 			throw new IllegalArgumentException("Parameter " + i + " must between 0 and " + (numberOfPoints - 1) + ".");
@@ -27,6 +49,13 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return points.get(i).getd(j);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @return
+	 */
 	public float getf(final int i, final int j) {
 		if (i < 0 || i > numberOfPoints - 1) {
 			throw new IllegalArgumentException("Parameter " + i + " must between 0 and " + (numberOfPoints - 1) + ".");
@@ -34,6 +63,12 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return points.get(i).getf(j);
 	}
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	public WB_Point getPointOnLine(final double t) {
 		if (t < 0 || t > incLengths[numberOfPoints - 1]) {
 			throw new IllegalArgumentException(
@@ -50,6 +85,12 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return points.get(index).addMul(x, directions.get(index));
 	}
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	public WB_Point getParametricPointOnLine(double t) {
 		if (t < 0 || t > 1) {
 			throw new IllegalArgumentException("Parameter must between 0 and " + 1 + ".");
@@ -68,6 +109,12 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return points.get((int) t).mulAddMul(1 - ft, ft, points.get(1 + (int) t));
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public WB_Vector getDirection(final int i) {
 		if (i < 0 || i > numberOfPoints - 2) {
 			throw new IllegalArgumentException("Parameter must between 0 and " + (numberOfPoints - 2) + ".");
@@ -75,6 +122,12 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return directions.get(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public WB_Vector getNormal(final int i) {
 		if (i < 0 || i > numberOfPoints - 2) {
 			throw new IllegalArgumentException("Parameter must between 0 and " + (numberOfPoints - 2) + ".");
@@ -89,6 +142,12 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return normal;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public double a(final int i) {
 		if (i < 0 || i > numberOfPoints - 2) {
 			throw new IllegalArgumentException("Parameter must between 0 and " + (numberOfPoints - 2) + ".");
@@ -96,6 +155,12 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return -directions.get(i).getd(1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public double b(final int i) {
 		if (i < 0 || i > numberOfPoints - 2) {
 			throw new IllegalArgumentException("Parameter must between 0 and " + (numberOfPoints - 2) + ".");
@@ -103,6 +168,12 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return directions.get(i).getd(0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public double c(final int i) {
 		if (i < 0 || i > numberOfPoints - 2) {
 			throw new IllegalArgumentException("Parameter must between 0 and " + (numberOfPoints - 2) + ".");
@@ -110,10 +181,21 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return points.get(i).getd(0) * directions.get(i).getd(1) - points.get(i).getd(1) * directions.get(i).getd(0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getNumberOfPoints() {
 		return numberOfPoints;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public WB_Segment getSegment(final int i) {
 		if (i < 0 || i > numberOfPoints - 2) {
 			throw new IllegalArgumentException("Parameter must between 0 and " + (numberOfPoints - 2) + ".");
@@ -121,10 +203,21 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return geometryfactory.createSegment(getPoint(i), getPoint(i + 1));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getNumberSegments() {
 		return points.size() - 1;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public double getLength(final int i) {
 		if (i < 0 || i > numberOfPoints - 2) {
 			throw new IllegalArgumentException("Parameter must between 0 and " + (numberOfPoints - 2) + ".");
@@ -132,9 +225,17 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return incLengths[i + 1] - incLengths[i];
 	}
 
+	/**
+	 *
+	 */
 	protected WB_PolyLine() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 */
 	public WB_PolyLine(final Collection<? extends WB_Coord> points) {
 		numberOfPoints = points.size();
 		this.points = new WB_PointList();
@@ -145,6 +246,11 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		hashcode = -1;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 */
 	public WB_PolyLine(final WB_Coord... points) {
 		numberOfPoints = points.length;
 		this.points = new WB_PointList();
@@ -155,6 +261,11 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		hashcode = -1;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 */
 	public void addPoint(final WB_Coord p) {
 		numberOfPoints++;
 		points.add(new WB_Point(p));
@@ -162,6 +273,11 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		hashcode = -1;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 */
 	public void removePoint(final int i) {
 		numberOfPoints--;
 		points.remove(i);
@@ -169,6 +285,9 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		hashcode = -1;
 	}
 
+	/**
+	 *
+	 */
 	private void getDirections() {
 		directions = new WB_VectorList();
 		incLengths = new double[points.size() - 1];
@@ -180,6 +299,12 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public boolean equals(final Object o) {
 		if (o == this) {
@@ -200,6 +325,11 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return true;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int hashCode() {
 		if (hashcode == -1) {
@@ -211,10 +341,21 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return hashcode;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_CoordCollection getPoints() {
 		return WB_CoordCollection.getCollection(points);
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_PolyLine apply(final WB_Transform3D T) {
 		final List<WB_Point> tpoints = new WB_PointList();
@@ -224,6 +365,12 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return geometryfactory.createPolyLine(tpoints);
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_PolyLine apply2D(final WB_Transform2D T) {
 		final List<WB_Point> tpoints = new WB_PointList();
@@ -233,6 +380,12 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return geometryfactory.createPolyLine(tpoints);
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_PolyLine apply2DSelf(final WB_Transform2D T) {
 		for (final WB_Point p : points) {
@@ -243,6 +396,12 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_PolyLine applySelf(final WB_Transform3D T) {
 		for (final WB_Point p : points) {
@@ -253,11 +412,23 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_Point getPointOnCurve(final double u) {
 		return getParametricPointOnLine(u);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_Vector getDirectionOnCurve(double u) {
 		if (u < 0 || u > 1) {
@@ -277,16 +448,32 @@ public class WB_PolyLine implements WB_Transformable3D, WB_Curve {
 		return directions.get((int) u);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_Vector getDerivative(final double u) {
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getLowerU() {
 		return 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public double getUpperU() {
 		return 1;

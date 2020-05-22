@@ -5,18 +5,42 @@ import java.util.List;
 
 import wblut.math.WB_MTRandom;
 
-public class WB_Danzer2D implements WB_TriangleFactory {
+/**
+ *
+ */
+public class WB_Danzer2D implements WB_TriangleSource {
+	/**  */
 	private final WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
+	/**
+	 *
+	 */
 	public enum Type {
-		A, B, C
+		/**  */
+		A,
+		/**  */
+		B,
+		/**  */
+		C
 	}
 
+	/**
+	 *
+	 */
 	static class WB_DanzerTile2D {
+		/**  */
 		public int p1, p2, p3;
+		/**  */
 		public Type type;
+		/**  */
 		public int generation;
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param g
+		 */
 		public WB_DanzerTile2D(final Type t, final int g) {
 			type = t;
 			p1 = p2 = p3 = -1;
@@ -24,49 +48,115 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		}
 	}
 
+	/**  */
 	final static double theta = Math.PI / 7.0;
+	/**  */
 	final static double psi = Math.PI / 3.5;
+	/**  */
 	final static double beta = 3.0 * Math.PI / 7.0;
+	/**  */
 	final static double phi = Math.PI / 1.75;
+	/**  */
 	final static double sintheta = Math.sin(theta);
+	/**  */
 	final static double sinhtheta = Math.sin(0.5 * theta);
+	/**  */
 	final static double sinpsi = Math.sin(psi);
+	/**  */
 	final static double sinbeta = Math.sin(beta);
+	/**  */
 	final static double sinhbeta = Math.sin(0.5 * beta);
+	/**  */
 	final static double sinphi = Math.sin(phi);
+	/**  */
 	final static double costheta = Math.cos(theta);
+	/**  */
 	final static double coshtheta = Math.cos(0.5 * theta);
+	/**  */
 	final static double cospsi = Math.cos(psi);
+	/**  */
 	final static double cosbeta = Math.cos(beta);
+	/**  */
 	final static double coshbeta = Math.cos(0.5 * beta);
+	/**  */
 	final static double cosphi = Math.cos(phi);
+	/**  */
 	final double gamma = sintheta / (sintheta + sinpsi);
+	/**  */
 	protected double a, b, c, r1, r2, r3;
+	/**  */
 	protected Type type;
+	/**  */
 	protected List<WB_Point> points;
+	/**  */
 	protected List<WB_DanzerTile2D> tiles;
+	/**  */
 	protected WB_MTRandom rnd;
 
+	/**
+	 *
+	 *
+	 * @param sc
+	 * @param t
+	 */
 	public WB_Danzer2D(final double sc, final Type t) {
 		this(sc, t, 0.0, new WB_Point(), new WB_PlanarMap());
 	}
 
+	/**
+	 *
+	 *
+	 * @param sc
+	 * @param t
+	 * @param offset
+	 */
 	public WB_Danzer2D(final double sc, final Type t, final WB_Coord offset) {
 		this(sc, t, 0.0, offset, new WB_PlanarMap());
 	}
 
+	/**
+	 *
+	 *
+	 * @param sc
+	 * @param t
+	 * @param angle
+	 */
 	public WB_Danzer2D(final double sc, final Type t, final double angle) {
 		this(sc, t, angle, new WB_Point(), new WB_PlanarMap());
 	}
 
+	/**
+	 *
+	 *
+	 * @param sc
+	 * @param t
+	 * @param angle
+	 * @param offset
+	 */
 	public WB_Danzer2D(final double sc, final Type t, final double angle, final WB_Coord offset) {
 		this(sc, t, angle, offset, new WB_PlanarMap());
 	}
 
+	/**
+	 *
+	 *
+	 * @param sc
+	 * @param t
+	 * @param context
+	 */
 	public WB_Danzer2D(final double sc, final Type t, final WB_Map2D context) {
 		this(sc, t, 0.0, new WB_Point(), context);
 	}
 
+	/**
+	 *
+	 *
+	 * @param sc
+	 * @param t
+	 * @param angle
+	 * @param offset
+	 * @param context
+	 */
 	public WB_Danzer2D(final double sc, final Type t, final double angle, final WB_Coord offset,
 			final WB_Map2D context) {
 		rnd = new WB_MTRandom();
@@ -142,6 +232,11 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		tiles.add(T);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 */
 	public void centerOnPoint(final int i) {
 		if (points != null && i >= 0 && i < points.size()) {
 			final WB_Point center = new WB_Point(points.get(i));
@@ -151,10 +246,18 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param seed
+	 */
 	public void setSeed(final long seed) {
 		rnd.setSeed(seed);
 	}
 
+	/**
+	 *
+	 */
 	public void inflate() {
 		final List<WB_DanzerTile2D> newTiles = new WB_List<>();
 		for (int i = 0; i < tiles.size(); i++) {
@@ -163,12 +266,22 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		tiles = newTiles;
 	}
 
+	/**
+	 *
+	 *
+	 * @param rep
+	 */
 	public void inflate(final int rep) {
 		for (int r = 0; r < rep; r++) {
 			inflate();
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param probability
+	 */
 	public void inflate(final double probability) {
 		final List<WB_DanzerTile2D> newTiles = new WB_List<>();
 		for (int i = 0; i < tiles.size(); i++) {
@@ -177,12 +290,25 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		tiles = newTiles;
 	}
 
+	/**
+	 *
+	 *
+	 * @param probability
+	 * @param rep
+	 */
 	public void inflate(final double probability, final int rep) {
 		for (int r = 0; r < rep; r++) {
 			inflate(probability);
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @param probability
+	 * @return
+	 */
 	protected List<WB_DanzerTile2D> inflateTileInt(final WB_DanzerTile2D T, final double probability) {
 		final List<WB_DanzerTile2D> newTiles = new WB_List<>();
 		if (rnd.nextDouble() >= probability) {
@@ -352,10 +478,21 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		return newTiles;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public WB_DanzerTile2D tile(final int i) {
 		return tiles.get(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int oldest() {
 		int result = Integer.MAX_VALUE;
 		for (final WB_DanzerTile2D T : tiles) {
@@ -367,6 +504,11 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int youngest() {
 		int result = -1;
 		for (final WB_DanzerTile2D T : tiles) {
@@ -375,15 +517,28 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 */
 	public void inflateTile(final int i) {
 		tiles.addAll(inflateTileInt(tiles.get(i), 2.0));
 		tiles.remove(i);
 	}
 
+	/**
+	 *
+	 */
 	public void inflateOldest() {
 		inflateOldest(0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 */
 	public void inflateOldest(final int r) {
 		final int age = oldest();
 		Collections.shuffle(tiles);
@@ -396,27 +551,57 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 */
 	public void removeTile(final int i) {
 		tiles.remove(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int size() {
 		return tiles.size();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getNumberOfPoints() {
 		return points.size();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_Point> points() {
 		return points;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_CoordCollection getPoints() {
 		return WB_CoordCollection.getCollection(points);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_Polygon> getTiles() {
 		final List<WB_Polygon> faces = new WB_List<>();
 		clean();
@@ -426,6 +611,11 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		return faces;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int[] getTriangles() {
 		clean();
@@ -439,10 +629,20 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		return triangles;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Triangulation2DWithPoints getTriangulation() {
 		return new WB_Triangulation2DWithPoints(getTilesAsIndices(), getPoints());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getTilesAsIndices() {
 		clean();
 		final int[] indices = new int[tiles.size() * 3];
@@ -455,6 +655,9 @@ public class WB_Danzer2D implements WB_TriangleFactory {
 		return indices;
 	}
 
+	/**
+	 *
+	 */
 	private void clean() {
 		final boolean[] used = new boolean[points.size()];
 		final int[] newindices = new int[points.size()];

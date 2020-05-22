@@ -12,7 +12,17 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Segment;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class HET_Contours {
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param P
+	 * @return
+	 */
 	public static List<List<WB_Coord>> planarSlices(final HE_Mesh mesh, final WB_Plane P) {
 		final HE_Mesh lmesh = mesh;
 		HE_MeshOp.triangulate(lmesh);
@@ -32,6 +42,16 @@ public class HET_Contours {
 		return contours;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param P
+	 * @param min
+	 * @param max
+	 * @param step
+	 * @return
+	 */
 	public static List<List<WB_Coord>> planarSlices(final HE_Mesh mesh, final WB_Plane P, final double min,
 			final double max, final double step) {
 		final double start = Math.min(min, max);
@@ -62,6 +82,13 @@ public class HET_Contours {
 		return contours;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param P
+	 * @return
+	 */
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final WB_Plane P) {
 		double A, B, C, D;
 		final double[] side = new double[3];
@@ -124,6 +151,16 @@ public class HET_Contours {
 		return segments;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param P
+	 * @param min
+	 * @param max
+	 * @param step
+	 * @return
+	 */
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final WB_Plane P, final double min, final double max,
 			final double step) {
 		double A, B, C, D;
@@ -193,6 +230,14 @@ public class HET_Contours {
 		return segments;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param function
+	 * @param level
+	 * @return
+	 */
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final WB_ScalarParameter function, final double level) {
 		final double[] side = new double[3];
 		final List<WB_Segment> segments = new WB_List<>();
@@ -249,6 +294,16 @@ public class HET_Contours {
 		return segments;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param function
+	 * @param min
+	 * @param max
+	 * @param step
+	 * @return
+	 */
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final WB_ScalarParameter function, final double min,
 			final double max, final double step) {
 		final double[] side = new double[3];
@@ -311,6 +366,14 @@ public class HET_Contours {
 		return segments;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param vertexValues
+	 * @param level
+	 * @return
+	 */
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final double[] vertexValues, final double level) {
 		final double[] side = new double[3];
 		final List<WB_Segment> segments = new WB_List<>();
@@ -367,6 +430,16 @@ public class HET_Contours {
 		return segments;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param vertexValues
+	 * @param min
+	 * @param max
+	 * @param step
+	 * @return
+	 */
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final double[] vertexValues, final double min,
 			final double max, final double step) {
 		final double[] side = new double[3];
@@ -429,6 +502,14 @@ public class HET_Contours {
 		return segments;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param attribute
+	 * @param level
+	 * @return
+	 */
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final String attribute, final double level) {
 		final double[] side = new double[3];
 		final List<WB_Segment> segments = new WB_List<>();
@@ -501,6 +582,16 @@ public class HET_Contours {
 		return segments;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param attribute
+	 * @param min
+	 * @param max
+	 * @param step
+	 * @return
+	 */
 	public static List<WB_Segment> contours(final HE_Mesh mesh, final String attribute, final double min,
 			final double max, final double step) {
 		final double[] side = new double[3];
@@ -579,6 +670,12 @@ public class HET_Contours {
 		return segments;
 	}
 
+	/**
+	 *
+	 *
+	 * @param segments
+	 * @return
+	 */
 	public static float[] toRawFloat(final List<WB_Segment> segments) {
 		final float[] coords = new float[segments.size() * 6];
 		WB_Segment seg;
@@ -594,6 +691,12 @@ public class HET_Contours {
 		return coords;
 	}
 
+	/**
+	 *
+	 *
+	 * @param segments
+	 * @return
+	 */
 	public static double[] toRawDouble(final List<WB_Segment> segments) {
 		final double[] coords = new double[segments.size() * 6];
 		WB_Segment seg;

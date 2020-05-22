@@ -8,36 +8,66 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Quad;
 import wblut.geom.WB_Triangle;
 
+/**
+ *
+ */
 public class HET_MeshBuffer extends PGraphicsOpenGL {
+	/**  */
 	protected PApplet home;
+	/**  */
 	protected HE_MeshCollection meshes;
+	/**  */
 	private ArrayList<WB_Triangle> triangles;
+	/**  */
 	private ArrayList<WB_Quad> quads;
+	/**  */
 	private WB_Point p1, p2, p3, p4;
+	/**  */
 	private int shape;
+	/**  */
 	private int shapectr;
 
+	/**
+	 *
+	 */
 	public HET_MeshBuffer() {
 		meshes = new HE_MeshCollection();
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void dispose() {
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public boolean displayable() {
 		return false;
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void beginDraw() {
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void endDraw() {
 	}
 
+	/**
+	 *
+	 */
 	public void nextMesh() {
 		final HE_Mesh m = new HE_Mesh();
 		if (triangles != null) {
@@ -60,6 +90,11 @@ public class HET_MeshBuffer extends PGraphicsOpenGL {
 		vertexCount = 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param kind
+	 */
 	@Override
 	public void beginShape(final int kind) {
 		shape = kind;
@@ -72,11 +107,24 @@ public class HET_MeshBuffer extends PGraphicsOpenGL {
 		vertexCount = 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 */
 	@Override
 	public void vertex(final float x, final float y) {
 		vertex(x, y, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	@Override
 	public void vertex(final float x, final float y, final float z) {
 		final float vertex[] = vertices[vertexCount];
@@ -102,6 +150,9 @@ public class HET_MeshBuffer extends PGraphicsOpenGL {
 		}
 	}
 
+	/**
+	 *
+	 */
 	protected void addTriangle() {
 		if (shape == TRIANGLES) {
 			p1 = new WB_Point(vertices[0][X], vertices[0][Y], vertices[0][Z]);
@@ -147,6 +198,9 @@ public class HET_MeshBuffer extends PGraphicsOpenGL {
 		}
 	}
 
+	/**
+	 *
+	 */
 	protected void addQuad() {
 		if (shape == QUADS) {
 			p1 = new WB_Point(vertices[0][X], vertices[0][Y], vertices[0][Z]);

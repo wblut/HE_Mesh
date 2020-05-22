@@ -3,43 +3,67 @@ package wblut.hemesh;
 import java.util.List;
 
 import wblut.geom.WB_AABB;
-import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordCollection;
-import wblut.geom.WB_CoordinateSystem;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_JTS;
 import wblut.geom.WB_List;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
-import wblut.geom.WB_Polygon;
-import wblut.geom.WB_Triangle;
-import wblut.geom.WB_TriangleFactory;
+import wblut.geom.WB_TriangleSource;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
-public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_TriangleFactory {
+/**
+ *
+ */
+public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_TriangleSource {
+	/**  */
 	private HE_Halfedge _halfedge;
+	/**  */
 	private int textureId;
+	/**  */
 	private int[] triangles;
 
+	/**
+	 *
+	 */
 	public HE_Face() {
 		super();
 		triangles = null;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Halfedge getHalfedge() {
 		return _halfedge;
 	}
 
+	/**
+	 *
+	 *
+	 * @param halfedge
+	 */
 	protected void setHalfedge(final HE_Halfedge halfedge) {
 		_halfedge = halfedge;
 	}
 
+	/**
+	 *
+	 */
 	protected void clearHalfedge() {
 		_halfedge = null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public HE_Halfedge getHalfedge(final HE_Vertex v) {
 		HE_Halfedge he = _halfedge;
 		if (he == null) {
@@ -54,6 +78,12 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	public HE_Halfedge getHalfedge(final HE_Face f) {
 		if (getHalfedge() == null || f == null) {
 			return null;
@@ -68,18 +98,20 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 		return null;
 	}
 
-	public WB_Point getFaceCenter() {
-		return HE_MeshOp.getFaceCenter(this);
-	}
-
-	public WB_Vector getFaceNormal() {
-		return HE_MeshOp.getFaceNormal(this);
-	}
-
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getFaceArea() {
 		return HE_MeshOp.getFaceArea(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getFaceDegree() {
 		int result = 0;
 		if (_halfedge == null) {
@@ -93,47 +125,102 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_FaceEdgeCirculator feCrc() {
 		return new HE_FaceEdgeCirculator(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_FaceFaceCirculator ffCrc() {
 		return new HE_FaceFaceCirculator(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_FaceVertexCirculator fvCrc() {
 		return new HE_FaceVertexCirculator(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_FaceHalfedgeInnerCirculator fheiCrc() {
 		return new HE_FaceHalfedgeInnerCirculator(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_FaceHalfedgeOuterCirculator fheoCrc() {
 		return new HE_FaceHalfedgeOuterCirculator(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_FaceEdgeRevCirculator feRevCrc() {
 		return new HE_FaceEdgeRevCirculator(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_FaceFaceRevCirculator ffRevCrc() {
 		return new HE_FaceFaceRevCirculator(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_FaceHalfedgeInnerRevCirculator fheiRevCrc() {
 		return new HE_FaceHalfedgeInnerRevCirculator(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_FaceHalfedgeOuterRevCirculator fheoRevCrc() {
 		return new HE_FaceHalfedgeOuterRevCirculator(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_FaceVertexRevCirculator fvRevCrc() {
 		return new HE_FaceVertexRevCirculator(this);
 	}
 
-	public List<HE_Vertex> getFaceVertices() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_VertexList getFaceVertices() {
 		final HE_VertexList fv = new HE_VertexList();
 		if (_halfedge == null) {
 			return fv;
@@ -143,10 +230,15 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 			fv.add(he.getVertex());
 			he = he.getNextInFace();
 		} while (he != _halfedge);
-		return fv.asUnmodifiable();
+		return fv;
 	}
 
-	public List<HE_Vertex> getUniqueFaceVertices() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_VertexList getUniqueFaceVertices() {
 		final HE_VertexList fv = new HE_VertexList();
 		if (_halfedge == null) {
 			return fv;
@@ -158,10 +250,15 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 			}
 			he = he.getNextInFace();
 		} while (he != _halfedge);
-		return fv.asUnmodifiable();
+		return fv;
 	}
 
-	public List<HE_Halfedge> getFaceHalfedges() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_HalfedgeList getFaceHalfedges() {
 		final HE_HalfedgeList fhe = new HE_HalfedgeList();
 		if (_halfedge == null) {
 			return fhe;
@@ -173,10 +270,15 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 			}
 			he = he.getNextInFace();
 		} while (he != _halfedge);
-		return fhe.asUnmodifiable();
+		return fhe;
 	}
 
-	public List<HE_Halfedge> getFaceHalfedgesTwoSided() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_HalfedgeList getFaceHalfedgesTwoSided() {
 		final HE_HalfedgeList fhe = new HE_HalfedgeList();
 		if (_halfedge == null) {
 			return fhe;
@@ -193,10 +295,15 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 			}
 			he = he.getNextInFace();
 		} while (he != _halfedge);
-		return fhe.asUnmodifiable();
+		return fhe;
 	}
 
-	public List<HE_Halfedge> getFaceEdges() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_HalfedgeList getFaceEdges() {
 		final HE_HalfedgeList fe = new HE_HalfedgeList();
 		if (_halfedge == null) {
 			return fe;
@@ -214,10 +321,15 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 			}
 			he = he.getNextInFace();
 		} while (he != _halfedge);
-		return fe.asUnmodifiable();
+		return fe;
 	}
 
-	public List<HE_Face> getNeighborFaces() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_FaceList getNeighborFaces() {
 		final HE_FaceList ff = new HE_FaceList();
 		if (getHalfedge() == null) {
 			return ff;
@@ -234,9 +346,14 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 			}
 			he = he.getNextInFace();
 		} while (he != getHalfedge());
-		return ff.asUnmodifiable();
+		return ff;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<HE_TextureCoordinate> getFaceUVWs() {
 		final WB_List<HE_TextureCoordinate> fv = new WB_List<>();
 		if (_halfedge == null) {
@@ -250,6 +367,11 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 		return fv.asUnmodifiable();
 	}
 
+	/**
+	 *
+	 *
+	 * @param c
+	 */
 	public void move(final WB_Coord c) {
 		HE_Halfedge he = _halfedge;
 		do {
@@ -258,6 +380,12 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 		} while (he != _halfedge);
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	@Override
 	public int compareTo(final HE_Face f) {
 		if (f.getHalfedge() == null) {
@@ -272,11 +400,22 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 		return getHalfedge().compareTo(f.getHalfedge());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int[] getTriangles() {
 		return getTriangles(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param optimize
+	 * @return
+	 */
 	public int[] getTriangles(final boolean optimize) {
 		if (triangles != null) {
 			return triangles;
@@ -295,25 +434,37 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 			}
 			return triangles;
 		} else if (fo == 4) {
-			final WB_Point[] points = new WB_Point[4];
-			int i = 0;
-			HE_Halfedge he = _halfedge;
-			do {
-				points[i] = new WB_Point(he.getVertex().xd(), he.getVertex().yd(), he.getVertex().zd());
-				he = he.getNextInFace();
-				i++;
-			} while (he != _halfedge);
-			return triangles = WB_JTS.PolygonTriangulatorJTS.triangulateQuad(points[0], points[1], points[2],
-					points[3]);
+			HE_Halfedge he=getHalfedge();
+			boolean p0inside = WB_GeometryOp.pointInTriangleBary3D(he.getVertex(), he.getNextInFace().getVertex(), he.getNextInFace().getNextInFace().getVertex(), he.getPrevInFace().getVertex());
+			if (p0inside) {
+				return new int[] { 0, 1, 2, 0, 2, 3 };
+			}
+			boolean p2inside = WB_GeometryOp.pointInTriangleBary3D(he.getNextInFace().getNextInFace().getVertex(), he.getNextInFace().getVertex(), he.getVertex(), he.getPrevInFace().getVertex());
+			if (p2inside) {
+				return new int[] { 0, 1, 2, 0, 2, 3 };
+			}
+			return new int[] { 0, 1, 3, 1, 2, 3 };
+			
+
 		}
 		return triangles = new WB_JTS.PolygonTriangulatorJTS()
-				.triangulatePolygon2D(HE_MeshOp.getOrthoPolygon(this), optimize).getTriangles();
+				.triangulateHEFace(this, optimize);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_AABB getAABB() {
 		return HE_MeshOp.getAABB(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public String toString() {
 		String s = "HE_Face key: " + getKey() + ". Connects " + getFaceDegree() + " vertices: ";
@@ -326,11 +477,16 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 		return s;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isPlanar() {
 		final WB_Plane P = HE_MeshOp.getPlane(this);
 		HE_Halfedge he = getHalfedge();
 		do {
-			if (!WB_Epsilon.isZero(WB_GeometryOp3D.getDistance3D(he.getVertex(), P))) {
+			if (!WB_Epsilon.isZero(WB_GeometryOp.getDistance3D(he.getVertex(), P))) {
 				return false;
 			}
 			he = he.getNextInFace();
@@ -338,6 +494,11 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 		return true;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isBoundary() {
 		HE_Halfedge he = _halfedge;
 		do {
@@ -349,28 +510,57 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 		return false;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isDegenerate() {
 		return WB_Vector.getLength3D(HE_MeshOp.getFaceNormal(this)) < 0.5;
 	}
 
+	/**
+	 *
+	 *
+	 * @param el
+	 */
 	public void copyProperties(final HE_Face el) {
 		super.copyProperties(el);
 		textureId = el.textureId;
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void clear() {
 		_halfedge = null;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getTextureId() {
 		return textureId;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 */
 	public void setTextureId(final int i) {
 		textureId = i;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	public boolean isNeighbor(final HE_Face f) {
 		if (getHalfedge() == null) {
 			return false;
@@ -385,53 +575,21 @@ public class HE_Face extends HE_MeshElement implements Comparable<HE_Face>, WB_T
 		return false;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_CoordCollection getPoints() {
 		return WB_CoordCollection.getCollection(getFaceVertices());
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void clearPrecomputed() {
 		triangles = null;
-	}
-
-	public WB_CoordinateSystem getFaceCS() {
-		return HE_MeshOp.getFaceCS(this);
-	}
-
-	public WB_Vector getFaceNormalNotNormalized() {
-		return HE_MeshOp.getFaceNormalNotNormalized(this);
-	}
-
-	public WB_Classification getFaceType() {
-		return HE_MeshOp.getFaceType(this);
-	}
-
-	public WB_Vector getNormalOffsetFaceCenter(final double d) {
-		return HE_MeshOp.getNormalOffsetFaceCenter(this, d);
-	}
-
-	public WB_Plane getNormalOffsetPlane(final double d) {
-		return HE_MeshOp.getNormalOffsetPlane(this, d);
-	}
-
-	public WB_Polygon getOrthoPolygon() {
-		return HE_MeshOp.getOrthoPolygon(this);
-	}
-
-	public WB_Polygon getPlanarPolygon() {
-		return HE_MeshOp.getPlanarPolygon(this);
-	}
-
-	public WB_Plane getPlane() {
-		return HE_MeshOp.getPlane(this);
-	}
-
-	public WB_Polygon getPolygon() {
-		return HE_MeshOp.getPolygon(this);
-	}
-
-	public WB_Triangle getTriangle() {
-		return HE_MeshOp.getTriangle(this);
 	}
 }

@@ -10,18 +10,42 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import wblut.geom.WB_List;
+
+/**
+ *
+ *
+ * @param <E>
+ */
 public class HET_MTVisitorHalfedge<E extends Object> {
+	/**  */
 	HET_InfoHalfedge<E> halfedgeInfo;
 
+	/**
+	 *
+	 *
+	 * @param halfedgeInfo
+	 */
 	public HET_MTVisitorHalfedge(final HET_InfoHalfedge<E> halfedgeInfo) {
 		this.halfedgeInfo = halfedgeInfo;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public List<E> getHalfedgeInfo(final HE_HalfedgeStructure mesh) {
 		return visit(mesh.getHalfedges());
 	}
 
-	private List<E> visit(final List<HE_Halfedge> halfedges) {
+	/**
+	 *
+	 *
+	 * @param halfedges
+	 * @return
+	 */
+	private List<E> visit(final HE_HalfedgeList halfedges) {
 		final List<E> result = new WB_List<>();
 		try {
 			final int threadCount = Runtime.getRuntime().availableProcessors();
@@ -48,19 +72,39 @@ public class HET_MTVisitorHalfedge<E extends Object> {
 		return result;
 	}
 
+	/**
+	 *
+	 */
 	class HET_HalfedgeVisitor implements Callable<List<E>> {
+		/**  */
 		int start;
+		/**  */
 		int end;
+		/**  */
 		int id;
-		List<HE_Halfedge> halfedges;
+		/**  */
+		HE_HalfedgeList halfedges;
 
-		public HET_HalfedgeVisitor(final int s, final int e, final int id, final List<HE_Halfedge> halfedges) {
+		/**
+		 *
+		 *
+		 * @param s
+		 * @param e
+		 * @param id
+		 * @param halfedges
+		 */
+		public HET_HalfedgeVisitor(final int s, final int e, final int id, final HE_HalfedgeList halfedges) {
 			start = s;
 			end = e;
 			this.id = id;
 			this.halfedges = halfedges;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public List<E> call() {
 			final ArrayList<E> result = new ArrayList<>();

@@ -6,77 +6,135 @@ import java.util.List;
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_CoordList;
-import wblut.geom.WB_Point;
+import wblut.geom.WB_CoordCollection;
+import wblut.geom.WB_OBB;
 import wblut.geom.WB_VoronoiCell3D;
 import wblut.geom.WB_VoronoiFactory3D;
 import wblut.math.WB_ConstantScalarParameter;
+import wblut.math.WB_Epsilon;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class HEMC_VoronoiBox extends HEMC_MultiCreator {
-	private List<WB_Coord> points;
+	/**  */
+	private WB_CoordCollection points;
+	/**  */
 	private int numberOfPoints;
+	/**  */
 	private WB_AABB aabb;
+	/**  */
 	private boolean bruteForce;
+	/**  */
 	private WB_ScalarParameter offset;
 
+	/**
+	 *
+	 */
 	public HEMC_VoronoiBox() {
 		super();
 		offset = WB_ScalarParameter.ZERO;
 	}
 
+	public HEMC_VoronoiBox setPoints(final WB_CoordCollection points) {
+		this.points = points;
+		return this;
+	}
+
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEMC_VoronoiBox setPoints(final WB_Coord[] points) {
-		this.points = new WB_CoordList();
-		for (final WB_Coord p : points) {
-			this.points.add(p);
-		}
+		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEMC_VoronoiBox setPoints(final Collection<? extends WB_Coord> points) {
-		this.points = new WB_CoordList();
-		this.points.addAll(points);
+		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEMC_VoronoiBox setPoints(final double[][] points) {
-		final int n = points.length;
-		this.points = new WB_CoordList();
-		for (int i = 0; i < n; i++) {
-			this.points.add(new WB_Point(points[i][0], points[i][1], points[i][2]));
-		}
+		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEMC_VoronoiBox setPoints(final float[][] points) {
-		final int n = points.length;
-		this.points = new WB_CoordList();
-		for (int i = 0; i < n; i++) {
-			this.points.add(new WB_Point(points[i][0], points[i][1], points[i][2]));
-		}
+		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param o
+	 * @return
+	 */
 	public HEMC_VoronoiBox setOffset(final double o) {
 		offset = new WB_ConstantScalarParameter(o);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param o
+	 * @return
+	 */
 	public HEMC_VoronoiBox setOffset(final WB_ScalarParameter o) {
 		offset = o;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param container
+	 * @return
+	 */
 	public HEMC_VoronoiBox setContainer(final WB_AABB container) {
 		this.aabb = container;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEMC_VoronoiBox setBruteForce(final boolean b) {
 		bruteForce = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param result
+	 */
 	@Override
 	void create(final HE_MeshCollection result) {
 		tracker.setStartStatus(this, "Starting HEMC_VoronoiBox");
@@ -90,6 +148,11 @@ public class HEMC_VoronoiBox extends HEMC_MultiCreator {
 			return;
 		}
 		numberOfPoints = points.size();
+		final WB_OBB OBB = new WB_OBB(points);
+		final int dim = OBB.getDimension(WB_Epsilon.EPSILON);
+		if (dim < 3) {
+			bruteForce = true;
+		}
 		tracker.setDuringStatus(this, "Calculating Voronoi cells.");
 		final List<WB_VoronoiCell3D> voronoi = bruteForce
 				? WB_VoronoiFactory3D.getVoronoi3DBruteForce(points, numberOfPoints, aabb, offset).getCells()

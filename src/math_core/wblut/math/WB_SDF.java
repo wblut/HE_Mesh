@@ -126,145 +126,354 @@ import wblut.geom.WB_Vector;
 //is immensely helpful for understanding which parts of the
 //distance field are broken.
 //
+/**
+ *
+ */
 ////////////////////////////////////////////////////////////////
 public class WB_SDF {
 	////////////////////////////////////////////////////////////////
 	//
 	// HELPER FUNCTIONS/MACROS
 	//
+	/**  */
 	////////////////////////////////////////////////////////////////
 	public static final double PI = Math.PI;
+	/**  */
 	public static final double TAU = 2 * 2 * PI;
+	/**  */
 	public static final double PHI = Math.sqrt(5) * 0.5 + 0.5;
 
 	// Clamp to [0,1] - this operation is free under certain circumstances.
 	// For further information see
 	// http://www.humus.name/Articles/Persson_LowLevelThinking.pdf and
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	// http://www.humus.name/Articles/Persson_LowlevelShaderOptimization.pdf
 	static double saturate(final double x) {
 		return clamp(x, 0, 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param min
+	 * @param max
+	 * @return
+	 */
 	static double clamp(final double x, final double min, final double max) {
 		return x < min ? min : x > max ? max : x;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	static double sqrt(final double x) {
 		return Math.sqrt(x);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	static double length3D(final WB_Coord v) {
 		return Math.sqrt(v.xd() * v.xd() + v.yd() * v.yd() + v.zd() * v.zd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	static double length2D(final WB_Coord v) {
 		return Math.sqrt(v.xd() * v.xd() + v.yd() * v.yd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	static double abs(final double x) {
 		return Math.abs(x);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	static WB_Vector abs(final WB_Coord v) {
 		return new WB_Vector(abs(v.xd()), abs(v.yd()), abs(v.zd()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param edge
+	 * @param x
+	 * @return
+	 */
 	static double step(final double edge, final double x) {
 		return x < edge ? 0.0 : 1.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param a
+	 * @return
+	 */
 	static double mix(final double x, final double y, final double a) {
 		return (1.0 - a) * x + a * y;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	static WB_Vector normalize(final WB_Coord v) {
 		final WB_Vector result = new WB_Vector(v);
 		result.normalizeSelf();
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param w
+	 * @return
+	 */
 	static double dot3D(final WB_Coord v, final WB_Coord w) {
 		return WB_Vector.dot(v, w);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param w
+	 * @return
+	 */
 	static double dot2D(final WB_Coord v, final WB_Coord w) {
 		return WB_Vector.dot2D(v, w);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	// Sign function that doesn't return 0
 	static double sgn(final double x) {
 		return x < 0 ? -1 : 1;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	static WB_Vector sgn2D(final WB_Coord v) {
 		return new WB_Vector(v.xd() < 0 ? -1 : 1, v.yd() < 0 ? -1 : 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	static double square(final double x) {
 		return x * x;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	static WB_Vector square2D(final WB_Coord v) {
 		return new WB_Vector(v.xd() * v.xd(), v.yd() * v.yd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	static WB_Vector square3D(final WB_Coord v) {
 		return new WB_Vector(v.xd() * v.xd(), v.yd() * v.yd(), v.zd() * v.zd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	// Maximum/minumum elements of a vector
 	static double max(final double a, final double b) {
 		return b > a ? b : a;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	static double min(final double a, final double b) {
 		return b < a ? b : a;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param w
+	 * @return
+	 */
 	static WB_Vector max3D(final WB_Coord v, final WB_Coord w) {
 		return new WB_Vector(max(v.xd(), w.xd()), max(v.yd(), w.yd()), max(v.zd(), w.zd()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param w
+	 * @return
+	 */
 	static WB_Vector min3D(final WB_Coord v, final WB_Coord w) {
 		return new WB_Vector(min(v.xd(), w.xd()), min(v.yd(), w.yd()), min(v.zd(), w.zd()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param w
+	 * @return
+	 */
 	static WB_Vector max2D(final WB_Coord v, final WB_Coord w) {
 		return new WB_Vector(max(v.xd(), w.xd()), max(v.yd(), w.yd()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param w
+	 * @return
+	 */
 	static WB_Vector min2D(final WB_Coord v, final WB_Coord w) {
 		return new WB_Vector(min(v.xd(), w.xd()), min(v.yd(), w.yd()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param x
+	 * @return
+	 */
 	static WB_Vector max3D(final WB_Coord v, final double x) {
 		return new WB_Vector(max(v.xd(), x), max(v.yd(), x), max(v.zd(), x));
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param x
+	 * @return
+	 */
 	static WB_Vector min3D(final WB_Coord v, final double x) {
 		return new WB_Vector(min(v.xd(), x), min(v.yd(), x), min(v.zd(), x));
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param x
+	 * @return
+	 */
 	static WB_Vector max2D(final WB_Coord v, final double x) {
 		return new WB_Vector(max(v.xd(), x), max(v.yd(), x));
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param x
+	 * @return
+	 */
 	static WB_Vector min2D(final WB_Coord v, final double x) {
 		return new WB_Vector(min(v.xd(), x), min(v.yd(), x));
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	static double vmax2D(final WB_Coord v) {
 		return max(v.xd(), v.yd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	static double vmax3D(final WB_Coord v) {
 		return max(max(v.xd(), v.yd()), v.zd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	static double vmin2D(final WB_Coord v) {
 		return min(v.xd(), v.yd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	static double vmin3D(final WB_Coord v) {
 		return min(min(v.xd(), v.yd()), v.zd());
 	}
@@ -283,44 +492,99 @@ public class WB_SDF {
 	// side or direction) the y axis is "up" and the object is
 	// centered at the origin.
 	//
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @return
+	 */
 	////////////////////////////////////////////////////////////////
 	public static double fSphere(final WB_Coord p, final double r) {
 		return WB_Vector.getLength3D(p) - r;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param n
+	 * @param distanceFromOrigin
+	 * @return
+	 */
 	// Plane with normal n (n is normalized) at some distance from the origin
 	public static double fPlane(final WB_Coord p, final WB_Coord n, final double distanceFromOrigin) {
 		return WB_Vector.dot(p, n) + distanceFromOrigin;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param b
+	 * @return
+	 */
 	// Cheap Box: distance to corners is overestimated
 	public static double fBoxCheap(final WB_Coord p, final WB_Coord b) { // cheap
 																			// box
 		return vmax3D(WB_Vector.sub(abs(p), b));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param b
+	 * @return
+	 */
 	// Box: correct distance to corners
 	public static double fBox(final WB_Coord p, final WB_Coord b) {
 		final WB_Vector d = WB_Vector.sub(abs(p), b);
 		return length3D(max3D(d, new WB_Vector(0, 0, 0))) + vmax3D(min3D(d, new WB_Vector(0, 0, 0)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param b
+	 * @return
+	 */
 	// Same as above, but in two dimensions (an endless box)
 	public static double fBox2Cheap(final WB_Coord p, final WB_Coord b) {
 		return vmax2D(WB_Vector.sub(abs(p), b));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param b
+	 * @return
+	 */
 	public static double fBox2(final WB_Coord p, final WB_Coord b) {
 		final WB_Vector d = WB_Vector.sub(abs(p), b);
 		return length2D(max2D(d, new WB_Vector(0, 0))) + vmax2D(min2D(d, new WB_Vector(0, 0)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	// Endless "corner"
 	public static double fCorner(final WB_Coord p) {
 		return length2D(max2D(p, new WB_Vector(0, 0))) + vmax2D(min2D(p, new WB_Vector(0, 0)));
 	}
 
 	// Blobby ball object. You've probably seen it somewhere. This is not a
+	/**
+	 *
+	 *
+	 * @param q
+	 * @return
+	 */
 	// correct distance bound, beware.
 	public static double fBlob(final WB_Coord q) {
 		final WB_Vector p = new WB_Vector(abs(q));
@@ -339,6 +603,14 @@ public class WB_SDF {
 		return l - 1.5 - 0.2 * (1.5 / 2) * Math.cos(min(sqrt(1.01 - b / l) * (PI / 0.25), PI));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @param height
+	 * @return
+	 */
 	// Cylinder standing upright on the xz plane
 	public static double fCylinder(final WB_Coord p, final double r, final double height) {
 		double d = length2D(new WB_Vector(p.xd(), p.zd())) - r;
@@ -346,6 +618,14 @@ public class WB_SDF {
 		return d;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @param c
+	 * @return
+	 */
 	// Capsule: A Cylinder with round caps on both sides
 	public static double fCapsule(final WB_Coord p, final double r, final double c) {
 		return mix(length2D(new WB_Vector(p.xd(), p.zd())) - r,
@@ -353,6 +633,14 @@ public class WB_SDF {
 	}
 
 	// Distance to line segment between <a> and <b>, used for fCapsule() version
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	// 2below
 	public static double fLineSegment(final WB_Coord p, final WB_Coord a, final WB_Coord b) {
 		final WB_Vector ab = WB_Vector.sub(b, a);
@@ -360,17 +648,41 @@ public class WB_SDF {
 		return length3D(ab.mulSelf(t).addSelf(a).subSelf(p));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @return
+	 */
 	// Capsule version 2: between two end points <a> and <b> with radius r
 	public static double fCapsule(final WB_Coord p, final WB_Coord a, final WB_Coord b, final double r) {
 		return fLineSegment(p, a, b) - r;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param smallRadius
+	 * @param largeRadius
+	 * @return
+	 */
 	// Torus in the XZ-plane
 	public static double fTorus(final WB_Coord p, final double smallRadius, final double largeRadius) {
 		return length2D(new WB_Vector(length2D(new WB_Vector(p.xd(), p.zd())) - largeRadius, p.yd())) - smallRadius;
 	}
 
 	// A circle line. Can also be used to make a torus by subtracting the
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @return
+	 */
 	// smaller radius of the torus.
 	public static double fCircle(final WB_Coord p, final double r) {
 		final double l = length2D(new WB_Vector(p.xd(), p.zd())) - r;
@@ -378,12 +690,26 @@ public class WB_SDF {
 	}
 
 	// A circular disc with no thickness (i.e. a cylinder with no height).
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @return
+	 */
 	// Subtract some value to make a flat disc with rounded edge.
 	public static double fDisc(final WB_Coord p, final double r) {
 		final double l = length2D(new WB_Vector(p.xd(), p.zd())) - r;
 		return l < 0 ? abs(p.yd()) : length2D(new WB_Vector(p.yd(), l));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param h
+	 * @return
+	 */
 	// Hexagonal prism, circumcircle variant
 	public static double fHexagonCircumcircle(final WB_Coord p, final WB_Coord h) {
 		final WB_Coord q = abs(p);
@@ -394,12 +720,27 @@ public class WB_SDF {
 		// - h.x);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param h
+	 * @return
+	 */
 	// Hexagonal prism, incircle variant
 	public static double fHexagonIncircle(final WB_Coord p, final WB_Coord h) {
 		return fHexagonCircumcircle(p, new WB_Vector(h.xd() * sqrt(3) * 0.5, h.yd()));
 	}
 
 	// Cone with correct distances to tip and base circle. Y is up, 0 is in the
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param radius
+	 * @param height
+	 * @return
+	 */
 	// middle of the base.
 	public static double fCone(final WB_Coord p, final double radius, final double height) {
 		final WB_Vector q = new WB_Vector(length2D(new WB_Vector(p.xd(), p.zd())), p.yd());
@@ -432,6 +773,7 @@ public class WB_SDF {
 	// which seems to happen for fIcosahedron und fTruncatedIcosahedron on
 	// nvidia 350.12 at least.
 	// Specialized implementations can well be faster in all cases.
+	/**  */
 	//
 	public final static WB_Vector[] GDFVectors = new WB_Vector[] { normalize(new WB_Vector(1, 0, 0)),
 			normalize(new WB_Vector(0, 1, 0)), normalize(new WB_Vector(0, 0, 1)), normalize(new WB_Vector(1, 1, 1)),
@@ -445,6 +787,16 @@ public class WB_SDF {
 
 	// Version with variable exponent.
 	// This is slow and does not produce correct distances, but allows for
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @param e
+	 * @param begin
+	 * @param end
+	 * @return
+	 */
 	// bulging of objects.
 	public static double fGDF(final WB_Coord p, final double r, final double e, final int begin, final int end) {
 		double d = 0;
@@ -455,6 +807,15 @@ public class WB_SDF {
 	}
 
 	// Version with without exponent, creates objects with sharp edges and flat
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @param begin
+	 * @param end
+	 * @return
+	 */
 	// faces
 	public static double fGDF(final WB_Coord p, final double r, final int begin, final int end) {
 		double d = 0;
@@ -464,47 +825,127 @@ public class WB_SDF {
 		return d - r;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @param e
+	 * @return
+	 */
 	// Primitives follow:
 	public static double fOctahedron(final WB_Coord p, final double r, final double e) {
 		return fGDF(p, r, e, 3, 6);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @param e
+	 * @return
+	 */
 	public static double fDodecahedron(final WB_Coord p, final double r, final double e) {
 		return fGDF(p, r, e, 13, 18);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @param e
+	 * @return
+	 */
 	public static double fIcosahedron(final WB_Coord p, final double r, final double e) {
 		return fGDF(p, r, e, 3, 12);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @param e
+	 * @return
+	 */
 	public static double fTruncatedOctahedron(final WB_Coord p, final double r, final double e) {
 		return fGDF(p, r, e, 0, 6);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @param e
+	 * @return
+	 */
 	public static double fTruncatedIcosahedron(final WB_Coord p, final double r, final double e) {
 		return fGDF(p, r, e, 3, 18);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @return
+	 */
 	public static double fOctahedron(final WB_Coord p, final double r) {
 		return fGDF(p, r, 3, 6);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @return
+	 */
 	public static double fDodecahedron(final WB_Coord p, final double r) {
 		return fGDF(p, r, 13, 18);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @return
+	 */
 	public static double fIcosahedron(final WB_Coord p, final double r) {
 		return fGDF(p, r, 3, 12);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @return
+	 */
 	public static double fTruncatedOctahedron(final WB_Coord p, final double r) {
 		return fGDF(p, r, 0, 6);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param r
+	 * @return
+	 */
 	public static double fTruncatedIcosahedron(final WB_Coord p, final double r) {
 		return fGDF(p, r, 3, 18);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 */
 	// Shortcut for 45-degrees rotation
 	public static void pR45(final WB_Vector p) {
 		p.addSelf(p.yd(), -p.xd());
@@ -512,6 +953,13 @@ public class WB_SDF {
 	}
 
 	// Repeat space along one axis. Use like this to repeat along the x axis:
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param size
+	 * @return
+	 */
 	// <double cell = pMod1(p.xd(),5);> - using the return value is optional.
 	public static double pMod1(double p, final double size) {
 		final double halfsize = size * 0.5;
@@ -591,6 +1039,14 @@ public class WB_SDF {
 	////////////////////////////////////////////////////////////////
 
 	// The "Chamfer" flavour makes a 45-degree chamfered edge (the diagonal of a
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @return
+	 */
 	// square of size <r>):
 	public static double fOpUnionChamfer(final double a, final double b, final double r) {
 		return min(min(a, b), (a - r + b) * sqrt(0.5));
@@ -600,32 +1056,81 @@ public class WB_SDF {
 	// resulting object
 	// when using union, which we normally don't care about too much. Thus,
 	// intersection
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @return
+	 */
 	// implementations sometimes differ from union implementations.
 	public static double fOpIntersectionChamfer(final double a, final double b, final double r) {
 		return max(max(a, b), (a + r + b) * sqrt(0.5));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @return
+	 */
 	// Difference can be built from Intersection or Union:
 	public static double fOpDifferenceChamfer(final double a, final double b, final double r) {
 		return fOpIntersectionChamfer(a, -b, r);
 	}
 
 	// The "Round" variant uses a quarter-circle to join the two objects
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @return
+	 */
 	// smoothly:
 	public static double fOpUnionRound(final double a, final double b, final double r) {
 		final WB_Vector u = max2D(new WB_Vector(r - a, r - b), new WB_Vector(0, 0));
 		return max(r, min(a, b)) - length2D(u);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @return
+	 */
 	public static double fOpIntersectionRound(final double a, final double b, final double r) {
 		final WB_Vector u = max2D(new WB_Vector(r + a, r + b), new WB_Vector(0, 0));
 		return min(-r, max(a, b)) + length2D(u);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @return
+	 */
 	public static double fOpDifferenceRound(final double a, final double b, final double r) {
 		return fOpIntersectionRound(a, -b, r);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @param n
+	 * @return
+	 */
 	// The "Columns" flavour makes n-1 circular columns at a 45 degree angle:
 	public static double fOpUnionColumns(final double a, final double b, final double r, final double n) {
 		if (a < r && b < r) {
@@ -651,6 +1156,15 @@ public class WB_SDF {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @param n
+	 * @return
+	 */
 	public static double fOpDifferenceColumns(double a, final double b, final double r, final double n) {
 		a = -a;
 		final double m = min(a, b);
@@ -677,11 +1191,29 @@ public class WB_SDF {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @param n
+	 * @return
+	 */
 	public static double fOpIntersectionColumns(final double a, final double b, final double r, final double n) {
 		return fOpDifferenceColumns(a, -b, r, n);
 	}
 
 	// The "Stairs" flavour produces n-1 steps of a staircase:
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @param n
+	 * @return
+	 */
 	// much less stupid version by paniq
 	public static double fOpUnionStairs(final double a, final double b, final double r, final double n) {
 		final double s = r / n;
@@ -689,17 +1221,43 @@ public class WB_SDF {
 		return min(min(a, b), 0.5 * (u + a + abs((u - a + s) % (2 * s) - s)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @param n
+	 * @return
+	 */
 	// We can just call Union since stairs are symmetric.
 	public static double fOpIntersectionStairs(final double a, final double b, final double r, final double n) {
 		return -fOpUnionStairs(-a, -b, r, n);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @param n
+	 * @return
+	 */
 	public static double fOpDifferenceStairs(final double a, final double b, final double r, final double n) {
 		return -fOpUnionStairs(-a, b, r, n);
 	}
 
 	// Similar to fOpUnionRound, but more lipschitz-y at acute angles
 	// (and less so at 90 degrees). Useful when fudging around too much
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @return
+	 */
 	// by MediaMolecule, from Alex Evans' siggraph slides
 	public static double fOpUnionSoft(final double a, final double b, final double r) {
 		final double e = max(r - abs(a - b), 0);
@@ -707,21 +1265,55 @@ public class WB_SDF {
 	}
 
 	// produces a cylindical pipe that runs along the intersection.
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @return
+	 */
 	// No objects remain, only the pipe. This is not a boolean operator.
 	public static double fOpPipe(final double a, final double b, final double r) {
 		return length2D(new WB_Vector(a, b)) - r;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param r
+	 * @return
+	 */
 	// first object gets a v-shaped engraving where it intersect the second
 	public static double fOpEngrave(final double a, final double b, final double r) {
 		return max(a, (a + r - abs(b)) * sqrt(0.5));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param ra
+	 * @param rb
+	 * @return
+	 */
 	// first object gets a carpenter-style groove cut out
 	public static double fOpGroove(final double a, final double b, final double ra, final double rb) {
 		return max(a, min(a + ra, rb - abs(b)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param ra
+	 * @param rb
+	 * @return
+	 */
 	// first object gets a carpenter-style tongue attached
 	public static double fOpTongue(final double a, final double b, final double ra, final double rb) {
 		return min(a, max(a - ra, abs(b) - rb));

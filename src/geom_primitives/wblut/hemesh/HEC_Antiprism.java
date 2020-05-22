@@ -7,9 +7,16 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HEC_Antiprism extends HEC_Creator {
+	/**  */
 	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
 
+	/**
+	 *
+	 */
 	public HEC_Antiprism() {
 		super();
 		parameters.set("facets", 5);
@@ -19,6 +26,13 @@ public class HEC_Antiprism extends HEC_Creator {
 		parameters.set("bottomcap", true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @param r
+	 * @param d
+	 */
 	public HEC_Antiprism(final int n, final double r, final double d) {
 		this();
 		parameters.set("facets", n);
@@ -28,51 +42,111 @@ public class HEC_Antiprism extends HEC_Creator {
 		parameters.set("bottomcap", true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @return
+	 */
 	public HEC_Antiprism setFacets(final int n) {
 		parameters.set("facets", n);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEC_Antiprism setHeight(final double d) {
 		parameters.set("height", d);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HEC_Antiprism setRadius(final double r) {
 		parameters.set("radius", r);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEC_Antiprism setTopCap(final boolean b) {
 		parameters.set("topcap", b);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEC_Antiprism setBottomCap(final boolean b) {
 		parameters.set("bottomcap", b);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	int getFacets() {
 		return parameters.get("facets", 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getHeight() {
 		return parameters.get("height", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getRadius() {
 		return parameters.get("radius", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	boolean getTopCap() {
 		return parameters.get("topcap", true);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	boolean getBottomCap() {
 		return parameters.get("bottomcap", true);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final int facets = getFacets();

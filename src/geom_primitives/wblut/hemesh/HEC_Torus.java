@@ -4,15 +4,28 @@ import wblut.geom.WB_Point;
 import wblut.math.WB_ConstantScalarParameter;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class HEC_Torus extends HEC_Creator {
+	/**  */
 	private WB_ScalarParameter Rix, Riz;
+	/**  */
 	private WB_ScalarParameter Ro;
+	/**  */
 	private int tubefacets;
+	/**  */
 	private int torusfacets;
+	/**  */
 	private int twist;
+	/**  */
 	private WB_ScalarParameter tubephase;
+	/**  */
 	private double torusphase;
 
+	/**
+	 *
+	 */
 	public HEC_Torus() {
 		super();
 		Rix = new WB_ConstantScalarParameter(50);
@@ -24,6 +37,14 @@ public class HEC_Torus extends HEC_Creator {
 		torusphase = 0.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Ri
+	 * @param Ro
+	 * @param tubefacets
+	 * @param torusfacets
+	 */
 	public HEC_Torus(final double Ri, final double Ro, final int tubefacets, final int torusfacets) {
 		this();
 		this.Rix = this.Riz = new WB_ConstantScalarParameter(Ri);
@@ -32,6 +53,15 @@ public class HEC_Torus extends HEC_Creator {
 		this.torusfacets = torusfacets;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Rix
+	 * @param Riz
+	 * @param Ro
+	 * @param tubefacets
+	 * @param torusfacets
+	 */
 	public HEC_Torus(final double Rix, final double Riz, final double Ro, final int tubefacets, final int torusfacets) {
 		this();
 		this.Rix = new WB_ConstantScalarParameter(Rix);
@@ -41,12 +71,27 @@ public class HEC_Torus extends HEC_Creator {
 		this.torusfacets = torusfacets;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Ri
+	 * @param Ro
+	 * @return
+	 */
 	public HEC_Torus setRadius(final double Ri, final double Ro) {
 		this.Rix = this.Riz = new WB_ConstantScalarParameter(Ri);
 		this.Ro = new WB_ConstantScalarParameter(Ro);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Rix
+	 * @param Riz
+	 * @param Ro
+	 * @return
+	 */
 	public HEC_Torus setRadius(final double Rix, final double Riz, final double Ro) {
 		this.Rix = new WB_ConstantScalarParameter(Rix);
 		this.Riz = new WB_ConstantScalarParameter(Riz);
@@ -54,69 +99,148 @@ public class HEC_Torus extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Ro
+	 * @return
+	 */
 	public HEC_Torus setTorusRadius(final double Ro) {
 		this.Ro = new WB_ConstantScalarParameter(Ro);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Ri
+	 * @return
+	 */
 	public HEC_Torus setTubeRadius(final double Ri) {
 		this.Rix = this.Riz = new WB_ConstantScalarParameter(Ri);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Rix
+	 * @param Riz
+	 * @return
+	 */
 	public HEC_Torus setTubeRadius(final double Rix, final double Riz) {
 		this.Rix = new WB_ConstantScalarParameter(Rix);
 		this.Riz = new WB_ConstantScalarParameter(Riz);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Ro
+	 * @return
+	 */
 	public HEC_Torus setTorusRadius(final WB_ScalarParameter Ro) {
 		this.Ro = Ro;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Ri
+	 * @return
+	 */
 	public HEC_Torus setTubeRadius(final WB_ScalarParameter Ri) {
 		this.Rix = Ri;
 		this.Riz = Ri;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Rix
+	 * @param Riz
+	 * @return
+	 */
 	public HEC_Torus setTubeRadius(final WB_ScalarParameter Rix, final WB_ScalarParameter Riz) {
 		this.Rix = Rix;
 		this.Riz = Riz;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param facets
+	 * @return
+	 */
 	public HEC_Torus setTubeFacets(final int facets) {
 		tubefacets = facets;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param facets
+	 * @return
+	 */
 	public HEC_Torus setTorusFacets(final int facets) {
 		torusfacets = facets;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	public HEC_Torus setTwist(final int t) {
 		twist = t;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public HEC_Torus setTorusPhase(final double p) {
 		torusphase = p;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public HEC_Torus setTubePhase(final double p) {
 		tubephase = new WB_ConstantScalarParameter(p);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public HEC_Torus setTubePhase(final WB_ScalarParameter p) {
 		tubephase = p;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final WB_Point[] vertices = new WB_Point[(tubefacets + 1) * (torusfacets + 1)];

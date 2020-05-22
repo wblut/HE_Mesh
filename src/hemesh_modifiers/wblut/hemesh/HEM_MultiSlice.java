@@ -4,36 +4,69 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 
+/**
+ *
+ */
 public class HEM_MultiSlice extends HEM_Modifier {
+	/**  */
 	private ArrayList<WB_Plane> planes;
+	/**  */
 	private int[] labels;
+	/**  */
 	private boolean reverse = false;
+	/**  */
 	private WB_Point center;
+	/**  */
 	private boolean capHoles = true;
+	/**  */
 	private boolean optimizeCap = true;
+	/**  */
 	private boolean triangulate = false;
+	/**  */
 	public HE_Selection origFaces;
+	/**  */
 	private double offset;
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEM_MultiSlice setOffset(final double d) {
 		offset = d;
 		return this;
 	}
 
+	/**
+	 *
+	 */
 	public HEM_MultiSlice() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param planes
+	 * @return
+	 */
 	public HEM_MultiSlice setPlanes(final Collection<WB_Plane> planes) {
 		this.planes = new ArrayList<>();
 		this.planes.addAll(planes);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param planes
+	 * @return
+	 */
 	public HEM_MultiSlice setPlanes(final WB_Plane[] planes) {
 		this.planes = new ArrayList<>();
 		for (final WB_Plane plane : planes) {
@@ -42,36 +75,78 @@ public class HEM_MultiSlice extends HEM_Modifier {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param labels
+	 * @return
+	 */
 	public HEM_MultiSlice setLabels(final int[] labels) {
 		this.labels = labels;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_MultiSlice setReverse(final Boolean b) {
 		reverse = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param c
+	 * @return
+	 */
 	public HEM_MultiSlice setCenter(final WB_Point c) {
 		center = c.copy();
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_MultiSlice setTriangulate(final boolean b) {
 		triangulate = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_MultiSlice setCap(final Boolean b) {
 		capHoles = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_MultiSlice setOptimizeCap(final boolean b) {
 		optimizeCap = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		origFaces = HE_Selection.getSelection(mesh);
@@ -93,7 +168,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 			final double[] r = new double[planes.size()];
 			for (int i = 0; i < planes.size(); i++) {
 				final WB_Plane P = planes.get(i);
-				r[i] = WB_GeometryOp3D.getSqDistance3D(P.getOrigin(), center);
+				r[i] = WB_GeometryOp.getSqDistance3D(P.getOrigin(), center);
 			}
 			for (int i = planes.size(); --i >= 0;) {
 				for (int m = 0; m < i; m++) {
@@ -118,7 +193,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 			unique = true;
 			for (int j = 0; j < i; j++) {
 				Pj = planes.get(j);
-				if (WB_GeometryOp3D.isEqual(Pi, Pj)) {
+				if (WB_GeometryOp.isEqual(Pi, Pj)) {
 					unique = false;
 					break;
 				}
@@ -155,6 +230,12 @@ public class HEM_MultiSlice extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		return applySelf(selection.getParent());

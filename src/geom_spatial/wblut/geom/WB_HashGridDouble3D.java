@@ -2,11 +2,25 @@ package wblut.geom;
 
 import wblut.hemesh.HE_DoubleMap;
 
+/**
+ *
+ */
 public class WB_HashGridDouble3D {
+	/**  */
 	private final HE_DoubleMap values;
+	/**  */
 	private final double defaultValue;
+	/**  */
 	private final int sizeI, sizeJ, sizeK, sizeIJ;
 
+	/**
+	 *
+	 *
+	 * @param sizeI
+	 * @param sizeJ
+	 * @param sizeK
+	 * @param defaultValue
+	 */
 	public WB_HashGridDouble3D(final int sizeI, final int sizeJ, final int sizeK, final double defaultValue) {
 		this.sizeI = sizeI;
 		this.sizeJ = sizeJ;
@@ -16,6 +30,13 @@ public class WB_HashGridDouble3D {
 		values = new HE_DoubleMap();
 	}
 
+	/**
+	 *
+	 *
+	 * @param sizeI
+	 * @param sizeJ
+	 * @param sizeK
+	 */
 	public WB_HashGridDouble3D(final int sizeI, final int sizeJ, final int sizeK) {
 		this.sizeI = sizeI;
 		this.sizeJ = sizeJ;
@@ -25,6 +46,15 @@ public class WB_HashGridDouble3D {
 		values = new HE_DoubleMap();
 	}
 
+	/**
+	 *
+	 *
+	 * @param value
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	public boolean setValue(final double value, final int i, final int j, final int k) {
 		if (value != defaultValue) {
 			return false;
@@ -37,6 +67,15 @@ public class WB_HashGridDouble3D {
 		return false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param value
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	public boolean addValue(final double value, final int i, final int j, final int k) {
 		final long id = safeIndex(i, j, k);
 		if (id > 0) {
@@ -51,6 +90,14 @@ public class WB_HashGridDouble3D {
 		return false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	public boolean clearValue(final int i, final int j, final int k) {
 		final long id = safeIndex(i, j, k);
 		if (id > 0) {
@@ -60,6 +107,14 @@ public class WB_HashGridDouble3D {
 		return false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	public double getValue(final int i, final int j, final int k) {
 		final long id = safeIndex(i, j, k);
 		if (id == -1) {
@@ -71,6 +126,14 @@ public class WB_HashGridDouble3D {
 		return defaultValue;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	private long safeIndex(final int i, final int j, final int k) {
 		if (i < 0) {
 			return -1;
@@ -93,26 +156,56 @@ public class WB_HashGridDouble3D {
 		return i + j * sizeI + k * sizeIJ;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getSizeI() {
 		return sizeI;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getSizeJ() {
 		return sizeJ;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getSizeK() {
 		return sizeK;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getDefaultValue() {
 		return defaultValue;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public long[] getKeys() {
 		return values.keySet().toArray();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int size() {
 		return values.size();
 	}

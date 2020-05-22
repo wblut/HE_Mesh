@@ -2,7 +2,6 @@ package wblut.processing;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -12,15 +11,30 @@ import wblut.hemesh.HE_FaceIterator;
 import wblut.hemesh.HE_Halfedge;
 import wblut.hemesh.HE_HalfedgeStructure;
 import wblut.hemesh.HE_Vertex;
+import wblut.hemesh.HE_VertexList;
 
+/**
+ *
+ */
 public class WB_SelectRender3D {
+	/**  */
 	private final PApplet home;
+	/**  */
 	private final PGraphics3D selector;
+	/**  */
 	private final int[] samples;
+	/**  */
 	protected int currentColor;
+	/**  */
 	protected HashMap<Integer, Long> colorToObject;
+	/**  */
 	private final double scale;
 
+	/**
+	 *
+	 *
+	 * @param home
+	 */
 	public WB_SelectRender3D(final PApplet home) {
 		scale = 1;// doesn't work yet
 		selector = (PGraphics3D) home.createGraphics((int) (home.width * scale), (int) (home.height * scale),
@@ -35,10 +49,15 @@ public class WB_SelectRender3D {
 		samples = new int[5];
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 */
 	private void drawFace(final HE_Face f) {
 		if (f.getFaceDegree() > 2) {
 			final int[] tris = f.getTriangles();
-			final List<HE_Vertex> vertices = f.getFaceVertices();
+			final HE_VertexList vertices = f.getFaceVertices();
 			HE_Vertex v0, v1, v2;
 			for (int i = 0; i < tris.length; i += 3) {
 				selector.beginShape(PConstants.TRIANGLES);
@@ -53,6 +72,11 @@ public class WB_SelectRender3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	public void drawFaces(final HE_HalfedgeStructure mesh) {
 		selector.beginDraw();
 		selector.setMatrix(home.getMatrix());
@@ -69,6 +93,12 @@ public class WB_SelectRender3D {
 		selector.endDraw();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param d
+	 */
 	public void drawEdges(final HE_HalfedgeStructure mesh, final double d) {
 		selector.beginDraw();
 		selector.setMatrix(home.getMatrix());
@@ -86,6 +116,12 @@ public class WB_SelectRender3D {
 		selector.endDraw();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param d
+	 */
 	public void drawVertices(final HE_HalfedgeStructure mesh, final double d) {
 		selector.beginDraw();
 		selector.setMatrix(home.getMatrix());
@@ -105,6 +141,13 @@ public class WB_SelectRender3D {
 		selector.endDraw();
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public long getKeyAA(final int x, final int y) {
 		final int locx = (int) (x * scale);
 		final int locy = (int) (y * scale);
@@ -135,6 +178,13 @@ public class WB_SelectRender3D {
 		return selection == null ? -1 : selection;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public long getKey(final int x, final int y) {
 		final int locx = (int) (x * scale);
 		final int locy = (int) (y * scale);
@@ -145,14 +195,29 @@ public class WB_SelectRender3D {
 		return selection == null ? -1 : selection;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public long getKey() {
 		return getKey(home.mouseX, home.mouseY);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public long getKeyAA() {
 		return getKeyAA(home.mouseX, home.mouseY);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 */
 	private void setKey(final Long i) {
 		if (i < 0 || i > 16777214) {
 			PApplet.println("[HE_Selector error] setKey(): ID out of range");
@@ -166,6 +231,9 @@ public class WB_SelectRender3D {
 		selector.stroke(currentColor);
 	}
 
+	/**
+	 *
+	 */
 	public void image() {
 		home.image(selector, 0, 0);
 	}

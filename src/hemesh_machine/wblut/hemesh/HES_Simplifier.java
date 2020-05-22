@@ -1,10 +1,22 @@
 package wblut.hemesh;
 
+/**
+ *
+ */
 abstract public class HES_Simplifier extends HE_Machine {
+	/**
+	 *
+	 */
 	public HES_Simplifier() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
 		if (mesh == null || mesh.getNumberOfVertices() == 0) {
@@ -26,6 +38,12 @@ abstract public class HES_Simplifier extends HE_Machine {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
 		if (selection == null) {
@@ -50,7 +68,19 @@ abstract public class HES_Simplifier extends HE_Machine {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	protected abstract HE_Mesh applySelf(final HE_Mesh mesh);
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	protected abstract HE_Mesh applySelf(final HE_Selection selection);
 }

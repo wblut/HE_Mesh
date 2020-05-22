@@ -4,26 +4,48 @@ import java.util.Collection;
 
 import wblut.geom.WB_Coord;
 
+/**
+ *
+ */
 public class HEC_FromVoronoiCells extends HEC_Creator {
+	/**  */
 	private HE_MeshCollection cells;
+	/**  */
 	private boolean[] on;
-	private boolean capBoundaries;
+	/**  */
+	private boolean capBoundary;
+	/**  */
 	private boolean membrane;
 
+	/**
+	 *
+	 */
 	public HEC_FromVoronoiCells() {
 		super();
 		setOverride(true);
 		cells = null;
 		on = null;
-		capBoundaries = true;
+		capBoundary = true;
 		membrane = false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param cells
+	 * @return
+	 */
 	public HEC_FromVoronoiCells setCells(final HE_MeshCollection cells) {
 		this.cells = cells;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param cells
+	 * @return
+	 */
 	public HEC_FromVoronoiCells setCells(final HE_Mesh[] cells) {
 		this.cells = new HE_MeshCollection();
 		for (final HE_Mesh cell : cells) {
@@ -32,6 +54,12 @@ public class HEC_FromVoronoiCells extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param cells
+	 * @return
+	 */
 	public HEC_FromVoronoiCells setCells(final Collection<HE_Mesh> cells) {
 		this.cells = new HE_MeshCollection();
 		for (final HE_Mesh cell : cells) {
@@ -40,27 +68,44 @@ public class HEC_FromVoronoiCells extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param on
+	 * @return
+	 */
 	public HEC_FromVoronoiCells setActive(final boolean[] on) {
 		this.on = on;
 		return this;
 	}
 
-	@Deprecated
-	public HEC_FromVoronoiCells setSurface(final boolean b) {
-		this.capBoundaries = !b;
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
+	public HEC_FromVoronoiCells setCapBoundary(final boolean b) {
+		this.capBoundary = b;
 		return this;
 	}
 
-	public HEC_FromVoronoiCells setCapBoundaries(final boolean b) {
-		this.capBoundaries = b;
-		return this;
-	}
-
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEC_FromVoronoiCells setMembrane(final boolean b) {
 		this.membrane = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		if (cells == null) {
@@ -125,7 +170,7 @@ public class HEC_FromVoronoiCells extends HEC_Creator {
 			i++;
 		}
 		HET_Fixer.fixNonManifoldVertices(result);
-		if (!capBoundaries) {
+		if (!capBoundary) {
 			final HE_Selection sel = result.selectFacesWithInternalLabel(-1);
 			final HE_FaceIterator fitr = sel.fItr();
 			while (fitr.hasNext()) {

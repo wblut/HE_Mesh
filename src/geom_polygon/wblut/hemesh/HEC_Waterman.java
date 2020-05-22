@@ -6,14 +6,24 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_PointList;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HEC_Waterman extends HEC_Creator {
+	/**  */
 	private double R;
+	/**  */
 	private int root;
+	/**  */
 	private int c;
+	/**  */
 	private final static WB_Point[] centers = new WB_Point[] { new WB_Point(), new WB_Point(0.5, 0.5, 0.0),
 			new WB_Point(1.0 / 3.0, 1.0 / 3.0, 2.0 / 3.0), new WB_Point(1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0),
 			new WB_Point(0.5, 0.5, 0.5), new WB_Point(0.0, 0.0, 0.5), new WB_Point(1.0, 0.0, 0.0) };
 
+	/**
+	 *
+	 */
 	public HEC_Waterman() {
 		super();
 		R = 1.0;
@@ -21,26 +31,55 @@ public class HEC_Waterman extends HEC_Creator {
 		c = 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @return
+	 */
 	public HEC_Waterman setOuterRadius(final double R) {
 		this.R = R;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @return
+	 */
 	public HEC_Waterman setRadius(final double R) {
 		this.R = R;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param root
+	 * @return
+	 */
 	public HEC_Waterman setRoot(final int root) {
 		this.root = root;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param c
+	 * @return
+	 */
 	public HEC_Waterman setCenter(final int c) {
 		this.c = c;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_Mesh createBase() {
 		if (root < 1) {

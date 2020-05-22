@@ -14,75 +14,210 @@ import wblut.hemesh.HE_Mesh;
 import wblut.math.WB_ConstantScalarParameter;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class WB_VoronoiFactory3D extends WB_VoronoiFactory2D {
+	/**  */
 	private static WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
+	/**  */
 	final static WB_Map2D XY = geometryfactory.createEmbeddedPlane();
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final WB_Coord[] points, final int nv, final WB_AABB aabb,
 			final WB_ScalarParameter d) {
 		return getVoronoi3D(WB_CoordCollection.getCollection(points), nv, aabb, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final WB_Coord[] points, final int nv, final WB_AABB aabb, final double d) {
 		return getVoronoi3D(points, nv, aabb, new WB_ConstantScalarParameter(d));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final WB_Coord[] points, final int nv, final WB_AABB aabb) {
 		return getVoronoi3D(points, nv, aabb, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final WB_Coord[] points, final WB_AABB aabb, final WB_ScalarParameter d) {
 		return getVoronoi3D(points, points.length, aabb, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final WB_Coord[] points, final WB_AABB aabb, final double d) {
 		return getVoronoi3D(points, points.length, aabb, new WB_ConstantScalarParameter(d));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final WB_Coord[] points, final WB_AABB aabb) {
 		return getVoronoi3D(points, points.length, aabb, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final List<? extends WB_Coord> points, final WB_AABB aabb,
 			final WB_ScalarParameter d) {
 		return getVoronoi3D(points, points.size(), aabb, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final List<? extends WB_Coord> points, final WB_AABB aabb, final double d) {
 		return getVoronoi3D(points, points.size(), aabb, new WB_ConstantScalarParameter(d));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final List<? extends WB_Coord> points, final WB_AABB aabb) {
 		return getVoronoi3D(points, points.size(), aabb, new WB_ConstantScalarParameter(0));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final List<? extends WB_Coord> points, final int nv, final WB_AABB aabb,
 			final WB_ScalarParameter d) {
 		return getVoronoi3D(WB_CoordCollection.getCollection(points), nv, aabb, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final List<? extends WB_Coord> points, final int nv, final WB_AABB aabb,
 			final double d) {
 		return getVoronoi3D(points, nv, aabb, new WB_ConstantScalarParameter(d));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final List<? extends WB_Coord> points, final int nv, final WB_AABB aabb) {
 		return getVoronoi3D(points, nv, aabb, new WB_ConstantScalarParameter(0));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final WB_CoordCollection points, final WB_AABB aabb,
 			final WB_ScalarParameter d) {
 		return getVoronoi3D(points, points.size(), aabb, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final WB_CoordCollection points, final WB_AABB aabb, final double d) {
 		return getVoronoi3D(points, points.size(), aabb, new WB_ConstantScalarParameter(d));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final WB_CoordCollection points, final WB_AABB aabb) {
 		return getVoronoi3D(points, points.size(), aabb, new WB_ConstantScalarParameter(0));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final WB_CoordCollection points, int nv, final WB_AABB aabb,
 			final WB_ScalarParameter d) {
 		nv = Math.min(nv, points.size());
@@ -132,23 +267,58 @@ public class WB_VoronoiFactory3D extends WB_VoronoiFactory2D {
 		return new WB_Voronoi3D(result);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final WB_CoordCollection points, final int nv, final WB_AABB aabb,
 			final double d) {
 		return getVoronoi3D(points, nv, aabb, new WB_ConstantScalarParameter(d));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3D(final WB_CoordCollection points, final int nv, final WB_AABB aabb) {
 		return getVoronoi3D(points, nv, aabb, new WB_ConstantScalarParameter(0));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static int[][] getVoronoi3DNeighbors(final WB_Coord[] points) {
 		return getVoronoi3DNeighbors(WB_CoordCollection.getCollection(points));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static int[][] getVoronoi3DNeighbors(final List<? extends WB_Coord> points) {
 		return getVoronoi3DNeighbors(WB_CoordCollection.getCollection(points));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static int[][] getVoronoi3DNeighbors(final WB_CoordCollection points) {
 		final int nv = points.size();
 		if (nv == 2) {
@@ -185,6 +355,12 @@ public class WB_VoronoiFactory3D extends WB_VoronoiFactory2D {
 		return ns;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static int[][] getVoronoi3DNeighborPairs(final WB_CoordCollection points) {
 		final int nv = points.size();
 		if (nv == 2) {
@@ -237,22 +413,52 @@ public class WB_VoronoiFactory3D extends WB_VoronoiFactory2D {
 		return finalPairs;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static int[][] getVoronoi3DNeighborPairs(final WB_Coord[] points) {
 		return getVoronoi3DNeighborPairs(WB_CoordCollection.getCollection(points));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static int[][] getVoronoi3DNeighborPairs(final List<? extends WB_Coord> points) {
 		return getVoronoi3DNeighborPairs(WB_CoordCollection.getCollection(points));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static WB_Network getNetwork(final WB_Coord[] points) {
 		return new WB_Network(points, getVoronoi3DNeighborPairs(points));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static WB_Network getNetwork(final List<? extends WB_Coord> points) {
 		return new WB_Network(points, getVoronoi3DNeighborPairs(points));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public static WB_Network getNetwork(final WB_CoordCollection points) {
 		final int n = points.size();
 		final List<wblut.external.ProGAL.Point> tmppoints = new ArrayList<>(n);
@@ -299,62 +505,169 @@ public class WB_VoronoiFactory3D extends WB_VoronoiFactory2D {
 		return new WB_Network(vorPoints, finalPairs);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final List<? extends WB_Coord> points, final int nv,
 			final WB_AABB aabb, final WB_ScalarParameter d) {
 		return getVoronoi3DBruteForce(WB_CoordCollection.getCollection(points), nv, aabb, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final List<? extends WB_Coord> points, final int nv,
 			final WB_AABB aabb, final double d) {
 		return getVoronoi3DBruteForce(points, nv, aabb, new WB_ConstantScalarParameter(d));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final List<? extends WB_Coord> points, final int nv,
 			final WB_AABB aabb) {
 		return getVoronoi3DBruteForce(points, nv, aabb, new WB_ConstantScalarParameter(0));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final List<? extends WB_Coord> points, final WB_AABB aabb,
 			final WB_ScalarParameter d) {
 		return getVoronoi3DBruteForce(points, points.size(), aabb, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final List<? extends WB_Coord> points, final WB_AABB aabb,
 			final double d) {
 		return getVoronoi3DBruteForce(points, points.size(), aabb, new WB_ConstantScalarParameter(d));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final List<? extends WB_Coord> points, final WB_AABB aabb) {
 		return getVoronoi3DBruteForce(points, points.size(), aabb, new WB_ConstantScalarParameter(0));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final WB_Coord[] points, final int nv, final WB_AABB aabb,
 			final WB_ScalarParameter d) {
 		return getVoronoi3DBruteForce(WB_CoordCollection.getCollection(points), nv, aabb, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final WB_Coord[] points, final int nv, final WB_AABB aabb,
 			final double d) {
 		return getVoronoi3DBruteForce(points, nv, aabb, new WB_ConstantScalarParameter(d));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final WB_Coord[] points, final int nv, final WB_AABB aabb) {
 		return getVoronoi3DBruteForce(points, nv, aabb, new WB_ConstantScalarParameter(0));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final WB_Coord[] points, final WB_AABB aabb,
 			final WB_ScalarParameter d) {
 		return getVoronoi3DBruteForce(points, points.length, aabb, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final WB_Coord[] points, final WB_AABB aabb, final double d) {
 		return getVoronoi3DBruteForce(points, points.length, aabb, new WB_ConstantScalarParameter(0));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final WB_Coord[] points, final WB_AABB aabb) {
 		return getVoronoi3DBruteForce(points, points.length, aabb, new WB_ConstantScalarParameter(0));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final WB_CoordCollection points, int nv, final WB_AABB aabb,
 			final WB_ScalarParameter d) {
 		nv = Math.min(nv, points.size());
@@ -385,7 +698,7 @@ public class WB_VoronoiFactory3D extends WB_VoronoiFactory2D {
 				unique = true;
 				for (int k = 0; k < j; k++) {
 					final WB_Plane Pj = cutPlanes.get(j);
-					if (WB_GeometryOp3D.isEqual(P, Pj)) {
+					if (WB_GeometryOp.isEqual(P, Pj)) {
 						unique = false;
 						break;
 					}
@@ -409,34 +722,85 @@ public class WB_VoronoiFactory3D extends WB_VoronoiFactory2D {
 		return new WB_Voronoi3D(result);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final WB_CoordCollection points, final int nv, final WB_AABB aabb,
 			final double d) {
 		return getVoronoi3DBruteForce(points, nv, aabb, new WB_ConstantScalarParameter(d));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param nv
+	 * @param aabb
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final WB_CoordCollection points, final int nv,
 			final WB_AABB aabb) {
 		return getVoronoi3DBruteForce(points, nv, aabb, new WB_ConstantScalarParameter(0));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final WB_CoordCollection points, final WB_AABB aabb,
 			final WB_ScalarParameter d) {
 		return getVoronoi3DBruteForce(points, points.size(), aabb, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @param d
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final WB_CoordCollection points, final WB_AABB aabb,
 			final double d) {
 		return getVoronoi3DBruteForce(points, points.size(), aabb, new WB_ConstantScalarParameter(d));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param aabb
+	 * @return
+	 */
 	public static WB_Voronoi3D getVoronoi3DBruteForce(final WB_CoordCollection points, final WB_AABB aabb) {
 		return getVoronoi3DBruteForce(points, points.size(), aabb, new WB_ConstantScalarParameter(0));
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	private static WB_Point toPoint(final wblut.external.ProGAL.Point v) {
 		return geometryfactory.createPoint(v.x(), v.y(), v.z());
 	}
 
+	/**
+	 *
+	 *
+	 * @param args
+	 */
 	public static void main(final String[] args) {
 		final HEC_Geodesic creator = new HEC_Geodesic().setB(3).setC(3).setRadius(400);
 		final HE_Mesh container = new HE_Mesh(creator);

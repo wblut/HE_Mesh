@@ -3,23 +3,44 @@ package wblut.geom;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
+/**
+ *
+ */
 public class WB_Sphere {
+	/**  */
 	WB_Point center;
+	/**  */
 	double radius, r2;
+	/**  */
 	private final WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
+	/**
+	 *
+	 */
 	public WB_Sphere() {
 		this.center = geometryfactory.createPoint();
 		this.radius = 0;
 		r2 = radius * radius;
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param radius
+	 */
 	public WB_Sphere(final WB_Coord center, final double radius) {
 		this.center = geometryfactory.createPoint(center);
 		this.radius = WB_Math.fastAbs(radius);
 		r2 = radius * radius;
 	}
 
+	/**
+	 *
+	 *
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public boolean equals(final Object o) {
 		if (o == this) {
@@ -31,41 +52,88 @@ public class WB_Sphere {
 		return WB_Epsilon.isEqualAbs(radius, ((WB_Sphere) o).getRadius()) && center.equals(((WB_Sphere) o).getCenter());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int hashCode() {
 		return 31 * center.hashCode() + hashCode(radius);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	private int hashCode(final double v) {
 		final long tmp = Double.doubleToLongBits(v);
 		return (int) (tmp ^ tmp >>> 32);
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	public WB_Sphere apply(final WB_Transform3D T) {
 		return geometryfactory.createSphereWithRadius(center.applyAsPoint(T), radius);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Sphere get() {
 		return new WB_Sphere(center, radius);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Coord getCenter() {
 		return center;
 	}
 
+	/**
+	 *
+	 *
+	 * @param c
+	 */
 	public void setCenter(final WB_Coord c) {
 		this.center = new WB_Point(c);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getRadius() {
 		return radius;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 */
 	public void setRadius(final double r) {
 		this.radius = r;
 		r2 = this.radius * this.radius;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 */
 	public void growSpherebyPoint(final WB_Coord p) {
 		final WB_Vector d = WB_Point.subToVector3D(p, center);
 		final double dist2 = d.getSqLength3D();
@@ -78,6 +146,12 @@ public class WB_Sphere {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public WB_Coord projectToSphere(final WB_Coord v) {
 		final WB_Point vc = new WB_Point(v).sub(center);
 		final double er = vc.normalizeSelf();
@@ -87,6 +161,12 @@ public class WB_Sphere {
 		return center.addMul(radius, vc);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public boolean contains(final WB_Coord p) {
 		return center.getSqDistance(p) <= r2;
 	}

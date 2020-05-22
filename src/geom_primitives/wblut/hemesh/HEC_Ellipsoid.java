@@ -2,11 +2,20 @@ package wblut.hemesh;
 
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class HEC_Ellipsoid extends HEC_Creator {
+	/**  */
 	private double rx, ry, rz;
+	/**  */
 	private int uFacets;
+	/**  */
 	private int vFacets;
 
+	/**
+	 *
+	 */
 	public HEC_Ellipsoid() {
 		super();
 		rx = ry = rz = 100;
@@ -15,6 +24,14 @@ public class HEC_Ellipsoid extends HEC_Creator {
 		setCreationAxis(WB_Vector.Y());
 	}
 
+	/**
+	 *
+	 *
+	 * @param rx
+	 * @param ry
+	 * @param rz
+	 * @return
+	 */
 	public HEC_Ellipsoid setRadius(final double rx, final double ry, final double rz) {
 		this.rx = rx;
 		this.ry = ry;
@@ -22,16 +39,33 @@ public class HEC_Ellipsoid extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param facets
+	 * @return
+	 */
 	public HEC_Ellipsoid setUFacets(final int facets) {
 		uFacets = facets;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param facets
+	 * @return
+	 */
 	public HEC_Ellipsoid setVFacets(final int facets) {
 		vFacets = facets;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final double[][] vertices = new double[2 + uFacets * (vFacets - 1)][3];
@@ -79,6 +113,13 @@ public class HEC_Ellipsoid extends HEC_Creator {
 		return fl.createBase();
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @return
+	 */
 	private int index(final int u, final int v) {
 		if (v == 0) {
 			return 0;

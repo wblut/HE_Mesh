@@ -7,18 +7,38 @@ import wblut.geom.WB_List;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Quad;
 
+/**
+ *
+ */
 public class HEC_FromBinaryGrid3D extends HEC_Creator {
+	/**  */
 	private WB_BinaryGrid3D grid;
 
+	/**
+	 *
+	 *
+	 * @param grid
+	 */
 	public HEC_FromBinaryGrid3D(final WB_BinaryGrid3D grid) {
 		this.grid = grid;
 	}
 
+	/**
+	 *
+	 *
+	 * @param grid
+	 * @return
+	 */
 	public HEC_FromBinaryGrid3D setGrid(final WB_BinaryGrid3D grid) {
 		this.grid = grid;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_Mesh createBase() {
 		final List<WB_Quad> quads = new WB_List<>();

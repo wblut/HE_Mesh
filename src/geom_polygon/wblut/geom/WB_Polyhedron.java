@@ -4,12 +4,22 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *
+ */
 public class WB_Polyhedron implements WB_Transformable3D {
+	/**  */
 	private WB_Point[] vertices;
+	/**  */
 	private int[][] faces;
+	/**  */
 	private String name;
+	/**  */
 	double scale;
 
+	/**
+	 *
+	 */
 	public WB_Polyhedron() {
 		vertices = new WB_Point[0];
 		faces = new int[0][0];
@@ -17,6 +27,11 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		scale = 1.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param polyhedron
+	 */
 	public WB_Polyhedron(final WB_Polyhedron polyhedron) {
 		vertices = new WB_Point[polyhedron.vertices.length];
 		for (int i = 0; i < polyhedron.vertices.length; i++) {
@@ -33,42 +48,92 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		scale = polyhedron.scale;
 	}
 
+	/**
+	 *
+	 *
+	 * @param s
+	 */
 	public void setScale(final double s) {
 		scale = s;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getScale() {
 		return scale;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Coord[] getVertices() {
 		return vertices;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public WB_Coord getVertex(final int i) {
 		return vertices[i];
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[][] getFaces() {
 		return faces;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public int[] getFace(final int i) {
 		return faces[i];
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getNumberOfVertices() {
 		return vertices.length;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getNumberOfFaces() {
 		return faces.length;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 *
+	 */
 	public void tetrahedron() {
 		name = "T";
 		faces = new int[][] { { 0, 1, 2 }, { 0, 2, 3 }, { 0, 3, 1 }, { 1, 3, 2 } };
@@ -76,6 +141,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 				new WB_Point(-1.0, 1.0, -1.0), new WB_Point(-1.0, -1.0, 1.0) };
 	}
 
+	/**
+	 *
+	 */
 	public void octahedron() {
 		name = "O";
 		faces = new int[][] { { 0, 1, 2 }, { 0, 2, 3 }, { 0, 3, 4 }, { 0, 4, 1 }, { 1, 4, 5 }, { 1, 5, 2 }, { 2, 5, 3 },
@@ -84,6 +152,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 				new WB_Point(-1.414, 0, 0), new WB_Point(0, -1.414, 0), new WB_Point(0, 0, -1.414) };
 	}
 
+	/**
+	 *
+	 */
 	public void cube() {
 		name = "C";
 		faces = new int[][] { { 3, 0, 1, 2 }, { 3, 4, 5, 0 }, { 0, 5, 6, 1 }, { 1, 6, 7, 2 }, { 2, 7, 4, 3 },
@@ -94,6 +165,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 				new WB_Point(-0.707, 0.707, -0.707), new WB_Point(-0.707, -0.707, -0.707) };
 	}
 
+	/**
+	 *
+	 */
 	public void icosahedron() {
 		name = "I";
 		faces = new int[][] { { 0, 1, 2 }, { 0, 2, 3 }, { 0, 3, 4 }, { 0, 4, 5 }, { 0, 5, 1 }, { 1, 5, 7 }, { 1, 7, 6 },
@@ -107,6 +181,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 				new WB_Point(0, 0, -1.176) };
 	}
 
+	/**
+	 *
+	 */
 	public void dodecahedron() {
 		name = "D";
 		faces = new int[][] { { 0, 1, 4, 7, 2 }, { 0, 2, 6, 9, 3 }, { 0, 3, 8, 5, 1 }, { 1, 5, 11, 10, 4 },
@@ -124,6 +201,11 @@ public class WB_Polyhedron implements WB_Transformable3D {
 				new WB_Point(-0.713644, 0, -0.797878), new WB_Point(0, 0, -1.07047) };
 	}
 
+	/**
+	 *
+	 *
+	 * @param N
+	 */
 	public void prism(final int N) {
 		final double theta = 2.0 * Math.PI / N;
 		final double h = Math.sin(0.5 * theta);
@@ -147,6 +229,11 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param N
+	 */
 	public void antiprism(final int N) {
 		final double theta = 2.0 * Math.PI / N;
 		double h = Math.sqrt(1.0 - 4.0 / (4.0 + 2.0 * Math.cos(0.5 * theta) - 2 * Math.cos(theta)));
@@ -175,14 +262,28 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void kis() {
 		kis(0, 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param N
+	 */
 	public void kis(final int N) {
 		kis(N, 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param N
+	 * @param apex
+	 */
 	public void kis(final int N, final double apex) {
 		if (N == 0) {
 			name = "k".concat(name);
@@ -220,6 +321,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		faces = pfc.faces;
 	}
 
+	/**
+	 *
+	 */
 	public void ambo() {
 		name = "a".concat(name);
 		final PolyFlag flag = new PolyFlag();
@@ -242,6 +346,13 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		faces = pfc.faces;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i1
+	 * @param i2
+	 * @return
+	 */
 	private String midName(final int i1, final int i2) {
 		if (i1 < i2) {
 			return "v" + i1 + "-v" + i2;
@@ -250,6 +361,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void gyro() {
 		name = "g".concat(name);
 		final PolyFlag flag = new PolyFlag();
@@ -287,6 +401,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		faces = pfc.faces;
 	}
 
+	/**
+	 *
+	 */
 	public void propellor() {
 		name = "p".concat(name);
 		final PolyFlag flag = new PolyFlag();
@@ -318,6 +435,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		faces = pfc.faces;
 	}
 
+	/**
+	 *
+	 */
 	public void whirl() {
 		name = "w".concat(name);
 		final PolyFlag flag = new PolyFlag();
@@ -360,10 +480,18 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		faces = pfc.faces;
 	}
 
+	/**
+	 *
+	 */
 	public void chamfer() {
 		chamfer(0.5);
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 */
 	public void chamfer(final double d) {
 		name = "c".concat(name);
 		final PolyFlag flag = new PolyFlag();
@@ -391,6 +519,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		faces = pfc.faces;
 	}
 
+	/**
+	 *
+	 */
 	public void reflect() {
 		name = "r".concat(name);
 		for (final WB_Point p : vertices) {
@@ -405,6 +536,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void join() {
 		final String lname = "j".concat(name);
 		dual();
@@ -413,6 +547,11 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		name = lname;
 	}
 
+	/**
+	 *
+	 *
+	 * @param N
+	 */
 	public void truncate(final int N) {
 		final String lname = N == 0 ? "t".concat(name) : "t".concat(Integer.toString(N)).concat(name);
 		dual();
@@ -421,10 +560,16 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		name = lname;
 	}
 
+	/**
+	 *
+	 */
 	public void truncate() {
 		truncate(0);
 	}
 
+	/**
+	 *
+	 */
 	public void needle() {
 		final String lname = "n".concat(name);
 		dual();
@@ -432,6 +577,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		name = lname;
 	}
 
+	/**
+	 *
+	 */
 	public void zip() {
 		final String lname = "z".concat(name);
 		kis();
@@ -439,6 +587,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		name = lname;
 	}
 
+	/**
+	 *
+	 */
 	public void ortho() {
 		final String lname = "o".concat(name);
 		ambo();
@@ -447,6 +598,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		name = lname;
 	}
 
+	/**
+	 *
+	 */
 	public void expand() {
 		final String lname = "e".concat(name);
 		ambo();
@@ -454,6 +608,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		name = lname;
 	}
 
+	/**
+	 *
+	 */
 	public void snub() {
 		final String lname = "s".concat(name);
 		gyro();
@@ -461,6 +618,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		name = lname;
 	}
 
+	/**
+	 *
+	 */
 	public void bevel() {
 		final String lname = "b".concat(name);
 		ambo();
@@ -468,6 +628,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		name = lname;
 	}
 
+	/**
+	 *
+	 */
 	public void meta() {
 		final String lname = "m".concat(name);
 		join();
@@ -475,10 +638,19 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		name = lname;
 	}
 
+	/**
+	 *
+	 */
 	public void hollow() {
 		hollow(0.5, 0.2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param inset_dist
+	 * @param thickness
+	 */
 	public void hollow(final double inset_dist, final double thickness) {
 		name = "l".concat(name);
 		final WB_Polyhedron dual = new WB_Polyhedron(this);
@@ -529,12 +701,18 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		faces = pfc.faces;
 	}
 
+	/**
+	 *
+	 */
 	public void unit() {
 		for (final WB_Point p : vertices) {
 			p.normalizeSelf();
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void dual() {
 		name = "d".concat(name);
 		final PolyFlag flag = new PolyFlag();
@@ -575,6 +753,11 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		faces = sorted;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point[] centers() {
 		final WB_Point[] centers = new WB_Point[faces.length];
 		for (int i = 0; i < faces.length; i++) {
@@ -587,6 +770,11 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		return centers;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Vector[] normals() {
 		final WB_Vector[] normals = new WB_Vector[faces.length];
 		for (int i = 0; i < faces.length; i++) {
@@ -600,6 +788,11 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		return normals;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[][] edges() {
 		final List<int[]> edgeList = new WB_List<>();
 		int[] face;
@@ -618,6 +811,11 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point[] edgeCenters() {
 		final int[][] edges = edges();
 		final WB_Point[] edgeCenters = new WB_Point[edges.length];
@@ -627,6 +825,14 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		return edgeCenters;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v1
+	 * @param v2
+	 * @param v3
+	 * @return
+	 */
 	private WB_Vector orthogonal(final WB_Coord v1, final WB_Coord v2, final WB_Coord v3) {
 		WB_Vector d1, d2;
 		d1 = WB_Vector.subToVector3D(v2, v1);
@@ -634,6 +840,13 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		return d1.crossSelf(d2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @param newVertices
+	 * @param edges
+	 */
 	private void tangentify(final double f, final WB_Point[] newVertices, final int[][] edges) {
 		for (int i = 0; i < vertices.length; i++) {
 			newVertices[i].set(vertices[i]);
@@ -650,11 +863,23 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param v1
+	 * @param v2
+	 * @return
+	 */
 	private WB_Point tangentPoint(final WB_Coord v1, final WB_Coord v2) {
 		final WB_Vector d = WB_Vector.subToVector3D(v2, v1);
 		return new WB_Point(v1).addMulSelf(-d.dot(v1) / d.dot(d), d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param edges
+	 */
 	private void recenter(final int[][] edges) {
 		final WB_Point center = new WB_Point();
 		for (final int[] edge : edges) {
@@ -666,6 +891,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void recenter() {
 		final WB_Point center = new WB_Point();
 		final int[][] edges = edges();
@@ -678,6 +906,9 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void rescale() {
 		double d2max;
 		d2max = 0;
@@ -690,6 +921,12 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @param newVertices
+	 */
 	private void planarize(final double f, final WB_Point[] newVertices) {
 		for (int i = 0; i < vertices.length; i++) {
 			newVertices[i].set(vertices[i]);
@@ -707,6 +944,12 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param iterations
+	 * @param f
+	 */
 	public void planarize(final int iterations, final double f) {
 		WB_Point[] newVertices = new WB_Point[vertices.length];
 		for (int i = 0; i < vertices.length; i++) {
@@ -721,10 +964,21 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param iterations
+	 */
 	public void canonicalize(final int iterations) {
 		canonicalize(iterations, 0.1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param iterations
+	 * @param f
+	 */
 	public void canonicalize(final int iterations, final double f) {
 		WB_Point[] newVertices = new WB_Point[vertices.length];
 		WB_Point[] tmp;
@@ -745,6 +999,11 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param iterations
+	 */
 	public void adjust(final int iterations) {
 		final WB_Polyhedron dpoly = new WB_Polyhedron(this);
 		dpoly.dual();
@@ -754,6 +1013,12 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @return
+	 */
 	private WB_Point[] reciprocalC(final WB_Polyhedron poly) {
 		final WB_Point[] centers = poly.centers();
 		for (final WB_Point c : centers) {
@@ -762,6 +1027,11 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		return centers;
 	}
 
+	/**
+	 *
+	 *
+	 * @param iterations
+	 */
 	public void adjustCanonical(final int iterations) {
 		final WB_Polyhedron dpoly = new WB_Polyhedron(this);
 		dpoly.dual();
@@ -771,6 +1041,12 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @return
+	 */
 	private WB_Point[] reciprocalN(final WB_Polyhedron poly) {
 		final WB_Point[] result = new WB_Point[poly.faces.length];
 		int[] f;
@@ -797,14 +1073,35 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	private double edgeDist(final WB_Coord p1, final WB_Coord p2) {
 		return tangentPoint(p1, p2).getLength();
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	private WB_Vector reciprocal(final WB_Coord p) {
 		return new WB_Vector(p).divSelf(WB_Vector.getSqLength(p));
 	}
 
+	/**
+	 *
+	 *
+	 * @param set1
+	 * @param set2
+	 * @param set3
+	 * @return
+	 */
 	private int intersect(final int[] set1, final int[] set2, final int[] set3) {
 		int s1, s2, s3;
 		for (final int element : set1) {
@@ -824,12 +1121,22 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		return -1;
 	}
 
+	/**
+	 *
+	 */
 	static class PolyFlag {
+		/**  */
 		private final Map<String, WB_Point> vertexPos;
+		/**  */
 		private final Map<String, Integer> vertexID;
+		/**  */
 		private final Map<String, String> edgeID;
+		/**  */
 		private final Map<String, String> faceID;
 
+		/**
+		 *
+		 */
 		PolyFlag() {
 			vertexPos = new LinkedHashMap<>();
 			vertexID = new LinkedHashMap<>();
@@ -837,6 +1144,12 @@ public class WB_Polyhedron implements WB_Transformable3D {
 			faceID = new LinkedHashMap<>();
 		}
 
+		/**
+		 *
+		 *
+		 * @param name
+		 * @param p
+		 */
 		void newV(final String name, final WB_Point p) {
 			if (!vertexID.containsKey(name)) {
 				vertexID.put(name, 0);
@@ -844,6 +1157,13 @@ public class WB_Polyhedron implements WB_Transformable3D {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param f
+		 * @param v1
+		 * @param v2
+		 */
 		void newFlag(final String f, final String v1, final String v2) {
 			final String key = f + "_" + v1;
 			if (!faceID.containsKey(f)) {
@@ -854,6 +1174,11 @@ public class WB_Polyhedron implements WB_Transformable3D {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		PolyFlagCompile compilePolyhedron() {
 			final WB_Point[] vertices = new WB_Point[vertexPos.size()];
 			int i = 0;
@@ -881,16 +1206,32 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		}
 	}
 
+	/**
+	 *
+	 */
 	static class PolyFlagCompile {
+		/**  */
 		private final WB_Point[] vertices;
+		/**  */
 		private final int[][] faces;
 
+		/**
+		 *
+		 *
+		 * @param vertices
+		 * @param faces
+		 */
 		PolyFlagCompile(final WB_Point[] vertices, final int[][] faces) {
 			this.vertices = vertices;
 			this.faces = faces;
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param args
+	 */
 	public static void main(final String[] args) {
 		final WB_Polyhedron test = new WB_Polyhedron();
 		test.tetrahedron();
@@ -898,6 +1239,12 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		test.adjustCanonical(10);
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_Polyhedron apply2D(final WB_Transform2D T) {
 		final WB_Polyhedron poly = new WB_Polyhedron(this);
@@ -905,6 +1252,12 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_Polyhedron apply(final WB_Transform3D T) {
 		final WB_Polyhedron poly = new WB_Polyhedron(this);
@@ -912,6 +1265,12 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_Polyhedron apply2DSelf(final WB_Transform2D T) {
 		for (final WB_Point p : vertices) {
@@ -920,6 +1279,12 @@ public class WB_Polyhedron implements WB_Transformable3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_Polyhedron applySelf(final WB_Transform3D T) {
 		for (final WB_Point p : vertices) {

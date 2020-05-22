@@ -1,45 +1,83 @@
 package wblut.hemesh;
 
-import java.util.List;
-
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HEM_Kaleidoscope extends HEM_Modifier {
+	/**  */
 	private WB_Point origin;
+	/**  */
 	private WB_Vector axis;
+	/**  */
 	private int n;
+	/**  */
 	private double angle;
 
+	/**
+	 *
+	 */
 	public HEM_Kaleidoscope() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param o
+	 * @return
+	 */
 	public HEM_Kaleidoscope setOrigin(final WB_Coord o) {
 		origin = new WB_Point(o);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public HEM_Kaleidoscope setAxis(final WB_Coord v) {
 		axis = new WB_Vector(v);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @return
+	 */
 	public HEM_Kaleidoscope setSymmetry(final int n) {
 		this.n = n;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public HEM_Kaleidoscope setAngle(final double a) {
 		angle = a;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		if (n < 2) {
@@ -77,7 +115,7 @@ public class HEM_Kaleidoscope extends HEM_Modifier {
 		for (int j = 0; j < boundaryPairs.length; j += 2) {
 			boundaryPairs[j + 1].set(origboundary[j / 2][1]);
 			spindlepoint[j / 2] = WB_Epsilon
-					.isZeroSq(WB_GeometryOp3D.getSqDistanceToLine3D(boundaryPairs[j], new WB_Line(origin, axis)));
+					.isZeroSq(WB_GeometryOp.getSqDistanceToLine3D(boundaryPairs[j], new WB_Line(origin, axis)));
 		}
 		final HE_Mesh[] copies = new HE_Mesh[n];
 		for (int i = 0; i < n; i++) {
@@ -116,13 +154,26 @@ public class HEM_Kaleidoscope extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param origv
+	 * @param newv
+	 * @param origmesh
+	 */
 	void replaceVertex(final HE_Vertex origv, final HE_Vertex newv, final HE_Mesh origmesh) {
-		final List<HE_Halfedge> star = origv.getHalfedgeStar();
+		final HE_HalfedgeList star = origv.getHalfedgeStar();
 		for (final HE_Halfedge he : star) {
 			origmesh.setVertex(he, newv);
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		return applySelf(selection.getParent());

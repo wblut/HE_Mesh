@@ -1,10 +1,22 @@
 package wblut.hemesh;
 
+/**
+ *
+ */
 abstract public class HES_Subdividor extends HE_Machine {
+	/**
+	 *
+	 */
 	public HES_Subdividor() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting subvidision.");
@@ -27,6 +39,12 @@ abstract public class HES_Subdividor extends HE_Machine {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
 		if (selection == null) {
@@ -51,7 +69,19 @@ abstract public class HES_Subdividor extends HE_Machine {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	protected abstract HE_Mesh applySelf(final HE_Mesh mesh);
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	protected abstract HE_Mesh applySelf(final HE_Selection selection);
 }

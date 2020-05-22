@@ -2,41 +2,81 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HEM_Stretch extends HEM_Modifier {
+	/**  */
 	private WB_Plane groundPlane;
+	/**  */
 	private WB_Vector stretchDirection;
+	/**  */
 	private double stretchFactor;
+	/**  */
 	private double compressionFactor;
+	/**  */
 	private boolean posOnly;
 
+	/**
+	 *
+	 */
 	public HEM_Stretch() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public HEM_Stretch setGroundPlane(final WB_Plane P) {
 		groundPlane = P;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param ox
+	 * @param oy
+	 * @param oz
+	 * @param nx
+	 * @param ny
+	 * @param nz
+	 * @return
+	 */
 	public HEM_Stretch setGroundPlane(final double ox, final double oy, final double oz, final double nx,
 			final double ny, final double nz) {
 		groundPlane = new WB_Plane(ox, oy, oz, nx, ny, nz);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	public HEM_Stretch setStretchFactor(final double f) {
 		stretchFactor = f;
 		compressionFactor = Math.sqrt(f);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	public HEM_Stretch setCompressionFactor(final double f) {
 		if (f != 0) {
 			compressionFactor = f;
@@ -44,11 +84,23 @@ public class HEM_Stretch extends HEM_Modifier {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_Stretch setPosOnly(final boolean b) {
 		posOnly = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		if (groundPlane != null && stretchDirection == null) {
@@ -61,13 +113,13 @@ public class HEM_Stretch extends HEM_Modifier {
 			HE_Vertex v;
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				final double d = WB_GeometryOp3D.getDistance3D(v, groundPlane);
+				final double d = WB_GeometryOp.getDistance3D(v, groundPlane);
 				if (!posOnly || d > WB_Epsilon.EPSILON) {
-					p = WB_GeometryOp3D.getClosestPoint3D(v, groundPlane);
+					p = WB_GeometryOp.getClosestPoint3D(v, groundPlane);
 					v.getPosition().subSelf(p);
 					v.getPosition().mulSelf(stretchFactor);
 					v.getPosition().addSelf(p);
-					p = WB_GeometryOp3D.getClosestPoint3D(v, L);
+					p = WB_GeometryOp.getClosestPoint3D(v, L);
 					v.getPosition().subSelf(p);
 					v.getPosition().mulSelf(1 / compressionFactor);
 					v.getPosition().addSelf(p);
@@ -77,6 +129,12 @@ public class HEM_Stretch extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		if (groundPlane != null && stretchDirection == null) {
@@ -89,13 +147,13 @@ public class HEM_Stretch extends HEM_Modifier {
 			HE_Vertex v;
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				final double d = WB_GeometryOp3D.getDistance3D(v, groundPlane);
+				final double d = WB_GeometryOp.getDistance3D(v, groundPlane);
 				if (!posOnly || d > WB_Epsilon.EPSILON) {
-					p = WB_GeometryOp3D.getClosestPoint3D(v, groundPlane);
+					p = WB_GeometryOp.getClosestPoint3D(v, groundPlane);
 					v.getPosition().subSelf(p);
 					v.getPosition().mulSelf(stretchFactor);
 					v.getPosition().addSelf(p);
-					p = WB_GeometryOp3D.getClosestPoint3D(v, L);
+					p = WB_GeometryOp.getClosestPoint3D(v, L);
 					v.getPosition().subSelf(p);
 					v.getPosition().mulSelf(1 / compressionFactor);
 					v.getPosition().addSelf(p);

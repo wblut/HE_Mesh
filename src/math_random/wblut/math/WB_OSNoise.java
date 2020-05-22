@@ -1,19 +1,37 @@
 package wblut.math;
 
+/**
+ *
+ */
 public class WB_OSNoise implements WB_Noise {
+	/**  */
 	private static final double STRETCH_CONSTANT_2D = -0.211324865405187; // (1/Math.sqrt(2+1)-1)/2;
+	/**  */
 	private static final double SQUISH_CONSTANT_2D = 0.366025403784439; // (Math.sqrt(2+1)-1)/2;
+	/**  */
 	private static final double STRETCH_CONSTANT_3D = -1.0 / 6; // (1/Math.sqrt(3+1)-1)/3;
+	/**  */
 	private static final double SQUISH_CONSTANT_3D = 1.0 / 3; // (Math.sqrt(3+1)-1)/3;
+	/**  */
 	private static final double STRETCH_CONSTANT_4D = -0.138196601125011; // (1/Math.sqrt(4+1)-1)/4;
+	/**  */
 	private static final double SQUISH_CONSTANT_4D = 0.309016994374947; // (Math.sqrt(4+1)-1)/4;
+	/**  */
 	private static final double NORM_CONSTANT_2D = 47;
+	/**  */
 	private static final double NORM_CONSTANT_3D = 103;
+	/**  */
 	private static final double NORM_CONSTANT_4D = 30;
+	/**  */
 	private short[] perm;
+	/**  */
 	private short[] permGradIndex3D;
+	/**  */
 	private double sx, sy, sz, sw;
 
+	/**
+	 *
+	 */
 	public WB_OSNoise() {
 		this(System.currentTimeMillis());
 		sx = sy = sz = sw = 1.0;
@@ -23,12 +41,22 @@ public class WB_OSNoise implements WB_Noise {
 	// Generates a proper permutation (i.e. doesn't merely perform N successive
 	// pair swaps on a base array)
 
+	/**
+	 *
+	 *
+	 * @param seed
+	 */
 	// Uses a simple 64-bit LCG.
 	public WB_OSNoise(final long seed) {
 		setSeed(seed);
 		sx = sy = sz = sw = 1.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param seed
+	 */
 	@Override
 	public void setSeed(long seed) {
 		perm = new short[256];
@@ -52,11 +80,24 @@ public class WB_OSNoise implements WB_Noise {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	@Override
 	public double value1D(final double x) {
 		return value2D(x, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	// 2D OpenSimplex Noise.
 	@Override
 	public double value2D(final double x, final double y) {
@@ -165,6 +206,14 @@ public class WB_OSNoise implements WB_Noise {
 		return value / NORM_CONSTANT_2D;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	// 3D OpenSimplex Noise.
 	@Override
 	public double value3D(final double x, final double y, final double z) {
@@ -706,6 +755,15 @@ public class WB_OSNoise implements WB_Noise {
 		return value / NORM_CONSTANT_3D;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param w
+	 * @return
+	 */
 	// 4D OpenSimplex Noise.
 	@Override
 	public double value4D(final double x, final double y, final double z, final double w) {
@@ -1953,17 +2011,50 @@ public class WB_OSNoise implements WB_Noise {
 		return value / NORM_CONSTANT_4D;
 	}
 
+	/**
+	 *
+	 *
+	 * @param xsb
+	 * @param ysb
+	 * @param dx
+	 * @param dy
+	 * @return
+	 */
 	private double extrapolate(final int xsb, final int ysb, final double dx, final double dy) {
 		final int index = perm[(perm[xsb & 0xFF] + ysb) & 0xFF] & 0x0E;
 		return (gradients2D[index] * dx) + (gradients2D[index + 1] * dy);
 	}
 
+	/**
+	 *
+	 *
+	 * @param xsb
+	 * @param ysb
+	 * @param zsb
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 * @return
+	 */
 	private double extrapolate(final int xsb, final int ysb, final int zsb, final double dx, final double dy,
 			final double dz) {
 		final int index = permGradIndex3D[(perm[(perm[xsb & 0xFF] + ysb) & 0xFF] + zsb) & 0xFF];
 		return (gradients3D[index] * dx) + (gradients3D[index + 1] * dy) + (gradients3D[index + 2] * dz);
 	}
 
+	/**
+	 *
+	 *
+	 * @param xsb
+	 * @param ysb
+	 * @param zsb
+	 * @param wsb
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 * @param dw
+	 * @return
+	 */
 	private double extrapolate(final int xsb, final int ysb, final int zsb, final int wsb, final double dx,
 			final double dy, final double dz, final double dw) {
 		final int index = perm[(perm[(perm[(perm[xsb & 0xFF] + ysb) & 0xFF] + zsb) & 0xFF] + wsb) & 0xFF] & 0xFC;
@@ -1971,17 +2062,25 @@ public class WB_OSNoise implements WB_Noise {
 				+ (gradients4D[index + 3] * dw);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	private static int fastFloor(final double x) {
 		final int xi = (int) x;
 		return x < xi ? xi - 1 : xi;
 	}
 
 	// Gradients for 2D. They approximate the directions to the
+	/**  */
 	// vertices of an octagon from the center.
 	private static byte[] gradients2D = new byte[] { 5, 2, 2, 5, -5, 2, -2, 5, 5, -2, 2, -5, -5, -2, -2, -5, };
 	// Gradients for 3D. They approximate the directions to the
 	// vertices of a rhombicuboctahedron from the center, skewed so
 	// that the triangular and square facets can be inscribed inside
+	/**  */
 	// circles of the same radius.
 	private static byte[] gradients3D = new byte[] { -11, 4, 4, -4, 11, 4, -4, 4, 11, 11, 4, 4, 4, 11, 4, 4, 4, 11, -11,
 			-4, 4, -4, -11, 4, -4, -4, 11, 11, -4, 4, 4, -11, 4, 4, -4, 11, -11, 4, -4, -4, 11, -4, -4, 4, -11, 11, 4,
@@ -1989,6 +2088,7 @@ public class WB_OSNoise implements WB_Noise {
 	// Gradients for 4D. They approximate the directions to the
 	// vertices of a disprismatotesseractihexadecachoron from the center,
 	// skewed so that the tetrahedral and cubic facets can be inscribed inside
+	/**  */
 	// spheres of the same radius.
 	private static byte[] gradients4D = new byte[] { 3, 1, 1, 1, 1, 3, 1, 1, 1, 1, 3, 1, 1, 1, 1, 3, -3, 1, 1, 1, -1, 3,
 			1, 1, -1, 1, 3, 1, -1, 1, 1, 3, 3, -1, 1, 1, 1, -3, 1, 1, 1, -1, 3, 1, 1, -1, 1, 3, -3, -1, 1, 1, -1, -3, 1,
@@ -2000,6 +2100,11 @@ public class WB_OSNoise implements WB_Noise {
 			1, -1, -1, -1, 3, -1, -1, -1, 1, -3, -1, -1, 1, -1, -3, 3, -1, -1, -1, 1, -3, -1, -1, 1, -1, -3, -1, 1, -1,
 			-1, -3, -3, -1, -1, -1, -1, -3, -1, -1, -1, -1, -3, -1, -1, -1, -1, -3, };
 
+	/**
+	 *
+	 *
+	 * @param sx
+	 */
 	@Override
 	public void setScale(final double sx) {
 		this.sx = sx;
@@ -2008,12 +2113,25 @@ public class WB_OSNoise implements WB_Noise {
 		this.sw = sx;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sx
+	 * @param sy
+	 */
 	@Override
 	public void setScale(final double sx, final double sy) {
 		this.sx = sx;
 		this.sy = sy;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sx
+	 * @param sy
+	 * @param sz
+	 */
 	@Override
 	public void setScale(final double sx, final double sy, final double sz) {
 		this.sx = sx;
@@ -2021,6 +2139,14 @@ public class WB_OSNoise implements WB_Noise {
 		this.sz = sz;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sx
+	 * @param sy
+	 * @param sz
+	 * @param sw
+	 */
 	@Override
 	public void setScale(final double sx, final double sy, final double sz, final double sw) {
 		this.sx = sx;

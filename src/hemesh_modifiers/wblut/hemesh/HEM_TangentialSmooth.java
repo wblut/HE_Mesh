@@ -1,9 +1,8 @@
 package wblut.hemesh;
 
-import static wblut.geom.WB_GeometryOp3D.projectOnPlane;
+import static wblut.geom.WB_GeometryOp.projectOnPlane;
 
 import java.util.Iterator;
-import java.util.List;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_AABB;
@@ -11,38 +10,78 @@ import wblut.geom.WB_Coord;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 
+/**
+ *
+ */
 public class HEM_TangentialSmooth extends HEM_Modifier {
+	/**  */
 	private boolean autoRescale;
+	/**  */
 	private boolean keepBoundary;
+	/**  */
 	private int iter;
+	/**  */
 	private double lambda;
 
+	/**
+	 *
+	 */
 	public HEM_TangentialSmooth() {
 		lambda = 0.5;
 		iter = 1;
 		keepBoundary = false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_TangentialSmooth setAutoRescale(final boolean b) {
 		autoRescale = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HEM_TangentialSmooth setIterations(final int r) {
 		iter = r;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_TangentialSmooth setKeepBoundary(final boolean b) {
 		keepBoundary = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param lambda
+	 * @return
+	 */
 	public HEM_TangentialSmooth setLambda(final double lambda) {
 		this.lambda = lambda;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HEM_TangentialSmooth.");
@@ -59,7 +98,7 @@ public class HEM_TangentialSmooth extends HEM_Modifier {
 		for (int r = 0; r < iter; r++) {
 			Iterator<HE_Vertex> vItr = mesh.vItr();
 			HE_Vertex v;
-			List<HE_Vertex> neighbors;
+			HE_VertexList neighbors;
 			int id = 0;
 			WB_Point p;
 			WB_Plane tangent;
@@ -94,6 +133,12 @@ public class HEM_TangentialSmooth extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		tracker.setStartStatus(this, "Starting HEM_TangentialSmooth.");
@@ -113,7 +158,7 @@ public class HEM_TangentialSmooth extends HEM_Modifier {
 			Iterator<HE_Vertex> vItr = selection.vItr();
 			HE_Vertex v;
 			HE_Vertex n;
-			List<HE_Vertex> neighbors;
+			HE_VertexList neighbors;
 			int id = 0;
 			while (vItr.hasNext()) {
 				v = vItr.next();

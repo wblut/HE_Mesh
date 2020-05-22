@@ -2,24 +2,48 @@ package wblut.hemesh;
 
 import wblut.geom.WB_Transform3D;
 
+/**
+ *
+ */
 public class HEM_Transform3D extends HEM_Modifier {
+	/**  */
 	private WB_Transform3D T;
 
+	/**
+	 *
+	 */
 	public HEM_Transform3D() {
 		super();
 		T = null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 */
 	public HEM_Transform3D(final WB_Transform3D T) {
 		super();
 		this.T = T;
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	public HEM_Transform3D setTransform(final WB_Transform3D T) {
 		this.T = T;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		if (T == null) {
@@ -32,6 +56,12 @@ public class HEM_Transform3D extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		if (T == null) {

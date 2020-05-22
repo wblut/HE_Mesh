@@ -6,13 +6,26 @@ import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HEM_Triangulate extends HEM_Modifier {
+	/**  */
 	public HE_Selection triangles;
 
+	/**
+	 *
+	 */
 	public HEM_Triangulate() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		triangles = HE_Selection.getSelection(mesh);
@@ -22,7 +35,7 @@ public class HEM_Triangulate extends HEM_Modifier {
 		final WB_ProgressCounter counter = new WB_ProgressCounter(n, 10);
 		tracker.setCounterStatus(this, "Triangulating faces.", counter);
 		for (int i = 0; i < n; i++) {
-			if (!WB_Epsilon.isZero(WB_Vector.getLength3D(HE_MeshOp.getFaceNormal(f[i])))) {
+			if (!WB_Epsilon.isZero(WB_Vector.getLength3D(mesh.getFaceNormal(f[i])))) {
 				triangulateNoPairing(f[i], mesh);
 			} else {
 				final HE_Halfedge he = f[i].getHalfedge();
@@ -39,6 +52,12 @@ public class HEM_Triangulate extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		triangles = HE_Selection.getSelection(selection.getParent());
@@ -48,7 +67,7 @@ public class HEM_Triangulate extends HEM_Modifier {
 		final WB_ProgressCounter counter = new WB_ProgressCounter(n, 10);
 		tracker.setCounterStatus(this, "Triangulating faces.", counter);
 		for (int i = 0; i < n; i++) {
-			if (!WB_Epsilon.isZero(WB_Vector.getLength3D(HE_MeshOp.getFaceNormal(f[i])))) {
+			if (!WB_Epsilon.isZero(WB_Vector.getLength3D(selection.getParent().getFaceNormal(f[i])))) {
 				triangulateNoPairing(f[i], selection.getParent());
 			} else {
 				final HE_Halfedge he = f[i].getHalfedge();
@@ -67,12 +86,18 @@ public class HEM_Triangulate extends HEM_Modifier {
 		return selection.getParent();
 	}
 
+	/**
+	 *
+	 *
+	 * @param face
+	 * @param mesh
+	 */
 	private void triangulateNoPairing(final HE_Face face, final HE_Mesh mesh) {
 		if (face.getFaceDegree() == 3) {
 			triangles.add(face);
 		} else if (face.getFaceDegree() > 3) {
 			final int[] tris = face.getTriangles(false);
-			final List<HE_Vertex> vertices = face.getFaceVertices();
+			final HE_VertexList vertices = face.getFaceVertices();
 			final List<HE_TextureCoordinate> UVWs = face.getFaceUVWs();
 			HE_Halfedge he = face.getHalfedge();
 			do {

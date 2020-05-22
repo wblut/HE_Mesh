@@ -8,7 +8,11 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Math;
 
+/**
+ *
+ */
 public class HEMC_WeairePhelan extends HEMC_MultiCreator {
+	/**  */
 	private static final double[][] dodecahedronPoints = { { 0.31498, 0, 0.62996 }, { -0.31498, 0, 0.62996 },
 			{ 0.41997, 0.41997, 0.41997 }, { 0, 0.62996, 0.31498 }, { -0.41997, 0.41997, 0.41997 },
 			{ -0.41997, -0.41997, 0.41997 }, { 0, -0.62996, .31498 }, { .41997, -.41997, .41997 },
@@ -16,6 +20,7 @@ public class HEMC_WeairePhelan extends HEMC_MultiCreator {
 			{ .41997, .41997, -.41997 }, { 0, .62996, -.31498 }, { -.41997, .41997, -.41997 },
 			{ -.41997, -.41997, -.41997 }, { 0, -.62996, -.31498 }, { .41997, -.41997, -.41997 },
 			{ .31498, 0, -.62996 }, { -.31498, 0, -.62996 } };
+	/**  */
 	private static final double[][] tetrakaidecahedronPoints = { { .314980, .370039, .5 }, { -.314980, .370039, .5 },
 			{ -.5, 0, .5 }, { -.314980, -.370039, .5 }, { .314980, -.370039, .5 }, { .5, 0, .5 },
 			{ .419974, .580026, 0.080026 }, { -.419974, .580026, 0.080026 }, { -.685020, 0, .129961 },
@@ -24,11 +29,17 @@ public class HEMC_WeairePhelan extends HEMC_MultiCreator {
 			{ -.580026, -.419974, -0.080026 }, { 0, -.685020, -.129961 }, { .580026, -.419974, -0.080026 },
 			{ .370039, .314980, -.5 }, { 0, .5, -.5 }, { -.370039, .314980, -.5 }, { -.370039, -.314980, -.5 },
 			{ 0, -.5, -.5 }, { .370039, -.314980, -.5 } };
+	/**  */
 	private final HE_Mesh dodecahedron;
+	/**  */
 	private final HE_Mesh tetrakaidecahedron;
+	/**  */
 	private static int[] colors = new int[] { -65536, -16384, -8519936, -16711870, -16712705, -16761857, -8126209,
 			-65351 };
 
+	/**
+	 *
+	 */
 	public HEMC_WeairePhelan() {
 		super();
 		dodecahedron = new HE_Mesh(new HEC_ConvexHull().setPoints(dodecahedronPoints));
@@ -38,76 +49,177 @@ public class HEMC_WeairePhelan extends HEMC_MultiCreator {
 		setCrop(false);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected WB_Point getOrigin() {
 		return (WB_Point) parameters.get("origin", new WB_Point());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected WB_Vector getExtents() {
 		return (WB_Vector) parameters.get("extents", new WB_Vector());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double[] getScale() {
 		return (double[]) parameters.get("scale", new double[] { 0.0, 0.0, 0.0 });
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getSpacing() {
 		return parameters.get("spacing", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected int[] getNumberOfUnits() {
 		return (int[]) parameters.get("uvw", new int[] { 1, 1, 1 });
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected boolean[] getCrop() {
 		return (boolean[]) parameters.get("crop", new boolean[] { false, false, false, false, false, false });
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public HEMC_WeairePhelan setOrigin(final WB_Coord p) {
 		parameters.set("origin", new WB_Point(p));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public HEMC_WeairePhelan setExtents(final WB_Vector v) {
 		parameters.set("extents", new WB_Vector(v));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param scU
+	 * @param scV
+	 * @param scW
+	 * @return
+	 */
 	public HEMC_WeairePhelan setScale(final double scU, final double scV, final double scW) {
 		parameters.set("scale", new double[] { scU, scV, scW });
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sc
+	 * @return
+	 */
 	public HEMC_WeairePhelan setScale(final double sc) {
 		parameters.set("scale", new double[] { sc, sc, sc });
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sp
+	 * @return
+	 */
 	public HEMC_WeairePhelan setSpacing(final double sp) {
 		parameters.set("spacing", sp);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param U
+	 * @param V
+	 * @param W
+	 * @return
+	 */
 	public HEMC_WeairePhelan setNumberOfUnits(final int U, final int V, final int W) {
 		parameters.set("uvw", new int[] { WB_Math.max(1, U), WB_Math.max(1, V), WB_Math.max(1, W) });
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param crop
+	 * @return
+	 */
 	public HEMC_WeairePhelan setCrop(final boolean crop) {
 		parameters.set("crop", new boolean[] { crop, crop, crop, crop, crop, crop });
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param cropU
+	 * @param cropV
+	 * @param cropW
+	 * @return
+	 */
 	public HEMC_WeairePhelan setCrop(final boolean cropU, final boolean cropV, final boolean cropW) {
 		parameters.set("crop", new boolean[] { cropU, cropV, cropW, cropU, cropV, cropW });
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param cropUm
+	 * @param cropVm
+	 * @param cropWm
+	 * @param cropUp
+	 * @param cropVp
+	 * @param cropWp
+	 * @return
+	 */
 	public HEMC_WeairePhelan setCrop(final boolean cropUm, final boolean cropVm, final boolean cropWm,
 			final boolean cropUp, final boolean cropVp, final boolean cropWp) {
 		parameters.set("crop", new boolean[] { cropUm, cropVm, cropWm, cropUp, cropVp, cropWp });
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param offset
+	 * @return
+	 */
 	private HE_Mesh[] singleCell(final WB_Vector offset) {
 		final double[] scale = getScale();
 		final double spacing = getSpacing();
@@ -150,6 +262,11 @@ public class HEMC_WeairePhelan extends HEMC_MultiCreator {
 		return cells;
 	}
 
+	/**
+	 *
+	 *
+	 * @param result
+	 */
 	@Override
 	void create(final HE_MeshCollection result) {
 		final double[] scale = getScale();

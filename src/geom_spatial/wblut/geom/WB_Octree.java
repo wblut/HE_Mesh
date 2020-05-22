@@ -3,20 +3,44 @@ package wblut.geom;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ *
+ *
+ * @param <V>
+ */
 public class WB_Octree<V> {
+	/**  */
 	protected WB_AABB box;
+	/**  */
 	protected WB_Coord extent;
+	/**  */
 	protected WB_Coord min, max;
+	/**  */
 	protected double minNodeSize = 4.0;
+	/**  */
 	protected WB_Octree<V> parent;
+	/**  */
 	protected WB_Octree<V>[] nodes;
+	/**  */
 	protected int numNodes;
+	/**  */
 	protected List<WB_OctreeEntry<V>> entries;
+	/**  */
 	protected double size, hsize;
+	/**  */
 	protected WB_Coord center;
+	/**  */
 	private int level = 0;
+	/**  */
 	private boolean autoPrune = false;
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param center
+	 * @param size
+	 */
 	private WB_Octree(final WB_Octree<V> p, final WB_Coord center, final double size) {
 		box = new WB_AABB(new WB_Point(center).subSelf(0.5 * size, 0.5 * size, 0.5 * size),
 				new WB_Point(center).addSelf(0.5 * size, 0.5 * size, 0.5 * size));
@@ -31,6 +55,12 @@ public class WB_Octree<V> {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param size
+	 */
 	public WB_Octree(final WB_Coord center, final double size) {
 		box = new WB_AABB(new WB_Point(center).subSelf(0.5 * size, 0.5 * size, 0.5 * size),
 				new WB_Point(center).addSelf(0.5 * size, 0.5 * size, 0.5 * size));
@@ -41,6 +71,12 @@ public class WB_Octree<V> {
 		this.numNodes = 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param value
+	 */
 	@SuppressWarnings("unchecked")
 	public void addPoint(final WB_Coord p, final V value) {
 		if (box.contains(p)) {
@@ -70,16 +106,30 @@ public class WB_Octree<V> {
 		return;
 	}
 
+	/**
+	 *
+	 */
 	public void clear() {
 		numNodes = 0;
 		nodes = null;
 		entries = null;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getLevel() {
 		return level;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Octree<V> getNode(final WB_Coord p) {
 		if (box.contains(p)) {
 			if (numNodes > 0) {
@@ -94,26 +144,57 @@ public class WB_Octree<V> {
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getMinNodeSize() {
 		return minNodeSize;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getNumNodes() {
 		return numNodes;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	protected final int getOctant(final WB_Coord p) {
 		return (p.xd() >= center.xd() ? 1 : 0) + (p.yd() >= center.yd() ? 2 : 0) + (p.zd() >= center.zd() ? 4 : 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Coord getCenter() {
 		return center;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Octree<V> getParent() {
 		return parent;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getNumberOfPoints() {
 		if (entries == null) {
 			return 0;
@@ -121,6 +202,11 @@ public class WB_Octree<V> {
 		return entries.size();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_Octree<V>> getNodes() {
 		final List<WB_Octree<V>> result = new WB_List<>();
 		if (numNodes > 0) {
@@ -133,10 +219,18 @@ public class WB_Octree<V> {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getSize() {
 		return size;
 	}
 
+	/**
+	 *
+	 */
 	private void prune() {
 		if (entries != null && entries.size() == 0) {
 			entries = null;
@@ -153,6 +247,12 @@ public class WB_Octree<V> {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public boolean remove(final WB_Coord p) {
 		boolean found = false;
 		final WB_Octree<V> node = getNode(p);
@@ -171,24 +271,49 @@ public class WB_Octree<V> {
 		return found;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 */
 	public void removeAll(final Collection<WB_Coord> points) {
 		for (final WB_Coord p : points) {
 			remove(p);
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param minNodeSize
+	 */
 	public void setMinNodeSize(final double minNodeSize) {
 		this.minNodeSize = minNodeSize * 0.5f;
 	}
 
+	/**
+	 *
+	 *
+	 * @param state
+	 */
 	public void setAutoPrune(final boolean state) {
 		autoPrune = state;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_AABB getBox() {
 		return box;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_OctreeEntry<V>> getEntries() {
 		WB_List<WB_OctreeEntry<V>> result = null;
 		if (entries != null) {
@@ -210,6 +335,12 @@ public class WB_Octree<V> {
 		return result.asUnmodifiable();
 	}
 
+	/**
+	 *
+	 *
+	 * @param AABB
+	 * @return
+	 */
 	public List<WB_OctreeEntry<V>> getEntriesInRange(final WB_AABB AABB) {
 		WB_List<WB_OctreeEntry<V>> result = new WB_List<>();
 		if (box.intersects(AABB)) {
@@ -234,6 +365,12 @@ public class WB_Octree<V> {
 		return result.asUnmodifiable();
 	}
 
+	/**
+	 *
+	 *
+	 * @param sphere
+	 * @return
+	 */
 	public List<WB_OctreeEntry<V>> getEntriesInRange(final WB_Sphere sphere) {
 		final WB_List<WB_OctreeEntry<V>> result = new WB_List<>();
 		if (box.intersects(sphere)) {
@@ -257,10 +394,22 @@ public class WB_Octree<V> {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param radius
+	 * @return
+	 */
 	public List<WB_OctreeEntry<V>> getEntriesInRange(final WB_Coord center, final double radius) {
 		return getEntriesInRange(new WB_Sphere(center, radius));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_Coord> getPoints() {
 		final WB_CoordList result = new WB_CoordList();
 		if (entries != null) {
@@ -280,6 +429,12 @@ public class WB_Octree<V> {
 		return result.asUnmodifiable();
 	}
 
+	/**
+	 *
+	 *
+	 * @param AABB
+	 * @return
+	 */
 	public List<WB_Coord> getPointsInRange(final WB_AABB AABB) {
 		final WB_CoordList result = new WB_CoordList();
 		for (final WB_OctreeEntry<V> eo : getEntriesInRange(AABB)) {
@@ -288,6 +443,12 @@ public class WB_Octree<V> {
 		return result.asUnmodifiable();
 	}
 
+	/**
+	 *
+	 *
+	 * @param sphere
+	 * @return
+	 */
 	public List<WB_Coord> getPointsInRange(final WB_Sphere sphere) {
 		final WB_CoordList result = new WB_CoordList();
 		for (final WB_OctreeEntry<V> eo : getEntriesInRange(sphere)) {
@@ -296,10 +457,22 @@ public class WB_Octree<V> {
 		return result.asUnmodifiable();
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param radius
+	 * @return
+	 */
 	public List<WB_Coord> getPointsInRange(final WB_Coord center, final double radius) {
 		return getPointsInRange(new WB_Sphere(center, radius));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<V> getValues() {
 		final List<WB_OctreeEntry<V>> allEntries = getEntries();
 		final WB_List<V> result = new WB_List<>();
@@ -309,6 +482,12 @@ public class WB_Octree<V> {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param AABB
+	 * @return
+	 */
 	public List<V> getValuesInRange(final WB_AABB AABB) {
 		final List<WB_OctreeEntry<V>> entriesInRange = getEntriesInRange(AABB);
 		final WB_List<V> result = new WB_List<>();
@@ -318,6 +497,12 @@ public class WB_Octree<V> {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sphere
+	 * @return
+	 */
 	public List<V> getValuesInRange(final WB_Sphere sphere) {
 		final List<WB_OctreeEntry<V>> entriesInRange = getEntriesInRange(sphere);
 		final WB_List<V> result = new WB_List<>();
@@ -327,14 +512,34 @@ public class WB_Octree<V> {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param radius
+	 * @return
+	 */
 	public List<V> getValuesInRange(final WB_Coord center, final double radius) {
 		return getValuesInRange(new WB_Sphere(center, radius));
 	}
 
+	/**
+	 *
+	 *
+	 * @param <V>
+	 */
 	public static class WB_OctreeEntry<V> {
+		/**  */
 		public WB_Coord coord;
+		/**  */
 		public V value;
 
+		/**
+		 *
+		 *
+		 * @param coord
+		 * @param value
+		 */
 		public WB_OctreeEntry(final WB_Coord coord, final V value) {
 			this.coord = coord;
 			this.value = value;

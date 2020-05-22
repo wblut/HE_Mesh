@@ -2,12 +2,26 @@ package wblut.geom;
 
 import wblut.hemesh.HE_ObjectMap;
 
+/**
+ *
+ */
 public class WB_HashGridObject3D {
+	/**  */
 	@SuppressWarnings("rawtypes")
 	private final HE_ObjectMap values;
+	/**  */
 	private final Object defaultValue;
+	/**  */
 	private final int sizeI, sizeJ, sizeK, sizeIJ;
 
+	/**
+	 *
+	 *
+	 * @param sizeI
+	 * @param sizeJ
+	 * @param sizeK
+	 * @param defaultValue
+	 */
 	@SuppressWarnings("rawtypes")
 	public WB_HashGridObject3D(final int sizeI, final int sizeJ, final int sizeK, final Object defaultValue) {
 		this.sizeI = sizeI;
@@ -18,6 +32,13 @@ public class WB_HashGridObject3D {
 		values = new HE_ObjectMap();
 	}
 
+	/**
+	 *
+	 *
+	 * @param sizeI
+	 * @param sizeJ
+	 * @param sizeK
+	 */
 	@SuppressWarnings("rawtypes")
 	public WB_HashGridObject3D(final int sizeI, final int sizeJ, final int sizeK) {
 		this.sizeI = sizeI;
@@ -28,6 +49,15 @@ public class WB_HashGridObject3D {
 		values = new HE_ObjectMap();
 	}
 
+	/**
+	 *
+	 *
+	 * @param value
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public boolean setValue(final Object value, final int i, final int j, final int k) {
 		final long id = safeIndex(i, j, k);
@@ -38,6 +68,14 @@ public class WB_HashGridObject3D {
 		return false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	public boolean clearValue(final int i, final int j, final int k) {
 		final long id = safeIndex(i, j, k);
 		if (id > 0) {
@@ -47,6 +85,14 @@ public class WB_HashGridObject3D {
 		return false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	public Object getValue(final int i, final int j, final int k) {
 		final long id = safeIndex(i, j, k);
 		if (id == -1) {
@@ -59,6 +105,14 @@ public class WB_HashGridObject3D {
 		return defaultValue;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	private long safeIndex(final int i, final int j, final int k) {
 		if (i < 0) {
 			return -1;
@@ -81,26 +135,56 @@ public class WB_HashGridObject3D {
 		return i + j * sizeI + k * sizeIJ;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getWidth() {
 		return sizeI;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getHeight() {
 		return sizeJ;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getDepth() {
 		return sizeK;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public Object getDefaultValue() {
 		return defaultValue;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public long[] getKeys() {
 		return values.keySet().toArray();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int size() {
 		return values.size();
 	}

@@ -1,16 +1,35 @@
 package wblut.geom;
 
+/**
+ *
+ */
 public class WB_Tetrahedron implements WB_Transformable3D {
+	/**  */
 	WB_Point p1;
+	/**  */
 	WB_Point p2;
+	/**  */
 	WB_Point p3;
+	/**  */
 	WB_Point p4;
 
+	/**
+	 *
+	 */
 	protected WB_Tetrahedron() {
 	}
 
+	/**  */
 	private final WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @param p4
+	 */
 	public WB_Tetrahedron(final WB_Coord p1, final WB_Coord p2, final WB_Coord p3, final WB_Coord p4) {
 		this.p1 = geometryfactory.createPoint(p1);
 		this.p2 = geometryfactory.createPoint(p2);
@@ -18,22 +37,48 @@ public class WB_Tetrahedron implements WB_Transformable3D {
 		this.p4 = geometryfactory.createPoint(p4);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Coord p1() {
 		return p1;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Coord p2() {
 		return p2;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Coord p3() {
 		return p3;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Coord p4() {
 		return p4;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public WB_Coord getPoint(final int i) {
 		if (i == 0) {
 			return p1;
@@ -47,10 +92,20 @@ public class WB_Tetrahedron implements WB_Transformable3D {
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point getCenter() {
 		return geometryfactory.createMidpoint(p1, p2, p3, p3);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getVolume() {
 		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
 		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
@@ -58,6 +113,11 @@ public class WB_Tetrahedron implements WB_Transformable3D {
 		return Math.abs(a.dot(b.crossSelf(c))) / 6.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getCircumradius() {
 		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
 		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
@@ -69,6 +129,11 @@ public class WB_Tetrahedron implements WB_Transformable3D {
 		return O.getLength();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point getCircumcenter() {
 		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
 		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
@@ -80,6 +145,11 @@ public class WB_Tetrahedron implements WB_Transformable3D {
 		return p4.add(O);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Sphere getCircumsphere() {
 		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
 		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
@@ -91,6 +161,11 @@ public class WB_Tetrahedron implements WB_Transformable3D {
 		return geometryfactory.createSphereWithRadius(p4.add(O), O.getLength());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getInradius() {
 		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
 		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
@@ -103,6 +178,11 @@ public class WB_Tetrahedron implements WB_Transformable3D {
 		return sixV / denom;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point getIncenter() {
 		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
 		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
@@ -121,6 +201,11 @@ public class WB_Tetrahedron implements WB_Transformable3D {
 		return p4.add(O);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Sphere getInsphere() {
 		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
 		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
@@ -139,20 +224,37 @@ public class WB_Tetrahedron implements WB_Transformable3D {
 		return geometryfactory.createSphereWithRadius(p4.add(O), O.getLength());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isAcute() {
-		return WB_GeometryOp3D.getCosDihedralAngle(p1, p2, p3, p4) > 0.0
-				&& WB_GeometryOp3D.getCosDihedralAngle(p1, p2, p4, p3) > 0.0
-				&& WB_GeometryOp3D.getCosDihedralAngle(p1, p3, p4, p2) > 0.0
-				&& WB_GeometryOp3D.getCosDihedralAngle(p3, p1, p2, p4) > 0.0
-				&& WB_GeometryOp3D.getCosDihedralAngle(p2, p1, p3, p4) > 0.0
-				&& WB_GeometryOp3D.getCosDihedralAngle(p2, p1, p4, p3) > 0.0;
+		return WB_GeometryOp.getCosDihedralAngle(p1, p2, p3, p4) > 0.0
+				&& WB_GeometryOp.getCosDihedralAngle(p1, p2, p4, p3) > 0.0
+				&& WB_GeometryOp.getCosDihedralAngle(p1, p3, p4, p2) > 0.0
+				&& WB_GeometryOp.getCosDihedralAngle(p3, p1, p2, p4) > 0.0
+				&& WB_GeometryOp.getCosDihedralAngle(p2, p1, p3, p4) > 0.0
+				&& WB_GeometryOp.getCosDihedralAngle(p2, p1, p4, p3) > 0.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_Tetrahedron apply2D(final WB_Transform2D T) {
 		return new WB_Tetrahedron(p1.apply2D(T), p2.apply2D(T), p3.apply2D(T), p4.apply2D(T));
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_Tetrahedron apply2DSelf(final WB_Transform2D T) {
 		p1.apply2DSelf(T);
@@ -162,11 +264,23 @@ public class WB_Tetrahedron implements WB_Transformable3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_Tetrahedron apply(final WB_Transform3D T) {
 		return new WB_Tetrahedron(p1.apply(T), p2.apply(T), p3.apply(T), p4.apply(T));
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_Tetrahedron applySelf(final WB_Transform3D T) {
 		p1.applySelf(T);
@@ -176,6 +290,11 @@ public class WB_Tetrahedron implements WB_Transformable3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_AABB getAABB() {
 		final WB_AABB aabb = new WB_AABB();
 		aabb.expandToInclude(p1());

@@ -1,18 +1,29 @@
 package wblut.hemesh;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import wblut.geom.WB_Polyhedron;
 
+/**
+ *
+ */
 public class HEC_FromPolyhedron extends HEC_Creator {
+	/**  */
 	private final WB_Polyhedron source;
 
+	/**
+	 *
+	 *
+	 * @param source
+	 */
 	public HEC_FromPolyhedron(final WB_Polyhedron source) {
 		super();
 		this.source = source;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final HE_Mesh mesh = new HE_Mesh();
@@ -23,7 +34,7 @@ public class HEC_FromPolyhedron extends HEC_Creator {
 			return mesh;
 		}
 		final int[][] faces = source.getFaces();
-		final List<HE_Vertex> vertices = new HE_VertexList();
+		final HE_VertexList vertices = new HE_VertexList();
 		HE_Vertex v;
 		for (int i = 0; i < source.getNumberOfVertices(); i++) {
 			v = new HE_Vertex(source.getVertex(i));
@@ -34,7 +45,7 @@ public class HEC_FromPolyhedron extends HEC_Creator {
 		int id = 0;
 		HE_Halfedge he;
 		for (final int[] face : faces) {
-			final ArrayList<HE_Halfedge> faceEdges = new ArrayList<>();
+			final HE_HalfedgeList faceEdges = new HE_HalfedgeList();
 			final HE_Face hef = new HE_Face();
 			hef.setInternalLabel(id);
 			id++;

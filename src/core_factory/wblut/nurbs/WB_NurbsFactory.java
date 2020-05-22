@@ -1,15 +1,27 @@
 package wblut.nurbs;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryOp3D;
-import wblut.geom.WB_IntersectionResult;
+import wblut.geom.WB_GeometryOp;
+import wblut.geom.WB_Intersection;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PointHomogeneous;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class WB_NurbsFactory {
+	/**
+	 *
+	 *
+	 * @param C
+	 * @param p
+	 * @param axis
+	 * @param theta
+	 * @return
+	 */
 	public static WB_RBSplineSurface createSurfaceOfRevolution(final WB_BSpline C, final WB_Coord p,
 			final WB_Coord axis, double theta) {
 		final boolean full = (theta == 2 * Math.PI);
@@ -69,7 +81,7 @@ public class WB_NurbsFactory {
 			sines[i] = Math.sin(angle);
 		}
 		for (j = 0; j <= C.n(); j++) {
-			final WB_Point O = WB_GeometryOp3D.getClosestPoint3D(C.points()[j], L);
+			final WB_Point O = WB_GeometryOp.getClosestPoint3D(C.points()[j], L);
 			final WB_Vector X = WB_Vector.subToVector3D(C.points()[j], O);
 			final double r = X.normalizeSelf();
 			final WB_Vector Y = new WB_Vector(v).crossSelf(X);
@@ -89,7 +101,7 @@ public class WB_NurbsFactory {
 				T2.addMulSelf(-sines[i], X);
 				final WB_Line L1 = new WB_Line(P0, T0);
 				final WB_Line L2 = new WB_Line(P2, T2);
-				final WB_IntersectionResult is = WB_GeometryOp3D.getClosestPoint3D(L1, L2);
+				final WB_Intersection is = WB_GeometryOp.getClosestPoint3D(L1, L2);
 				final WB_Coord p1 = is.dimension == 0 ? (WB_Point) is.object : ((WB_Segment) is.object).getOrigin();
 				points[index + 1][j] = p1;
 				weights[index + 1][j] = wm;
@@ -107,11 +119,28 @@ public class WB_NurbsFactory {
 		return new WB_RBSplineSurface(points, UKnot, C.knot(), weights);
 	}
 
+	/**
+	 *
+	 *
+	 * @param C
+	 * @param p
+	 * @param axis
+	 * @return
+	 */
 	public static WB_RBSplineSurface createFullSurfaceOfRevolution(final WB_BSpline C, final WB_Coord p,
 			final WB_Coord axis) {
 		return createSurfaceOfRevolution(C, p, axis, 2 * Math.PI);
 	}
 
+	/**
+	 *
+	 *
+	 * @param C
+	 * @param p
+	 * @param axis
+	 * @param theta
+	 * @return
+	 */
 	public static WB_RBSplineSurface createSurfaceOfRevolution(final WB_RBSpline C, final WB_Coord p,
 			final WB_Coord axis, double theta) {
 		final WB_Vector v = new WB_Vector(axis);
@@ -170,7 +199,7 @@ public class WB_NurbsFactory {
 			sines[i] = Math.sin(angle);
 		}
 		for (j = 0; j <= C.n(); j++) {
-			final WB_Point O = WB_GeometryOp3D.getClosestPoint3D(C.points()[j], L);
+			final WB_Point O = WB_GeometryOp.getClosestPoint3D(C.points()[j], L);
 			final WB_Vector X = WB_Vector.subToVector3D(C.points()[j], O);
 			final double r = X.normalizeSelf();
 			final WB_Vector Y = new WB_Vector(v).crossSelf(X);
@@ -190,7 +219,7 @@ public class WB_NurbsFactory {
 				T2.addMulSelf(-sines[i], X);
 				final WB_Line L1 = new WB_Line(P0, T0);
 				final WB_Line L2 = new WB_Line(P2, T2);
-				final WB_IntersectionResult is = WB_GeometryOp3D.getClosestPoint3D(L1, L2);
+				final WB_Intersection is = WB_GeometryOp.getClosestPoint3D(L1, L2);
 				final WB_Coord p1 = is.dimension == 0 ? (WB_Point) is.object : ((WB_Segment) is.object).getOrigin();
 				points[index + 1][j] = p1;
 				weights[index + 1][j] = wm * C.wpoints()[j].wd();
@@ -205,11 +234,26 @@ public class WB_NurbsFactory {
 		return new WB_RBSplineSurface(points, UKnot, C.knot(), weights);
 	}
 
+	/**
+	 *
+	 *
+	 * @param C
+	 * @param p
+	 * @param axis
+	 * @return
+	 */
 	public static WB_RBSplineSurface createFullSurfaceOfRevolution(final WB_RBSpline C, final WB_Coord p,
 			final WB_Coord axis) {
 		return createSurfaceOfRevolution(C, p, axis, 2 * Math.PI);
 	}
 
+	/**
+	 *
+	 *
+	 * @param CA
+	 * @param CB
+	 * @return
+	 */
 	public static WB_BSplineSurface createRuledSurface(WB_BSpline CA, WB_BSpline CB) {
 		if (CA.getLowerU() != CB.getLowerU() || CA.getUpperU() != CB.getUpperU()) {
 			throw new IllegalArgumentException("Curves not defined on same parameter range.");
@@ -236,6 +280,13 @@ public class WB_NurbsFactory {
 		return new WB_BSplineSurface(controlPoints, mergedKnot, VKnot);
 	}
 
+	/**
+	 *
+	 *
+	 * @param CA
+	 * @param CB
+	 * @return
+	 */
 	public static WB_RBSplineSurface createRuledSurface(WB_RBSpline CA, WB_RBSpline CB) {
 		if (CA.getLowerU() != CB.getLowerU() || CA.getUpperU() != CB.getUpperU()) {
 			throw new IllegalArgumentException("Curves not defined on same parameter range.");
@@ -261,6 +312,14 @@ public class WB_NurbsFactory {
 		return new WB_RBSplineSurface(controlPoints, mergedKnot, VKnot);
 	}
 
+	/**
+	 *
+	 *
+	 * @param xzprofile
+	 * @param xytrajectory
+	 * @param alpha
+	 * @return
+	 */
 	public static WB_BSplineSurface createSwungSurface(final WB_BSpline xzprofile, final WB_BSpline xytrajectory,
 			final double alpha) {
 		final int n = xzprofile.n();
@@ -275,6 +334,14 @@ public class WB_NurbsFactory {
 		return new WB_BSplineSurface(points, xzprofile.knot(), xytrajectory.knot());
 	}
 
+	/**
+	 *
+	 *
+	 * @param xzprofile
+	 * @param xytrajectory
+	 * @param alpha
+	 * @return
+	 */
 	public static WB_RBSplineSurface createSwungSurface(final WB_BSpline xzprofile, final WB_RBSpline xytrajectory,
 			final double alpha) {
 		final int n = xzprofile.n();
@@ -291,6 +358,14 @@ public class WB_NurbsFactory {
 		return new WB_RBSplineSurface(points, xzprofile.knot(), xytrajectory.knot(), weights);
 	}
 
+	/**
+	 *
+	 *
+	 * @param xzprofile
+	 * @param xytrajectory
+	 * @param alpha
+	 * @return
+	 */
 	public static WB_RBSplineSurface createSwungSurface(final WB_RBSpline xzprofile, final WB_BSpline xytrajectory,
 			final double alpha) {
 		final int n = xzprofile.n();
@@ -307,6 +382,14 @@ public class WB_NurbsFactory {
 		return new WB_RBSplineSurface(points, xzprofile.knot(), xytrajectory.knot(), weights);
 	}
 
+	/**
+	 *
+	 *
+	 * @param xzprofile
+	 * @param xytrajectory
+	 * @param alpha
+	 * @return
+	 */
 	public static WB_RBSplineSurface createSwungSurface(final WB_RBSpline xzprofile, final WB_RBSpline xytrajectory,
 			final double alpha) {
 		final int n = xzprofile.n();
@@ -323,6 +406,14 @@ public class WB_NurbsFactory {
 		return new WB_RBSplineSurface(points, xzprofile.knot(), xytrajectory.knot(), weights);
 	}
 
+	/**
+	 *
+	 *
+	 * @param C
+	 * @param v
+	 * @param f
+	 * @return
+	 */
 	public static WB_BSplineSurface createLineSweep(final WB_BSpline C, final WB_Coord v, final double f) {
 		final WB_NurbsKnot VKnot = new WB_NurbsKnot(2, 1);
 		final WB_Point[][] points = new WB_Point[C.n() + 1][2];
@@ -333,6 +424,14 @@ public class WB_NurbsFactory {
 		return new WB_BSplineSurface(points, C.knot(), VKnot);
 	}
 
+	/**
+	 *
+	 *
+	 * @param C
+	 * @param v
+	 * @param f
+	 * @return
+	 */
 	public static WB_RBSplineSurface createLineSweep(final WB_RBSpline C, final WB_Coord v, final double f) {
 		final WB_NurbsKnot VKnot = new WB_NurbsKnot(2, 1);
 		final WB_Point[][] points = new WB_Point[C.n() + 1][2];

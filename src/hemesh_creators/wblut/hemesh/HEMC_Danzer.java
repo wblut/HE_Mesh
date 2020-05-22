@@ -10,86 +10,193 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Math;
 
+/**
+ *
+ */
 public class HEMC_Danzer extends HEMC_MultiCreator {
+	/**
+	 *
+	 */
 	public HEMC_Danzer() {
 		super();
 		setCrop(false);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected WB_Point getOrigin() {
 		return (WB_Point) parameters.get("origin", new WB_Point());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected WB_Vector getExtents() {
 		return (WB_Vector) parameters.get("extents", new WB_Vector());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getScale() {
 		return parameters.get("scale", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getSpacing() {
 		return parameters.get("spacing", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected int getLevel() {
 		return parameters.get("level", 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected WB_Danzer3D.Type getType() {
 		return (WB_Danzer3D.Type) parameters.get("type", WB_Danzer3D.Type.A);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected boolean[] getCrop() {
 		return (boolean[]) parameters.get("crop", new boolean[] { false, false, false, false, false, false });
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public HEMC_Danzer setOrigin(final WB_Coord p) {
 		parameters.set("origin", new WB_Point(p));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public HEMC_Danzer setExtents(final WB_Vector v) {
 		parameters.set("extents", new WB_Vector(v));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sc
+	 * @return
+	 */
 	public HEMC_Danzer setScale(final double sc) {
 		parameters.set("scale", sc);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sp
+	 * @return
+	 */
 	public HEMC_Danzer setSpacing(final double sp) {
 		parameters.set("spacing", sp);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param level
+	 * @return
+	 */
 	public HEMC_Danzer setLevel(final int level) {
 		parameters.set("level", WB_Math.max(0, level));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param crop
+	 * @return
+	 */
 	public HEMC_Danzer setCrop(final boolean crop) {
 		parameters.set("crop", new boolean[] { crop, crop, crop, crop, crop, crop });
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param cropU
+	 * @param cropV
+	 * @param cropW
+	 * @return
+	 */
 	public HEMC_Danzer setCrop(final boolean cropU, final boolean cropV, final boolean cropW) {
 		parameters.set("crop", new boolean[] { cropU, cropV, cropW, cropU, cropV, cropW });
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param cropUm
+	 * @param cropVm
+	 * @param cropWm
+	 * @param cropUp
+	 * @param cropVp
+	 * @param cropWp
+	 * @return
+	 */
 	public HEMC_Danzer setCrop(final boolean cropUm, final boolean cropVm, final boolean cropWm, final boolean cropUp,
 			final boolean cropVp, final boolean cropWp) {
 		parameters.set("crop", new boolean[] { cropUm, cropVm, cropWm, cropUp, cropVp, cropWp });
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param type
+	 * @return
+	 */
 	public HEMC_Danzer setType(final WB_Danzer3D.Type type) {
 		parameters.set("type", type);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param result
+	 */
 	@Override
 	void create(final HE_MeshCollection result) {
 		final WB_Vector extents = getExtents();

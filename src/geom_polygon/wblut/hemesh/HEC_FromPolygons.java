@@ -6,30 +6,60 @@ import wblut.geom.WB_CoordList;
 import wblut.geom.WB_List;
 import wblut.geom.WB_Polygon;
 
+/**
+ *
+ */
 public class HEC_FromPolygons extends HEC_Creator {
+	/**  */
 	private WB_Polygon[] polygons;
+	/**  */
 	private boolean checkNormals;
 
+	/**
+	 *
+	 */
 	public HEC_FromPolygons() {
 		super();
 		setOverride(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param qs
+	 */
 	public HEC_FromPolygons(final WB_Polygon[] qs) {
 		this();
 		polygons = qs;
 	}
 
+	/**
+	 *
+	 *
+	 * @param qs
+	 */
 	public HEC_FromPolygons(final Collection<? extends WB_Polygon> qs) {
 		this();
 		setPolygons(qs);
 	}
 
+	/**
+	 *
+	 *
+	 * @param qs
+	 * @return
+	 */
 	public HEC_FromPolygons setPolygons(final WB_Polygon[] qs) {
 		polygons = qs;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param qs
+	 * @return
+	 */
 	public HEC_FromPolygons setPolygons(final Collection<? extends WB_Polygon> qs) {
 		final int n = qs.size();
 		polygons = new WB_Polygon[n];
@@ -41,6 +71,11 @@ public class HEC_FromPolygons extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		if (polygons != null) {

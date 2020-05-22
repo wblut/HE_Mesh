@@ -8,37 +8,77 @@ import wblut.geom.WB_KDTreeInteger3D.WB_KDEntryInteger;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class HEM_Inflate extends HEM_Modifier {
+	/**  */
 	private boolean autoRescale;
+	/**  */
 	private int iter;
+	/**  */
 	private double radius;
+	/**  */
 	private double factor;
 
+	/**
+	 *
+	 */
 	public HEM_Inflate() {
 		radius = 10;
 		factor = 0.1;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_Inflate setAutoRescale(final boolean b) {
 		autoRescale = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HEM_Inflate setIterations(final int r) {
 		iter = r;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HEM_Inflate setRadius(final double r) {
 		radius = r;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	public HEM_Inflate setFactor(final double f) {
 		factor = f;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		WB_AABB box = new WB_AABB();
@@ -90,6 +130,12 @@ public class HEM_Inflate extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		selection.collectVertices();

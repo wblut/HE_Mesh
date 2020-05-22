@@ -6,17 +6,36 @@ import java.util.List;
 
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class WB_VoronoiCell3D {
+	/**  */
 	WB_Point generator;
+	/**  */
 	int index;
+	/**  */
 	WB_SimpleMesh cell;
+	/**  */
 	WB_SimpleMesh untrimmedCell;
+	/**  */
 	boolean boundary;
+	/**  */
 	boolean sliced;
+	/**  */
 	boolean[] verticesOnBoundary;
+	/**  */
 	boolean[] facesOnBoundary;
+	/**  */
 	private final WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param generator
+	 * @param index
+	 */
 	public WB_VoronoiCell3D(final WB_Coord[] points, final WB_Point generator, final int index) {
 		this.generator = generator;
 		this.index = index;
@@ -28,6 +47,13 @@ public class WB_VoronoiCell3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param generator
+	 * @param index
+	 */
 	public WB_VoronoiCell3D(final List<? extends WB_Coord> points, final WB_Point generator, final int index) {
 		this.generator = generator;
 		this.index = index;
@@ -39,6 +65,13 @@ public class WB_VoronoiCell3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param cell
+	 * @param generator
+	 * @param index
+	 */
 	public WB_VoronoiCell3D(final WB_SimpleMesh cell, final WB_Point generator, final int index) {
 		this.generator = generator;
 		this.index = index;
@@ -50,6 +83,11 @@ public class WB_VoronoiCell3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param container
+	 */
 	public void constrain(final WB_AABB container) {
 		final WB_AABB aabb = cell.getAABB();
 		if (container.contains(aabb)) {
@@ -81,6 +119,11 @@ public class WB_VoronoiCell3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param planes
+	 */
 	public void constrain(final Collection<? extends WB_Plane> planes) {
 		for (final WB_Plane P : planes) {
 			if (cell != null) {
@@ -95,7 +138,7 @@ public class WB_VoronoiCell3D {
 			pointloop: for (int i = 0; i < cell.getNumberOfVertices(); i++) {
 				p = cell.getVertex(i);
 				for (final WB_Plane P : planes) {
-					d = WB_GeometryOp3D.getDistanceToPlane3D(p, P);
+					d = WB_GeometryOp.getDistanceToPlane3D(p, P);
 					if (WB_Epsilon.isZero(d)) {
 						verticesOnBoundary[i] = true;
 						continue pointloop;
@@ -121,6 +164,11 @@ public class WB_VoronoiCell3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 */
 	public void trim(final double d) {
 		if (!WB_Epsilon.isZero(d)) {
 			for (final WB_Plane P : cell.getPlanes(-d)) {
@@ -132,6 +180,11 @@ public class WB_VoronoiCell3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 */
 	private void slice(final WB_Plane P) {
 		final WB_Classification[] classifyPoints = ptsPlane(P);
 		final List<WB_Coord> newPoints = new ArrayList<>();
@@ -147,49 +200,95 @@ public class WB_VoronoiCell3D {
 							&& classifyPoints[edge[0]] == WB_Classification.FRONT) {
 				final WB_Coord a = cell.getVertex(edge[0]);
 				final WB_Coord b = cell.getVertex(edge[1]);
-				newPoints.add((WB_Point) WB_GeometryOp3D.getIntersection3D(a, b, P).object);
+				newPoints.add((WB_Point) WB_GeometryOp.getIntersection3D(a, b, P).object);
 				sliced = true;
 			}
 		}
 		cell = geometryfactory.createConvexHull(newPoints, false);
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	private WB_Classification[] ptsPlane(final WB_Plane P) {
 		final WB_Classification[] result = new WB_Classification[cell.getNumberOfVertices()];
 		for (int i = 0; i < cell.getNumberOfVertices(); i++) {
-			result[i] = WB_GeometryOp3D.classifyPointToPlane3D(cell.getVertex(i), P);
+			result[i] = WB_GeometryOp.classifyPointToPlane3D(cell.getVertex(i), P);
 		}
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getIndex() {
 		return index;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point getGenerator() {
 		return generator;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_SimpleMesh getMesh() {
 		return cell;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_SimpleMesh getUntrimmedMesh() {
 		return untrimmedCell;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean[] getVerticesOnBoundary() {
 		return verticesOnBoundary;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean[] getFacesOnBoundary() {
 		return facesOnBoundary;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isBoundary() {
 		return boundary;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isTrimmed() {
 		return sliced;
 	}

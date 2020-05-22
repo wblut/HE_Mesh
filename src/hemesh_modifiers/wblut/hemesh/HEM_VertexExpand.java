@@ -7,24 +7,49 @@ import wblut.geom.WB_CoordList;
 import wblut.math.WB_ConstantScalarParameter;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class HEM_VertexExpand extends HEM_Modifier {
+	/**  */
 	private WB_ScalarParameter d;
 
+	/**
+	 *
+	 */
 	public HEM_VertexExpand() {
 		super();
 		d = WB_ScalarParameter.ZERO;
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEM_VertexExpand setDistance(final double d) {
 		this.d = d == 0 ? WB_ScalarParameter.ZERO : new WB_ConstantScalarParameter(d);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEM_VertexExpand setDistance(final WB_ScalarParameter d) {
 		this.d = d;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		if (d == WB_ScalarParameter.ZERO) {
@@ -35,7 +60,7 @@ public class HEM_VertexExpand extends HEM_Modifier {
 		final WB_CoordList normals = new WB_CoordList();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			normals.add(HE_MeshOp.getVertexNormal(v));
+			normals.add(mesh.getVertexNormal(v));
 		}
 		final Iterator<WB_Coord> vnItr = normals.iterator();
 		vItr = mesh.vItr();
@@ -48,6 +73,12 @@ public class HEM_VertexExpand extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		if (d == WB_ScalarParameter.ZERO) {
@@ -58,7 +89,7 @@ public class HEM_VertexExpand extends HEM_Modifier {
 		final WB_CoordList normals = new WB_CoordList();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			normals.add(HE_MeshOp.getVertexNormal(v));
+			normals.add(selection.getParent().getVertexNormal(v));
 		}
 		final Iterator<WB_Coord> vnItr = normals.iterator();
 		vItr = selection.vItr();

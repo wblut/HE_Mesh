@@ -1,28 +1,46 @@
 package wblut.hemesh;
 
 import java.util.Collections;
-import java.util.List;
 
+/**
+ *
+ */
 public class HEM_EqualizeValence extends HEM_Modifier {
+	/**  */
 	private double threshold;
 
+	/**
+	 *
+	 */
 	public HEM_EqualizeValence() {
 		super();
 		threshold = -Math.PI;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public HEM_EqualizeValence setThreshold(final double a) {
 		threshold = a;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		HE_MeshOp.triangulate(mesh);
 		HE_Vertex a, b, c, d;
 		int devpre = 0, devpost = 0;
 		for (int r = 0; r < 2; r++) {
-			final List<HE_Halfedge> edges = new HE_HalfedgeList();
+			final HE_HalfedgeList edges = new HE_HalfedgeList();
 			edges.addAll(mesh.getEdges());
 			Collections.shuffle(edges);
 			for (final HE_Halfedge e : edges) {
@@ -53,10 +71,16 @@ public class HEM_EqualizeValence extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		HE_MeshOp.triangulate(selection);
-		final List<HE_Halfedge> edges = new HE_HalfedgeList();
+		final HE_HalfedgeList edges = new HE_HalfedgeList();
 		edges.addAll(selection.getInnerEdges());
 		Collections.shuffle(edges);
 		HE_Vertex a, b, c, d;

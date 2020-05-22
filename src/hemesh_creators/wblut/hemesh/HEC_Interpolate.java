@@ -3,39 +3,81 @@ package wblut.hemesh;
 import wblut.math.WB_ConstantScalarParameter;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class HEC_Interpolate extends HEC_Creator {
+	/**  */
 	private HE_Mesh meshA;
+	/**  */
 	private HE_Mesh meshB;
 
+	/**
+	 *
+	 */
 	public HEC_Interpolate() {
 		super();
 		setOverride(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected WB_ScalarParameter getFactor() {
 		return (WB_ScalarParameter) parameters.get("factor", new WB_ConstantScalarParameter(0.0));
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public HEC_Interpolate setMeshA(final HE_Mesh mesh) {
 		meshA = mesh;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public HEC_Interpolate setMeshB(final HE_Mesh mesh) {
 		meshB = mesh;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	public HEC_Interpolate setFactor(final double f) {
 		parameters.get("factor", new WB_ConstantScalarParameter(f));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	public HEC_Interpolate setFactor(final WB_ScalarParameter f) {
 		parameters.get("factor", f);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		if (meshA == null || meshB == null || meshA.getNumberOfVertices() != meshB.getNumberOfVertices()) {

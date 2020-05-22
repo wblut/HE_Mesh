@@ -5,10 +5,30 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Math;
 
+/**
+ *
+ *
+ * @param <E>
+ */
 public interface HET_InfoFace<E extends Object> {
+	/**
+	 *
+	 *
+	 * @param face
+	 * @return
+	 */
 	E retrieve(final HE_Face face);
 
+	/**
+	 *
+	 */
 	public static class HET_FaceNormal implements HET_InfoFace<WB_Vector> {
+		/**
+		 *
+		 *
+		 * @param face
+		 * @return
+		 */
 		@Override
 		public WB_Vector retrieve(final HE_Face face) {
 			if (face.getHalfedge() == null) {
@@ -31,7 +51,16 @@ public interface HET_InfoFace<E extends Object> {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public static class HET_FaceCenter implements HET_InfoFace<WB_Point> {
+		/**
+		 *
+		 *
+		 * @param face
+		 * @return
+		 */
 		@Override
 		public WB_Point retrieve(final HE_Face face) {
 			if (face.getHalfedge() == null) {
@@ -50,7 +79,16 @@ public interface HET_InfoFace<E extends Object> {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public static class HET_FaceArea implements HET_InfoFace<Double> {
+		/**
+		 *
+		 *
+		 * @param face
+		 * @return
+		 */
 		@Override
 		public Double retrieve(final HE_Face face) {
 			if (face.getHalfedge() == null) {
@@ -113,7 +151,16 @@ public interface HET_InfoFace<E extends Object> {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public static class HET_FaceTriangles implements HET_InfoFace<int[]> {
+		/**
+		 *
+		 *
+		 * @param f
+		 * @return
+		 */
 		@Override
 		public int[] retrieve(final HE_Face f) {
 			int[] triangles;

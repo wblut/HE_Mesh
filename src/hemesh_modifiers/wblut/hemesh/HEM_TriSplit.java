@@ -2,25 +2,45 @@ package wblut.hemesh;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HEM_TriSplit extends HEM_Modifier {
+	/**  */
 	private double d;
+	/**  */
 	private HE_Selection selectionOut;
 
+	/**
+	 *
+	 */
 	public HEM_TriSplit() {
 		super();
 		d = 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEM_TriSplit setOffset(final double d) {
 		this.d = d;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HEM_TriSplit.");
@@ -29,6 +49,12 @@ public class HEM_TriSplit extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		tracker.setStartStatus(this, "Starting HEM_TriSplit.");
@@ -37,6 +63,12 @@ public class HEM_TriSplit extends HEM_Modifier {
 		return selection.getParent();
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @param d
+	 */
 	private void splitFacesTri(final HE_Selection selection, final double d) {
 		selectionOut = HE_Selection.getSelection(selection.getParent());
 		final HE_Face[] faces = selection.getFacesAsArray();
@@ -53,11 +85,26 @@ public class HEM_TriSplit extends HEM_Modifier {
 		selection.add(selectionOut);
 	}
 
+	/**
+	 *
+	 *
+	 * @param face
+	 * @param d
+	 * @param mesh
+	 * @return
+	 */
 	private HE_Selection splitFaceTri(final HE_Face face, final double d, final HE_Mesh mesh) {
-		return splitFaceTri(mesh, face,
-				WB_Point.addMul(HE_MeshOp.getFaceCenter(face), d, HE_MeshOp.getFaceNormal(face)));
+		return splitFaceTri(mesh, face, WB_Point.addMul(mesh.getFaceCenter(face), d, mesh.getFaceNormal(face)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param face
+	 * @param p
+	 * @return
+	 */
 	public static HE_Selection splitFaceTri(final HE_Mesh mesh, final HE_Face face, final WB_Coord p) {
 		HE_Halfedge he = face.getHalfedge();
 		final HE_Vertex vi = new HE_Vertex(p);
@@ -83,7 +130,7 @@ public class HEM_TriSplit extends HEM_Modifier {
 		do {
 			c++;
 			final WB_Plane P = new WB_Plane(HE_MeshOp.getHalfedgeCenter(he), HE_MeshOp.getHalfedgeNormal(he));
-			final double d = WB_GeometryOp3D.getDistance3D(p, P);
+			final double d = WB_GeometryOp.getDistance3D(p, P);
 			if (WB_Epsilon.isZero(d)) {
 				onEdge = true;
 				break;
@@ -140,6 +187,11 @@ public class HEM_TriSplit extends HEM_Modifier {
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection getSplitFaces() {
 		return this.selectionOut;
 	}

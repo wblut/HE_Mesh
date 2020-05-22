@@ -6,28 +6,60 @@ import java.util.List;
 import wblut.geom.WB_Geodesic.Type;
 import wblut.geom.WB_Geodesic.WB_GreatCircleIntersection;
 
+/**
+ *
+ */
 class WB_GeodesicI {
+	/**  */
 	public static final int EQUALCHORD = 0;
+	/**  */
 	public static final int EQUALARC = 1;
+	/**  */
 	public static final int EQUALARC2GC = 2;
+	/**  */
 	public static final int MIDARC = 3;
+	/**  */
 	private static double[][] deltahedron = new double[][] { { 0.471405, 0.816497, -0.333333 },
 			{ 0.707107, 0.707107, 0 }, { 0.723607, 0.525731, 0.447214 } };
+	/**  */
 	public WB_Point[] apices;
+	/**  */
 	public WB_Point[] refpoints;
+	/**  */
 	public WB_Point[] PPTpoints;
+	/**  */
 	private WB_Plane P;
+	/**  */
 	private final int v;
+	/**  */
 	private WB_SimpleMesh mesh;
+	/**  */
 	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	/**  */
 	private final double radius;
+	/**  */
 	private final WB_Geodesic.Type type;
+	/**  */
 	private final int div;
 
+	/**
+	 *
+	 *
+	 * @param radius
+	 * @param v
+	 */
 	public WB_GeodesicI(final double radius, final int v) {
 		this(radius, v, WB_Geodesic.Type.ICOSAHEDRON, EQUALARC);
 	}
 
+	/**
+	 *
+	 *
+	 * @param radius
+	 * @param v
+	 * @param type
+	 * @param div
+	 */
 	public WB_GeodesicI(final double radius, final int v, final Type type, final int div) {
 		if (v <= 0) {
 			throw new InvalidParameterException("v should be 1 or larger.");
@@ -43,11 +75,19 @@ class WB_GeodesicI {
 		this.v = div == MIDARC ? cv : v;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_SimpleMesh getMesh() {
 		createMesh();
 		return mesh;
 	}
 
+	/**
+	 *
+	 */
 	private void createMesh() {
 		apices = new WB_Point[3];
 		apices[0] = gf.createPoint(0, 0, 1);
@@ -296,14 +336,29 @@ class WB_GeodesicI {
 		mesh = gf.createConvexHullWithThreshold(points, false, threshold);
 	}
 
+	/**
+	 *
+	 *
+	 * @param gci
+	 * @param apices
+	 * @param type
+	 * @return
+	 */
 	private WB_Point selectPoint(final WB_GreatCircleIntersection gci, final WB_Point[] apices, final Type type) {
 		if (type == Type.TETRAHEDRON) {
-			return Math.abs(WB_GeometryOp3D.getDistance3D(gci.p0, P)) < Math
-					.abs(WB_GeometryOp3D.getDistance3D(gci.p1, P)) ? gf.createPoint(gci.p0) : gf.createPoint(gci.p1);
+			return Math.abs(WB_GeometryOp.getDistance3D(gci.p0, P)) < Math.abs(WB_GeometryOp.getDistance3D(gci.p1, P))
+					? gf.createPoint(gci.p0)
+					: gf.createPoint(gci.p1);
 		}
 		return gci.p0[2] > 0 ? gf.createPoint(gci.p0) : gf.createPoint(gci.p1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param log2v
+	 * @return
+	 */
 	private WB_Point[][] midpoint(final int log2v) {
 		final WB_Point[][] points = new WB_Point[v + 1][v + 1];
 		points[0][0] = apices[0];
@@ -313,6 +368,19 @@ class WB_GeodesicI {
 		return points;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param i0
+	 * @param j0
+	 * @param i1
+	 * @param j1
+	 * @param i2
+	 * @param j2
+	 * @param r
+	 * @param n
+	 */
 	private void recdivtriangle(final WB_Point[][] points, final int i0, final int j0, final int i1, final int j1,
 			final int i2, final int j2, final int r, final int n) {
 		final int i01 = (i0 + i1) / 2;

@@ -2,23 +2,34 @@ package wblut.hemesh;
 
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 
+/**
+ *
+ */
 public class HEM_FacePlanarize extends HEM_Modifier {
+	/**
+	 *
+	 */
 	public HEM_FacePlanarize() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		HE_Vertex v;
 		HE_Face f;
 		for (int r = 0; r < 100; r++) {
-			final List<HE_Face> faces = mesh.getFaces();
+			final HE_FaceList faces = mesh.getFaces();
 			Collections.shuffle(faces);
 			final Iterator<HE_Face> fItr = faces.iterator();
 			while (fItr.hasNext()) {
@@ -27,13 +38,19 @@ public class HEM_FacePlanarize extends HEM_Modifier {
 				final HE_FaceVertexCirculator fvCrc = f.fvCrc();
 				while (fvCrc.hasNext()) {
 					v = fvCrc.next();
-					v.getPosition().mulAddMulSelf(0.9, 0.1, WB_GeometryOp3D.projectOnPlane(v, P));
+					v.getPosition().mulAddMulSelf(0.9, 0.1, WB_GeometryOp.projectOnPlane(v, P));
 				}
 			}
 		}
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		selection.collectVertices();
@@ -46,7 +63,7 @@ public class HEM_FacePlanarize extends HEM_Modifier {
 		}
 		HE_Vertex v;
 		Iterator<HE_Vertex> vItr = selection.vItr();
-		List<HE_Face> faces;
+		HE_FaceList faces;
 		WB_Point target;
 		final WB_Point[] targets = new WB_Point[selection.getNumberOfVertices()];
 		id = 0;
@@ -55,7 +72,7 @@ public class HEM_FacePlanarize extends HEM_Modifier {
 			faces = v.getFaceStar();
 			target = new WB_Point();
 			for (final HE_Face f : faces) {
-				target.addSelf(WB_GeometryOp3D.projectOnPlane(v, planes[f.getInternalLabel()]));
+				target.addSelf(WB_GeometryOp.projectOnPlane(v, planes[f.getInternalLabel()]));
 			}
 			target.divSelf(faces.size());
 			targets[id++] = target;

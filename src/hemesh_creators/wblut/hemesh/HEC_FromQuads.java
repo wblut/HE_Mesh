@@ -5,29 +5,58 @@ import java.util.Collection;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Quad;
 
+/**
+ *
+ */
 public class HEC_FromQuads extends HEC_Creator {
+	/**  */
 	private WB_Quad[] quads;
 
+	/**
+	 *
+	 */
 	public HEC_FromQuads() {
 		super();
 		setOverride(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param qs
+	 */
 	public HEC_FromQuads(final WB_Quad[] qs) {
 		this();
 		quads = qs;
 	}
 
+	/**
+	 *
+	 *
+	 * @param qs
+	 */
 	public HEC_FromQuads(final Collection<WB_Quad> qs) {
 		this();
 		setQuads(qs);
 	}
 
+	/**
+	 *
+	 *
+	 * @param qs
+	 * @return
+	 */
 	public HEC_FromQuads setQuads(final WB_Quad[] qs) {
 		quads = qs;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param qs
+	 * @return
+	 */
 	public HEC_FromQuads setQuads(final Collection<WB_Quad> qs) {
 		final int n = qs.size();
 		quads = new WB_Quad[n];
@@ -39,6 +68,11 @@ public class HEC_FromQuads extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		if (quads != null) {

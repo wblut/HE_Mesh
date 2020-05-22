@@ -5,22 +5,57 @@ import java.util.List;
 
 import wblut.math.WB_MTRandom;
 
+/**
+ *
+ */
 public class WB_Danzer3D {
+	/**
+	 *
+	 */
 	public enum Type {
-		A, B, C, K
+		/**  */
+		A,
+		/**  */
+		B,
+		/**  */
+		C,
+		/**  */
+		K
 	}
 
+	/**
+	 *
+	 */
 	public static class WB_DanzerTile3D extends WB_Tetrahedron {
+		/**  */
 		private Type type;
+		/**  */
 		private int generation;
+		/**  */
 		private final static double a = Math.cos(1.0 / 10.0 * Math.PI);
+		/**  */
 		private final static double b = Math.cos(1.0 / 6.0 * Math.PI);
+		/**  */
 		private final static double tau = 0.5 * (1.0 + Math.sqrt(5.0));
+		/**  */
 		private final static double invtau = 1.0 / tau;
 
+		/**
+		 *
+		 */
 		protected WB_DanzerTile3D() {
 		}
 
+		/**
+		 *
+		 *
+		 * @param p1
+		 * @param p2
+		 * @param p3
+		 * @param p4
+		 * @param type
+		 * @param generation
+		 */
 		private WB_DanzerTile3D(final WB_Coord p1, final WB_Coord p2, final WB_Coord p3, final WB_Coord p4,
 				final Type type, final int generation) {
 			this.p1 = geometryfactory.createPoint(p1);
@@ -31,12 +66,28 @@ public class WB_Danzer3D {
 			this.generation = generation;
 		}
 
+		/**  */
 		private final WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
+		/**
+		 *
+		 *
+		 * @param type
+		 * @param scale
+		 * @param offset
+		 */
 		public WB_DanzerTile3D(final Type type, final double scale, final WB_Coord offset) {
 			this(type, scale, offset, 0);
 		}
 
+		/**
+		 *
+		 *
+		 * @param type
+		 * @param scale
+		 * @param offset
+		 * @param generation
+		 */
 		WB_DanzerTile3D(final Type type, final double scale, final WB_Coord offset, final int generation) {
 			p1 = new WB_Point();
 			this.type = type;
@@ -69,23 +120,23 @@ public class WB_Danzer3D {
 				C23 = new WB_Circle(a, 0, b * tau);
 				break;
 			}
-			p3 = new WB_Point(WB_GeometryOp2D.getIntersection2D(C13, C23).get(0));
+			p3 = new WB_Point(WB_GeometryOp.getIntersection2D(C13, C23).get(0));
 			WB_Coord[] points;
 			switch (type) {
 			case A:
-				points = WB_GeometryOp3D.getFourthPoint(p1, 1.0, p2, a, p3, b);
+				points = WB_GeometryOp.getFourthPoint(p1, 1.0, p2, a, p3, b);
 				break;
 			case B:
-				points = WB_GeometryOp3D.getFourthPoint(p1, a * invtau, p2, b, p3, 1);
+				points = WB_GeometryOp.getFourthPoint(p1, a * invtau, p2, b, p3, 1);
 				break;
 			case C:
-				points = WB_GeometryOp3D.getFourthPoint(p1, a, p2, b, p3, a);
+				points = WB_GeometryOp.getFourthPoint(p1, a, p2, b, p3, a);
 				break;
 			case K:
-				points = WB_GeometryOp3D.getFourthPoint(p1, 0.5, p2, 0.5 * tau, p3, 0.5 * invtau);
+				points = WB_GeometryOp.getFourthPoint(p1, 0.5, p2, 0.5 * tau, p3, 0.5 * invtau);
 				break;
 			default:
-				points = WB_GeometryOp3D.getFourthPoint(p1, 1.0, p2, a, p3, b);
+				points = WB_GeometryOp.getFourthPoint(p1, 1.0, p2, a, p3, b);
 				break;
 			}
 			if (points[0].zd() >= 0) {
@@ -99,26 +150,52 @@ public class WB_Danzer3D {
 			p4.mulSelf(scale).addSelf(offset);
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public WB_Coord p1() {
 			return p1;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public WB_Coord p2() {
 			return p2;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public WB_Coord p3() {
 			return p3;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public WB_Coord p4() {
 			return p4;
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @return
+		 */
 		@Override
 		public WB_Coord getPoint(final int i) {
 			if (i == 0) {
@@ -133,11 +210,21 @@ public class WB_Danzer3D {
 			return null;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public WB_Point getCenter() {
 			return geometryfactory.createMidpoint(p1, p2, p3, p3);
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public double getVolume() {
 			final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
@@ -146,6 +233,11 @@ public class WB_Danzer3D {
 			return Math.abs(a.dot(b.crossSelf(c))) / 6.0;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public double getCircumradius() {
 			final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
@@ -158,6 +250,11 @@ public class WB_Danzer3D {
 			return O.getLength();
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public WB_Point getCircumcenter() {
 			final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
@@ -170,6 +267,11 @@ public class WB_Danzer3D {
 			return p4.add(O);
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public WB_Sphere getCircumsphere() {
 			final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
@@ -182,6 +284,11 @@ public class WB_Danzer3D {
 			return geometryfactory.createSphereWithRadius(p4.add(O), O.getLength());
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public double getInradius() {
 			final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
@@ -195,6 +302,11 @@ public class WB_Danzer3D {
 			return sixV / denom;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public WB_Point getIncenter() {
 			final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
@@ -214,6 +326,11 @@ public class WB_Danzer3D {
 			return p4.add(O);
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public WB_Sphere getInsphere() {
 			final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
@@ -233,10 +350,20 @@ public class WB_Danzer3D {
 			return geometryfactory.createSphereWithRadius(p4.add(O), O.getLength());
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public Type getType() {
 			return type;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public int getTypeAsInt() {
 			switch (type) {
 			case A:
@@ -252,12 +379,23 @@ public class WB_Danzer3D {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param T
+		 * @return
+		 */
 		@Override
 		public WB_DanzerTile3D apply(final WB_Transform3D T) {
 			return new WB_DanzerTile3D(p1.applyAsPoint(T), p2.applyAsPoint(T), p3.applyAsPoint(T), p4.applyAsPoint(T),
 					type, generation);
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public List<WB_DanzerTile3D> inflate() {
 			final List<WB_DanzerTile3D> tiles = new WB_List<>();
 			WB_Point p5, p6, p7, p8, p9, p10, p11;
@@ -318,6 +456,12 @@ public class WB_Danzer3D {
 			return tiles;
 		}
 
+		/**
+		 *
+		 *
+		 * @param points
+		 * @return
+		 */
 		List<WB_DanzerTile3D> inflate(final List<WB_Point> points) {
 			final List<WB_DanzerTile3D> tiles = new WB_List<>();
 			WB_Point p5, p6, p7, p8, p9, p10, p11;
@@ -394,17 +538,36 @@ public class WB_Danzer3D {
 			return tiles;
 		}
 
+		/**
+		 *
+		 *
+		 * @param v
+		 * @param w
+		 * @param a
+		 * @param b
+		 * @return
+		 */
 		public static WB_Point interpolateNonNorm(final WB_Coord v, final WB_Coord w, final double a, final double b) {
-			return new WB_Point(
-					WB_GeometryOp3D.interpolate(v.xd(), v.yd(), v.zd(), w.xd(), w.yd(), w.zd(), a / (a + b)));
+			return new WB_Point(WB_GeometryOp.interpolate(v.xd(), v.yd(), v.zd(), w.xd(), w.yd(), w.zd(), a / (a + b)));
 		}
 	}
 
+	/**  */
 	protected Type type;
+	/**  */
 	protected List<WB_Point> points;
+	/**  */
 	protected List<WB_DanzerTile3D> tiles;
+	/**  */
 	protected WB_MTRandom rnd;
 
+	/**
+	 *
+	 *
+	 * @param type
+	 * @param scale
+	 * @param offset
+	 */
 	public WB_Danzer3D(final Type type, final double scale, final WB_Coord offset) {
 		rnd = new WB_MTRandom();
 		points = new WB_PointList();
@@ -418,6 +581,11 @@ public class WB_Danzer3D {
 		tiles.add(T);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 */
 	public void centerOnPoint(final int i) {
 		if (points != null && i >= 0 && i < points.size()) {
 			final WB_Point center = new WB_Point(points.get(i));
@@ -427,10 +595,18 @@ public class WB_Danzer3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param seed
+	 */
 	public void setSeed(final long seed) {
 		rnd.setSeed(seed);
 	}
 
+	/**
+	 *
+	 */
 	public void inflate() {
 		final List<WB_DanzerTile3D> newTiles = new WB_List<>();
 		for (int i = 0; i < tiles.size(); i++) {
@@ -439,12 +615,22 @@ public class WB_Danzer3D {
 		tiles = newTiles;
 	}
 
+	/**
+	 *
+	 *
+	 * @param rep
+	 */
 	public void inflate(final int rep) {
 		for (int r = 0; r < rep; r++) {
 			inflate();
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param probability
+	 */
 	public void inflate(final double probability) {
 		final List<WB_DanzerTile3D> newTiles = new WB_List<>();
 		for (int i = 0; i < tiles.size(); i++) {
@@ -457,16 +643,33 @@ public class WB_Danzer3D {
 		tiles = newTiles;
 	}
 
+	/**
+	 *
+	 *
+	 * @param probability
+	 * @param rep
+	 */
 	public void inflate(final double probability, final int rep) {
 		for (int r = 0; r < rep; r++) {
 			inflate(probability);
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public WB_DanzerTile3D tile(final int i) {
 		return tiles.get(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int oldest() {
 		int result = Integer.MAX_VALUE;
 		for (final WB_DanzerTile3D T : tiles) {
@@ -478,6 +681,11 @@ public class WB_Danzer3D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int youngest() {
 		int result = -1;
 		for (final WB_DanzerTile3D T : tiles) {
@@ -486,15 +694,28 @@ public class WB_Danzer3D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 */
 	public void inflateTile(final int i) {
 		tiles.addAll(tiles.get(i).inflate());
 		tiles.remove(i);
 	}
 
+	/**
+	 *
+	 */
 	public void inflateOldest() {
 		inflateOldest(0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 */
 	public void inflateOldest(final int r) {
 		final int age = oldest();
 		Collections.shuffle(tiles);
@@ -507,26 +728,56 @@ public class WB_Danzer3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 */
 	public void removeTile(final int i) {
 		tiles.remove(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int size() {
 		return tiles.size();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getNumberOfPoints() {
 		return points.size();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_CoordCollection getPoints() {
 		return WB_CoordCollection.getCollection(points);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_DanzerTile3D> getTiles() {
 		return tiles;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getNumberOfTiles() {
 		return tiles.size();
 	}

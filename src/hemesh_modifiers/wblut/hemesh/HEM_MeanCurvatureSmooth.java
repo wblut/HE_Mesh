@@ -8,38 +8,78 @@ import wblut.geom.WB_Coord;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class HEM_MeanCurvatureSmooth extends HEM_Modifier {
+	/**  */
 	private boolean autoRescale;
+	/**  */
 	private boolean keepBoundary;
+	/**  */
 	private double lambda;
+	/**  */
 	private int iter;
 
+	/**
+	 *
+	 */
 	public HEM_MeanCurvatureSmooth() {
 		lambda = 0.5;
 		iter = 1;
 		keepBoundary = false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_MeanCurvatureSmooth setAutoRescale(final boolean b) {
 		autoRescale = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HEM_MeanCurvatureSmooth setIterations(final int r) {
 		iter = r;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_MeanCurvatureSmooth setKeepBoundary(final boolean b) {
 		keepBoundary = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param lambda
+	 * @return
+	 */
 	public HEM_MeanCurvatureSmooth setLambda(final double lambda) {
 		this.lambda = lambda;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HEM_MeanCurvatureSmooth.");
@@ -92,6 +132,12 @@ public class HEM_MeanCurvatureSmooth extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		tracker.setStartStatus(this, "Starting HEM_MeanCurvatureSmooth.");

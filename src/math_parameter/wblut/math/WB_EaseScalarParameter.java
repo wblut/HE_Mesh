@@ -1,13 +1,32 @@
 package wblut.math;
 
+/**
+ *
+ */
 public class WB_EaseScalarParameter implements WB_ScalarParameter {
+	/**  */
 	double lowT, highT;
+	/**  */
 	double lowValue, highValue;
+	/**  */
 	double rangeT, rangeValue;
+	/**  */
 	boolean clamp;
+	/**  */
 	WB_Ease ease;
+	/**  */
 	WB_Ease.EaseType type;
 
+	/**
+	 *
+	 *
+	 * @param lowT
+	 * @param highT
+	 * @param lowValue
+	 * @param highValue
+	 * @param ease
+	 * @param type
+	 */
 	public WB_EaseScalarParameter(final double lowT, final double highT, final double lowValue, final double highValue,
 			final WB_Ease ease, final WB_Ease.EaseType type) {
 		if (lowT <= highT) {
@@ -28,6 +47,17 @@ public class WB_EaseScalarParameter implements WB_ScalarParameter {
 		this.type = type;
 	}
 
+	/**
+	 *
+	 *
+	 * @param lowT
+	 * @param highT
+	 * @param lowValue
+	 * @param highValue
+	 * @param clamp
+	 * @param ease
+	 * @param type
+	 */
 	public WB_EaseScalarParameter(final double lowT, final double highT, final double lowValue, final double highValue,
 			final boolean clamp, final WB_Ease ease, final WB_Ease.EaseType type) {
 		if (lowT <= highT) {
@@ -48,6 +78,15 @@ public class WB_EaseScalarParameter implements WB_ScalarParameter {
 		this.type = type;
 	}
 
+	/**
+	 *
+	 *
+	 * @param lowT
+	 * @param highT
+	 * @param lowValue
+	 * @param highValue
+	 * @param ease
+	 */
 	public WB_EaseScalarParameter(final double lowT, final double highT, final double lowValue, final double highValue,
 			final WB_Ease ease) {
 		if (lowT <= highT) {
@@ -68,6 +107,16 @@ public class WB_EaseScalarParameter implements WB_ScalarParameter {
 		this.type = WB_Ease.EaseType.INOUT;
 	}
 
+	/**
+	 *
+	 *
+	 * @param lowT
+	 * @param highT
+	 * @param lowValue
+	 * @param highValue
+	 * @param clamp
+	 * @param ease
+	 */
 	public WB_EaseScalarParameter(final double lowT, final double highT, final double lowValue, final double highValue,
 			final boolean clamp, final WB_Ease ease) {
 		if (lowT <= highT) {
@@ -88,6 +137,12 @@ public class WB_EaseScalarParameter implements WB_ScalarParameter {
 		this.type = WB_Ease.EaseType.INOUT;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	@Override
 	public double evaluate(final double... x) {
 		if (rangeT == 0) {

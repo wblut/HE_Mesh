@@ -8,14 +8,27 @@ import wblut.geom.WB_List;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Triangle;
 
+/**
+ *
+ */
 public class HEC_FromTriangles extends HEC_Creator {
+	/**  */
 	List<WB_Triangle> triangles;
 
+	/**
+	 *
+	 */
 	public HEC_FromTriangles() {
 		super();
 		setOverride(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param ts
+	 * @return
+	 */
 	public HEC_FromTriangles setTriangles(final WB_Triangle[] ts) {
 		triangles = new WB_List<>();
 		for (final WB_Triangle tri : ts) {
@@ -24,12 +37,23 @@ public class HEC_FromTriangles extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param ts
+	 * @return
+	 */
 	public HEC_FromTriangles setTriangles(final Collection<? extends WB_Triangle> ts) {
 		triangles = new WB_List<>();
 		triangles.addAll(ts);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		if (triangles != null) {

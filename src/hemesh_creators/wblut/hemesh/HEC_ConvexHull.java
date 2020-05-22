@@ -8,50 +8,106 @@ import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordCollection;
 import wblut.geom.WB_PointFactory;
 
+/**
+ *
+ */
 public class HEC_ConvexHull extends HEC_Creator {
+	/**  */
 	private WB_CoordCollection points;
+	/**  */
 	public HE_IntMap vertexToPointIndex;
 
+	/**
+	 *
+	 */
 	public HEC_ConvexHull() {
 		super();
 		setOverride(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEC_ConvexHull setPoints(final WB_CoordCollection points) {
 		this.points = points;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEC_ConvexHull setPoints(final WB_Coord[] points) {
 		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEC_ConvexHull setPoints(final Collection<? extends WB_Coord> points) {
 		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEC_ConvexHull setPoints(final double[][] points) {
 		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEC_ConvexHull setPoints(final float[][] points) {
 		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEC_ConvexHull setPoints(final int[][] points) {
 		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param generator
+	 * @param numberOfPoints
+	 * @return
+	 */
 	public HEC_ConvexHull setPoints(final WB_PointFactory generator, final int numberOfPoints) {
 		this.points = WB_CoordCollection.getCollection(generator, numberOfPoints);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_Mesh createBase() {
 		if (points == null) {

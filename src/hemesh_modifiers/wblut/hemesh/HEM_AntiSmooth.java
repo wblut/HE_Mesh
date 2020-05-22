@@ -1,14 +1,19 @@
 package wblut.hemesh;
 
 import java.util.Iterator;
-import java.util.List;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_Point;
 
+/**
+ *
+ */
 public class HEM_AntiSmooth extends HEM_Modifier {
+	/**
+	 *
+	 */
 	public HEM_AntiSmooth() {
 		parameters.set("autorescale", false);
 		parameters.set("lambda", 0.5);
@@ -16,42 +21,92 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 		parameters.set("iter", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_AntiSmooth setAutoRescale(final boolean b) {
 		parameters.set("autorescale", b);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HEM_AntiSmooth setIterations(final int r) {
 		parameters.set("iter", r);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_AntiSmooth setPreserveBoundary(final boolean b) {
 		parameters.set("preserveboundary", b);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param lambda
+	 * @return
+	 */
 	public HEM_AntiSmooth setLambda(final double lambda) {
 		parameters.set("lambda", lambda);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected boolean getAutoRescale() {
 		return parameters.get("autorescale", false);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected int getIterations() {
 		return parameters.get("iter", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected boolean getPreserveBoundary() {
 		return parameters.get("preserveboundary", false);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected double getLambda() {
 		return parameters.get("lambda", 0.5);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HEM_AntiSmooth.");
@@ -72,7 +127,7 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 		for (int r = 0; r < iter; r++) {
 			Iterator<HE_Vertex> vItr = mesh.vItr();
 			HE_Vertex v;
-			List<HE_Vertex> neighbors;
+			HE_VertexList neighbors;
 			int id = 0;
 			WB_Point p;
 			while (vItr.hasNext()) {
@@ -104,6 +159,12 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		tracker.setStartStatus(this, "Starting HEM_AntiSmooth.");
@@ -126,7 +187,7 @@ public class HEM_AntiSmooth extends HEM_Modifier {
 			Iterator<HE_Vertex> vItr = selection.vItr();
 			HE_Vertex v;
 			HE_Vertex n;
-			List<HE_Vertex> neighbors;
+			HE_VertexList neighbors;
 			int id = 0;
 			while (vItr.hasNext()) {
 				v = vItr.next();

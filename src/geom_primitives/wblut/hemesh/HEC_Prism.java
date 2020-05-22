@@ -7,12 +7,22 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HEC_Prism extends HEC_Creator {
+	/**  */
 	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	/**  */
 	private int facets;
+	/**  */
 	private double thickness;
+	/**  */
 	private double radius;
 
+	/**
+	 *
+	 */
 	public HEC_Prism() {
 		super();
 		facets = 6;
@@ -20,6 +30,13 @@ public class HEC_Prism extends HEC_Creator {
 		radius = 100;
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @param r
+	 * @param d
+	 */
 	public HEC_Prism(final int n, final double r, final double d) {
 		super();
 		facets = n;
@@ -27,21 +44,44 @@ public class HEC_Prism extends HEC_Creator {
 		radius = r;
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @return
+	 */
 	public HEC_Prism setFacets(final int n) {
 		facets = n;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEC_Prism setHeight(final double d) {
 		thickness = d;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HEC_Prism setRadius(final double r) {
 		radius = r;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		if (facets < 3 || WB_Epsilon.isZero(radius)) {

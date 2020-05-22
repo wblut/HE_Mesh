@@ -13,33 +13,64 @@ import wblut.geom.WB_List;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PointList;
 
+/**
+ *
+ */
 public class HEC_FromOBJFile extends HEC_Creator {
+	/**  */
 	private String path;
+	/**  */
 	private double s;
+	/**  */
 	private boolean noCheck;
 
+	/**
+	 *
+	 */
 	public HEC_FromOBJFile() {
 		super();
 		path = null;
 		setOverride(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param path
+	 */
 	public HEC_FromOBJFile(final String path) {
 		super();
 		this.path = path;
 		setOverride(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param path
+	 * @return
+	 */
 	public HEC_FromOBJFile setPath(final String path) {
 		this.path = path;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEC_FromOBJFile setNoCheck(final boolean b) {
 		this.noCheck = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		s = getScale();
@@ -88,7 +119,7 @@ public class HEC_FromOBJFile extends HEC_Creator {
 					for (int j = 0; j < parts.length - 1; j++) {
 						final String[] num = parts[j + 1].split("/");
 						tempFace[j] = Integer.parseInt(num[0]) - 1;
-						if (num.length > 1) {
+						if (num.length > 1 && !num[1].contentEquals("")) {
 							tempUVWFace[j] = Integer.parseInt(num[1]) - 1;
 						}
 					}
@@ -132,6 +163,12 @@ public class HEC_FromOBJFile extends HEC_Creator {
 		return new HE_Mesh();
 	}
 
+	/**
+	 *
+	 *
+	 * @param file
+	 * @return
+	 */
 	// Code excerpts from processing.core
 	private InputStream createInputStream(final File file) {
 		if (file == null) {
@@ -147,5 +184,9 @@ public class HEC_FromOBJFile extends HEC_Creator {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static void main(final String[] args) {
+		new HE_Mesh(new HEC_FromOBJFile().setPath("d:\\mesh.obj"));
 	}
 }

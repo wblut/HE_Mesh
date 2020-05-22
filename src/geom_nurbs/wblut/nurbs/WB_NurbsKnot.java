@@ -8,12 +8,25 @@ import wblut.geom.WB_DoubleIntMap;
 import wblut.geom.WB_DoubleList;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class WB_NurbsKnot {
+	/**  */
 	protected final double[] values;
+	/**  */
 	protected final int degree;
+	/**  */
 	protected final int n;
+	/**  */
 	protected final int m;
 
+	/**
+	 *
+	 *
+	 * @param ncp
+	 * @param degree
+	 */
 	public WB_NurbsKnot(final int ncp, final int degree) {
 		if (degree > ncp - 1 || degree < 1) {
 			throw new IllegalArgumentException("Degree too high for number of control points or smaller than 1.");
@@ -31,6 +44,13 @@ public class WB_NurbsKnot {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param ncp
+	 * @param degree
+	 * @param val
+	 */
 	public WB_NurbsKnot(final int ncp, final int degree, final double[] val) {
 		this(ncp, degree);
 		if (val.length != ncp - 1 - degree) {
@@ -52,6 +72,12 @@ public class WB_NurbsKnot {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param degree
+	 * @param val
+	 */
 	public WB_NurbsKnot(final int degree, final double[] val) {
 		m = val.length - 1;
 		values = new double[m + 1];
@@ -62,6 +88,11 @@ public class WB_NurbsKnot {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param knot
+	 */
 	public WB_NurbsKnot(final WB_NurbsKnot knot) {
 		degree = knot.degree;
 		n = knot.n;
@@ -72,18 +103,38 @@ public class WB_NurbsKnot {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int p() {
 		return degree;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int n() {
 		return n;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int m() {
 		return m;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int s() {
 		double cv, ov;
 		ov = Double.NaN;
@@ -98,6 +149,11 @@ public class WB_NurbsKnot {
 		return s - 2;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public String toString() {
 		final StringBuffer str = new StringBuffer();
@@ -109,10 +165,21 @@ public class WB_NurbsKnot {
 		return str.toString();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double[] values() {
 		return values;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public double value(final int i) {
 		if (i < 0 || i > m) {
 			throw new IllegalArgumentException("Index " + i + " doesn't exist in knot.");
@@ -120,6 +187,12 @@ public class WB_NurbsKnot {
 		return values[i];
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param k
+	 */
 	public void setValue(final int i, final double k) {
 		if (i < 0 || i > m) {
 			throw new IllegalArgumentException("Index " + i + " doesn't exist in knot.");
@@ -127,6 +200,12 @@ public class WB_NurbsKnot {
 		values[i] = k;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	public int span(final double u) {
 		if (u < values[0] || u > values[n + 1]) {
 			throw new IllegalArgumentException("Value outside of knot range.");
@@ -148,6 +227,12 @@ public class WB_NurbsKnot {
 		return mid;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	public int multiplicity(final double u) {
 		if (u < values[0] || u > values[n + 1]) {
 			throw new IllegalArgumentException("Value outside of knot range.");
@@ -167,6 +252,13 @@ public class WB_NurbsKnot {
 		return mult;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param span
+	 * @return
+	 */
 	public int multiplicity(final double u, final int span) {
 		if (u < values[0] || u > values[n + 1]) {
 			throw new IllegalArgumentException("Value outside of knot range.");
@@ -185,6 +277,13 @@ public class WB_NurbsKnot {
 		return mult;
 	}
 
+	/**
+	 *
+	 *
+	 * @param span
+	 * @param u
+	 * @return
+	 */
 	protected double[] basisFunctions(final int span, final double u) {
 		final double[] N = new double[degree + 1];
 		final double[] left = new double[degree + 1];
@@ -205,6 +304,14 @@ public class WB_NurbsKnot {
 		return N;
 	}
 
+	/**
+	 *
+	 *
+	 * @param span
+	 * @param u
+	 * @param p
+	 * @return
+	 */
 	protected double[][] allBasisFunctions(final int span, final double u, final int p) {
 		final double[][] N = new double[p + 1][p + 1];
 		for (int i = 0; i <= p; i++) {
@@ -227,6 +334,9 @@ public class WB_NurbsKnot {
 		return N;
 	}
 
+	/**
+	 *
+	 */
 	public void normalize() {
 		final double low = values[0];
 		final double high = values[m];
@@ -247,6 +357,13 @@ public class WB_NurbsKnot {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param UA
+	 * @param UB
+	 * @return
+	 */
 	public static WB_NurbsKnot merge(final WB_NurbsKnot UA, final WB_NurbsKnot UB) {
 		if (UA.p() != UB.p()) {
 			throw new IllegalArgumentException("Cannot merge knots of different degree.");
@@ -294,6 +411,11 @@ public class WB_NurbsKnot {
 		return new WB_NurbsKnot(UA.degree, allValues);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double[][] multVal() {
 		final Set<Double> uniqValues = new LinkedHashSet<>();
 		for (final double value : values) {

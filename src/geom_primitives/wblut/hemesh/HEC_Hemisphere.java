@@ -2,13 +2,24 @@ package wblut.hemesh;
 
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class HEC_Hemisphere extends HEC_Creator {
+	/**  */
 	private double rx, ry, rz;
+	/**  */
 	private int uFacets;
+	/**  */
 	private int vFacets;
+	/**  */
 	private boolean cap;
+	/**  */
 	private double phase;
 
+	/**
+	 *
+	 */
 	public HEC_Hemisphere() {
 		super();
 		rx = ry = rz = 100;
@@ -18,6 +29,12 @@ public class HEC_Hemisphere extends HEC_Creator {
 		setCreationAxis(WB_Vector.Y());
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @return
+	 */
 	public HEC_Hemisphere setRadius(final double R) {
 		rx = R;
 		ry = R;
@@ -25,6 +42,14 @@ public class HEC_Hemisphere extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param rx
+	 * @param ry
+	 * @param rz
+	 * @return
+	 */
 	public HEC_Hemisphere setRadius(final double rx, final double ry, final double rz) {
 		this.rx = rx;
 		this.ry = ry;
@@ -32,26 +57,55 @@ public class HEC_Hemisphere extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param facets
+	 * @return
+	 */
 	public HEC_Hemisphere setUFacets(final int facets) {
 		uFacets = facets;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param facets
+	 * @return
+	 */
 	public HEC_Hemisphere setVFacets(final int facets) {
 		vFacets = facets;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param cap
+	 * @return
+	 */
 	public HEC_Hemisphere setCap(final boolean cap) {
 		this.cap = cap;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public HEC_Hemisphere setPhase(final double p) {
 		phase = p;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final double[][] vertices = new double[(uFacets + 1) * (vFacets + 1) - 1 + (cap ? uFacets : 0)][3];
@@ -125,6 +179,13 @@ public class HEC_Hemisphere extends HEC_Creator {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @return
+	 */
 	private int index(final int u, final int v) {
 		if (v == 0) {
 			return u;

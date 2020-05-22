@@ -4,10 +4,23 @@ import wblut.geom.WB_Coord;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PointHomogeneous;
 
+/**
+ *
+ */
 public class WB_RBSplineSurface extends WB_BSplineSurface {
+	/**  */
 	private final double[][] weights;
+	/**  */
 	protected WB_PointHomogeneous[][] wpoints;
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param uknot
+	 * @param vknot
+	 * @param weights
+	 */
 	public WB_RBSplineSurface(final WB_Coord[][] controlPoints, final WB_NurbsKnot uknot, final WB_NurbsKnot vknot,
 			final double[][] weights) {
 		super(controlPoints, uknot, vknot);
@@ -23,6 +36,14 @@ public class WB_RBSplineSurface extends WB_BSplineSurface {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param udegree
+	 * @param vdegree
+	 * @param weights
+	 */
 	public WB_RBSplineSurface(final WB_Point[][] controlPoints, final int udegree, final int vdegree,
 			final double[][] weights) {
 		super(controlPoints, udegree, vdegree);
@@ -38,6 +59,13 @@ public class WB_RBSplineSurface extends WB_BSplineSurface {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param udegree
+	 * @param vdegree
+	 */
 	public WB_RBSplineSurface(final WB_Point[][] controlPoints, final int udegree, final int vdegree) {
 		super(controlPoints, udegree, vdegree);
 		weights = new double[n + 1][m + 1];
@@ -54,6 +82,13 @@ public class WB_RBSplineSurface extends WB_BSplineSurface {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param uknot
+	 * @param vknot
+	 */
 	public WB_RBSplineSurface(final WB_PointHomogeneous[][] controlPoints, final WB_NurbsKnot uknot,
 			final WB_NurbsKnot vknot) {
 		super();
@@ -80,6 +115,13 @@ public class WB_RBSplineSurface extends WB_BSplineSurface {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param w
+	 */
 	public void setWeight(final int i, final int j, final double w) {
 		if (i < 0 || i > n || j < 0 || j > m) {
 			throw new IllegalArgumentException("Index outside of weights range.");
@@ -88,6 +130,13 @@ public class WB_RBSplineSurface extends WB_BSplineSurface {
 		wpoints[i][j] = new WB_PointHomogeneous(points[i][j], weights[i][j]);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @return
+	 */
 	@Override
 	public WB_Point surfacePoint(final double u, final double v) {
 		final int uspan = uknot.span(u);
@@ -110,6 +159,9 @@ public class WB_RBSplineSurface extends WB_BSplineSurface {
 		return new WB_Point(SH.project());
 	}
 
+	/**
+	 *
+	 */
 	public void updateWeights() {
 		for (int i = 0; i < n + 1; i++) {
 			for (int j = 0; j < m + 1; j++) {
@@ -118,17 +170,36 @@ public class WB_RBSplineSurface extends WB_BSplineSurface {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_RBSplineSurface insertUKnot(final double u) {
 		return insertUKnot(u, 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_RBSplineSurface insertUKnotMax(final double u) {
 		final int k = uknot.multiplicity(u);
 		return insertUKnot(u, p - k);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param r
+	 * @return
+	 */
 	@Override
 	public WB_RBSplineSurface insertUKnot(final double u, final int r) {
 		final int nq = n + r;
@@ -182,17 +253,36 @@ public class WB_RBSplineSurface extends WB_BSplineSurface {
 		return new WB_RBSplineSurface(Q, UQ, vknot);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	@Override
 	public WB_RBSplineSurface insertVKnot(final double v) {
 		return insertVKnot(v, 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	@Override
 	public WB_RBSplineSurface insertVKnotMax(final double v) {
 		final int k = vknot.multiplicity(v);
 		return insertVKnot(v, q - k);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @param r
+	 * @return
+	 */
 	@Override
 	public WB_RBSplineSurface insertVKnot(final double v, final int r) {
 		final int mq = m + r;
@@ -246,6 +336,12 @@ public class WB_RBSplineSurface extends WB_BSplineSurface {
 		return new WB_RBSplineSurface(Q, uknot, VQ);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_RBSpline isoCurveU(final double u) {
 		final WB_PointHomogeneous[] cpoints = new WB_PointHomogeneous[m + 1];
@@ -262,6 +358,12 @@ public class WB_RBSplineSurface extends WB_BSplineSurface {
 		return new WB_RBSpline(cpoints, vknot);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	@Override
 	public WB_RBSpline isoCurveV(final double v) {
 		final WB_PointHomogeneous[] cpoints = new WB_PointHomogeneous[n + 1];
@@ -278,6 +380,12 @@ public class WB_RBSplineSurface extends WB_BSplineSurface {
 		return new WB_RBSpline(cpoints, uknot);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_RBSplineSurface[] splitU(final double u) {
 		final WB_RBSplineSurface newRBSplineSurface = insertUKnotMax(u);
@@ -315,6 +423,12 @@ public class WB_RBSplineSurface extends WB_BSplineSurface {
 		return splitSurfaces;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	@Override
 	public WB_RBSplineSurface[] splitV(final double v) {
 		final WB_RBSplineSurface newRBSplineSurface = insertVKnotMax(v);
@@ -352,6 +466,13 @@ public class WB_RBSplineSurface extends WB_BSplineSurface {
 		return splitSurfaces;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @return
+	 */
 	@Override
 	public WB_RBSplineSurface[] split(final double u, final double v) {
 		final WB_RBSplineSurface[] splitSurfaces = new WB_RBSplineSurface[4];

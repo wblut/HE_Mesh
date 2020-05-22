@@ -11,13 +11,26 @@ import wblut.hemesh.HE_Mesh;
 import wblut.hemesh.HE_MeshCollection;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class WB_BSPTree3D {
+	/**  */
 	private WB_BSPNode3D root;
 
+	/**
+	 *
+	 */
 	public WB_BSPTree3D() {
 		root = null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param tree
+	 * @param polygons
+	 */
 	private void build(final WB_BSPNode3D tree, final List<WB_Polygon> polygons) {
 		if (polygons.size() > 0) {
 			WB_Polygon cpol = null;
@@ -38,7 +51,7 @@ public class WB_BSPTree3D {
 			WB_Polygon pol = null;
 			while (PItr.hasNext()) {
 				pol = PItr.next();
-				final WB_Classification result = WB_GeometryOp3D.classifyPolygonToPlane3D(pol, tree.partition);
+				final WB_Classification result = WB_GeometryOp.classifyPolygonToPlane3D(pol, tree.partition);
 				if (result == WB_Classification.FRONT) {
 					pos_list.add(pol);
 				} else if (result == WB_Classification.BACK) {
@@ -70,6 +83,12 @@ public class WB_BSPTree3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param tree
+	 * @param polygons
+	 */
 	private void build(final WB_BSPNode3D tree, final WB_Polygon[] polygons) {
 		if (polygons.length > 0) {
 			final WB_Polygon cpol = polygons[0];
@@ -81,7 +100,7 @@ public class WB_BSPTree3D {
 			WB_Polygon pol = null;
 			for (int i = 1; i < polygons.length; i++) {
 				pol = polygons[i];
-				final WB_Classification result = WB_GeometryOp3D.classifyPolygonToPlane3D(pol, tree.partition);
+				final WB_Classification result = WB_GeometryOp.classifyPolygonToPlane3D(pol, tree.partition);
 				if (result == WB_Classification.FRONT) {
 					pos_list.add(pol);
 				} else if (result == WB_Classification.BACK) {
@@ -113,6 +132,11 @@ public class WB_BSPTree3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param polygons
+	 */
 	public void build(final List<WB_Polygon> polygons) {
 		if (root == null) {
 			root = new WB_BSPNode3D();
@@ -120,6 +144,11 @@ public class WB_BSPTree3D {
 		build(root, polygons);
 	}
 
+	/**
+	 *
+	 *
+	 * @param polygons
+	 */
 	public void build(final WB_Polygon[] polygons) {
 		if (root == null) {
 			root = new WB_BSPNode3D();
@@ -127,6 +156,11 @@ public class WB_BSPTree3D {
 		build(root, polygons);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	public void build(final HE_Mesh mesh) {
 		if (root == null) {
 			root = new WB_BSPNode3D();
@@ -134,16 +168,37 @@ public class WB_BSPTree3D {
 		build(root, mesh.getPolygons());
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public int pointLocation(final WB_Coord p) {
 		return pointLocation(root, p);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public int pointLocation(final double x, final double y, final double z) {
 		return pointLocation(root, new WB_Point(x, y, z));
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param p
+	 * @return
+	 */
 	private int pointLocation(final WB_BSPNode3D node, final WB_Coord p) {
-		final WB_Classification type = WB_GeometryOp3D.classifyPointToPlane3D(p, node.partition);
+		final WB_Classification type = WB_GeometryOp.classifyPointToPlane3D(p, node.partition);
 		if (type == WB_Classification.FRONT) {
 			if (node.pos != null) {
 				return pointLocation(node.pos, p);
@@ -158,7 +213,7 @@ public class WB_BSPTree3D {
 			}
 		} else {
 			for (final WB_Polygon element : node.polygons) {
-				if (WB_Epsilon.isZeroSq(WB_GeometryOp3D.getSqDistance3D(p, element))) {
+				if (WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistance3D(p, element))) {
 					return 0;
 				}
 			}
@@ -172,14 +227,33 @@ public class WB_BSPTree3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @param pos
+	 * @param neg
+	 * @param coSame
+	 * @param coDiff
+	 */
 	public void partitionPolygon(final WB_Polygon P, final List<WB_Polygon> pos, final List<WB_Polygon> neg,
 			final List<WB_Polygon> coSame, final List<WB_Polygon> coDiff) {
 		partitionPolygon(root, P, pos, neg, coSame, coDiff);
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param P
+	 * @param pos
+	 * @param neg
+	 * @param coSame
+	 * @param coDiff
+	 */
 	private void partitionPolygon(final WB_BSPNode3D node, final WB_Polygon P, final List<WB_Polygon> pos,
 			final List<WB_Polygon> neg, final List<WB_Polygon> coSame, final List<WB_Polygon> coDiff) {
-		final WB_Classification type = WB_GeometryOp3D.classifyPolygonToPlane3D(P, node.partition);
+		final WB_Classification type = WB_GeometryOp.classifyPolygonToPlane3D(P, node.partition);
 		if (type == WB_Classification.CROSSING) {
 			final WB_Polygon[] polygons = splitPolygon(P, node.partition);
 			if (polygons[0] != null) {
@@ -197,10 +271,30 @@ public class WB_BSPTree3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param P
+	 * @param pos
+	 * @param neg
+	 * @param coSame
+	 * @param coDiff
+	 */
 	private void partitionCoincidentPolygons(final WB_BSPNode3D node, final WB_Polygon P, final List<WB_Polygon> pos,
 			final List<WB_Polygon> neg, final List<WB_Polygon> coSame, final List<WB_Polygon> coDiff) {
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param P
+	 * @param pos
+	 * @param neg
+	 * @param coSame
+	 * @param coDiff
+	 */
 	private void getPolygonPosPartition(final WB_BSPNode3D node, final WB_Polygon P, final List<WB_Polygon> pos,
 			final List<WB_Polygon> neg, final List<WB_Polygon> coSame, final List<WB_Polygon> coDiff) {
 		if (node.pos != null) {
@@ -210,6 +304,16 @@ public class WB_BSPTree3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param P
+	 * @param pos
+	 * @param neg
+	 * @param coSame
+	 * @param coDiff
+	 */
 	private void getPolygonNegPartition(final WB_BSPNode3D node, final WB_Polygon P, final List<WB_Polygon> pos,
 			final List<WB_Polygon> neg, final List<WB_Polygon> coSame, final List<WB_Polygon> coDiff) {
 		if (node.neg != null) {
@@ -219,10 +323,25 @@ public class WB_BSPTree3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param pos
+	 * @param neg
+	 */
 	public void partitionMesh(final HE_Mesh mesh, final List<HE_Mesh> pos, final List<HE_Mesh> neg) {
 		partitionMesh(root, mesh, pos, neg);
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param mesh
+	 * @param pos
+	 * @param neg
+	 */
 	private void partitionMesh(final WB_BSPNode3D node, final HE_Mesh mesh, final List<HE_Mesh> pos,
 			final List<HE_Mesh> neg) {
 		final HEMC_SplitMesh sm = new HEMC_SplitMesh();
@@ -237,6 +356,14 @@ public class WB_BSPTree3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param mesh
+	 * @param pos
+	 * @param neg
+	 */
 	private void getMeshPosPartition(final WB_BSPNode3D node, final HE_Mesh mesh, final List<HE_Mesh> pos,
 			final List<HE_Mesh> neg) {
 		if (node.pos != null) {
@@ -246,6 +373,14 @@ public class WB_BSPTree3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param mesh
+	 * @param pos
+	 * @param neg
+	 */
 	private void getMeshNegPartition(final WB_BSPNode3D node, final HE_Mesh mesh, final List<HE_Mesh> pos,
 			final List<HE_Mesh> neg) {
 		if (node.neg != null) {
@@ -255,12 +390,23 @@ public class WB_BSPTree3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public ArrayList<WB_Polygon> toPolygons() {
 		final ArrayList<WB_Polygon> polygons = new ArrayList<>();
 		addPolygons(root, polygons);
 		return polygons;
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @param polygons
+	 */
 	private void addPolygons(final WB_BSPNode3D node, final ArrayList<WB_Polygon> polygons) {
 		polygons.addAll(node.polygons);
 		if (node.pos != null) {
@@ -271,12 +417,23 @@ public class WB_BSPTree3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_BSPTree3D negate() {
 		final WB_BSPTree3D negTree = new WB_BSPTree3D();
 		negTree.root = negate(root);
 		return negTree;
 	}
 
+	/**
+	 *
+	 *
+	 * @param node
+	 * @return
+	 */
 	private WB_BSPNode3D negate(final WB_BSPNode3D node) {
 		final WB_BSPNode3D negNode = new WB_BSPNode3D();
 		negNode.partition = node.partition.get();
@@ -294,6 +451,13 @@ public class WB_BSPTree3D {
 		return negNode;
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param P
+	 * @return
+	 */
 	static WB_Polygon[] splitPolygon(final WB_Polygon poly, final WB_Plane P) {
 		int numFront = 0;
 		int numBack = 0;
@@ -303,16 +467,16 @@ public class WB_BSPTree3D {
 		final int numVerts = poly.getNumberOfPoints();
 		if (numVerts > 0) {
 			WB_Coord a = poly.getPoint(numVerts - 1);
-			WB_Classification aSide = WB_GeometryOp3D.classifyPointToPlane3D(a, P);
+			WB_Classification aSide = WB_GeometryOp.classifyPointToPlane3D(a, P);
 			WB_Coord b;
 			WB_Classification bSide;
 			for (int n = 0; n < numVerts; n++) {
-				final WB_IntersectionResult i;
+				final WB_Intersection i;
 				b = poly.getPoint(n);
-				bSide = WB_GeometryOp3D.classifyPointToPlane3D(b, P);
+				bSide = WB_GeometryOp.classifyPointToPlane3D(b, P);
 				if (bSide == WB_Classification.FRONT) {
 					if (aSide == WB_Classification.BACK) {
-						i = WB_GeometryOp3D.getIntersection3D(b, a, P);
+						i = WB_GeometryOp.getIntersection3D(b, a, P);
 						frontVerts.add((WB_Coord) i.object);
 						numFront++;
 						backVerts.add((WB_Coord) i.object);
@@ -322,7 +486,7 @@ public class WB_BSPTree3D {
 					numFront++;
 				} else if (bSide == WB_Classification.BACK) {
 					if (aSide == WB_Classification.FRONT) {
-						i = WB_GeometryOp3D.getIntersection3D(a, b, P);
+						i = WB_GeometryOp.getIntersection3D(a, b, P);
 						frontVerts.add((WB_Coord) i.object);
 						numFront++;
 						backVerts.add((WB_Coord) i.object);
@@ -354,6 +518,11 @@ public class WB_BSPTree3D {
 		return polygons;
 	}
 
+	/**
+	 *
+	 *
+	 * @param args
+	 */
 	public static void main(final String[] args) {
 		final HEC_Dodecahedron creator = new HEC_Dodecahedron();
 		creator.setRadius(150);

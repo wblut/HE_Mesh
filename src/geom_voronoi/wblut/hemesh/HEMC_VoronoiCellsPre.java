@@ -12,96 +12,163 @@ import java.util.concurrent.Future;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_AABBTree3D;
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_CoordList;
-import wblut.geom.WB_GeometryOp3D;
-import wblut.geom.WB_Point;
+import wblut.geom.WB_CoordCollection;
+import wblut.geom.WB_GeometryOp;
+import wblut.geom.WB_OBB;
 import wblut.geom.WB_VoronoiFactory3D;
 import wblut.math.WB_ConstantScalarParameter;
+import wblut.math.WB_Epsilon;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class HEMC_VoronoiCellsPre extends HEMC_MultiCreator {
-	private List<WB_Coord> points;
+	/**  */
+	private WB_CoordCollection points;
+	/**  */
 	private HE_Mesh container;
+	/**  */
 	private boolean bruteForce;
+	/**  */
 	private WB_ScalarParameter offset;
+	/**  */
 	public HE_Selection[] inner;
+	/**  */
 	public HE_Selection[] outer;
 
+	/**
+	 *
+	 */
 	public HEMC_VoronoiCellsPre() {
 		super();
 		offset = WB_ScalarParameter.ZERO;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param addCenter
+	 * @return
+	 */
 	public HEMC_VoronoiCellsPre setMesh(final HE_Mesh mesh, final boolean addCenter) {
 		if (addCenter) {
-			points = new WB_CoordList();
-			points.addAll(mesh.getVertices());
+			points = WB_CoordCollection.getCollection(mesh.getVertices());
 			points.add(HE_MeshOp.getCenter(mesh));
 		} else {
-			points = new WB_CoordList();
-			points.addAll(mesh.getVertices());
+			points = WB_CoordCollection.getCollection(mesh.getVertices());
 		}
 		container = mesh;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEMC_VoronoiCellsPre setPoints(final WB_Coord[] points) {
-		this.points = new WB_CoordList();
-		for (final WB_Coord p : points) {
-			this.points.add(p);
-		}
+		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEMC_VoronoiCellsPre setPoints(final Collection<? extends WB_Coord> points) {
-		this.points = new WB_CoordList();
-		this.points.addAll(points);
+		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEMC_VoronoiCellsPre setPoints(final double[][] points) {
-		final int n = points.length;
-		this.points = new WB_CoordList();
-		for (int i = 0; i < n; i++) {
-			this.points.add(new WB_Point(points[i][0], points[i][1], points[i][2]));
-		}
+		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public HEMC_VoronoiCellsPre setPoints(final float[][] points) {
-		final int n = points.length;
-		this.points = new WB_CoordList();
-		for (int i = 0; i < n; i++) {
-			this.points.add(new WB_Point(points[i][0], points[i][1], points[i][2]));
-		}
+		this.points = WB_CoordCollection.getCollection(points);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param o
+	 * @return
+	 */
 	public HEMC_VoronoiCellsPre setOffset(final double o) {
 		offset = new WB_ConstantScalarParameter(o);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param o
+	 * @return
+	 */
 	public HEMC_VoronoiCellsPre setOffset(final WB_ScalarParameter o) {
 		offset = o;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param container
+	 * @return
+	 */
 	public HEMC_VoronoiCellsPre setContainer(final HE_Mesh container) {
 		this.container = container;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEMC_VoronoiCellsPre setBruteForce(final boolean b) {
 		bruteForce = b;
 		return this;
 	}
 
+	/**
+	 *
+	 */
 	class VorResult {
+		/**  */
 		HE_Mesh mesh;
+		/**  */
 		HE_Selection inner;
+		/**  */
 		HE_Selection outer;
 
+		/**
+		 *
+		 *
+		 * @param mesh
+		 * @param inner
+		 * @param outer
+		 */
 		VorResult(final HE_Mesh mesh, final HE_Selection inner, final HE_Selection outer) {
 			this.mesh = mesh;
 			this.inner = inner;
@@ -109,25 +176,46 @@ public class HEMC_VoronoiCellsPre extends HEMC_MultiCreator {
 		}
 	}
 
+	/**
+	 *
+	 */
 	class CellRunner implements Callable<VorResult> {
+		/**  */
 		int index;
+		/**  */
 		int[] indices;
 
+		/**
+		 *
+		 *
+		 * @param index
+		 * @param indices
+		 */
 		CellRunner(final int index, final int[] indices) {
 			this.index = index;
 			this.indices = indices;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public VorResult call() {
 			final HEC_VoronoiCell cvc = new HEC_VoronoiCell();
-			cvc.setPoints(points).setContainer(container).setOffset(offset).setLimitPoints(true);
+			cvc.setPoints(points.toList()).setContainer(container).setOffset(offset).setLimitPoints(true);
 			cvc.setCellIndex(index);
 			cvc.setPointsToUse(indices);
 			return new VorResult(cvc.createBase(), cvc.inner, cvc.outer);
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param result
+	 */
 	@Override
 	void create(final HE_MeshCollection result) {
 		tracker.setStartStatus(this, "Starting HEMC_VoronoiCellsPre");
@@ -140,6 +228,11 @@ public class HEMC_VoronoiCellsPre extends HEMC_MultiCreator {
 			_numberOfMeshes = 1;
 			return;
 		}
+		final WB_OBB OBB = new WB_OBB(points);
+		final int dim = OBB.getDimension(WB_Epsilon.EPSILON);
+		if (dim < 3) {
+			bruteForce = true;
+		}
 		final HEMC_VoronoiBox multiCreator = new HEMC_VoronoiBox();
 		multiCreator.setPoints(points);
 		multiCreator.setContainer(HE_MeshOp.getAABB(container));
@@ -148,7 +241,7 @@ public class HEMC_VoronoiCellsPre extends HEMC_MultiCreator {
 		final HE_MeshCollection cells = multiCreator.create();
 		final int[][] indices = WB_VoronoiFactory3D.getVoronoi3DNeighbors(points);
 		final HEC_VoronoiCell cvc = new HEC_VoronoiCell();
-		cvc.setPoints(points).setContainer(container).setOffset(offset).setLimitPoints(true);
+		cvc.setPoints(points.toList()).setContainer(container).setOffset(offset).setLimitPoints(true);
 		final WB_AABBTree3D tree = new WB_AABBTree3D(container, 1);
 		final ArrayList<HE_Selection> linnersel = new ArrayList<>();
 		final ArrayList<HE_Selection> loutersel = new ArrayList<>();
@@ -169,7 +262,7 @@ public class HEMC_VoronoiCellsPre extends HEMC_MultiCreator {
 				}
 			}
 			final WB_AABB maabb = HE_MeshOp.getAABB(m);
-			final boolean intersects = WB_GeometryOp3D.checkIntersection3D(maabb, tree);
+			final boolean intersects = WB_GeometryOp.checkIntersection3D(maabb, tree);
 			if (!in && !intersects) {
 				tracker.setDuringStatus(this, "Ignoring external cell " + (i + 1) + " of " + cells.size() + ".");
 			} else if (!intersects) {

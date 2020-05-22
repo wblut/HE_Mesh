@@ -4,19 +4,70 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public abstract class WB_IsoValues3D {
+	/**
+	 *
+	 */
 	public enum Mode {
-		RED, GREEN, BLUE, HUE, SAT, BRI, ALPHA
+		/**  */
+		RED,
+		/**  */
+		GREEN,
+		/**  */
+		BLUE,
+		/**  */
+		HUE,
+		/**  */
+		SAT,
+		/**  */
+		BRI,
+		/**  */
+		ALPHA
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	public abstract double getValue(int i, int j, int k);
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public abstract int getSizeI();
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public abstract int getSizeJ();
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public abstract int getSizeK();
 
+	/**
+	 *
+	 *
+	 * @param sizeX
+	 * @param sizeY
+	 * @param sizeZ
+	 * @param threshold
+	 * @return
+	 */
 	public WB_BinaryGrid3D getBinaryGrid3D(final int sizeX, final int sizeY, final int sizeZ, final double threshold) {
 		final WB_BinaryGrid3D grid = WB_BinaryGrid3D.createGrid(new WB_Point(), sizeX, 1.0, sizeY, 1.0, sizeZ, 1.0);
 		for (int k = 0; k < sizeZ; k++) {
@@ -31,10 +82,20 @@ public abstract class WB_IsoValues3D {
 		return grid;
 	}
 
+	/**
+	 *
+	 */
 	public static class Grid3D extends WB_IsoValues3D {
+		/**  */
 		private final double[][][] values;
+		/**  */
 		private final int sizeI, sizeJ, sizeK;
 
+		/**
+		 *
+		 *
+		 * @param values
+		 */
 		public Grid3D(final double[][][] values) {
 			sizeI = values.length;
 			sizeJ = sizeI == 0 ? 0 : values[0].length;
@@ -49,6 +110,11 @@ public abstract class WB_IsoValues3D {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param values
+		 */
 		public Grid3D(final float[][][] values) {
 			sizeI = values.length;
 			sizeJ = sizeI == 0 ? 0 : values[0].length;
@@ -63,31 +129,64 @@ public abstract class WB_IsoValues3D {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @param j
+		 * @param k
+		 * @return
+		 */
 		@Override
 		public double getValue(final int i, final int j, final int k) {
 			return values[i][j][k];
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeI() {
 			return sizeI;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeJ() {
 			return sizeJ;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeK() {
 			return sizeK;
 		}
 	}
 
+	/**
+	 *
+	 */
 	public static class GridRaw3D extends WB_IsoValues3D {
+		/**  */
 		private final double[][][] values;
+		/**  */
 		private final int sizeI, sizeJ, sizeK;
 
+		/**
+		 *
+		 *
+		 * @param values
+		 */
 		public GridRaw3D(final double[][][] values) {
 			this.values = values;
 			sizeI = values.length;
@@ -95,32 +194,75 @@ public abstract class WB_IsoValues3D {
 			sizeK = sizeJ == 0 ? 0 : values[0][0].length;
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @param j
+		 * @param k
+		 * @return
+		 */
 		@Override
 		public double getValue(final int i, final int j, final int k) {
 			return values[i][j][k];
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeI() {
 			return sizeI;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeJ() {
 			return sizeJ;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeK() {
 			return sizeK;
 		}
 	}
 
+	/**
+	 *
+	 */
 	public static class Function3D extends WB_IsoValues3D {
+		/**  */
 		private final double fxi, fyi, fzi, dfx, dfy, dfz;
+		/**  */
 		private final WB_ScalarParameter function;
+		/**  */
 		private final int sizeI, sizeJ, sizeK;
 
+		/**
+		 *
+		 *
+		 * @param function
+		 * @param xi
+		 * @param yi
+		 * @param zi
+		 * @param dx
+		 * @param dy
+		 * @param dz
+		 * @param sizeI
+		 * @param sizeJ
+		 * @param sizeK
+		 */
 		public Function3D(final WB_ScalarParameter function, final double xi, final double yi, final double zi,
 				final double dx, final double dy, final double dz, final int sizeI, final int sizeJ, final int sizeK) {
 			this.function = function;
@@ -135,64 +277,139 @@ public abstract class WB_IsoValues3D {
 			this.sizeK = sizeK;
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @param j
+		 * @param k
+		 * @return
+		 */
 		@Override
 		public double getValue(final int i, final int j, final int k) {
 			return function.evaluate(fxi + i * dfx, fyi + j * dfy, fzi + k * dfz);
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeI() {
 			return sizeI;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeJ() {
 			return sizeJ;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeK() {
 			return sizeK;
 		}
 	}
 
+	/**
+	 *
+	 */
 	public static class HashGrid3D extends WB_IsoValues3D {
+		/**  */
 		private final WB_HashGridDouble3D values;
 
+		/**
+		 *
+		 *
+		 * @param values
+		 */
 		public HashGrid3D(final WB_HashGridDouble3D values) {
 			this.values = values;
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @param j
+		 * @param k
+		 * @return
+		 */
 		@Override
 		public double getValue(final int i, final int j, final int k) {
 			return values.getValue(i, j, k);
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeI() {
 			return values.getSizeI();
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeJ() {
 			return values.getSizeJ();
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeK() {
 			return values.getSizeK();
 		}
 	}
 
+	/**
+	 *
+	 */
 	public static class ImageStack3D extends WB_IsoValues3D {
+		/**  */
 		private final String[] images;
+		/**  */
 		private double[][] sliceK, sliceKpo;
+		/**  */
 		private int currentK, currentKpo;
+		/**  */
 		private final int sizeI, sizeJ, sizeK;
+		/**  */
 		private final Mode mode;
+		/**  */
 		private final PApplet home;
+		/**  */
 		private PImage slice;
 
+		/**
+		 *
+		 *
+		 * @param images
+		 * @param home
+		 * @param sizeI
+		 * @param sizeJ
+		 * @param sizeK
+		 * @param mode
+		 */
 		public ImageStack3D(final String[] images, final PApplet home, final int sizeI, final int sizeJ,
 				final int sizeK, final Mode mode) {
 			this.images = images;
@@ -208,6 +425,15 @@ public abstract class WB_IsoValues3D {
 			initialize();
 		}
 
+		/**
+		 *
+		 *
+		 * @param images
+		 * @param home
+		 * @param sizeI
+		 * @param sizeJ
+		 * @param sizeK
+		 */
 		public ImageStack3D(final String[] images, final PApplet home, final int sizeI, final int sizeJ,
 				final int sizeK) {
 			this.images = images;
@@ -223,6 +449,14 @@ public abstract class WB_IsoValues3D {
 			initialize();
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @param j
+		 * @param k
+		 * @return
+		 */
 		@Override
 		public double getValue(final int i, final int j, final int k) {
 			if (k == currentK) {
@@ -237,6 +471,9 @@ public abstract class WB_IsoValues3D {
 			}
 		}
 
+		/**
+		 *
+		 */
 		private void initialize() {
 			currentK = 0;
 			currentKpo = 1;
@@ -246,6 +483,12 @@ public abstract class WB_IsoValues3D {
 			fillSlice(currentKpo, sliceKpo);
 		}
 
+		/**
+		 *
+		 *
+		 * @param k
+		 * @param values
+		 */
 		private void fillSlice(final int k, final double[][] values) {
 			if (sizeK == images.length && k >= 0 && k < images.length) {
 				slice = home.loadImage(images[k]);
@@ -290,6 +533,9 @@ public abstract class WB_IsoValues3D {
 			}
 		}
 
+		/**
+		 *
+		 */
 		private void incrementSlice() {
 			currentK = currentKpo;
 			currentKpo = currentKpo + 1;
@@ -299,6 +545,12 @@ public abstract class WB_IsoValues3D {
 			fillSlice(currentKpo, sliceKpo);
 		}
 
+		/**
+		 *
+		 *
+		 * @param k
+		 * @return
+		 */
 		private double[][] updateSlice(final int k) {
 			if (k == currentK + 1) {
 				currentKpo = k;
@@ -317,6 +569,14 @@ public abstract class WB_IsoValues3D {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param img
+		 * @param i
+		 * @param j
+		 * @return
+		 */
 		private double getSingleSliceValue(final PImage img, final int i, final int j) {
 			final int color = img.get(i, j);
 			switch (mode) {
@@ -339,27 +599,59 @@ public abstract class WB_IsoValues3D {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeI() {
 			return sizeI;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeJ() {
 			return sizeJ;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeK() {
 			return sizeK;
 		}
 	}
 
+	/**
+	 *
+	 */
 	public static class SubValues3D extends WB_IsoValues3D {
+		/**  */
 		int di, dj, dk;
+		/**  */
 		int sizeI, sizeJ, sizeK;
+		/**  */
 		WB_IsoValues3D parent;
 
+		/**
+		 *
+		 *
+		 * @param parent
+		 * @param i
+		 * @param j
+		 * @param k
+		 * @param sizeI
+		 * @param sizeJ
+		 * @param sizeK
+		 */
 		public SubValues3D(final WB_IsoValues3D parent, final int i, final int j, final int k, final int sizeI,
 				final int sizeJ, final int sizeK) {
 			this.parent = parent;
@@ -377,21 +669,44 @@ public abstract class WB_IsoValues3D {
 			this.sizeK = Math.max(0, Math.min(sizeK, pk - dk));
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @param j
+		 * @param k
+		 * @return
+		 */
 		@Override
 		public double getValue(final int i, final int j, final int k) {
 			return parent.getValue(i + di, j + dj, k + dk);
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeI() {
 			return sizeI;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeJ() {
 			return sizeJ;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getSizeK() {
 			return sizeK;

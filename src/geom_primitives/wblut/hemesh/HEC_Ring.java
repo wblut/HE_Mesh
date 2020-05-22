@@ -9,14 +9,26 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class HEC_Ring extends HEC_Creator {
+	/**  */
 	double innerRadius, outerRadius;
+	/**  */
 	double phase;
+	/**  */
 	double thickness;
+	/**  */
 	double offset;
+	/**  */
 	WB_Coord normal;
+	/**  */
 	int N;
 
+	/**
+	 *
+	 */
 	public HEC_Ring() {
 		super();
 		innerRadius = outerRadius = 0;
@@ -27,37 +39,79 @@ public class HEC_Ring extends HEC_Creator {
 		offset = 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param ir
+	 * @param or
+	 * @return
+	 */
 	public HEC_Ring setRadius(final double ir, final double or) {
 		innerRadius = Math.min(Math.abs(ir), Math.abs(or));
 		outerRadius = Math.max(Math.abs(ir), Math.abs(or));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param phase
+	 * @return
+	 */
 	public HEC_Ring setPhase(final double phase) {
 		this.phase = phase;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param N
+	 * @return
+	 */
 	public HEC_Ring setN(final int N) {
 		this.N = N;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param normal
+	 * @return
+	 */
 	public HEC_Ring setNormal(final WB_Coord normal) {
 		this.normal = normal;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param thickness
+	 * @return
+	 */
 	public HEC_Ring setThickness(final double thickness) {
 		this.thickness = thickness;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param offset
+	 * @return
+	 */
 	public HEC_Ring setOffset(final double offset) {
 		this.offset = offset;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		if (innerRadius == 0 && outerRadius == 0) {

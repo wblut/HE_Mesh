@@ -1,6 +1,5 @@
 package wblut.hemesh;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -8,38 +7,78 @@ import java.util.Map;
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_AABBTree3D;
 import wblut.geom.WB_Classification;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Plane;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HEM_SliceEdges extends HEM_Modifier {
+	/**  */
 	static final int ON = 1, BACK = 2, FRONT = 3;
+	/**  */
 	private WB_Plane P;
+	/**  */
 	public HE_Selection cut;
+	/**  */
 	public HE_Selection cutEdges;
 
+	/**
+	 *
+	 */
 	public HEM_SliceEdges() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public HEM_SliceEdges setPlane(final WB_Plane P) {
 		this.P = P;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param ox
+	 * @param oy
+	 * @param oz
+	 * @param nx
+	 * @param ny
+	 * @param nz
+	 * @return
+	 */
 	public HEM_SliceEdges setPlane(final double ox, final double oy, final double oz, final double nx, final double ny,
 			final double nz) {
 		P = new WB_Plane(ox, oy, oz, nx, ny, nz);
 		return this;
 	}
 
+	/**  */
 	private double offset;
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEM_SliceEdges setOffset(final double d) {
 		offset = d;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HEM_SliceEdges.");
@@ -59,7 +98,7 @@ public class HEM_SliceEdges extends HEM_Modifier {
 		}
 		// check if plane intersects mesh
 		final WB_Plane lP = new WB_Plane(P.getNormal(), -P.d() + offset);
-		if (!WB_GeometryOp3D.checkIntersection3D(HE_MeshOp.getAABB(mesh), lP)) {
+		if (!WB_GeometryOp.checkIntersection3D(HE_MeshOp.getAABB(mesh), lP)) {
 			tracker.setStopStatus(this, "Plane doesn't intersect bounding box. Exiting HEM_SliceEdges.");
 			return mesh;
 		}
@@ -78,7 +117,7 @@ public class HEM_SliceEdges extends HEM_Modifier {
 		final Iterator<HE_Vertex> vItr = faces.vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			tmp = WB_GeometryOp3D.classifyPointToPlane3D(v, lP);
+			tmp = WB_GeometryOp.classifyPointToPlane3D(v, lP);
 			if (tmp == WB_Classification.ON) {
 				v.setInternalLabel(ON);
 			} else if (tmp == WB_Classification.BACK) {
@@ -91,7 +130,6 @@ public class HEM_SliceEdges extends HEM_Modifier {
 		}
 		counter = new WB_ProgressCounter(faces.getNumberOfEdges(), 10);
 		tracker.setCounterStatus(this, "Classifying edges.", counter);
-		new ArrayList<HE_Vertex>();
 		final HE_Selection split = HE_Selection.getSelection(mesh);
 		final Map<Long, Double> edgeInt = new HashMap<>();
 		final Iterator<HE_Halfedge> eItr = faces.eItr();
@@ -147,6 +185,12 @@ public class HEM_SliceEdges extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		tracker.setStartStatus(this, "Starting HEM_SliceEdges.");
@@ -190,7 +234,7 @@ public class HEM_SliceEdges extends HEM_Modifier {
 		final Iterator<HE_Vertex> vItr = lsel.vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			tmp = WB_GeometryOp3D.classifyPointToPlane3D(v, lP);
+			tmp = WB_GeometryOp.classifyPointToPlane3D(v, lP);
 			vertexClass.put(v.getKey(), tmp);
 			if (tmp == WB_Classification.FRONT) {
 				positiveVertexExists = true;
@@ -201,7 +245,6 @@ public class HEM_SliceEdges extends HEM_Modifier {
 			counter.increment();
 		}
 		if (positiveVertexExists && negativeVertexExists) {
-			new ArrayList<HE_Vertex>();
 			final HE_Selection split = HE_Selection.getSelection(lsel.getParent());
 			final HashMap<Long, Double> edgeInt = new HashMap<>();
 			final Iterator<HE_Halfedge> eItr = lsel.eItr();

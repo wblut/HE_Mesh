@@ -11,35 +11,45 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class WB_SimpleMesh implements WB_TriangleFactory {
+/**
+ *
+ */
+public class WB_SimpleMesh implements WB_TriangleSource {
+	/**  */
 	protected int[][] faces;
-	protected List<WB_Coord> vertices;
+	/**  */
+	protected WB_CoordCollection vertices;
+	/**  */
 	List<int[]> tris;
+	/**  */
 	private final WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
+	/**
+	 *
+	 */
 	protected WB_SimpleMesh() {
-		vertices = new WB_CoordList();
+		vertices = WB_CoordCollection.getCollection();
 		this.faces = new int[0][];
 	}
 
-	private List<WB_Coord> createVertices(final Collection<? extends WB_Coord> points) {
-		vertices = new WB_CoordList();
-		for (final WB_Coord p : points) {
-			vertices.add(new WB_Point(p));
-		}
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
+	private WB_CoordCollection createVertices(final WB_CoordCollection points) {
+		vertices = points;
 		return vertices;
 	}
 
-	private List<WB_Coord> createVertices(final WB_Coord[] points) {
-		vertices = new WB_CoordList();
-		for (final WB_Coord p : points) {
-			vertices.add(new WB_Point(p));
-		}
-		return vertices;
-	}
-
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	protected WB_SimpleMesh(final WB_SimpleMesh mesh) {
-		vertices = createVertices(mesh.vertices);
+		vertices = WB_CoordCollection.getCollection(vertices);
 		this.faces = new int[mesh.faces.length][];
 		int i = 0;
 		for (final int[] face : mesh.faces) {
@@ -51,20 +61,33 @@ public class WB_SimpleMesh implements WB_TriangleFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param faces
+	 */
 	protected WB_SimpleMesh(final Collection<? extends WB_Coord> points, final int[][] faces) {
-		vertices = createVertices(points);
-		this.faces = new int[faces.length][];
-		int i = 0;
-		for (final int[] face : faces) {
-			this.faces[i] = new int[face.length];
-			for (int j = 0; j < face.length; j++) {
-				this.faces[i][j] = face[j];
-			}
-			i++;
-		}
+		this(WB_CoordCollection.getCollection(points), faces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param faces
+	 */
 	protected WB_SimpleMesh(final WB_Coord[] points, final int[][] faces) {
+		this(WB_CoordCollection.getCollection(points), faces);
+	}
+
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param faces
+	 */
+	protected WB_SimpleMesh(final WB_CoordCollection points, final int[][] faces) {
 		vertices = createVertices(points);
 		this.faces = new int[faces.length][];
 		int i = 0;
@@ -77,14 +100,29 @@ public class WB_SimpleMesh implements WB_TriangleFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_SimpleMesh get() {
 		return new WB_SimpleMesh(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[][] getFacesAsInt() {
 		return faces;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[][] getEdgesAsInt() {
 		if (faces == null) {
 			return null;
@@ -108,6 +146,13 @@ public class WB_SimpleMesh implements WB_TriangleFactory {
 		return edges;
 	}
 
+	/**
+	 *
+	 *
+	 * @param id
+	 * @param d
+	 * @return
+	 */
 	public WB_Plane getPlane(final int id, final double d) {
 		final int[] face = getFace(id);
 		final WB_Vector normal = geometryfactory.createVector();
@@ -128,10 +173,22 @@ public class WB_SimpleMesh implements WB_TriangleFactory {
 		return geometryfactory.createPlane(center.addMul(d, normal), normal);
 	}
 
+	/**
+	 *
+	 *
+	 * @param id
+	 * @return
+	 */
 	public WB_Plane getPlane(final int id) {
 		return getPlane(id, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public List<WB_Plane> getPlanes(final double d) {
 		final List<WB_Plane> planes = new WB_List<>();
 		for (int i = 0; i < faces.length; i++) {
@@ -140,18 +197,28 @@ public class WB_SimpleMesh implements WB_TriangleFactory {
 		return planes;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_Plane> getPlanes() {
 		return getPlanes(0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point getCenter() {
 		double cx = 0;
 		double cy = 0;
 		double cz = 0;
-		for (final WB_Coord p : vertices) {
-			cx += p.xd();
-			cy += p.yd();
-			cz += p.zd();
+		for (int i = 0; i < vertices.size(); i++) {
+			cx += vertices.getX(i);
+			cy += vertices.getY(i);
+			cz += vertices.getZ(i);
 		}
 		cx /= vertices.size();
 		cy /= vertices.size();
@@ -159,36 +226,78 @@ public class WB_SimpleMesh implements WB_TriangleFactory {
 		return geometryfactory.createPoint(cx, cy, cz);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_AABB getAABB() {
-		return new WB_AABB(vertices);
+		return new WB_AABB(vertices.toList());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getNumberOfFaces() {
 		return faces.length;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getNumberOfVertices() {
 		return vertices.size();
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public WB_Coord getVertex(final int i) {
 		return vertices.get(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_CoordCollection getPoints() {
-		return WB_CoordCollection.getCollection(vertices);
+		return vertices;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public int[] getFace(final int i) {
 		return faces[i];
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int[] getTriangles() {
 		return triangulateMTIndices();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	private int[] triangulateMTIndices() {
 		int[] triangles = new int[0];
 		try {
@@ -227,16 +336,33 @@ public class WB_SimpleMesh implements WB_TriangleFactory {
 		return triangles;
 	}
 
+	/**
+	 *
+	 */
 	private class TriangulateRunner implements Callable<ArrayList<int[]>> {
+		/**  */
 		int start;
+		/**  */
 		int end;
+		/**  */
 		int[] triangles;
 
+		/**
+		 *
+		 *
+		 * @param s
+		 * @param e
+		 */
 		TriangulateRunner(final int s, final int e) {
 			start = s;
 			end = e;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public ArrayList<int[]> call() {
 			int[] face;
@@ -246,7 +372,7 @@ public class WB_SimpleMesh implements WB_TriangleFactory {
 				if (face.length == 3) {
 					tris.add(face);
 				} else {
-					triangles = new WB_JTS.PolygonTriangulatorJTS().triangulatePolygon2D(face, vertices, true,
+					triangles = new WB_JTS.PolygonTriangulatorJTS().triangulatePolygon2D(face, vertices.toList(), true,
 							geometryfactory.createEmbeddedPlane(getPlane(i))).getTriangles();
 					for (int j = 0; j < triangles.length; j += 3) {
 						tris.add(new int[] { triangles[j], triangles[j + 1], triangles[j + 2] });

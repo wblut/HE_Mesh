@@ -1,17 +1,36 @@
 package wblut.hemesh;
 
+/**
+ *
+ */
 public class HEM_Diagrid extends HEM_Modifier {
+	/**  */
 	private double limitAngle;
 
+	/**
+	 *
+	 */
 	public HEM_Diagrid() {
 		limitAngle = 1.001 * 0.5 * Math.PI;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public HEM_Diagrid setLimitAngle(final double a) {
 		limitAngle = a;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		final HE_Selection sel = mesh.selectAllEdges();
@@ -27,6 +46,12 @@ public class HEM_Diagrid extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		selection.collectEdgesByFace();

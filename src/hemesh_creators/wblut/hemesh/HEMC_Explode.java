@@ -1,24 +1,45 @@
 package wblut.hemesh;
 
-import java.util.List;
-
+/**
+ *
+ */
 public class HEMC_Explode extends HEMC_MultiCreator {
+	/**  */
 	private HE_Mesh mesh;
 
+	/**
+	 *
+	 */
 	public HEMC_Explode() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	public HEMC_Explode(final HE_Mesh mesh) {
 		super();
 		setMesh(mesh);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public HEMC_Explode setMesh(final HE_Mesh mesh) {
 		this.mesh = mesh;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param result
+	 */
 	@Override
 	void create(final HE_MeshCollection result) {
 		if (mesh == null) {
@@ -49,7 +70,7 @@ public class HEMC_Explode extends HEMC_MultiCreator {
 			HE_RAS<HE_Face> facesToProcess = new HE_RAS<>();
 			HE_RAS<HE_Face> newFacesToProcess;
 			facesToProcess.add(start);
-			List<HE_Face> neighbors;
+			HE_FaceList neighbors;
 			do {
 				newFacesToProcess = new HE_RAS<>();
 				for (final HE_Face f : facesToProcess) {

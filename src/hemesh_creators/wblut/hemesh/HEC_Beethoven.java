@@ -5,7 +5,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.InflaterInputStream;
 
+/**
+ *
+ */
 public class HEC_Beethoven extends HEC_Creator {
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final InputStream is = this.getClass().getClassLoader().getResourceAsStream("resources/beethoven.binhemesh");

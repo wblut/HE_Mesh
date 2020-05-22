@@ -4,11 +4,23 @@ import java.util.Iterator;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 
+/**
+ *
+ */
 public class HEM_FlipFaces extends HEM_Modifier {
+	/**
+	 *
+	 */
 	public HEM_FlipFaces() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatusStr("HEM_FlipFacesMeshOp", "Flipping faces.");
@@ -64,6 +76,12 @@ public class HEM_FlipFaces extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		tracker.setStartStatusStr("HEM_FlipFacesMeshOp", "Flipping faces.");

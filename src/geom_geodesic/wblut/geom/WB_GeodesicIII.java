@@ -6,24 +6,50 @@ import java.util.List;
 import wblut.geom.WB_Geodesic.Type;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 class WB_GeodesicIII {
+	/**  */
 	public static final int TETRAHEDRO = 0;
+	/**  */
 	public static final int OCTAHEDRO = 1;
+	/**  */
 	public static final int ICOSAHEDRO = 2;
+	/**  */
 	private final double[][] centralanglesabc;
+	/**  */
 	private static double PI = Math.PI;
+	/**  */
 	private static double[][] surfaceanglesABC = new double[][] { { PI / 3.0, PI / 3.0, PI / 2.0 },
 			{ PI / 3.0, PI / 4.0, PI / 2.0 }, { PI / 3.0, PI / 5.0, PI / 2.0 } };
+	/**  */
 	private final double TORADIANS = Math.PI / 180.0;
+	/**  */
 	private final int b, c, v;
+	/**  */
 	private final double radius;
+	/**  */
 	private final Type type;
+	/**  */
 	private WB_SimpleMesh mesh;
+	/**  */
 	private static WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	/**  */
 	public List<WB_Point> points;
+	/**  */
 	public List<WB_Point> PPT;
+	/**  */
 	public List<WB_Point> zeropoints;
 
+	/**
+	 *
+	 *
+	 * @param radius
+	 * @param b
+	 * @param c
+	 * @param type
+	 */
 	public WB_GeodesicIII(final double radius, final int b, final int c, final Type type) {
 		if (b <= 0 || c <= 0 || b == c) {
 			throw new InvalidParameterException("Invalid values for b and c.");
@@ -65,11 +91,19 @@ class WB_GeodesicIII {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_SimpleMesh getMesh() {
 		createMesh();
 		return mesh;
 	}
 
+	/**
+	 *
+	 */
 	private void createMesh() {
 		final WB_Point p0 = getPoint(0, 0);
 		final WB_Point p1 = getPoint(b, c);
@@ -99,7 +133,7 @@ class WB_GeodesicIII {
 		for (int i = -v; i <= v; i++) {
 			for (int j = -v; j <= v; j++) {
 				p = getPoint(i, j).mulSelf(scalefactor);
-				cp = WB_GeometryOp3D.getClosestPointToTriangle3D(p, p0, p1, p2);
+				cp = WB_GeometryOp.getClosestPointToTriangle3D(p, p0, p1, p2);
 				if (WB_Epsilon.isZeroSq(cp.getSqDistance(p))) {
 					PPT.add(p);
 				}
@@ -248,9 +282,18 @@ class WB_GeodesicIII {
 		mesh = gf.createConvexHullWithThreshold(points, false, threshold);
 	}
 
+	/**  */
 	static final private double cos60 = Math.cos(Math.PI / 3.0);
+	/**  */
 	static final private double sin60 = Math.sin(Math.PI / 3.0);
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @param c
+	 * @return
+	 */
 	WB_Point getPoint(final int b, final int c) {
 		return new WB_Point((b + cos60 * c), sin60 * c, 0);
 	}

@@ -8,19 +8,38 @@ import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class HEM_ChamferEdges extends HEM_Modifier {
+	/**  */
 	private double distance;
 
+	/**
+	 *
+	 */
 	public HEM_ChamferEdges() {
 		super();
 		distance = 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEM_ChamferEdges setDistance(final double d) {
 		distance = d;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		if (distance == 0) {
@@ -48,6 +67,12 @@ public class HEM_ChamferEdges extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		if (distance == 0) {

@@ -1,45 +1,84 @@
 package wblut.hemesh;
 
 import java.util.Iterator;
-import java.util.List;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_Point;
 
+/**
+ *
+ */
 public class HEM_Smooth extends HEM_Modifier {
+	/**  */
 	private boolean autoRescale;
+	/**  */
 	private boolean keepBoundary;
+	/**  */
 	private double lambda;
+	/**  */
 	private int iter;
 
+	/**
+	 *
+	 */
 	public HEM_Smooth() {
 		lambda = 0.5;
 		iter = 1;
 		keepBoundary = false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_Smooth setAutoRescale(final boolean b) {
 		autoRescale = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HEM_Smooth setIterations(final int r) {
 		iter = r;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_Smooth setKeepBoundary(final boolean b) {
 		keepBoundary = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param lambda
+	 * @return
+	 */
 	public HEM_Smooth setLambda(final double lambda) {
 		this.lambda = lambda;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HEM_Smooth.");
@@ -56,7 +95,7 @@ public class HEM_Smooth extends HEM_Modifier {
 		for (int r = 0; r < iter; r++) {
 			Iterator<HE_Vertex> vItr = mesh.vItr();
 			HE_Vertex v;
-			List<HE_Vertex> neighbors;
+			HE_VertexList neighbors;
 			int id = 0;
 			WB_Point p;
 			while (vItr.hasNext()) {
@@ -88,6 +127,12 @@ public class HEM_Smooth extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		tracker.setStartStatus(this, "Starting HEM_Smooth.");
@@ -106,7 +151,7 @@ public class HEM_Smooth extends HEM_Modifier {
 			Iterator<HE_Vertex> vItr = selection.vItr();
 			HE_Vertex v;
 			HE_Vertex n;
-			List<HE_Vertex> neighbors;
+			HE_VertexList neighbors;
 			int id = 0;
 			while (vItr.hasNext()) {
 				v = vItr.next();

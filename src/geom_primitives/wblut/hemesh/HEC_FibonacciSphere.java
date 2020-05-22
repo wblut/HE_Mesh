@@ -5,27 +5,52 @@ import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_Point;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HEC_FibonacciSphere extends HEC_Creator {
+	/**  */
 	private double R;
+	/**  */
 	private int N;
 	// private static final double PHI = 0.5 * (1.0 + Math.sqrt(5.0));
 
+	/**
+	 *
+	 */
 	public HEC_FibonacciSphere() {
 		super();
 		R = 1.0;
 		N = 100;
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @return
+	 */
 	public HEC_FibonacciSphere setRadius(final double R) {
 		this.R = R;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param N
+	 * @return
+	 */
 	public HEC_FibonacciSphere setN(final int N) {
 		this.N = N;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_Mesh createBase() {
 		final WB_GeometryFactory3D gf = new WB_GeometryFactory3D();

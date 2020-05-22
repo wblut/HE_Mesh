@@ -10,20 +10,46 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import wblut.hemesh.HE_Element;
 
+/**
+ *
+ */
 public class WB_ProgressReporter extends Thread {
+	/**  */
 	WB_ProgressTracker tracker;
+	/**  */
 	WB_ProgressStatus status;
+	/**  */
 	PrintStream output;
+	/**  */
 	String path;
 
+	/**
+	 *
+	 *
+	 * @param path
+	 */
 	public WB_ProgressReporter(final String path) {
 		this(0, path, false);
 	}
 
+	/**
+	 *
+	 *
+	 * @param depth
+	 * @param consoleDepth
+	 * @param path
+	 */
 	public WB_ProgressReporter(final int depth, final int consoleDepth, final String path) {
 		this(depth, path, false);
 	}
 
+	/**
+	 *
+	 *
+	 * @param depth
+	 * @param path
+	 * @param append
+	 */
 	public WB_ProgressReporter(final int depth, final String path, final boolean append) {
 		super();
 		tracker = WB_ProgressTracker.instance();
@@ -36,6 +62,9 @@ public class WB_ProgressReporter extends Thread {
 		}
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void start() {
 		super.start();
@@ -43,6 +72,9 @@ public class WB_ProgressReporter extends Thread {
 		System.out.println("");
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void run() {
 		while (!Thread.interrupted()) {
@@ -65,16 +97,33 @@ public class WB_ProgressReporter extends Thread {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public static class WB_ProgressCounter {
+		/**  */
 		protected volatile int count;
+		/**  */
 		protected volatile String caller;
+		/**  */
 		protected volatile String text;
+		/**  */
 		private final int limit;
+		/**  */
 		private int percentageStep;
+		/**  */
 		private volatile int currentPercentage;
+		/**  */
 		private volatile int nextUpdate;
+		/**  */
 		static WB_ProgressTracker tracker = WB_ProgressTracker.instance();
 
+		/**
+		 *
+		 *
+		 * @param limit
+		 * @param percentageStep
+		 */
 		public WB_ProgressCounter(final int limit, final int percentageStep) {
 			this.count = 0;
 			this.limit = limit;
@@ -91,10 +140,18 @@ public class WB_ProgressReporter extends Thread {
 			text = null;
 		}
 
+		/**
+		 *
+		 */
 		public void increment() {
 			increment(1);
 		}
 
+		/**
+		 *
+		 *
+		 * @param inc
+		 */
 		public void increment(final int inc) {
 			count += inc;
 			if (count >= nextUpdate) {
@@ -108,40 +165,79 @@ public class WB_ProgressReporter extends Thread {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		protected int getCount() {
 			return count;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		protected int getLimit() {
 			return limit;
 		}
 	}
 
+	/**
+	 *
+	 */
 	public static class WB_ProgressTracker {
+		/**  */
 		protected Queue<WB_ProgressStatus> statuses;
+		/**  */
 		protected volatile int level;
+		/**  */
 		static int indent = 3;
+		/**  */
 		protected volatile int maxLevel;
+		/**  */
 		final int INCLVL = +1;
+		/**  */
 		final int DECLVL = -1;
+		/**  */
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
+		/**
+		 *
+		 */
 		protected WB_ProgressTracker() {
 			statuses = new ConcurrentLinkedQueue<>();
 			level = 0;
 			maxLevel = 2;
 		}
 
+		/**  */
 		private static final WB_ProgressTracker tracker = new WB_ProgressTracker();
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public static WB_ProgressTracker instance() {
 			return tracker;
 		}
 
+		/**
+		 *
+		 *
+		 * @param indent
+		 */
 		public void setIndent(final int indent) {
 			WB_ProgressTracker.indent = Math.max(0, indent);
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		protected WB_ProgressStatus getStatus() {
 			if (statuses.size() > 0) {
 				return statuses.poll();
@@ -149,6 +245,12 @@ public class WB_ProgressReporter extends Thread {
 			return null;
 		}
 
+		/**
+		 *
+		 *
+		 * @param caller
+		 * @param status
+		 */
 		public void setStartStatus(final Object caller, final String status) {
 			if (level <= maxLevel) {
 				String key = "";
@@ -161,6 +263,12 @@ public class WB_ProgressReporter extends Thread {
 			level = Math.max(0, level + INCLVL);
 		}
 
+		/**
+		 *
+		 *
+		 * @param caller
+		 * @param status
+		 */
 		public void setStopStatus(final Object caller, final String status) {
 			level = Math.max(0, level + DECLVL);
 			if (level <= maxLevel) {
@@ -173,6 +281,12 @@ public class WB_ProgressReporter extends Thread {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param caller
+		 * @param status
+		 */
 		public void setDuringStatus(final Object caller, final String status) {
 			if (level <= maxLevel) {
 				String key = "";
@@ -184,6 +298,12 @@ public class WB_ProgressReporter extends Thread {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param caller
+		 * @param status
+		 */
 		public void setStartStatusStr(final String caller, final String status) {
 			if (level <= maxLevel) {
 				statuses.add(new WB_ProgressStatus("\u250C", caller, status, level, sdf.format(new Date().getTime())));
@@ -191,6 +311,12 @@ public class WB_ProgressReporter extends Thread {
 			level = Math.max(0, level + INCLVL);
 		}
 
+		/**
+		 *
+		 *
+		 * @param caller
+		 * @param status
+		 */
 		public void setStopStatusStr(final String caller, final String status) {
 			level = Math.max(0, level + DECLVL);
 			if (level <= maxLevel) {
@@ -198,12 +324,25 @@ public class WB_ProgressReporter extends Thread {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param caller
+		 * @param status
+		 */
 		public void setDuringStatusStr(final String caller, final String status) {
 			if (level <= maxLevel) {
 				statuses.add(new WB_ProgressStatus("|", caller, status, level, sdf.format(new Date().getTime())));
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param caller
+		 * @param status
+		 * @param counter
+		 */
 		public void setCounterStatus(final Object caller, final String status, final WB_ProgressCounter counter) {
 			if (counter.getLimit() > 0) {
 				String key = "";
@@ -219,6 +358,13 @@ public class WB_ProgressReporter extends Thread {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param caller
+		 * @param status
+		 * @param counter
+		 */
 		public void setCounterStatusStr(final String caller, final String status, final WB_ProgressCounter counter) {
 			if (counter.getLimit() > 0) {
 				if (level <= maxLevel) {
@@ -228,12 +374,22 @@ public class WB_ProgressReporter extends Thread {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param caller
+		 */
 		public void setSpacer(final String caller) {
 			if (level <= maxLevel) {
 				statuses.add(new WB_ProgressStatus(caller, level, sdf.format(new Date().getTime())));
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param caller
+		 */
 		public void setSpacer(final Object caller) {
 			if (level <= maxLevel) {
 				statuses.add(new WB_ProgressStatus(caller.getClass().getSimpleName(), level,
@@ -241,24 +397,54 @@ public class WB_ProgressReporter extends Thread {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public boolean isUpdated() {
 			return statuses.size() > 0;
 		}
 
+		/**
+		 *
+		 *
+		 * @param maxLevel
+		 */
 		public void setMaxLevel(final int maxLevel) {
 			this.maxLevel = maxLevel;
 		}
 	}
 
+	/**
+	 *
+	 */
 	static class WB_ProgressStatus {
+		/**  */
 		String caller;
+		/**  */
 		String text;
+		/**  */
 		String counterString;
+		/**  */
 		String indent;
+		/**  */
 		String time;
+		/**  */
 		String delim;
+		/**  */
 		int level;
 
+		/**
+		 *
+		 *
+		 * @param delim
+		 * @param caller
+		 * @param text
+		 * @param counter
+		 * @param depth
+		 * @param time
+		 */
 		WB_ProgressStatus(final String delim, final String caller, final String text, final WB_ProgressCounter counter,
 				final int depth, final String time) {
 			this.caller = caller;
@@ -278,6 +464,15 @@ public class WB_ProgressReporter extends Thread {
 			this.delim = delim;
 		}
 
+		/**
+		 *
+		 *
+		 * @param delim
+		 * @param caller
+		 * @param text
+		 * @param depth
+		 * @param time
+		 */
 		WB_ProgressStatus(final String delim, final String caller, final String text, final int depth,
 				final String time) {
 			this.caller = caller;
@@ -296,6 +491,13 @@ public class WB_ProgressReporter extends Thread {
 			level = depth;
 		}
 
+		/**
+		 *
+		 *
+		 * @param caller
+		 * @param depth
+		 * @param time
+		 */
 		WB_ProgressStatus(final String caller, final int depth, final String time) {
 			this.caller = "spacer";
 			StringBuffer outputBuffer = new StringBuffer(caller.length());
@@ -320,6 +522,11 @@ public class WB_ProgressReporter extends Thread {
 			level = depth;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		String getText() {
 			if (caller == null) {
 				return null;
@@ -335,6 +542,11 @@ public class WB_ProgressReporter extends Thread {
 			return time + " " + indent + delim + " " + caller + ": " + text + counterString;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		String getConsoleText() {
 			if (caller == null) {
 				return null;
@@ -350,6 +562,11 @@ public class WB_ProgressReporter extends Thread {
 			return time + " " + indent + (delim.equals("|") ? "|" : "*") + " " + caller + ": " + text + counterString;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		int getLevel() {
 			return level;
 		}

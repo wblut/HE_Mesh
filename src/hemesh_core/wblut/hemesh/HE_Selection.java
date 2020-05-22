@@ -2,22 +2,35 @@ package wblut.hemesh;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_GeometryFactory3D;
 import wblut.geom.WB_Plane;
 
+/**
+ *
+ */
 public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure {
+	/**  */
 	private HE_Mesh parent;
+	/**  */
 	String createdBy;
+	/**  */
 	protected WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
+	/**  */
 	private HE_RAS<HE_Vertex> vertices;
+	/**  */
 	private HE_RAS<HE_Halfedge> halfedges;
+	/**  */
 	private HE_RAS<HE_Halfedge> edges;
+	/**  */
 	private HE_RAS<HE_Face> faces;
+	/**  */
 	String name;
 
+	/**
+	 *
+	 */
 	private HE_Selection() {
 		super();
 		vertices = new HE_RAS<>();
@@ -26,50 +39,103 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		faces = new HE_RAS<>();
 	}
 
+	/**
+	 *
+	 *
+	 * @param parent
+	 */
 	public HE_Selection(final HE_Mesh parent) {
 		this();
 		this.parent = parent;
 	}
 
+	/**
+	 *
+	 *
+	 * @param parent
+	 * @return
+	 */
 	static HE_Selection getSelection(final HE_Mesh parent) {
 		return new HE_Selection(parent);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 *
+	 *
+	 * @param name
+	 */
 	@Override
 	public void setName(final String name) {
 		this.name = name;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public final int getNumberOfFaces() {
 		return faces.size();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public final int getNumberOfHalfedges() {
 		return halfedges.size() + edges.size();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int getNumberOfEdges() {
 		return edges.size();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public final int getNumberOfVertices() {
 		return vertices.size();
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public final HE_Face getFaceWithKey(final long key) {
 		return faces.getWithKey(key);
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public final HE_Halfedge getHalfedgeWithKey(final long key) {
 		HE_Halfedge he = edges.getWithKey(key);
@@ -80,6 +146,12 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return he;
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public final HE_Halfedge getEdgeWithKey(final long key) {
 		HE_Halfedge he = edges.getWithKey(key);
@@ -90,11 +162,23 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return he;
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public final HE_Vertex getVertexWithKey(final long key) {
 		return vertices.getWithKey(key);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public final HE_Face getFaceWithIndex(final int i) {
 		if (i < 0 || i >= faces.size()) {
@@ -103,6 +187,12 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return faces.getWithIndex(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public final HE_Halfedge getHalfedgeWithIndex(final int i) {
 		if (i < 0 || i >= edges.size() + halfedges.size()) {
@@ -114,6 +204,12 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return edges.getWithIndex(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public final HE_Halfedge getEdgeWithIndex(final int i) {
 		if (i < 0 || i >= edges.size()) {
@@ -122,6 +218,12 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return edges.getWithIndex(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public final HE_Vertex getVertexWithIndex(final int i) {
 		if (i < 0 || i >= vertices.size()) {
@@ -130,6 +232,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return vertices.getWithIndex(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param el
+	 */
 	@Override
 	public final void add(final HE_Element el) {
 		if (el instanceof HE_Face) {
@@ -141,11 +248,21 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 */
 	@Override
 	public final void add(final HE_Face f) {
 		faces.add(f);
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 */
 	@Override
 	public void add(final HE_Halfedge he) {
 		if (he.isEdge()) {
@@ -155,11 +272,21 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 */
 	@Override
 	public final void add(final HE_Vertex v) {
 		vertices.add(v);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	@Override
 	public void add(final HE_Mesh mesh) {
 		addVertices(mesh.getVertices());
@@ -168,6 +295,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		addHalfedges(mesh.getEdges());
 	}
 
+	/**
+	 *
+	 *
+	 * @param faces
+	 */
 	@Override
 	public final void addFaces(final HE_Face[] faces) {
 		for (final HE_Face face : faces) {
@@ -175,6 +307,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param faces
+	 */
 	@Override
 	public final void addFaces(final Collection<? extends HE_Face> faces) {
 		for (final HE_Face f : faces) {
@@ -182,11 +319,21 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param source
+	 */
 	@Override
 	public final void addFaces(final HE_HalfedgeStructure source) {
 		faces.addAll(source.getFaces());
 	}
 
+	/**
+	 *
+	 *
+	 * @param halfedges
+	 */
 	@Override
 	public final void addHalfedges(final HE_Halfedge[] halfedges) {
 		for (final HE_Halfedge halfedge : halfedges) {
@@ -194,6 +341,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param halfedges
+	 */
 	@Override
 	public final void addHalfedges(final Collection<? extends HE_Halfedge> halfedges) {
 		for (final HE_Halfedge he : halfedges) {
@@ -201,6 +353,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param source
+	 */
 	@Override
 	public final void addHalfedges(final HE_HalfedgeStructure source) {
 		for (final HE_Halfedge he : source.getHalfedges()) {
@@ -208,22 +365,42 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param edges
+	 */
 	public final void addEdges(final HE_Halfedge[] edges) {
 		for (final HE_Halfedge edge : edges) {
 			add(edge);
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param edges
+	 */
 	public final void addEdges(final Collection<? extends HE_Halfedge> edges) {
 		for (final HE_Halfedge e : edges) {
 			add(e);
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param source
+	 */
 	public final void addEdges(final HE_HalfedgeStructure source) {
 		edges.addAll(source.getEdges());
 	}
 
+	/**
+	 *
+	 *
+	 * @param vertices
+	 */
 	@Override
 	public final void addVertices(final HE_Vertex[] vertices) {
 		for (final HE_Vertex vertex : vertices) {
@@ -231,11 +408,21 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param source
+	 */
 	@Override
 	public final void addVertices(final HE_HalfedgeStructure source) {
 		vertices.addAll(source.getVertices());
 	}
 
+	/**
+	 *
+	 *
+	 * @param vertices
+	 */
 	@Override
 	public final void addVertices(final Collection<? extends HE_Vertex> vertices) {
 		for (final HE_Vertex v : vertices) {
@@ -243,22 +430,42 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 */
 	@Override
 	public void remove(final HE_Face f) {
 		faces.remove(f);
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 */
 	@Override
 	public void remove(final HE_Halfedge he) {
 		edges.remove(he);
 		halfedges.remove(he);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 */
 	@Override
 	public void remove(final HE_Vertex v) {
 		vertices.remove(v);
 	}
 
+	/**
+	 *
+	 *
+	 * @param faces
+	 */
 	@Override
 	public final void removeFaces(final HE_Face[] faces) {
 		for (final HE_Face face : faces) {
@@ -266,6 +473,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param faces
+	 */
 	@Override
 	public final void removeFaces(final Collection<? extends HE_Face> faces) {
 		for (final HE_Face f : faces) {
@@ -273,6 +485,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param halfedges
+	 */
 	@Override
 	public final void removeHalfedges(final HE_Halfedge[] halfedges) {
 		for (final HE_Halfedge halfedge : halfedges) {
@@ -280,6 +497,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param halfedges
+	 */
 	@Override
 	public final void removeHalfedges(final Collection<? extends HE_Halfedge> halfedges) {
 		for (final HE_Halfedge he : halfedges) {
@@ -287,6 +509,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param edges
+	 */
 	@Override
 	public final void removeEdges(final HE_Halfedge[] edges) {
 		for (final HE_Halfedge edge : edges) {
@@ -294,6 +521,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param edges
+	 */
 	@Override
 	public final void removeEdges(final Collection<? extends HE_Halfedge> edges) {
 		for (final HE_Halfedge e : edges) {
@@ -301,6 +533,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param vertices
+	 */
 	@Override
 	public final void removeVertices(final HE_Vertex[] vertices) {
 		for (final HE_Vertex vertice : vertices) {
@@ -308,6 +545,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param vertices
+	 */
 	@Override
 	public final void removeVertices(final Collection<? extends HE_Vertex> vertices) {
 		for (final HE_Vertex v : vertices) {
@@ -315,6 +557,9 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void clear() {
 		clearVertices();
@@ -322,35 +567,59 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		clearFaces();
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void clearFaces() {
 		faces = new HE_RAS<>();
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void clearHalfedges() {
 		halfedges = new HE_RAS<>();
 		edges = new HE_RAS<>();
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public final void clearEdges() {
 		edges = new HE_RAS<>();
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void clearVertices() {
 		vertices = new HE_RAS<>();
 	}
 
+	/**
+	 *
+	 */
 	void clearFacesNoSelectionCheck() {
 		faces = new HE_RAS<>();
 	}
 
+	/**
+	 *
+	 */
 	void clearVerticesNoSelectionCheck() {
 		vertices = new HE_RAS<>();
 	}
 
+	/**
+	 *
+	 *
+	 * @param el
+	 * @return
+	 */
 	@Override
 	public final boolean contains(final HE_Element el) {
 		if (el instanceof HE_Face) {
@@ -363,26 +632,54 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	@Override
 	public final boolean contains(final HE_Face f) {
 		return faces.contains(f);
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 * @return
+	 */
 	@Override
 	public final boolean contains(final HE_Halfedge he) {
 		return edges.contains(he) || halfedges.contains(he);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	@Override
 	public final boolean contains(final HE_Vertex v) {
 		return vertices.contains(v);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
-	public final List<HE_Vertex> getVertices() {
+	public final HE_VertexList getVertices() {
 		return new HE_VertexList(vertices.getObjects());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public final HE_Vertex[] getVerticesAsArray() {
 		final HE_Vertex[] vertices = new HE_Vertex[getNumberOfVertices()];
@@ -396,17 +693,27 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return vertices;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
-	public final List<HE_Halfedge> getHalfedges() {
-		final List<HE_Halfedge> halfedges = new HE_HalfedgeList();
+	public final HE_HalfedgeList getHalfedges() {
+		final HE_HalfedgeList halfedges = new HE_HalfedgeList();
 		halfedges.addAll(this.halfedges);
 		halfedges.addAll(this.edges);
 		return halfedges;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public final HE_Halfedge[] getHalfedgesAsArray() {
-		final List<HE_Halfedge> hes = getHalfedges();
+		final HE_HalfedgeList hes = getHalfedges();
 		final HE_Halfedge[] halfedges = new HE_Halfedge[hes.size()];
 		int i = 0;
 		for (final HE_Halfedge he : hes) {
@@ -416,11 +723,21 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return halfedges;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
-	public final List<HE_Halfedge> getEdges() {
+	public final HE_HalfedgeList getEdges() {
 		return new HE_HalfedgeList(edges.getObjects());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public final HE_Halfedge[] getEdgesAsArray() {
 		final HE_Halfedge[] edges = new HE_Halfedge[getNumberOfEdges()];
@@ -433,11 +750,21 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return edges;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
-	public final List<HE_Face> getFaces() {
+	public final HE_FaceList getFaces() {
 		return new HE_FaceList(faces.getObjects());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public final HE_Face[] getFacesAsArray() {
 		final HE_Face[] faces = new HE_Face[getNumberOfFaces()];
@@ -450,67 +777,134 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return faces;
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public final boolean containsFace(final long key) {
 		return faces.containsKey(key);
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public final boolean containsHalfedge(final long key) {
 		return halfedges.containsKey(key) || edges.containsKey(key);
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public final boolean containsEdge(final long key) {
 		return edges.containsKey(key);
 	}
 
+	/**
+	 *
+	 *
+	 * @param key
+	 * @return
+	 */
 	@Override
 	public final boolean containsVertex(final long key) {
 		return vertices.containsKey(key);
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	@Override
 	public final int getIndex(final HE_Face f) {
 		return faces.indexOf(f);
 	}
 
+	/**
+	 *
+	 *
+	 * @param edge
+	 * @return
+	 */
 	@Override
 	public final int getIndex(final HE_Halfedge edge) {
 		return edges.indexOf(edge);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	@Override
 	public final int getIndex(final HE_Vertex v) {
 		return vertices.indexOf(v);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_VertexIterator vItr() {
-		final List<HE_Vertex> vs = new HE_VertexList(vertices);
+		final HE_VertexList vs = new HE_VertexList(vertices);
 		return new HE_VertexIterator(vs);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_EdgeIterator eItr() {
-		final List<HE_Halfedge> es = new HE_HalfedgeList(edges);
+		final HE_HalfedgeList es = new HE_HalfedgeList(edges);
 		return new HE_EdgeIterator(es);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_HalfedgeIterator heItr() {
-		final List<HE_Halfedge> hes = new HE_HalfedgeList(getHalfedges());
+		final HE_HalfedgeList hes = new HE_HalfedgeList(getHalfedges());
 		return HE_HalfedgeIterator.getIterator(hes);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_FaceIterator fItr() {
-		final List<HE_Face> fs = new HE_FaceList(getFaces());
+		final HE_FaceList fs = new HE_FaceList(getFaces());
 		return new HE_FaceIterator(fs);
 	}
 
-	public List<HE_Halfedge> getAllBoundaryHalfedges() {
-		final List<HE_Halfedge> boundaryHalfedges = new HE_HalfedgeList();
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_HalfedgeList getAllBoundaryHalfedges() {
+		final HE_HalfedgeList boundaryHalfedges = new HE_HalfedgeList();
 		HE_Halfedge he;
 		final Iterator<HE_Halfedge> heItr = heItr();
 		while (heItr.hasNext()) {
@@ -522,6 +916,12 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return boundaryHalfedges;
 	}
 
+	/**
+	 *
+	 *
+	 * @param modifier
+	 * @return
+	 */
 	@Override
 	public HE_Mesh modify(final HEM_Modifier modifier) {
 		modifier.apply(this);
@@ -529,6 +929,12 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this.parent;
 	}
 
+	/**
+	 *
+	 *
+	 * @param subdividor
+	 * @return
+	 */
 	@Override
 	public HE_Mesh subdivide(final HES_Subdividor subdividor) {
 		subdividor.apply(this);
@@ -536,6 +942,13 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this.parent;
 	}
 
+	/**
+	 *
+	 *
+	 * @param subdividor
+	 * @param rep
+	 * @return
+	 */
 	@Override
 	public HE_Mesh subdivide(final HES_Subdividor subdividor, final int rep) {
 		for (int i = 0; i < rep; i++) {
@@ -545,6 +958,12 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this.parent;
 	}
 
+	/**
+	 *
+	 *
+	 * @param simplifier
+	 * @return
+	 */
 	@Override
 	public HE_Mesh simplify(final HES_Simplifier simplifier) {
 		simplifier.apply(this);
@@ -552,10 +971,15 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this.parent;
 	}
 
-	public List<HE_Halfedge> getOuterEdges() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_HalfedgeList getOuterEdges() {
 		final HE_Selection sel = get();
 		sel.collectEdgesByFace();
-		final List<HE_Halfedge> result = new HE_HalfedgeList();
+		final HE_HalfedgeList result = new HE_HalfedgeList();
 		HE_Halfedge he;
 		final Iterator<HE_Halfedge> heItr = sel.heItr();
 		while (heItr.hasNext()) {
@@ -571,10 +995,15 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return result;
 	}
 
-	public List<HE_Halfedge> getInnerEdges() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_HalfedgeList getInnerEdges() {
 		final HE_Selection sel = get();
 		sel.collectEdgesByFace();
-		final List<HE_Halfedge> result = new HE_HalfedgeList();
+		final HE_HalfedgeList result = new HE_HalfedgeList();
 		HE_Halfedge he;
 		final Iterator<HE_Halfedge> heItr = sel.heItr();
 		while (heItr.hasNext()) {
@@ -590,9 +1019,14 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return result;
 	}
 
-	public List<HE_Vertex> getOuterVertices() {
-		final List<HE_Vertex> result = new HE_VertexList();
-		final List<HE_Halfedge> outerEdges = getOuterEdges();
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_VertexList getOuterVertices() {
+		final HE_VertexList result = new HE_VertexList();
+		final HE_HalfedgeList outerEdges = getOuterEdges();
 		for (final HE_Halfedge e : outerEdges) {
 			final HE_Vertex v1 = e.getVertex();
 			final HE_Vertex v2 = e.getEndVertex();
@@ -606,11 +1040,16 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return result;
 	}
 
-	public List<HE_Vertex> getInnerVertices() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_VertexList getInnerVertices() {
 		final HE_Selection sel = get();
 		sel.collectVertices();
-		final List<HE_Vertex> result = new HE_VertexList();
-		final List<HE_Vertex> outerVertices = getOuterVertices();
+		final HE_VertexList result = new HE_VertexList();
+		final HE_VertexList outerVertices = getOuterVertices();
 		final HE_VertexIterator vItr = sel.vItr();
 		HE_Vertex v;
 		while (vItr.hasNext()) {
@@ -622,9 +1061,14 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return result;
 	}
 
-	public List<HE_Vertex> getAllBoundaryVertices() {
-		final List<HE_Vertex> result = new HE_VertexList();
-		final List<HE_Halfedge> outerEdges = getOuterEdges();
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_VertexList getAllBoundaryVertices() {
+		final HE_VertexList result = new HE_VertexList();
+		final HE_HalfedgeList outerEdges = getOuterEdges();
 		for (final HE_Halfedge e : outerEdges) {
 			if (e.getFace() == null || e.getPair().getFace() == null) {
 				final HE_Vertex v1 = e.getVertex();
@@ -640,8 +1084,13 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return result;
 	}
 
-	public List<HE_Face> getBoundaryFaces() {
-		final List<HE_Face> boundaryFaces = new HE_FaceList();
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_FaceList getBoundaryFaces() {
+		final HE_FaceList boundaryFaces = new HE_FaceList();
 		final HE_FaceIterator fItr = fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -657,10 +1106,15 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return boundaryFaces;
 	}
 
-	public List<HE_Halfedge> getOuterHalfedges() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_HalfedgeList getOuterHalfedges() {
 		final HE_Selection sel = get();
 		sel.collectHalfedges();
-		final List<HE_Halfedge> result = new HE_HalfedgeList();
+		final HE_HalfedgeList result = new HE_HalfedgeList();
 		HE_Halfedge he;
 		final Iterator<HE_Halfedge> heItr = sel.heItr();
 		while (heItr.hasNext()) {
@@ -673,10 +1127,15 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return result;
 	}
 
-	public List<HE_Halfedge> getOuterHalfedgesInside() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_HalfedgeList getOuterHalfedgesInside() {
 		final HE_Selection sel = get();
 		sel.collectHalfedges();
-		final List<HE_Halfedge> result = new HE_HalfedgeList();
+		final HE_HalfedgeList result = new HE_HalfedgeList();
 		HE_Halfedge he;
 		final Iterator<HE_Halfedge> heItr = sel.heItr();
 		while (heItr.hasNext()) {
@@ -689,10 +1148,15 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return result;
 	}
 
-	public List<HE_Halfedge> getInnerHalfedges() {
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_HalfedgeList getInnerHalfedges() {
 		final HE_Selection sel = get();
 		sel.collectHalfedges();
-		final List<HE_Halfedge> result = new HE_HalfedgeList();
+		final HE_HalfedgeList result = new HE_HalfedgeList();
 		HE_Halfedge he;
 		final Iterator<HE_Halfedge> heItr = sel.heItr();
 		while (heItr.hasNext()) {
@@ -704,6 +1168,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection get() {
 		final HE_Selection copy = new HE_Selection(parent);
 		final HE_FaceIterator fItr = fItr();
@@ -728,10 +1197,18 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return copy;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Mesh getAsMesh() {
 		return new HE_Mesh(new HEC_Copy(this));
 	}
 
+	/**
+	 *
+	 */
 	void completeFromFaces() {
 		this.clearHalfedges();
 		this.clearVertices();
@@ -763,6 +1240,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param sel
+	 */
 	public void add(final HE_Selection sel) {
 		final HE_FaceIterator fItr = sel.fItr();
 		HE_Face f;
@@ -784,10 +1266,20 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param sel
+	 */
 	public void union(final HE_Selection sel) {
 		add(sel);
 	}
 
+	/**
+	 *
+	 *
+	 * @param sel
+	 */
 	public void subtract(final HE_Selection sel) {
 		final HE_FaceIterator fItr = sel.fItr();
 		HE_Face f;
@@ -809,6 +1301,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param sel
+	 */
 	public void intersect(final HE_Selection sel) {
 		final HE_RAS<HE_Face> newFaces = new HE_RAS<>();
 		final HE_FaceIterator fItr = sel.fItr();
@@ -845,6 +1342,9 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		addVertices(newVertices);
 	}
 
+	/**
+	 *
+	 */
 	public void grow() {
 		final HE_FaceIterator fItr = fItr();
 		while (fItr.hasNext()) {
@@ -852,14 +1352,22 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 */
 	public void grow(final int n) {
 		for (int i = 0; i < n; i++) {
 			grow();
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void shrink() {
-		final List<HE_Halfedge> outerEdges = getOuterEdges();
+		final HE_HalfedgeList outerEdges = getOuterEdges();
 		for (final HE_Halfedge e : outerEdges) {
 			final HE_Face f1 = e.getFace();
 			final HE_Face f2 = e.getPair().getFace();
@@ -872,12 +1380,20 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 */
 	public void shrink(final int n) {
 		for (int i = 0; i < n; i++) {
 			shrink();
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void surround() {
 		final HE_FaceList currentFaces = new HE_FaceList();
 		final HE_FaceIterator fItr = fItr();
@@ -890,11 +1406,21 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		removeFaces(currentFaces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 */
 	public void surround(final int n) {
 		grow(n - 1);
 		surround();
 	}
 
+	/**
+	 *
+	 *
+	 * @param threshold
+	 */
 	public void smooth(final int threshold) {
 		final HE_HalfedgeList currentHalfedges = new HE_HalfedgeList();
 		final Iterator<HE_Halfedge> heItr = heItr();
@@ -919,6 +1445,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param threshold
+	 */
 	public void smooth(final double threshold) {
 		final HE_HalfedgeList currentHalfedges = new HE_HalfedgeList();
 		final Iterator<HE_Halfedge> heItr = heItr();
@@ -943,6 +1474,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection invertSelection() {
 		invertFaces();
 		invertEdges();
@@ -951,6 +1487,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection invertFaces() {
 		final HE_RAS<HE_Face> newFaces = new HE_RAS<>();
 		final HE_FaceIterator fItr = parent.fItr();
@@ -966,13 +1507,23 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection boundary() {
-		final List<HE_Face> newFaces = this.getBoundaryFaces();
+		final HE_FaceList newFaces = this.getBoundaryFaces();
 		clearFaces();
 		addFaces(newFaces);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection invertEdges() {
 		final HE_RAS<HE_Halfedge> newEdges = new HE_RAS<>();
 		final HE_EdgeIterator eItr = parent.eItr();
@@ -988,6 +1539,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection invertVertices() {
 		final HE_RAS<HE_Vertex> newVertices = new HE_RAS<>();
 		final HE_VertexIterator vItr = parent.vItr();
@@ -1003,6 +1559,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection invertHalfedges() {
 		final HE_RAS<HE_Halfedge> newHalfedges = new HE_RAS<>();
 		final Iterator<HE_Halfedge> heItr = parent.heItr();
@@ -1018,6 +1579,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection cleanSelection() {
 		final HE_RAS<HE_Face> newFaces = new HE_RAS<>();
 		final HE_FaceIterator fItr = fItr();
@@ -1055,8 +1621,13 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection collectVertices() {
-		List<HE_Vertex> tmpVertices = new HE_VertexList();
+		HE_VertexList tmpVertices = new HE_VertexList();
 		final HE_FaceIterator fItr = fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -1074,6 +1645,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection collectFaces() {
 		final HE_VertexIterator vItr = vItr();
 		HE_Vertex v;
@@ -1088,6 +1664,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection collectEdgesByFace() {
 		final HE_FaceIterator fitr = fItr();
 		while (fitr.hasNext()) {
@@ -1099,6 +1680,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection collectEdgesByVertex() {
 		final HE_VertexIterator vitr = vItr();
 		while (vitr.hasNext()) {
@@ -1107,6 +1693,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection collectHalfedges() {
 		final HE_FaceIterator fItr = fItr();
 		HE_Face f;
@@ -1117,6 +1708,11 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param he
+	 */
 	public void addEdge(final HE_Halfedge he) {
 		if (he.isEdge()) {
 			edges.add(he);
@@ -1127,18 +1723,36 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public String createdBy() {
 		return createdBy == null ? "" : createdBy;
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	protected void clearPrecomputed() {
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Mesh getParent() {
 		return parent;
 	}
 
+	/**
+	 *
+	 *
+	 * @param args
+	 */
 	public static void main(final String[] args) {
 		final HEC_Grid creator = new HEC_Grid();
 		creator.setU(10);// number of cells in U direction
@@ -1152,6 +1766,9 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		mesh.stats();
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void stats() {
 		System.out.println("HE_Selection: " + getKey() + " (parent: " + parent.getKey());
@@ -1160,354 +1777,987 @@ public class HE_Selection extends HE_MeshElement implements HE_HalfedgeStructure
 		System.out.println("Number of halfedges: " + this.getNumberOfHalfedges());
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public static HE_Selection selectAll(final HE_Mesh mesh) {
 		return mesh.selectAll();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @return
+	 */
 	public static HE_Selection selectAll(final HE_Mesh mesh, final String name) {
 		return mesh.selectAll(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public static HE_Selection selectAllEdges(final HE_Mesh mesh) {
 		return mesh.selectAllEdges();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @return
+	 */
 	public static HE_Selection selectAllEdges(final HE_Mesh mesh, final String name) {
 		return mesh.selectAllEdges(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public static HE_Selection selectAllFaces(final HE_Mesh mesh) {
 		return mesh.selectAllFaces();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @return
+	 */
 	public static HE_Selection selectAllFaces(final HE_Mesh mesh, final String name) {
 		return mesh.selectAllFaces(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public static HE_Selection selectAllHalfedges(final HE_Mesh mesh) {
 		return mesh.selectAllHalfedges();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @return
+	 */
 	public static HE_Selection selectAllHalfedges(final HE_Mesh mesh, final String name) {
 		return mesh.selectAllHalfedges(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public static HE_Selection selectAllInnerBoundaryHalfedges(final HE_Mesh mesh) {
 		return mesh.selectAllInnerBoundaryHalfedges();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @return
+	 */
 	public static HE_Selection selectAllInnerBoundaryHalfedges(final HE_Mesh mesh, final String name) {
 		return mesh.selectAllInnerBoundaryHalfedges(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public static HE_Selection selectAllOuterBoundaryHalfedges(final HE_Mesh mesh) {
 		return mesh.selectAllOuterBoundaryHalfedges();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @return
+	 */
 	public static HE_Selection selectAllOuterBoundaryHalfedges(final HE_Mesh mesh, final String name) {
 		return mesh.selectAllOuterBoundaryHalfedges(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public static HE_Selection selectAllVertices(final HE_Mesh mesh) {
 		return mesh.selectAllVertices();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @return
+	 */
 	public static HE_Selection selectAllVertices(final HE_Mesh mesh, final String name) {
 		return mesh.selectAllVertices(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectBackEdges(final HE_Mesh mesh, final String name, final WB_Plane P) {
 		return mesh.selectBackEdges(name, P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectBackEdges(final HE_Mesh mesh, final WB_Plane P) {
 		return mesh.selectBackEdges(P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectBackFaces(final HE_Mesh mesh, final String name, final WB_Plane P) {
 		return mesh.selectBackFaces(name, P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectBackFaces(final HE_Mesh mesh, final WB_Plane P) {
 		return mesh.selectBackFaces(P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectBackVertices(final HE_Mesh mesh, final String name, final WB_Plane P) {
 		return mesh.selectBackVertices(name, P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectBackVertices(final HE_Mesh mesh, final WB_Plane P) {
 		return mesh.selectBackVertices(P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public static HE_Selection selectBoundaryEdges(final HE_Mesh mesh) {
 		return mesh.selectBoundaryEdges();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @return
+	 */
 	public static HE_Selection selectBoundaryEdges(final HE_Mesh mesh, final String name) {
 		return mesh.selectBoundaryEdges(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public static HE_Selection selectBoundaryFaces(final HE_Mesh mesh) {
 		return mesh.selectBoundaryFaces();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @return
+	 */
 	public static HE_Selection selectBoundaryFaces(final HE_Mesh mesh, final String name) {
 		return mesh.selectBoundaryFaces(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public static HE_Selection selectBoundaryVertices(final HE_Mesh mesh) {
 		return mesh.selectBoundaryVertices();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @return
+	 */
 	public static HE_Selection selectBoundaryVertices(final HE_Mesh mesh, final String name) {
 		return mesh.selectBoundaryVertices(name);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectCrossingEdges(final HE_Mesh mesh, final String name, final WB_Plane P) {
 		return mesh.selectCrossingEdges(name, P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectCrossingEdges(final HE_Mesh mesh, final WB_Plane P) {
 		return mesh.selectCrossingEdges(P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectCrossingFaces(final HE_Mesh mesh, final String name, final WB_Plane P) {
 		return mesh.selectCrossingFaces(name, P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectCrossingFaces(final HE_Mesh mesh, final WB_Plane P) {
 		return mesh.selectCrossingFaces(P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectEdgesWithLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectEdgesWithLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectEdgesWithLabel(final HE_Mesh mesh, final String name, final int label) {
 		return mesh.selectEdgesWithLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectEdgesWithOtherInternalLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectEdgesWithOtherInternalLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectEdgesWithOtherInternalLabel(final HE_Mesh mesh, final String name,
 			final int label) {
 		return mesh.selectEdgesWithOtherInternalLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectEdgesWithOtherLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectEdgesWithOtherLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectEdgesWithOtherLabel(final HE_Mesh mesh, final String name, final int label) {
 		return mesh.selectEdgesWithOtherLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectEdgesWithInternalLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectEdgesWithInternalLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectEdgesWithInternalLabel(final HE_Mesh mesh, final String name, final int label) {
 		return mesh.selectEdgesWithInternalLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectFacesWithInternalLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectFacesWithInternalLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectFacesWithInternalLabel(final HE_Mesh mesh, final String name, final int label) {
 		return mesh.selectFacesWithInternalLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectFacesWithLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectFacesWithLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectFacesWithLabel(final HE_Mesh mesh, final String name, final int label) {
 		return mesh.selectFacesWithLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param v
+	 * @return
+	 */
 	public static HE_Selection selectFacesWithNormal(final HE_Mesh mesh, final String name, final WB_Coord v) {
 		return mesh.selectFacesWithNormal(name, v);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param n
+	 * @param ta
+	 * @return
+	 */
 	public static HE_Selection selectFacesWithNormal(final HE_Mesh mesh, final String name, final WB_Coord n,
 			final double ta) {
 		return mesh.selectFacesWithNormal(name, n, ta);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param v
+	 * @return
+	 */
 	public static HE_Selection selectFacesWithNormal(final HE_Mesh mesh, final WB_Coord v) {
 		return mesh.selectFacesWithNormal(v);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param n
+	 * @param ta
+	 * @return
+	 */
 	public static HE_Selection selectFacesWithNormal(final HE_Mesh mesh, final WB_Coord n, final double ta) {
 		return mesh.selectFacesWithNormal(n, ta);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectFacesWithOtherInternalLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectFacesWithOtherInternalLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectFacesWithOtherInternalLabel(final HE_Mesh mesh, final String name,
 			final int label) {
 		return mesh.selectFacesWithOtherInternalLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectFacesWithOtherLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectFacesWithOtherLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectFacesWithOtherLabel(final HE_Mesh mesh, final String name, final int label) {
 		return mesh.selectFacesWithOtherLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectFrontEdges(final HE_Mesh mesh, final String name, final WB_Plane P) {
 		return mesh.selectFrontEdges(name, P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectFrontEdges(final HE_Mesh mesh, final WB_Plane P) {
 		return mesh.selectFrontEdges(P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectFrontFaces(final HE_Mesh mesh, final String name, final WB_Plane P) {
 		return mesh.selectFrontFaces(name, P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectFrontFaces(final HE_Mesh mesh, final WB_Plane P) {
 		return mesh.selectFrontFaces(P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectFrontVertices(final HE_Mesh mesh, final String name, final WB_Plane P) {
 		return mesh.selectFrontVertices(name, P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectFrontVertices(final HE_Mesh mesh, final WB_Plane P) {
 		return mesh.selectFrontVertices(P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectHalfedgesWithLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectHalfedgesWithLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectHalfedgesWithLabel(final HE_Mesh mesh, final String name, final int label) {
 		return mesh.selectHalfedgesWithLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectHalfedgesWithOtherInternalLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectHalfedgesWithOtherInternalLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectHalfedgesWithOtherInternalLabel(final HE_Mesh mesh, final String name,
 			final int label) {
 		return mesh.selectHalfedgesWithOtherInternalLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectHalfedgesWithOtherLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectHalfedgesWithOtherLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectHalfedgesWithOtherLabel(final HE_Mesh mesh, final String name, final int label) {
 		return mesh.selectHalfedgesWithOtherLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectHalfedgeWithInternalLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectHalfedgeWithInternalLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectHalfedgeWithInternalLabel(final HE_Mesh mesh, final String name, final int label) {
 		return mesh.selectHalfedgeWithInternalLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectOnVertices(final HE_Mesh mesh, final String name, final WB_Plane P) {
 		return mesh.selectOnVertices(name, P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param P
+	 * @return
+	 */
 	public static HE_Selection selectOnVertices(final HE_Mesh mesh, final WB_Plane P) {
 		return mesh.selectOnVertices(P);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param r
+	 * @return
+	 */
 	public static HE_Selection selectRandomEdges(final HE_Mesh mesh, final double r) {
 		return mesh.selectRandomEdges(r);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param r
+	 * @param seed
+	 * @return
+	 */
 	public static HE_Selection selectRandomEdges(final HE_Mesh mesh, final double r, final long seed) {
 		return mesh.selectRandomEdges(r, seed);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param r
+	 * @return
+	 */
 	public static HE_Selection selectRandomEdges(final HE_Mesh mesh, final String name, final double r) {
 		return mesh.selectRandomEdges(name, r);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param r
+	 * @param seed
+	 * @return
+	 */
 	public static HE_Selection selectRandomEdges(final HE_Mesh mesh, final String name, final double r,
 			final long seed) {
 		return mesh.selectRandomEdges(name, r, seed);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param r
+	 * @return
+	 */
 	public static HE_Selection selectRandomFaces(final HE_Mesh mesh, final double r) {
 		return mesh.selectRandomFaces(r);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param r
+	 * @param seed
+	 * @return
+	 */
 	public static HE_Selection selectRandomFaces(final HE_Mesh mesh, final double r, final long seed) {
 		return mesh.selectRandomFaces(r, seed);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param r
+	 * @return
+	 */
 	public static HE_Selection selectRandomFaces(final HE_Mesh mesh, final String name, final double r) {
 		return mesh.selectRandomFaces(r);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param r
+	 * @param seed
+	 * @return
+	 */
 	public static HE_Selection selectRandomFaces(final HE_Mesh mesh, final String name, final double r,
 			final long seed) {
 		return mesh.selectRandomFaces(name, r, seed);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param r
+	 * @return
+	 */
 	public static HE_Selection selectRandomVertices(final HE_Mesh mesh, final double r) {
 		return mesh.selectRandomVertices(r);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param r
+	 * @param seed
+	 * @return
+	 */
 	public static HE_Selection selectRandomVertices(final HE_Mesh mesh, final double r, final long seed) {
 		return mesh.selectRandomVertices(r, seed);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param r
+	 * @return
+	 */
 	public static HE_Selection selectRandomVertices(final HE_Mesh mesh, final String name, final double r) {
 		return mesh.selectRandomVertices(name, r);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param r
+	 * @param seed
+	 * @return
+	 */
 	public static HE_Selection selectRandomVertices(final HE_Mesh mesh, final String name, final double r,
 			final long seed) {
 		return mesh.selectRandomVertices(name, r, seed);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectVerticesWithInternalLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectVerticesWithInternalLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectVerticesWithInternalLabel(final HE_Mesh mesh, final String name, final int label) {
 		return mesh.selectVerticesWithInternalLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectVerticesWithLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectVerticesWithLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectVerticesWithLabel(final HE_Mesh mesh, final String name, final int label) {
 		return mesh.selectVerticesWithLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectVerticesWithOtherInternalLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectVerticesWithOtherInternalLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectVerticesWithOtherInternalLabel(final HE_Mesh mesh, final String name,
 			final int label) {
 		return mesh.selectVerticesWithOtherInternalLabel(name, label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectVerticesWithOtherLabel(final HE_Mesh mesh, final int label) {
 		return mesh.selectVerticesWithOtherLabel(label);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param name
+	 * @param label
+	 * @return
+	 */
 	public static HE_Selection selectVerticesWithOtherLabel(final HE_Mesh mesh, final String name, final int label) {
 		return mesh.selectVerticesWithOtherLabel(name, label);
 	}

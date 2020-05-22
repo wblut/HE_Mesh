@@ -3,20 +3,40 @@ package wblut.hemesh;
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
 import wblut.geom.WB_Point;
 
+/**
+ *
+ */
 public class HES_QuadSplit extends HES_Subdividor {
+	/**  */
 	private HE_Selection selectionOut;
+	/**  */
 	private double d;
 
+	/**
+	 *
+	 */
 	public HES_QuadSplit() {
 		super();
 		d = 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HES_QuadSplit setOffset(final double d) {
 		this.d = d;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HEM_QuadSplit.");
@@ -31,7 +51,7 @@ public class HES_QuadSplit extends HES_Subdividor {
 		final HE_FaceIterator fItr = mesh.fItr();
 		while (fItr.hasNext()) {
 			f = fItr.next();
-			faceCenters[i] = WB_Point.addMul(HE_MeshOp.getFaceCenter(f), d, HE_MeshOp.getFaceNormal(f));
+			faceCenters[i] = WB_Point.addMul(mesh.getFaceCenter(f), d, mesh.getFaceNormal(f));
 			faceDegrees[i] = f.getFaceDegree();
 			i++;
 			counter.increment();
@@ -94,7 +114,9 @@ public class HES_QuadSplit extends HES_Subdividor {
 				mesh.setHalfedge(fc, he);
 				he1[c] = he.getNextInFace();
 				he2[c] = new HE_Halfedge();
+				he2[c].clearVisible();
 				he3[c] = new HE_Halfedge();
+				he3[c].clearVisible();
 				mesh.setVertex(he2[c], he.getNextInFace().getNextInFace().getVertex());
 				if (he.getNextInFace().getNextInFace().hasUVW()) {
 					he2[c].setUVW(he.getNextInFace().getNextInFace().getUVW());
@@ -124,6 +146,12 @@ public class HES_QuadSplit extends HES_Subdividor {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sel
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection sel) {
 		final HE_Mesh mesh = sel.getParent();
@@ -139,7 +167,7 @@ public class HES_QuadSplit extends HES_Subdividor {
 		tracker.setCounterStatus(this, "Getting face centers.", counter);
 		while (fItr.hasNext()) {
 			f = fItr.next();
-			faceCenters[i] = WB_Point.addMul(HE_MeshOp.getFaceCenter(f), d, HE_MeshOp.getFaceNormal(f));
+			faceCenters[i] = WB_Point.addMul(mesh.getFaceCenter(f), d, mesh.getFaceNormal(f));
 			faceDegrees[i] = f.getFaceDegree();
 			i++;
 			counter.increment();
@@ -233,10 +261,20 @@ public class HES_QuadSplit extends HES_Subdividor {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_Selection getSplitFaces() {
 		return this.selectionOut;
 	}
 
+	/**
+	 *
+	 *
+	 * @param args
+	 */
 	public static void main(final String args[]) {
 		final HE_Mesh mesh = new HEC_Grid().setSizeU(100.0).setsizeV(100.0).setU(10).setsizeV(10).create();
 		mesh.validate();

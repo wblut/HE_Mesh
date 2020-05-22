@@ -1,28 +1,56 @@
 package wblut.math;
 
+/**
+ *
+ */
 public class WB_NeumaierSum {
+	/**  */
 	private double sum;
+	/**  */
 	private double compensation;
+	/**  */
 	private int count;
+	/**  */
 	private double tmp;
 
+	/**
+	 *
+	 */
 	public WB_NeumaierSum() {
 	}
 
+	/**
+	 *
+	 */
 	public void reset() {
 		sum = 0.0;
 		compensation = 0.0;
 		count = 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getCount() {
 		return count;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getSum() {
 		return sum + compensation;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getAverage() {
 		if (count == 0) {
 			return 0;
@@ -30,6 +58,11 @@ public class WB_NeumaierSum {
 		return (sum + compensation) / count;
 	}
 
+	/**
+	 *
+	 *
+	 * @param value
+	 */
 	public void add(final double value) {
 		tmp = sum + value;
 		if (Math.abs(sum) >= Math.abs(value)) {
@@ -40,6 +73,11 @@ public class WB_NeumaierSum {
 		sum = tmp;
 	}
 
+	/**
+	 *
+	 *
+	 * @param args
+	 */
 	public static void main(final String[] args) {
 		final WB_NeumaierSum sum = new WB_NeumaierSum();
 		sum.add(1);

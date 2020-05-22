@@ -10,18 +10,42 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import wblut.geom.WB_List;
+
+/**
+ *
+ *
+ * @param <E>
+ */
 public class HET_MTVisitorFace<E extends Object> {
+	/**  */
 	HET_InfoFace<E> faceInfo;
 
+	/**
+	 *
+	 *
+	 * @param faceInfo
+	 */
 	public HET_MTVisitorFace(final HET_InfoFace<E> faceInfo) {
 		this.faceInfo = faceInfo;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public List<E> getFaceInfo(final HE_HalfedgeStructure mesh) {
 		return visit(mesh.getFaces());
 	}
 
-	private List<E> visit(final List<HE_Face> faces) {
+	/**
+	 *
+	 *
+	 * @param faces
+	 * @return
+	 */
+	private List<E> visit(final HE_FaceList faces) {
 		final List<E> result = new WB_List<>();
 		try {
 			final int threadCount = Runtime.getRuntime().availableProcessors();
@@ -47,19 +71,39 @@ public class HET_MTVisitorFace<E extends Object> {
 		return result;
 	}
 
+	/**
+	 *
+	 */
 	class HET_FaceVisitor implements Callable<List<E>> {
+		/**  */
 		int start;
+		/**  */
 		int end;
+		/**  */
 		int id;
-		List<HE_Face> faces;
+		/**  */
+		HE_FaceList faces;
 
-		public HET_FaceVisitor(final int s, final int e, final int id, final List<HE_Face> faces) {
+		/**
+		 *
+		 *
+		 * @param s
+		 * @param e
+		 * @param id
+		 * @param faces
+		 */
+		public HET_FaceVisitor(final int s, final int e, final int id, final HE_FaceList faces) {
 			start = s;
 			end = e;
 			this.id = id;
 			this.faces = faces;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public List<E> call() {
 			final ArrayList<E> result = new ArrayList<>();

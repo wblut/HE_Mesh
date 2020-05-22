@@ -1,7 +1,7 @@
 package wblut.hemesh;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_ConstantScalarParameter;
@@ -11,7 +11,13 @@ import wblut.math.WB_Epsilon;
 import wblut.math.WB_LinearScalarParameter;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class HEC_Cylinder extends HEC_Creator {
+	/**
+	 *
+	 */
 	public HEC_Cylinder() {
 		super();
 		parameters.set("facets", 6);
@@ -29,6 +35,15 @@ public class HEC_Cylinder extends HEC_Creator {
 		setCreationAxis(WB_Vector.Y());
 	}
 
+	/**
+	 *
+	 *
+	 * @param Ri
+	 * @param Ro
+	 * @param H
+	 * @param facets
+	 * @param steps
+	 */
 	public HEC_Cylinder(final double Ri, final double Ro, final double H, final int facets, final int steps) {
 		this();
 		parameters.set("facets", facets);
@@ -38,61 +53,130 @@ public class HEC_Cylinder extends HEC_Creator {
 		parameters.set("steps", steps);
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @return
+	 */
 	public HEC_Cylinder setRadius(final double R) {
 		parameters.set("bottomradius", R);
 		parameters.set("topradius", R);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Rb
+	 * @param Rt
+	 * @return
+	 */
 	public HEC_Cylinder setRadius(final double Rb, final double Rt) {
 		parameters.set("bottomradius", Rb);
 		parameters.set("topradius", Rt);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Rb
+	 * @return
+	 */
 	public HEC_Cylinder setBottomRadius(final double Rb) {
 		parameters.set("bottomradius", Rb);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Rt
+	 * @return
+	 */
 	public HEC_Cylinder setTopRadius(final double Rt) {
 		parameters.set("topradius", Rt);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param H
+	 * @return
+	 */
 	public HEC_Cylinder setHeight(final double H) {
 		parameters.set("height", H);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param steps
+	 * @return
+	 */
 	public HEC_Cylinder setSteps(final int steps) {
 		parameters.set("steps", steps);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param facets
+	 * @return
+	 */
 	public HEC_Cylinder setFacets(final int facets) {
 		parameters.set("facets", facets);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param topcap
+	 * @param bottomcap
+	 * @return
+	 */
 	public HEC_Cylinder setCap(final boolean topcap, final boolean bottomcap) {
 		parameters.set("bottomcap", bottomcap);
 		parameters.set("topcap", topcap);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param direction
+	 * @return
+	 */
 	public HEC_Cylinder align(final WB_Coord direction) {
 		setAxis(direction);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param endpoint
+	 * @return
+	 */
 	public HEC_Cylinder align(final WB_Coord origin, final WB_Coord endpoint) {
-		setHeight(WB_GeometryOp3D.getDistance3D(origin, endpoint));
+		setHeight(WB_GeometryOp.getDistance3D(origin, endpoint));
 		setCenter(origin);
 		setAxis(new WB_Vector(origin, endpoint));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param segment
+	 * @return
+	 */
 	public HEC_Cylinder align(final WB_Segment segment) {
 		setHeight(segment.getLength());
 		setCenter(segment.getOrigin());
@@ -100,54 +184,119 @@ public class HEC_Cylinder extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getTopRadius() {
 		return parameters.get("topradius", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getBottomRadius() {
 		return parameters.get("bottomradius", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getHeight() {
 		return parameters.get("height", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	int getSteps() {
 		return parameters.get("steps", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	int getFacets() {
 		return parameters.get("facets", 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	boolean getTopCap() {
 		return parameters.get("topcap", true);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	boolean getBottomCap() {
 		return parameters.get("bottomcap", true);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	boolean getReverse() {
 		return parameters.get("reverse", true);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getPhase() {
 		return parameters.get("phase", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	WB_ScalarParameter getTaper() {
 		return (WB_ScalarParameter) parameters.get("taper", new WB_LinearScalarParameter(0.0, 1.0, 0.0, 1.0));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	WB_ScalarParameter getHeightTaper() {
 		return (WB_ScalarParameter) parameters.get("heighttaper", new WB_LinearScalarParameter(0.0, 1.0, 0.0, 1.0));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	WB_ScalarParameter getProfile() {
 		return (WB_ScalarParameter) parameters.get("profile", new WB_ConstantScalarParameter(1.0));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final boolean topcap = getTopCap();
@@ -282,36 +431,79 @@ public class HEC_Cylinder extends HEC_Creator {
 		return fl.createBase();
 	}
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	public HEC_Cylinder setProfile(final WB_ScalarParameter t) {
 		parameters.set("profile", t);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	public HEC_Cylinder setTaper(final WB_ScalarParameter t) {
 		parameters.set("taper", t);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param E
+	 * @param type
+	 * @return
+	 */
 	public HEC_Cylinder setTaper(final WB_Ease E, final WB_Ease.EaseType type) {
 		parameters.set("taper", new WB_EaseScalarParameter(0, 1, 0, 1, true, E, type));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public HEC_Cylinder setPhase(final double p) {
 		parameters.set("phase", p);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	public HEC_Cylinder setHeightTaper(final WB_ScalarParameter t) {
 		parameters.set("heighttaper", t);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param E
+	 * @param type
+	 * @return
+	 */
 	public HEC_Cylinder setHeigthTaper(final WB_Ease E, final WB_Ease.EaseType type) {
 		parameters.set("heighttaper", new WB_EaseScalarParameter(0, 1, 0, 1, true, E, type));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param args
+	 */
 	public static void main(final String[] args) {
 		final HEC_Cylinder creator1 = new HEC_Cylinder();
 		creator1.setRadius(150, 150);

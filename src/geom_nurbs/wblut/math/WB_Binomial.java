@@ -1,8 +1,18 @@
 package wblut.math;
 
+/**
+ *
+ */
 public class WB_Binomial {
+	/**  */
 	private final long[][] binomial;
 
+	/**
+	 *
+	 *
+	 * @param N
+	 * @param K
+	 */
 	public WB_Binomial(final int N, final int K) {
 		binomial = new long[N + 1][K + 1];
 		// base cases
@@ -19,10 +29,24 @@ public class WB_Binomial {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @param k
+	 * @return
+	 */
 	public long binPrecalc(final int n, final int k) {
 		return binomial[n][k];
 	}
 
+	/**
+	 *
+	 *
+	 * @param N
+	 * @param K
+	 * @return
+	 */
 	public static long bin(final int N, final int K) {
 		final long[][] binomial = new long[N + 1][K + 1];
 		for (int k = 1; k <= K; k++) {

@@ -3,10 +3,20 @@ package wblut.math;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class WB_SphericalHarmonics {
+	/**  */
 	final static double[][] norms = initNormalization();
+	/**  */
 	final static double SQRT2 = Math.sqrt(2.0);
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	private static double[][] initNormalization() {
 		final double[][] norms = new double[41][42];
 		for (int L = 0; L < 40; L++) {
@@ -17,6 +27,13 @@ public class WB_SphericalHarmonics {
 		return norms;
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param M
+	 * @return
+	 */
 	private static double getNormalizationLUT(final int L, final int M) {
 		if (L <= 40) {
 			return norms[L][M];
@@ -24,6 +41,13 @@ public class WB_SphericalHarmonics {
 		return getNormalization(L, M);
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param M
+	 * @return
+	 */
 	private static double getNormalization(final int L, final int M) {
 		// sqrt((2L+1)/4PI.(L-M)!/(L+M)!)
 		double factor = 4.0 * Math.PI;
@@ -35,6 +59,14 @@ public class WB_SphericalHarmonics {
 		return Math.sqrt(factor);
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param M
+	 * @param x
+	 * @return
+	 */
 	public static double Plm(final int L, final int M, final double x) {
 		if (M < 0 || M > L) {
 			throw new IllegalArgumentException(
@@ -78,6 +110,17 @@ public class WB_SphericalHarmonics {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param angle
+	 * @param ax
+	 * @param ay
+	 * @param az
+	 * @param theta
+	 * @param phi
+	 * @return
+	 */
 	protected static WB_Coord rotateSpherical(final double angle, final double ax, final double ay, final double az,
 			final double theta, final double phi) {
 		final WB_Vector v = new WB_Vector(Math.cos(phi) * Math.sin(theta), Math.sin(phi) * Math.sin(theta),
@@ -86,6 +129,15 @@ public class WB_SphericalHarmonics {
 		return new WB_Vector(Math.acos(Math.min(Math.max(v.zd(), -1.0), 1.0)), Math.atan2(v.yd(), v.xd()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param M
+	 * @param theta
+	 * @param phi
+	 * @return
+	 */
 	public static WB_Complex Y(final int L, final int M, final double theta, final double phi) {
 		if (Math.abs(M) > L) {
 			throw new IllegalArgumentException(
@@ -105,12 +157,34 @@ public class WB_SphericalHarmonics {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param M
+	 * @param theta
+	 * @param phi
+	 * @param angle
+	 * @param ax
+	 * @param ay
+	 * @param az
+	 * @return
+	 */
 	public static WB_Complex Y(final int L, final int M, final double theta, final double phi, final double angle,
 			final double ax, final double ay, final double az) {
 		final WB_Coord rotatedThetaPhi = rotateSpherical(angle, ax, ay, az, theta, phi);
 		return Y(L, M, rotatedThetaPhi.xd(), rotatedThetaPhi.yd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param M
+	 * @param theta
+	 * @param phi
+	 * @return
+	 */
 	public static double Ylm(final int L, final int M, final double theta, final double phi) {
 		if (Math.abs(M) > L) {
 			throw new IllegalArgumentException(
@@ -129,17 +203,52 @@ public class WB_SphericalHarmonics {
 		return norm * legendre * Math.cos(absM * phi) * SQRT2;
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param M
+	 * @param theta
+	 * @param phi
+	 * @param angle
+	 * @param ax
+	 * @param ay
+	 * @param az
+	 * @return
+	 */
 	public static double Ylm(final int L, final int M, final double theta, final double phi, final double angle,
 			final double ax, final double ay, final double az) {
 		final WB_Coord rotatedThetaPhi = rotateSpherical(angle, ax, ay, az, theta, phi);
 		return Ylm(L, M, rotatedThetaPhi.xd(), rotatedThetaPhi.yd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param M
+	 * @param theta
+	 * @param phi
+	 * @return
+	 */
 	public static double Ylm2(final int L, final int M, final double theta, final double phi) {
 		final double result = Ylm(L, M, theta, phi);
 		return result * result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param M
+	 * @param theta
+	 * @param phi
+	 * @param angle
+	 * @param ax
+	 * @param ay
+	 * @param az
+	 * @return
+	 */
 	public static double Ylm2(final int L, final int M, final double theta, final double phi, final double angle,
 			final double ax, final double ay, final double az) {
 		final WB_Coord rotatedThetaPhi = rotateSpherical(angle, ax, ay, az, theta, phi);

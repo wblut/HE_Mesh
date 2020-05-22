@@ -9,22 +9,52 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.zip.GZIPInputStream;
 
+/**
+ *
+ */
 public class WB_FromBinarySTLFile {
+	/**
+	 *
+	 */
 	private WB_FromBinarySTLFile() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param buf
+	 * @return
+	 */
 	private static final double bufferToDouble(final byte[] buf) {
 		return Float.intBitsToFloat(bufferToInt(buf));
 	}
 
+	/**
+	 *
+	 *
+	 * @param buf
+	 * @return
+	 */
 	private static final int bufferToInt(final byte[] buf) {
 		return byteToInt(buf[0]) | byteToInt(buf[1]) << 8 | byteToInt(buf[2]) << 16 | byteToInt(buf[3]) << 24;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	private static final int byteToInt(final byte b) {
 		return b < 0 ? 256 + b : b;
 	}
 
+	/**
+	 *
+	 *
+	 * @param file
+	 * @return
+	 */
 	private static InputStream createInputStream(final File file) {
 		if (file == null) {
 			throw new IllegalArgumentException("file can't be null");
@@ -41,6 +71,16 @@ public class WB_FromBinarySTLFile {
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param ds
+	 * @param result
+	 * @param scale
+	 * @param buf
+	 * @return
+	 * @throws IOException
+	 */
 	private static WB_Point readVector(final DataInputStream ds, final WB_Point result, final double scale,
 			final byte[] buf) throws IOException {
 		ds.read(buf, 0, 4);
@@ -52,6 +92,13 @@ public class WB_FromBinarySTLFile {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param path
+	 * @param scale
+	 * @return
+	 */
 	public static WB_SimpleMesh createMesh(final String path, final double scale) {
 		final byte[] buf = new byte[12];
 		final File file = new File(path);

@@ -1,8 +1,6 @@
 package wblut.hemesh;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_KDTreeInteger3D;
@@ -13,9 +11,18 @@ import wblut.geom.WB_SimpleMesh;
 import wblut.geom.WB_SimpleMeshCreator;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HEC_FromSimpleMesh extends HEC_Creator {
+	/**  */
 	private final WB_SimpleMesh source;
 
+	/**
+	 *
+	 *
+	 * @param source
+	 */
 	public HEC_FromSimpleMesh(final WB_SimpleMesh source) {
 		super();
 		this.source = source;
@@ -25,6 +32,11 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		setCheckUniformNormals(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param source
+	 */
 	public HEC_FromSimpleMesh(final WB_SimpleMeshCreator source) {
 		super();
 		this.source = source.create();
@@ -34,24 +46,51 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		setCheckUniformNormals(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected boolean getCheckDuplicateVertices() {
 		return parameters.get("duplicate", true);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	protected boolean getCheckUniformNormals() {
 		return parameters.get("uniform", true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEC_FromSimpleMesh setCheckDuplicateVertices(final boolean b) {
 		parameters.set("duplicate", b);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEC_FromSimpleMesh setCheckUniformNormals(final boolean b) {
 		parameters.set("uniform", b);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final HE_Mesh mesh = new HE_Mesh();
@@ -62,7 +101,7 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 			return mesh;
 		}
 		final int[][] faces = source.getFacesAsInt();
-		final List<HE_Vertex> uniqueVertices = getUniqueVertices(mesh);
+		final HE_VertexList uniqueVertices = getUniqueVertices(mesh);
 		if (getCheckUniformNormals()) {
 			unifyNormals(faces);
 		}
@@ -72,7 +111,7 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 			if (face.length == 0) {
 				continue;
 			}
-			final ArrayList<HE_Halfedge> faceEdges = new ArrayList<>();
+			final HE_HalfedgeList faceEdges = new HE_HalfedgeList();
 			final HE_Face hef = new HE_Face();
 			hef.setInternalLabel(id);
 			id++;
@@ -113,6 +152,13 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @return
+	 */
 	private Long ohash(final int u, final int v) {
 		int lu = u;
 		int lv = v;
@@ -125,6 +171,15 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		return A >= B ? A * A + A + B : A + B * B;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param face
+	 * @param neighbor
+	 * @return
+	 */
 	private int consistentOrder(final int i, final int j, final int[] face, final int[] neighbor) {
 		for (int k = 0; k < neighbor.length; k++) {
 			if (neighbor[k] == face[i] && neighbor[(k + 1) % neighbor.length] == face[j]) {
@@ -137,8 +192,14 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		return 0;
 	}
 
-	private List<HE_Vertex> getUniqueVertices(final HE_Mesh mesh) {
-		final List<HE_Vertex> uniqueVertices = new HE_VertexList();
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
+	private HE_VertexList getUniqueVertices(final HE_Mesh mesh) {
+		final HE_VertexList uniqueVertices = new HE_VertexList();
 		if (getCheckDuplicateVertices()) {
 			final WB_KDTreeInteger3D<WB_Coord> kdtree = new WB_KDTreeInteger3D<>();
 			WB_KDEntryInteger<WB_Coord> neighbor;
@@ -170,6 +231,11 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		return uniqueVertices;
 	}
 
+	/**
+	 *
+	 *
+	 * @param faces
+	 */
 	private void unifyNormals(final int[][] faces) {
 		final HE_ObjectMap<int[]> edges = new HE_ObjectMap<>();
 		for (int i = 0; i < faces.length; i++) {
@@ -231,6 +297,11 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		} while (facesleft);
 	}
 
+	/**
+	 *
+	 *
+	 * @param arg
+	 */
 	public static final void main(final String arg[]) {
 		final WB_PyramidFactory pf = new WB_PyramidFactory();
 		final WB_Point[] points = new WB_Point[12];
@@ -240,6 +311,6 @@ public class HEC_FromSimpleMesh extends HEC_Creator {
 		}
 		pf.setPoints(points);
 		final WB_SimpleMesh smesh = pf.createPyramidWithHeightAndAngle(450, Math.PI / 6.0);
-		final HE_Mesh mesh = new HE_Mesh(smesh);
+		new HE_Mesh(smesh);
 	}
 }

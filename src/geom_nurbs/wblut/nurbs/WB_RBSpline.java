@@ -8,10 +8,21 @@ import wblut.geom.WB_PointHomogeneous;
 import wblut.math.WB_Binomial;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class WB_RBSpline extends WB_BSpline {
+	/**  */
 	private final double[] weights;
+	/**  */
 	protected WB_PointHomogeneous[] wpoints;
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param knot
+	 */
 	public WB_RBSpline(final WB_Point[] controlPoints, final WB_NurbsKnot knot) {
 		super(controlPoints, knot);
 		weights = new double[n + 1];
@@ -22,6 +33,13 @@ public class WB_RBSpline extends WB_BSpline {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param knot
+	 * @param weights
+	 */
 	public WB_RBSpline(final WB_Point[] controlPoints, final WB_NurbsKnot knot, final double[] weights) {
 		super(controlPoints, knot);
 		if (weights.length != controlPoints.length) {
@@ -34,6 +52,12 @@ public class WB_RBSpline extends WB_BSpline {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param knot
+	 */
 	public WB_RBSpline(final WB_PointHomogeneous[] controlPoints, final WB_NurbsKnot knot) {
 		if (knot.n != controlPoints.length - 1) {
 			throw new IllegalArgumentException("Knot size and/or order doesn't match number of control points.");
@@ -52,14 +76,33 @@ public class WB_RBSpline extends WB_BSpline {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param order
+	 */
 	public WB_RBSpline(final WB_Point[] controlPoints, final int order) {
 		this(controlPoints, new WB_NurbsKnot(controlPoints.length, order));
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param order
+	 */
 	public WB_RBSpline(final WB_PointHomogeneous[] controlPoints, final int order) {
 		this(controlPoints, new WB_NurbsKnot(controlPoints.length, order));
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param order
+	 * @param weights
+	 */
 	public WB_RBSpline(final WB_Point[] controlPoints, final int order, final double[] weights) {
 		super(controlPoints, order);
 		this.weights = weights;
@@ -69,14 +112,30 @@ public class WB_RBSpline extends WB_BSpline {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_PointHomogeneous[] wpoints() {
 		return wpoints;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double[] weights() {
 		return weights;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_Point getPointOnCurve(final double u) {
 		final int span = knot.span(u);
@@ -89,6 +148,12 @@ public class WB_RBSpline extends WB_BSpline {
 		return new WB_Point(CH.project());
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param w
+	 */
 	public void setWeight(final int i, final double w) {
 		if (i < 0 || i > n) {
 			throw new IllegalArgumentException("Index outside of weights range.");
@@ -97,6 +162,12 @@ public class WB_RBSpline extends WB_BSpline {
 		wpoints[i] = new WB_PointHomogeneous(points[i], w);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public double getWeight(final int i) {
 		if (i < 0 || i > n) {
 			throw new IllegalArgumentException("Index outside of weights range.");
@@ -104,23 +175,45 @@ public class WB_RBSpline extends WB_BSpline {
 		return weights[i];
 	}
 
+	/**
+	 *
+	 */
 	public void updateHomogeneous() {
 		for (int i = 0; i < n + 1; i++) {
 			wpoints[i] = new WB_PointHomogeneous(points[i], weights[i]);
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_RBSpline insertKnot(final double u) {
 		return insertKnot(u, 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_RBSpline insertKnotMax(final double u) {
 		final int k = knot.multiplicity(u);
 		return insertKnot(u, p - k);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param r
+	 * @return
+	 */
 	@Override
 	public WB_RBSpline insertKnot(final double u, final int r) {
 		final int mp = n + p + 1;
@@ -167,6 +260,12 @@ public class WB_RBSpline extends WB_BSpline {
 		return new WB_RBSpline(Q, UQ);
 	}
 
+	/**
+	 *
+	 *
+	 * @param K
+	 * @return
+	 */
 	@Override
 	public WB_RBSpline refineKnot(final WB_NurbsKnot K) {
 		final double[][] multVal = K.multVal();
@@ -189,6 +288,12 @@ public class WB_RBSpline extends WB_BSpline {
 		return refineKnotRestricted(fX);
 	}
 
+	/**
+	 *
+	 *
+	 * @param X
+	 * @return
+	 */
 	private WB_RBSpline refineKnotRestricted(final double[] X) {
 		final int r = X.length - 1;
 		final int a = knot.span(X[0]);
@@ -233,6 +338,12 @@ public class WB_RBSpline extends WB_BSpline {
 		return new WB_RBSpline(Q, Ubar);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_RBSpline[] split(final double u) {
 		final WB_RBSpline newRBSpline = insertKnotMax(u);
@@ -266,6 +377,12 @@ public class WB_RBSpline extends WB_BSpline {
 		return splitCurves;
 	}
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	@Override
 	public WB_RBSpline elevateDegree(final int t) {
 		final int m = n + p + 1;

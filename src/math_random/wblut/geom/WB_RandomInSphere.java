@@ -1,23 +1,46 @@
 package wblut.geom;
 
+/**
+ *
+ */
 public class WB_RandomInSphere extends WB_RandomFactory {
+	/**  */
 	private double radius;
 
+	/**
+	 *
+	 */
 	public WB_RandomInSphere() {
 		super();
 		radius = 1.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param seed
+	 */
 	public WB_RandomInSphere(final long seed) {
 		super(seed);
 		radius = 1.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public WB_RandomInSphere setRadius(final double r) {
 		radius = r;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_Point nextPointImp() {
 		final double elevation = Math.asin(2.0 * randomGen.nextDouble() - 1);
@@ -27,6 +50,11 @@ public class WB_RandomInSphere extends WB_RandomFactory {
 				r * Math.sin(elevation));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_Vector nextVectorImp() {
 		final double elevation = Math.asin(2.0 * randomGen.nextDouble() - 1);

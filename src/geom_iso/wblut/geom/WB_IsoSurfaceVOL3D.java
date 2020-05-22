@@ -10,16 +10,27 @@ import java.util.List;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class WB_IsoSurfaceVOL3D {
+	/**  */
 	final static int ONVERTEX = 0;
+	/**  */
 	final static int ONEDGE = 1;
+	/**  */
 	final static int NEGATIVE = 0;
+	/**  */
 	final static int EQUAL = 1;
+	/**  */
 	final static int POSITIVE = 2;
+	/**  */
 	int[] digits = new int[8];
+	/**  */
 	final static WB_Point[] gridvertices = new WB_Point[] { new WB_Point(0, 0, 0), new WB_Point(1, 0, 0),
 			new WB_Point(0, 1, 0), new WB_Point(1, 1, 0), new WB_Point(0, 0, 1), new WB_Point(1, 0, 1),
 			new WB_Point(0, 1, 1), new WB_Point(1, 1, 1), };
+	/**  */
 	// EDGES: 2 vertices per edge
 	final static int[][] edges = { { 0, 1 }, // x ijk
 			{ 0, 2 }, // y ijk
@@ -34,27 +45,42 @@ public class WB_IsoSurfaceVOL3D {
 			{ 5, 7 }, // y IjK
 			{ 6, 7 } // x iJK
 	};
+	/**  */
 	int[][] entries;
+	/**  */
 	private WB_IsoValues3D values;
 	// ISOVERTICES: 20
 	// type=ONVERTEX iso vertex on vertex, index in vertex list
 	// type=ONEDGE iso vertex on edge, index in edge list, 0=lower
+	/**  */
 	// threshold,1=higher threshold
 	final static int[][] isovertices = new int[][] { { 1, 0, 0 }, { 1, 0, 1 }, { 1, 1, 0 }, { 1, 1, 1 }, { 1, 2, 0 },
 			{ 1, 2, 1 }, { 1, 3, 0 }, { 1, 3, 1 }, { 1, 4, 0 }, { 1, 4, 1 }, { 1, 5, 0 }, { 1, 5, 1 }, { 1, 6, 0 },
 			{ 1, 6, 1 }, { 1, 7, 0 }, { 1, 7, 1 }, { 1, 8, 0 }, { 1, 8, 1 }, { 1, 9, 0 }, { 1, 9, 1 }, { 1, 10, 0 },
 			{ 1, 10, 1 }, { 1, 11, 0 }, { 1, 11, 1 }, { 0, 0 }, { 0, 1 }, { 0, 2 }, { 0, 3 }, { 0, 4 }, { 0, 5 },
 			{ 0, 6 }, { 0, 7 } };
+	/**  */
 	private int resx, resy, resz;
+	/**  */
 	private double cx, cy, cz;
+	/**  */
 	private double dx, dy, dz;
+	/**  */
 	private double isolevelmin, isolevelmax;
+	/**  */
 	private WB_IndexedObjectMap<WB_Point> xedges;
+	/**  */
 	private WB_IndexedObjectMap<WB_Point> yedges;
+	/**  */
 	private WB_IndexedObjectMap<WB_Point> zedges;
+	/**  */
 	private WB_IndexedObjectMap<WB_Point> vertices;
+	/**  */
 	private List<WB_Tetrahedron> tetra;
 
+	/**
+	 *
+	 */
 	public WB_IsoSurfaceVOL3D() {
 		super();
 		String line = "";
@@ -94,6 +120,14 @@ public class WB_IsoSurfaceVOL3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param resx
+	 * @param resy
+	 * @param resz
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL3D setResolution(final int resx, final int resy, final int resz) {
 		this.resx = resx;
 		this.resy = resy;
@@ -101,6 +135,14 @@ public class WB_IsoSurfaceVOL3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL3D setSize(final double dx, final double dy, final double dz) {
 		this.dx = dx;
 		this.dy = dy;
@@ -108,6 +150,12 @@ public class WB_IsoSurfaceVOL3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL3D setValues(final double[][][] values) {
 		this.values = new WB_IsoValues3D.GridRaw3D(values);
 		resx = values.length - 1;
@@ -116,6 +164,12 @@ public class WB_IsoSurfaceVOL3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL3D setValues(final float[][][] values) {
 		this.values = new WB_IsoValues3D.Grid3D(values);
 		resx = values.length - 1;
@@ -124,6 +178,21 @@ public class WB_IsoSurfaceVOL3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param function
+	 * @param xi
+	 * @param yi
+	 * @param zi
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 * @param sizeI
+	 * @param sizeJ
+	 * @param sizeK
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL3D setValues(final WB_ScalarParameter function, final double xi, final double yi,
 			final double zi, final double dx, final double dy, final double dz, final int sizeI, final int sizeJ,
 			final int sizeK) {
@@ -134,6 +203,12 @@ public class WB_IsoSurfaceVOL3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL3D setValues(final WB_HashGridDouble3D values) {
 		this.values = new WB_IsoValues3D.HashGrid3D(values);
 		resx = values.getSizeI() - 1;
@@ -142,12 +217,25 @@ public class WB_IsoSurfaceVOL3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param isolevelmin
+	 * @param isolevelmax
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL3D setIsolevel(final double isolevelmin, final double isolevelmax) {
 		this.isolevelmin = isolevelmin;
 		this.isolevelmax = isolevelmax;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param c
+	 * @return
+	 */
 	public WB_IsoSurfaceVOL3D setCenter(final WB_Coord c) {
 		cx = c.xd();
 		cy = c.yd();
@@ -155,14 +243,39 @@ public class WB_IsoSurfaceVOL3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	private int index(final int i, final int j, final int k) {
 		return i + 1 + (resx + 2) * (j + 1) + (resx + 2) * (resy + 2) * (k + 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	private double value(final int i, final int j, final int k) {
 		return values.getValue(i, j, k);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @return
+	 */
 	private WB_Point vertex(final int i, final int j, final int k, final WB_Point offset) {
 		WB_Point vertex = vertices.get(index(i, j, k));
 		if (vertex != null) {
@@ -174,6 +287,16 @@ public class WB_IsoSurfaceVOL3D {
 		return vertex;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @param isolevel
+	 * @return
+	 */
 	private WB_Point xedge(final int i, final int j, final int k, final WB_Point offset, final double isolevel) {
 		WB_Point xedge = xedges.get(index(i, j, k));
 		if (xedge != null) {
@@ -189,6 +312,16 @@ public class WB_IsoSurfaceVOL3D {
 		return xedge;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @param isolevel
+	 * @return
+	 */
 	private WB_Point yedge(final int i, final int j, final int k, final WB_Point offset, final double isolevel) {
 		WB_Point yedge = yedges.get(index(i, j, k));
 		if (yedge != null) {
@@ -204,6 +337,16 @@ public class WB_IsoSurfaceVOL3D {
 		return yedge;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @param isolevel
+	 * @return
+	 */
 	private WB_Point zedge(final int i, final int j, final int k, final WB_Point offset, final double isolevel) {
 		WB_Point zedge = zedges.get(index(i, j, k));
 		if (zedge != null) {
@@ -219,6 +362,16 @@ public class WB_IsoSurfaceVOL3D {
 		return zedge;
 	}
 
+	/**
+	 *
+	 *
+	 * @param isolevel
+	 * @param p1
+	 * @param p2
+	 * @param valp1
+	 * @param valp2
+	 * @return
+	 */
 	private WB_Point interp(final double isolevel, final WB_Point p1, final WB_Point p2, final double valp1,
 			final double valp2) {
 		double mu;
@@ -236,6 +389,14 @@ public class WB_IsoSurfaceVOL3D {
 				p1.zd() + mu * (p2.zd() - p1.zd()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	private int classifyCell(final int i, final int j, final int k) {
 		if (i < 0 || j < 0 || k < 0 || i >= resx || j >= resy || k >= resz) {
 			return -1;
@@ -309,6 +470,9 @@ public class WB_IsoSurfaceVOL3D {
 		return cubeindex;
 	}
 
+	/**
+	 *
+	 */
 	private void polygonise() {
 		xedges = new WB_IndexedObjectMap<>();
 		yedges = new WB_IndexedObjectMap<>();
@@ -325,6 +489,15 @@ public class WB_IsoSurfaceVOL3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param cubeindex
+	 * @param offset
+	 */
 	private void getPolygons(final int i, final int j, final int k, final int cubeindex, final WB_Point offset) {
 		final int[] indices = entries[cubeindex];
 		final int numtetras = indices[0];
@@ -338,11 +511,26 @@ public class WB_IsoSurfaceVOL3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<WB_Tetrahedron> getTetrahedra() {
 		polygonise();
 		return tetra;
 	}
 
+	/**
+	 *
+	 *
+	 * @param isopointindex
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @return
+	 */
 	WB_Point getIsoVertex(final int isopointindex, final int i, final int j, final int k, final WB_Point offset) {
 		if (isovertices[isopointindex][0] == ONVERTEX) {
 			switch (isovertices[isopointindex][1]) {

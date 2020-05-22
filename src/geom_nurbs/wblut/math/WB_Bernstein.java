@@ -1,6 +1,16 @@
 package wblut.math;
 
+/**
+ *
+ */
 public class WB_Bernstein {
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param order
+	 * @return
+	 */
 	public static double[] getBernsteinCoefficientsOfOrderN(final double u, final int order) {
 		final double[] B = new double[order + 1];
 		B[0] = 1.0;
@@ -18,6 +28,13 @@ public class WB_Bernstein {
 		return B;
 	}
 
+	/**
+	 *
+	 *
+	 * @param steps
+	 * @param order
+	 * @return
+	 */
 	public static double[][] getBernsteinCoefficientsOfOrderNForRange(final int steps, final int order) {
 		final int clampedsteps = Math.max(2, steps);
 		final double[][] B = new double[clampedsteps][order + 1];

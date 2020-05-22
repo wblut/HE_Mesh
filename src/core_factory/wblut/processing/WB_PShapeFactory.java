@@ -2,7 +2,6 @@ package wblut.processing;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -14,17 +13,27 @@ import wblut.hemesh.HEC_IsoSkin;
 import wblut.hemesh.HE_Face;
 import wblut.hemesh.HE_FaceIterator;
 import wblut.hemesh.HE_Halfedge;
+import wblut.hemesh.HE_HalfedgeList;
 import wblut.hemesh.HE_HalfedgeStructure;
 import wblut.hemesh.HE_Mesh;
-import wblut.hemesh.HE_MeshOp;
 import wblut.hemesh.HE_Selection;
 import wblut.hemesh.HE_Vertex;
 
+/**
+ *
+ */
 public class WB_PShapeFactory {
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacetedPShape(final HE_Mesh mesh, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
-		List<HE_Halfedge> halfedges;
+		HE_HalfedgeList halfedges;
 		final HE_FaceIterator fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -49,10 +58,17 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param meshes
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacetedPShape(final Collection<? extends HE_Mesh> meshes, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
-		List<HE_Halfedge> halfedges;
+		HE_HalfedgeList halfedges;
 		for (final HE_Mesh mesh : meshes) {
 			final HE_FaceIterator fItr = mesh.fItr();
 			HE_Face f;
@@ -79,11 +95,19 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param img
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacetedPShape(final HE_Mesh mesh, final PImage img, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
 		retained.texture(img);
-		List<HE_Halfedge> halfedges;
+		HE_HalfedgeList halfedges;
 		final HE_FaceIterator fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -108,10 +132,18 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param img
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacetedPShape(final HE_Mesh mesh, final PImage[] img, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
-		List<HE_Halfedge> halfedges;
+		HE_HalfedgeList halfedges;
 		final HE_FaceIterator fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -137,12 +169,21 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param offset
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacetedPShape(final HE_HalfedgeStructure mesh, final double offset, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
+		final HE_Mesh parent = mesh instanceof HE_Mesh ? (HE_Mesh) mesh : ((HE_Selection) mesh).getParent();
 		final HE_FaceIterator fItr = mesh.fItr();
 		HE_Face f;
-		List<HE_Halfedge> halfedges;
+		HE_HalfedgeList halfedges;
 		HE_Vertex v;
 		HE_Halfedge he;
 		WB_Coord fn;
@@ -155,17 +196,17 @@ public class WB_PShapeFactory {
 				for (int i = 0; i < tris.length; i += 3) {
 					he = halfedges.get(tris[i]);
 					v = he.getVertex();
-					fn = HE_MeshOp.getVertexNormal(v);
+					fn = parent.getVertexNormal(v);
 					retained.vertex(v.xf() + df * fn.xf(), v.yf() + df * fn.yf(), v.zf() + df * fn.zf(),
 							he.getUVW().xf(), he.getUVW().yf());
 					he = halfedges.get(tris[i + 1]);
 					v = he.getVertex();
-					fn = HE_MeshOp.getVertexNormal(v);
+					fn = parent.getVertexNormal(v);
 					retained.vertex(v.xf() + df * fn.xf(), v.yf() + df * fn.yf(), v.zf() + df * fn.zf(),
 							he.getUVW().xf(), he.getUVW().yf());
 					he = halfedges.get(tris[i + 2]);
 					v = he.getVertex();
-					fn = HE_MeshOp.getVertexNormal(v);
+					fn = parent.getVertexNormal(v);
 					retained.vertex(v.xf() + df * fn.xf(), v.yf() + df * fn.yf(), v.zf() + df * fn.zf(),
 							he.getUVW().xf(), he.getUVW().yf());
 				}
@@ -175,10 +216,17 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacetedPShapeWithFaceColor(final HE_Mesh mesh, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
-		List<HE_Halfedge> halfedges;
+		HE_HalfedgeList halfedges;
 		final HE_FaceIterator fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -204,10 +252,17 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacetedPShapeWithVertexColor(final HE_Mesh mesh, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
-		List<HE_Halfedge> halfedges;
+		HE_HalfedgeList halfedges;
 		final HE_FaceIterator fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -235,35 +290,88 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacettedPShape(final HE_Mesh mesh, final PApplet home) {
 		return createFacetedPShape(mesh, home);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param img
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacettedPShape(final HE_Mesh mesh, final PImage img, final PApplet home) {
 		return createFacetedPShape(mesh, img, home);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param img
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacettedPShape(final HE_Mesh mesh, final PImage[] img, final PApplet home) {
 		return createFacetedPShape(mesh, img, home);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param offset
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacettedPShape(final HE_HalfedgeStructure mesh, final double offset,
 			final PApplet home) {
 		return createFacetedPShape(mesh, offset, home);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacettedPShapeWithFaceColor(final HE_Mesh mesh, final PApplet home) {
 		return createFacetedPShapeWithFaceColor(mesh, home);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacettedPShapeWithVertexColor(final HE_Mesh mesh, final PApplet home) {
 		return createFacetedPShapeWithVertexColor(mesh, home);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param home
+	 * @return
+	 */
 	public static PShape createSmoothPShape(final HE_Mesh mesh, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
-		List<HE_Halfedge> halfedges;
+		HE_HalfedgeList halfedges;
+		final HE_Mesh parent = mesh;
 		final HE_FaceIterator fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -280,9 +388,9 @@ public class WB_PShapeFactory {
 				v1 = he1.getVertex();
 				he2 = halfedges.get(tris[i + 2]);
 				v2 = he2.getVertex();
-				n0 = HE_MeshOp.getVertexNormal(v0);
-				n1 = HE_MeshOp.getVertexNormal(v1);
-				n2 = HE_MeshOp.getVertexNormal(v2);
+				n0 = parent.getVertexNormal(v0);
+				n1 = parent.getVertexNormal(v1);
+				n2 = parent.getVertexNormal(v2);
 				retained.normal(n0.xf(), n0.yf(), n0.zf());
 				retained.vertex(v0.xf(), v0.yf(), v0.zf(), he0.getUVW().uf(), he0.getUVW().vf());
 				retained.normal(n1.xf(), n1.yf(), n1.zf());
@@ -295,10 +403,18 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param home
+	 * @return
+	 */
 	public static PShape createSmoothPShape(final HE_Selection mesh, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
-		List<HE_Halfedge> halfedges;
+		HE_HalfedgeList halfedges;
+		final HE_Mesh parent = mesh.getParent();
 		final HE_FaceIterator fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -315,9 +431,9 @@ public class WB_PShapeFactory {
 				v1 = he1.getVertex();
 				he2 = halfedges.get(tris[i + 2]);
 				v2 = he2.getVertex();
-				n0 = HE_MeshOp.getVertexNormal(v0);
-				n1 = HE_MeshOp.getVertexNormal(v1);
-				n2 = HE_MeshOp.getVertexNormal(v2);
+				n0 = parent.getVertexNormal(v0);
+				n1 = parent.getVertexNormal(v1);
+				n2 = parent.getVertexNormal(v2);
 				retained.normal(n0.xf(), n0.yf(), n0.zf());
 				retained.vertex(v0.xf(), v0.yf(), v0.zf(), he0.getUVW().uf(), he0.getUVW().vf());
 				retained.normal(n1.xf(), n1.yf(), n1.zf());
@@ -330,11 +446,20 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param img
+	 * @param home
+	 * @return
+	 */
 	public static PShape createSmoothPShape(final HE_Mesh mesh, final PImage img, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
 		retained.texture(img);
-		List<HE_Halfedge> halfedges;
+		HE_HalfedgeList halfedges;
+		final HE_Mesh parent = mesh;
 		final HE_FaceIterator fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -351,9 +476,9 @@ public class WB_PShapeFactory {
 				v1 = he1.getVertex();
 				he2 = halfedges.get(tris[i + 2]);
 				v2 = he2.getVertex();
-				n0 = HE_MeshOp.getVertexNormal(v0);
-				n1 = HE_MeshOp.getVertexNormal(v1);
-				n2 = HE_MeshOp.getVertexNormal(v2);
+				n0 = parent.getVertexNormal(v0);
+				n1 = parent.getVertexNormal(v1);
+				n2 = parent.getVertexNormal(v2);
 				retained.normal(n0.xf(), n0.yf(), n0.zf());
 				retained.vertex(v0.xf(), v0.yf(), v0.zf(), he0.getUVW().uf(), he0.getUVW().vf());
 				retained.normal(n1.xf(), n1.yf(), n1.zf());
@@ -366,10 +491,19 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param img
+	 * @param home
+	 * @return
+	 */
 	public static PShape createSmoothPShape(final HE_Mesh mesh, final PImage[] img, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
-		List<HE_Halfedge> halfedges;
+		HE_HalfedgeList halfedges;
+		final HE_Mesh parent = mesh;
 		final HE_FaceIterator fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -387,9 +521,9 @@ public class WB_PShapeFactory {
 				v1 = he1.getVertex();
 				he2 = halfedges.get(tris[i + 2]);
 				v2 = he2.getVertex();
-				n0 = HE_MeshOp.getVertexNormal(v0);
-				n1 = HE_MeshOp.getVertexNormal(v1);
-				n2 = HE_MeshOp.getVertexNormal(v2);
+				n0 = parent.getVertexNormal(v0);
+				n1 = parent.getVertexNormal(v1);
+				n2 = parent.getVertexNormal(v2);
 				retained.normal(n0.xf(), n0.yf(), n0.zf());
 				retained.vertex(v0.xf(), v0.yf(), v0.zf(), he0.getUVW().uf(), he0.getUVW().vf());
 				retained.normal(n1.xf(), n1.yf(), n1.zf());
@@ -402,12 +536,20 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param home
+	 * @return
+	 */
 	public static PShape createSmoothPShapeWithFaceColor(final HE_Mesh mesh, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
-		List<HE_Halfedge> halfedges;
+		HE_HalfedgeList halfedges;
 		final HE_FaceIterator fItr = mesh.fItr();
 		HE_Face f;
+		final HE_Mesh parent = mesh;
 		while (fItr.hasNext()) {
 			f = fItr.next();
 			retained.fill(f.getColor());
@@ -423,9 +565,9 @@ public class WB_PShapeFactory {
 				v1 = he1.getVertex();
 				he2 = halfedges.get(tris[i + 2]);
 				v2 = he2.getVertex();
-				n0 = HE_MeshOp.getVertexNormal(v0);
-				n1 = HE_MeshOp.getVertexNormal(v1);
-				n2 = HE_MeshOp.getVertexNormal(v2);
+				n0 = parent.getVertexNormal(v0);
+				n1 = parent.getVertexNormal(v1);
+				n2 = parent.getVertexNormal(v2);
 				retained.normal(n0.xf(), n0.yf(), n0.zf());
 				retained.vertex(v0.xf(), v0.yf(), v0.zf(), he0.getUVW().uf(), he0.getUVW().vf());
 				retained.normal(n1.xf(), n1.yf(), n1.zf());
@@ -438,10 +580,17 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param home
+	 * @return
+	 */
 	public static PShape createSmoothPShapeWithVertexColor(final HE_Mesh mesh, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
-		List<HE_Halfedge> halfedges;
+		HE_HalfedgeList halfedges;
 		final HE_FaceIterator fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -469,6 +618,13 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param home
+	 * @return
+	 */
 	public static PShape createWireframePShape(final HE_HalfedgeStructure mesh, final PApplet home) {
 		final PShape retained = home.createShape();
 		if (mesh instanceof HE_Selection) {
@@ -491,6 +647,13 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param meshes
+	 * @param home
+	 * @return
+	 */
 	public static PShape createWireframePShape(final Collection<? extends HE_HalfedgeStructure> meshes,
 			final PApplet home) {
 		final PShape retained = home.createShape();
@@ -514,12 +677,24 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param meshes
+	 * @param offset
+	 * @param home
+	 * @return
+	 */
 	public static PShape createWireframePShape(final Collection<? extends HE_HalfedgeStructure> meshes,
 			final double offset, final PApplet home) {
 		final PShape retained = home.createShape();
+		HE_Mesh parent;
 		for (final HE_HalfedgeStructure mesh : meshes) {
 			if (mesh instanceof HE_Selection) {
 				((HE_Selection) mesh).collectEdgesByFace();
+				parent = ((HE_Selection) mesh).getParent();
+			} else {
+				parent = (HE_Mesh) mesh;
 			}
 			final Iterator<HE_Halfedge> eItr = mesh.eItr();
 			HE_Halfedge e;
@@ -530,10 +705,10 @@ public class WB_PShapeFactory {
 			while (eItr.hasNext()) {
 				e = eItr.next();
 				v = e.getVertex();
-				fn = v.getVertexNormal();
+				fn = parent.getVertexNormal(v);
 				retained.vertex(v.xf() + df * fn.xf(), v.yf() + df * fn.yf(), v.zf() + df * fn.zf());
 				v = e.getEndVertex();
-				fn = v.getVertexNormal();
+				fn = parent.getVertexNormal(v);
 				retained.vertex(v.xf() + df * fn.xf(), v.yf() + df * fn.yf(), v.zf() + df * fn.zf());
 			}
 		}
@@ -541,6 +716,13 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param skin
+	 * @param home
+	 * @return
+	 */
 	public static PShape createSubstratePShape(final HEC_IsoSkin skin, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.LINES);
@@ -606,6 +788,13 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param grid
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacetedPShape(final WB_BinaryGrid3D grid, final PApplet home) {
 		home.pushMatrix();
 		final PShape retained = home.createShape();
@@ -620,6 +809,16 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param grid
+	 * @param cx
+	 * @param cy
+	 * @param cz
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacetedPShape(final WB_BinaryGrid3D grid, final int cx, final int cy, final int cz,
 			final PApplet home) {
 		home.pushMatrix();
@@ -641,6 +840,16 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param grid
+	 * @param cx
+	 * @param cy
+	 * @param cz
+	 * @param home
+	 * @return
+	 */
 	public static PShape[] createFacetedPShapes(final WB_BinaryGrid3D grid, final int cx, final int cy, final int cz,
 			final PApplet home) {
 		final PShape[] result = new PShape[3];
@@ -673,6 +882,13 @@ public class WB_PShapeFactory {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param grid
+	 * @param home
+	 * @return
+	 */
 	public static PShape createWireframePShape(final WB_BinaryGrid3D grid, final PApplet home) {
 		home.pushMatrix();
 		final PShape retained = home.createShape();
@@ -687,6 +903,12 @@ public class WB_PShapeFactory {
 		return retained;
 	}
 
+	/**
+	 *
+	 *
+	 * @param grid
+	 * @param retained
+	 */
 	static void drawXEdges(final WB_BinaryGrid3D grid, final PShape retained) {
 		int val00, valm0, valmm, val0m, sum;
 		double x, y, z;
@@ -714,6 +936,12 @@ public class WB_PShapeFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param grid
+	 * @param retained
+	 */
 	static void drawXFaces(final WB_BinaryGrid3D grid, final PShape retained) {
 		int val0, valm, sum;
 		double x, y, z;
@@ -737,6 +965,12 @@ public class WB_PShapeFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param grid
+	 * @param retained
+	 */
 	static void drawYEdges(final WB_BinaryGrid3D grid, final PShape retained) {
 		int val00, valm0, valmm, val0m, sum;
 		double x, y, z;
@@ -764,6 +998,12 @@ public class WB_PShapeFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param grid
+	 * @param retained
+	 */
 	static void drawYFaces(final WB_BinaryGrid3D grid, final PShape retained) {
 		int val0, valm, sum;
 		double x, y, z;
@@ -787,6 +1027,12 @@ public class WB_PShapeFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param grid
+	 * @param retained
+	 */
 	static void drawZEdges(final WB_BinaryGrid3D grid, final PShape retained) {
 		int val00, valm0, valmm, val0m, sum;
 		double x, y, z;
@@ -814,6 +1060,12 @@ public class WB_PShapeFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param grid
+	 * @param retained
+	 */
 	static void drawZFaces(final WB_BinaryGrid3D grid, final PShape retained) {
 		int val0, valm, sum;
 		double x, y, z;
@@ -837,16 +1089,34 @@ public class WB_PShapeFactory {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param x1
+	 * @param y1
+	 * @param z1
+	 * @param x2
+	 * @param y2
+	 * @param z2
+	 * @param retained
+	 */
 	static void line(final double x1, final double y1, final double z1, final double x2, final double y2,
 			final double z2, final PShape retained) {
 		retained.vertex((float) x1, (float) y1, (float) z1);
 		retained.vertex((float) x2, (float) y2, (float) z2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param home
+	 * @return
+	 */
 	public static PShape createFacetedPShape(final HE_Selection mesh, final PApplet home) {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
-		List<HE_Halfedge> halfedges;
+		HE_HalfedgeList halfedges;
 		final HE_FaceIterator fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {

@@ -10,23 +10,48 @@ import wblut.geom.WB_Vector;
 import wblut.math.WB_ConstantScalarParameter;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class HEM_ChamferCorners extends HEM_Modifier {
+	/**  */
 	private WB_ScalarParameter distance;
 
+	/**
+	 *
+	 */
 	public HEM_ChamferCorners() {
 		super();
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEM_ChamferCorners setDistance(final double d) {
 		distance = new WB_ConstantScalarParameter(d);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 * @return
+	 */
 	public HEM_ChamferCorners setDistance(final WB_ScalarParameter d) {
 		distance = d;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		if (distance == null) {
@@ -38,7 +63,7 @@ public class HEM_ChamferCorners extends HEM_Modifier {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			if (HE_MeshOp.getVertexType(v) == WB_Classification.CONVEX) {
-				final WB_Vector N = new WB_Vector(HE_MeshOp.getVertexNormal(v));
+				final WB_Vector N = new WB_Vector(mesh.getVertexNormal(v));
 				final WB_Point O = new WB_Point(N).mulSelf(-distance.evaluate(v.xd(), v.yd(), v.zd()));
 				N.mulSelf(-1);
 				O.addSelf(v);
@@ -53,6 +78,12 @@ public class HEM_ChamferCorners extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		if (distance == null) {
@@ -65,7 +96,7 @@ public class HEM_ChamferCorners extends HEM_Modifier {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			if (HE_MeshOp.getVertexType(v) == WB_Classification.CONVEX) {
-				final WB_Vector N = new WB_Vector(HE_MeshOp.getVertexNormal(v));
+				final WB_Vector N = new WB_Vector(selection.getParent().getVertexNormal(v));
 				final WB_Point O = new WB_Point(N).mulSelf(-distance.evaluate(v.xd(), v.yd(), v.zd()));
 				N.mulSelf(-1);
 				O.addSelf(v);

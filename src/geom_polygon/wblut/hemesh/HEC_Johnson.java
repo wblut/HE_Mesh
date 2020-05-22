@@ -5,11 +5,20 @@ import wblut.data.WB_JohnsonPolyhedraData02;
 import wblut.data.WB_JohnsonPolyhedraData03;
 import wblut.data.WB_JohnsonPolyhedraData04;
 
+/**
+ *
+ */
 public class HEC_Johnson extends HEC_Creator {
+	/**  */
 	private double R;
+	/**  */
 	private int type;
+	/**  */
 	private String name;
 
+	/**
+	 *
+	 */
 	public HEC_Johnson() {
 		super();
 		R = 100;
@@ -17,6 +26,12 @@ public class HEC_Johnson extends HEC_Creator {
 		name = "default";
 	}
 
+	/**
+	 *
+	 *
+	 * @param type
+	 * @param E
+	 */
 	public HEC_Johnson(final int type, final double E) {
 		super();
 		R = E;
@@ -35,11 +50,23 @@ public class HEC_Johnson extends HEC_Creator {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param E
+	 * @return
+	 */
 	public HEC_Johnson setEdge(final double E) {
 		R = E;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param type
+	 * @return
+	 */
 	public HEC_Johnson setType(final int type) {
 		if (type < 1 || type > 92) {
 			throw new IllegalArgumentException("Type of Johnson polyhedron should be between 1 and 92.");
@@ -57,11 +84,21 @@ public class HEC_Johnson extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_Mesh createBase() {
 		final double[][] vertices;
@@ -86,6 +123,9 @@ public class HEC_Johnson extends HEC_Creator {
 		return result;
 	}
 
+	/**
+	 *
+	 */
 	public static void printTypes() {
 		for (int i = 1; i <= 92; i++) {
 			String name = "";

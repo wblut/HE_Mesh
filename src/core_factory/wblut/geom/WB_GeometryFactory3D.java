@@ -14,21 +14,40 @@ import wblut.data.WB_PolyhedraData;
 import wblut.external.QuickHull3D.WB_QuickHull3D;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
+	/**  */
 	final WB_Point origin;
+	/**  */
 	final WB_Vector X;
+	/**  */
 	final WB_Vector Y;
+	/**  */
 	final WB_Vector Z;
+	/**  */
 	final WB_Vector mX;
+	/**  */
 	final WB_Vector mY;
+	/**  */
 	final WB_Vector mZ;
+	/**  */
 	WB_Plane XY;
+	/**  */
 	WB_Plane YZ;
+	/**  */
 	WB_Plane ZX;
+	/**  */
 	WB_Plane YX;
+	/**  */
 	WB_Plane ZY;
+	/**  */
 	WB_Plane XZ;
 
+	/**
+	 *
+	 */
 	public WB_GeometryFactory3D() {
 		super();
 		origin = createPoint(0, 0, 0);
@@ -40,38 +59,83 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		mZ = createVector(0, 0, -1);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public static WB_GeometryFactory3D instance() {
 		return new WB_GeometryFactory3D();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point origin() {
 		return origin;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Vector X() {
 		return X;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Vector Y() {
 		return Y;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Vector Z() {
 		return Z;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Vector minX() {
 		return mX;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Vector minY() {
 		return mY;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Vector minZ() {
 		return mZ;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Plane XY() {
 		if (XY == null) {
 			XY = createPlane(origin(), Z());
@@ -79,6 +143,11 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return XY;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Plane YZ() {
 		if (YZ == null) {
 			YZ = createPlane(origin(), X());
@@ -86,6 +155,11 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return YZ;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Plane ZX() {
 		if (ZX == null) {
 			ZX = createPlane(origin(), Y());
@@ -93,6 +167,11 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return ZX;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Plane YX() {
 		if (YX == null) {
 			YX = createPlane(origin(), minZ());
@@ -100,6 +179,11 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return XY;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Plane ZY() {
 		if (ZY == null) {
 			ZY = createPlane(origin(), minX());
@@ -107,6 +191,11 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return ZY;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Plane XZ() {
 		if (XZ == null) {
 			XZ = createPlane(origin(), minY());
@@ -114,6 +203,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return XZ;
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param X
+	 * @return
+	 */
 	public WB_CoordinateSystem createCSFromOriginAndX(final WB_Coord origin, final WB_Coord X) {
 		final WB_Point lOrigin = createPoint(origin.xd(), origin.yd(), 0);
 		final WB_Vector lX = createNormalizedVector(X.xd(), X.yd(), 0);
@@ -121,6 +217,14 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createCSFromOriginAndXY(lOrigin, lX, lY);
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param X
+	 * @param parent
+	 * @return
+	 */
 	public WB_CoordinateSystem createCSFromOriginAndX(final WB_Coord origin, final WB_Coord X,
 			final WB_CoordinateSystem parent) {
 		final WB_Point lOrigin = createPoint(origin.xd(), origin.yd());
@@ -129,6 +233,14 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createCSFromOriginAndXY(lOrigin, lX, lY, parent);
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param X
+	 * @param Y
+	 * @return
+	 */
 	public WB_CoordinateSystem createCSFromOriginAndXY(final WB_Coord origin, final WB_Coord X, final WB_Coord Y) {
 		final WB_Vector lX = createNormalizedVector(X);
 		WB_Vector lY = createNormalizedVector(Y);
@@ -141,6 +253,15 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return new WB_CoordinateSystem(origin, lX, lY, lZ, WORLD());
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param X
+	 * @param Y
+	 * @param parent
+	 * @return
+	 */
 	public WB_CoordinateSystem createCSFromOriginAndXY(final WB_Coord origin, final WB_Coord X, final WB_Coord Y,
 			final WB_CoordinateSystem parent) {
 		final WB_Vector lX = createNormalizedVector(X);
@@ -154,65 +275,167 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return new WB_CoordinateSystem(origin, lX, lY, lZ, parent);
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param X
+	 * @param Y
+	 * @param Z
+	 * @param parent
+	 * @return
+	 */
 	public WB_CoordinateSystem createCSFromOriginAndXYZ(final WB_Coord origin, final WB_Coord X, final WB_Coord Y,
 			final WB_Coord Z, final WB_CoordinateSystem parent) {
 		return new WB_CoordinateSystem(origin, X, Y, Z, parent);
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param X
+	 * @param Y
+	 * @param Z
+	 * @return
+	 */
 	public WB_CoordinateSystem createCSFromOriginAndXYZ(final WB_Coord origin, final WB_Coord X, final WB_Coord Y,
 			final WB_Coord Z) {
 		return new WB_CoordinateSystem(origin, X, Y, Z, WORLD());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Map2D createEmbeddedPlane() {
 		return new WB_PlanarMap();
 	}
 
+	/**
+	 *
+	 *
+	 * @param mode
+	 * @param offset
+	 * @return
+	 */
 	public WB_Map2D createEmbeddedPlane(final int mode, final double offset) {
 		return new WB_PlanarMap(mode, offset);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mode
+	 * @return
+	 */
 	public WB_Map2D createEmbeddedPlane(final int mode) {
 		return new WB_PlanarMap(mode);
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @param offset
+	 * @return
+	 */
 	public WB_Map2D createEmbeddedPlane(final WB_Plane P, final double offset) {
 		return new WB_PlanarMap(P, offset);
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public WB_Map2D createEmbeddedPlane(final WB_Plane P) {
 		return new WB_PlanarMap(P);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point createPoint() {
 		return new WB_Point(0, 0, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Point createPoint(final WB_Coord p) {
 		return new WB_Point(p);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Point createPoint(final double[] p) {
 		return new WB_Point(p);
 	}
 
+	/**
+	 *
+	 *
+	 * @param _x
+	 * @param _y
+	 * @return
+	 */
 	public WB_Point createPoint(final double _x, final double _y) {
 		return createPoint(_x, _y, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param _x
+	 * @param _y
+	 * @param _z
+	 * @return
+	 */
 	public WB_Point createPoint(final double _x, final double _y, final double _z) {
 		return new WB_Point(_x, _y, _z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param q
+	 * @param f
+	 * @return
+	 */
 	public WB_Point createInterpolatedPoint(final WB_Coord p, final WB_Coord q, final double f) {
 		return new WB_Point((1.0 - f) * p.xd() + f * q.xd(), (1.0 - f) * p.yd() + f * q.yd(),
 				(1.0 - f) * p.zd() + f * q.zd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param tri
+	 * @return
+	 */
 	public WB_Point createIncenter(final WB_Triangle tri) {
 		return createPointFromTrilinearCoordinates(1, 1, 1, tri);
 	}
 
+	/**
+	 *
+	 *
+	 * @param tri
+	 * @return
+	 */
 	public WB_Point createOrthocenter(final WB_Triangle tri) {
 		final double a2 = tri.a() * tri.a();
 		final double b2 = tri.b() * tri.b();
@@ -221,40 +444,110 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 				(a2 - b2 + c2) * (-a2 + b2 + c2), tri);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @param w
+	 * @param tri
+	 * @return
+	 */
 	public WB_Point createPointFromBarycentricCoordinates(final double u, final double v, final double w,
 			final WB_Triangle tri) {
 		return createPointFromTrilinearCoordinates(u / tri.a(), v / tri.b(), w / tri.c(), tri);
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @param phi
+	 * @param z
+	 * @return
+	 */
 	public WB_Point createPointFromCylindrical(final double r, final double phi, final double z) {
 		return createPoint(r * Math.cos(phi), r * Math.sin(phi), z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @param theta
+	 * @param phi
+	 * @return
+	 */
 	public WB_Point createPointFromSpherical(final double r, final double theta, final double phi) {
 		return createPoint(r * Math.cos(phi) * Math.sin(theta), r * Math.sin(phi) * Math.sin(theta),
 				r * Math.cos(theta));
 	}
 
+	/**
+	 *
+	 *
+	 * @param sigma
+	 * @param tau
+	 * @param phi
+	 * @return
+	 */
 	public WB_Point createPointFromParaboloidal(final double sigma, final double tau, final double phi) {
 		return createPoint(sigma * tau * Math.cos(phi), sigma * tau * Math.sin(phi), 0.5 * (tau * tau - sigma * sigma));
 	}
 
+	/**
+	 *
+	 *
+	 * @param sigma
+	 * @param tau
+	 * @param z
+	 * @return
+	 */
 	public WB_Point createPointFromParabolic(final double sigma, final double tau, final double z) {
 		return createPoint(sigma * tau, 0.5 * (tau * tau - sigma * sigma), z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param mu
+	 * @param nu
+	 * @param phi
+	 * @return
+	 */
 	public WB_Point createPointFromOblateSpheroidal(final double a, final double mu, final double nu,
 			final double phi) {
 		final double common = a * Math.cosh(mu) * Math.cos(nu);
 		return createPoint(common * Math.cos(phi), common * Math.sin(phi), a * Math.sinh(mu) * Math.sin(nu));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param mu
+	 * @param nu
+	 * @param phi
+	 * @return
+	 */
 	public WB_Point createPointFromProlateSpheroidal(final double a, final double mu, final double nu,
 			final double phi) {
 		final double common = a * Math.sinh(mu) * Math.sin(nu);
 		return createPoint(common * Math.cos(phi), common * Math.sin(phi), a * Math.cosh(mu) * Math.cos(nu));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param lambda
+	 * @param mu
+	 * @param nu
+	 * @return
+	 */
 	public WB_Point createPointFromEllipsoidal(final double a, final double b, final double c, final double lambda,
 			final double mu, final double nu) {
 		final double a2 = a * a;
@@ -265,10 +558,28 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 				Math.sqrt((c2 - lambda) * (c2 - mu) * (c2 - nu) / (c2 - a2) / (c2 - b2)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param mu
+	 * @param nu
+	 * @param z
+	 * @return
+	 */
 	public WB_Point createPointFromElliptic(final double a, final double mu, final double nu, final double z) {
 		return createPoint(a * Math.cosh(mu) * Math.cos(nu), a * Math.sinh(mu) * Math.cos(nu), z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param sigma
+	 * @param tau
+	 * @param phi
+	 * @return
+	 */
 	public WB_Point createPointFromToroidal(final double a, final double sigma, final double tau, final double phi) {
 		double invdenom = Math.cosh(tau) - Math.cos(sigma);
 		invdenom = WB_Epsilon.isZero(invdenom) ? 0.0 : a / invdenom;
@@ -276,6 +587,15 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 				Math.sin(sigma) * invdenom);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param sigma
+	 * @param tau
+	 * @param phi
+	 * @return
+	 */
 	public WB_Point createPointFromBispherical(final double a, final double sigma, final double tau, final double phi) {
 		double invdenom = Math.cosh(tau) - Math.cos(sigma);
 		invdenom = WB_Epsilon.isZero(invdenom) ? 0.0 : a / invdenom;
@@ -283,6 +603,15 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 				Math.sinh(tau) * invdenom);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param sigma
+	 * @param tau
+	 * @param z
+	 * @return
+	 */
 	public WB_Point createPointFromBipolarCylindrical(final double a, final double sigma, final double tau,
 			final double z) {
 		double invdenom = Math.cosh(tau) - Math.cos(sigma);
@@ -290,6 +619,16 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createPoint(Math.sinh(tau) * invdenom, Math.sin(sigma) * invdenom, z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @param c
+	 * @param r
+	 * @param mu
+	 * @param nu
+	 * @return
+	 */
 	public WB_Point createPointFromConical(final double b, final double c, final double r, final double mu,
 			final double nu) {
 		final double b2 = b * b;
@@ -300,10 +639,22 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 				r / c * Math.sqrt((mu2 - c2) * (nu2 - c2) / (c2 - b2)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param tri
+	 * @return
+	 */
 	public WB_Point createCentroid(final WB_Triangle tri) {
 		return createPointFromTrilinearCoordinates(tri.b() * tri.c(), tri.c() * tri.a(), tri.a() * tri.b(), tri);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public WB_Point createCentroid(final WB_Coord... points) {
 		final WB_Point c = new WB_Point();
 		for (final WB_Coord point : points) {
@@ -313,10 +664,25 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return c;
 	}
 
+	/**
+	 *
+	 *
+	 * @param tri
+	 * @return
+	 */
 	public WB_Point createCircumcenter(final WB_Triangle tri) {
 		return createPointFromTrilinearCoordinates(tri.cosA(), tri.cosB(), tri.cosC(), tri);
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @param w
+	 * @param tri
+	 * @return
+	 */
 	public WB_Point createPointFromTrilinearCoordinates(final double u, final double v, final double w,
 			final WB_Triangle tri) {
 		final double invabc = 1.0 / (tri.a() * u + tri.b() * v + tri.c() * w);
@@ -331,10 +697,23 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createPoint(eax, eay, eaz);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param q
+	 * @return
+	 */
 	public WB_Point createMidpoint(final WB_Coord p, final WB_Coord q) {
 		return createPoint((p.xd() + q.xd()) * 0.5, (p.yd() + q.yd()) * 0.5, (p.zd() + q.zd()) * 0.5);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Point createMidpoint(final WB_Coord... p) {
 		final WB_Point m = createPoint();
 		for (final WB_Coord point : p) {
@@ -344,6 +723,12 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return m;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	private List<WB_Point> cleanPointlist(final List<WB_Point> points) {
 		final List<WB_Point> result = new WB_PointList();
 		final int n = points.size();
@@ -355,62 +740,147 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Vector createVector() {
 		return createVector(0, 0, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param q
+	 * @return
+	 */
 	public WB_Vector createVectorFromTo(final WB_Coord p, final WB_Coord q) {
 		return createVector(q.xd() - p.xd(), q.yd() - p.yd(), q.zd() - p.zd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public final WB_Vector createVector(final WB_Coord p) {
 		return new WB_Vector(p);
 	}
 
+	/**
+	 *
+	 *
+	 * @param _x
+	 * @param _y
+	 * @return
+	 */
 	public WB_Vector createVector(final double _x, final double _y) {
 		return createVector(_x, _y, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param _x
+	 * @param _y
+	 * @param _z
+	 * @return
+	 */
 	public WB_Vector createVector(final double _x, final double _y, final double _z) {
 		return new WB_Vector(_x, _y, _z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Vector createNormalizedVector(final WB_Coord p) {
 		final WB_Vector vec = createVector(p);
 		vec.normalizeSelf();
 		return vec;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param q
+	 * @return
+	 */
 	public WB_Vector createNormalizedVectorFromTo(final WB_Coord p, final WB_Coord q) {
 		final WB_Vector vec = createVector(q.xd() - p.xd(), q.yd() - p.yd(), q.zd() - p.zd());
 		vec.normalizeSelf();
 		return vec;
 	}
 
+	/**
+	 *
+	 *
+	 * @param _x
+	 * @param _y
+	 * @param _z
+	 * @return
+	 */
 	public WB_Vector createNormalizedVector(final double _x, final double _y, final double _z) {
 		final WB_Vector vec = createVector(_x, _y, _z);
 		vec.normalizeSelf();
 		return vec;
 	}
 
+	/**
+	 *
+	 *
+	 * @param _x
+	 * @param _y
+	 * @param _z
+	 * @param _w
+	 * @return
+	 */
 	public WB_Vector createNormalizedVector(final double _x, final double _y, final double _z, final double _w) {
 		final WB_Vector vec = createVector(_x, _y, _z);
 		vec.normalizeSelf();
 		return vec;
 	}
 
+	/**
+	 *
+	 *
+	 * @param _x
+	 * @param _y
+	 * @return
+	 */
 	public WB_Vector createNormalizedVector(final double _x, final double _y) {
 		final WB_Vector vec = createVector(_x, _y);
 		vec.normalizeSelf();
 		return vec;
 	}
 
+	/**
+	 *
+	 *
+	 * @param _x
+	 * @param _y
+	 * @return
+	 */
 	public WB_Vector createNormalizedPerpendicularVector(final double _x, final double _y) {
 		final WB_Vector vec = createVector(-_y, _x, 0);
 		vec.normalizeSelf();
 		return vec;
 	}
 
+	/**
+	 *
+	 *
+	 * @param _x
+	 * @param _y
+	 * @param _z
+	 * @return
+	 */
 	public WB_Vector createNormalizedPerpendicularVector(final double _x, final double _y, final double _z) {
 		if (_x > _y) {
 			if (_y > _z) {
@@ -427,6 +897,12 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public WB_Vector createNormalizedPerpendicularVector(final WB_Coord p) {
 		if (p.xd() > p.yd()) {
 			if (p.yd() > p.zd()) {
@@ -443,36 +919,97 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @param phi
+	 * @param z
+	 * @return
+	 */
 	public WB_Vector createVectorFromCylindrical(final double r, final double phi, final double z) {
 		return createVector(r * Math.cos(phi), r * Math.sin(phi), z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @param theta
+	 * @param phi
+	 * @return
+	 */
 	public WB_Vector createVectorFromSpherical(final double r, final double theta, final double phi) {
 		return createVector(r * Math.cos(phi) * Math.sin(theta), r * Math.sin(phi) * Math.sin(theta),
 				r * Math.cos(theta));
 	}
 
+	/**
+	 *
+	 *
+	 * @param sigma
+	 * @param tau
+	 * @param phi
+	 * @return
+	 */
 	public WB_Vector createVectorFromParaboloidal(final double sigma, final double tau, final double phi) {
 		return createVector(sigma * tau * Math.cos(phi), sigma * tau * Math.sin(phi),
 				0.5 * (tau * tau - sigma * sigma));
 	}
 
+	/**
+	 *
+	 *
+	 * @param sigma
+	 * @param tau
+	 * @param z
+	 * @return
+	 */
 	public WB_Vector createVectorFromParabolic(final double sigma, final double tau, final double z) {
 		return createVector(sigma * tau, 0.5 * (tau * tau - sigma * sigma), z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param mu
+	 * @param nu
+	 * @param phi
+	 * @return
+	 */
 	public WB_Vector createVectorFromOblateSpheroidal(final double a, final double mu, final double nu,
 			final double phi) {
 		final double common = a * Math.cosh(mu) * Math.cos(nu);
 		return createVector(common * Math.cos(phi), common * Math.sin(phi), a * Math.sinh(mu) * Math.sin(nu));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param mu
+	 * @param nu
+	 * @param phi
+	 * @return
+	 */
 	public WB_Vector createVectorFromProlateSpheroidal(final double a, final double mu, final double nu,
 			final double phi) {
 		final double common = a * Math.sinh(mu) * Math.sin(nu);
 		return createVector(common * Math.cos(phi), common * Math.sin(phi), a * Math.cosh(mu) * Math.cos(nu));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param lambda
+	 * @param mu
+	 * @param nu
+	 * @return
+	 */
 	public WB_Vector createVectorFromEllipsoidal(final double a, final double b, final double c, final double lambda,
 			final double mu, final double nu) {
 		final double a2 = a * a;
@@ -483,10 +1020,28 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 				Math.sqrt((c2 - lambda) * (c2 - mu) * (c2 - nu) / (c2 - a2) / (c2 - b2)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param mu
+	 * @param nu
+	 * @param z
+	 * @return
+	 */
 	public WB_Vector createVectorFromElliptic(final double a, final double mu, final double nu, final double z) {
 		return createVector(a * Math.cosh(mu) * Math.cos(nu), a * Math.sinh(mu) * Math.cos(nu), z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param sigma
+	 * @param tau
+	 * @param phi
+	 * @return
+	 */
 	public WB_Vector createVectorFromToroidal(final double a, final double sigma, final double tau, final double phi) {
 		double invdenom = Math.cosh(tau) - Math.cos(sigma);
 		invdenom = WB_Epsilon.isZero(invdenom) ? 0.0 : a / invdenom;
@@ -494,6 +1049,15 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 				Math.sin(sigma) * invdenom);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param sigma
+	 * @param tau
+	 * @param phi
+	 * @return
+	 */
 	public WB_Vector createVectorFromBispherical(final double a, final double sigma, final double tau,
 			final double phi) {
 		double invdenom = Math.cosh(tau) - Math.cos(sigma);
@@ -502,6 +1066,15 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 				Math.sinh(tau) * invdenom);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param sigma
+	 * @param tau
+	 * @param z
+	 * @return
+	 */
 	public WB_Vector createVectorFromBipolarCylindrical(final double a, final double sigma, final double tau,
 			final double z) {
 		double invdenom = Math.cosh(tau) - Math.cos(sigma);
@@ -509,6 +1082,16 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createVector(Math.sinh(tau) * invdenom, Math.sin(sigma) * invdenom, z);
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @param c
+	 * @param r
+	 * @param mu
+	 * @param nu
+	 * @return
+	 */
 	public WB_Vector createVectorFromConical(final double b, final double c, final double r, final double mu,
 			final double nu) {
 		final double b2 = b * b;
@@ -519,94 +1102,269 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 				r / c * Math.sqrt((mu2 - c2) * (nu2 - c2) / (c2 - b2)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	public WB_Line createLineThroughPoints(final WB_Coord p1, final WB_Coord p2) {
 		return createLineWithDirection(p1, createVectorFromTo(p1, p2));
 	}
 
+	/**
+	 *
+	 *
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @return
+	 */
 	public WB_Line createLineThroughPoints(final double x1, final double y1, final double x2, final double y2) {
 		return createLineWithDirection(createPoint(x1, y1), createVector(x2 - x1, y2 - y1));
 	}
 
+	/**
+	 *
+	 *
+	 * @param x1
+	 * @param y1
+	 * @param z1
+	 * @param x2
+	 * @param y2
+	 * @param z2
+	 * @return
+	 */
 	// 3D
 	public WB_Line createLineThroughPoints(final double x1, final double y1, final double z1, final double x2,
 			final double y2, final double z2) {
 		return createLineWithDirection(createPoint(x1, y1, z1), createVector(x2 - x1, y2 - y1, z2 - z1));
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param direction
+	 * @return
+	 */
 	public WB_Line createLineWithDirection(final WB_Coord origin, final WB_Coord direction) {
 		return new WB_Line(origin, direction);
 	}
 
+	/**
+	 *
+	 *
+	 * @param ox
+	 * @param oy
+	 * @param oz
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 * @return
+	 */
 	public WB_Line createLineWithDirection(final double ox, final double oy, final double oz, final double dx,
 			final double dy, final double dz) {
 		return createLineWithDirection(createPoint(ox, oy, oz), createVector(dx, dy, dz));
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param p
+	 * @return
+	 */
 	public WB_Line createParallelLineThroughPoint(final WB_Line L, final WB_Coord p) {
 		return createLineWithDirection(p, L.getDirection());
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param q
+	 * @return
+	 */
 	public WB_Plane createBisector(final WB_Coord p, final WB_Coord q) {
 		return createPlane(createMidpoint(p, q), createVectorFromTo(p, q));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	public WB_Ray createRayThroughPoints(final WB_Coord p1, final WB_Coord p2) {
 		return createRayWithDirection(p1, createVector(p2).subSelf(p1));
 	}
 
+	/**
+	 *
+	 *
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @return
+	 */
 	public WB_Ray createRayThroughPoints(final double x1, final double y1, final double x2, final double y2) {
 		return createRayWithDirection(createPoint(x1, y1), createVector(x2 - x1, y2 - y1));
 	}
 
+	/**
+	 *
+	 *
+	 * @param x1
+	 * @param y1
+	 * @param z1
+	 * @param x2
+	 * @param y2
+	 * @param z2
+	 * @return
+	 */
 	// 3D
 	public WB_Ray createRayThroughPoints(final double x1, final double y1, final double z1, final double x2,
 			final double y2, final double z2) {
 		return createRayWithDirection(createPoint(x1, y1, z1), createVector(x2 - x1, y2 - y1, z2 - z1));
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param direction
+	 * @return
+	 */
 	public WB_Ray createRayWithDirection(final WB_Coord origin, final WB_Coord direction) {
 		return new WB_Ray(origin, direction);
 	}
 
+	/**
+	 *
+	 *
+	 * @param ox
+	 * @param oy
+	 * @param oz
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 * @return
+	 */
 	public WB_Ray createRayWithDirection(final double ox, final double oy, final double oz, final double dx,
 			final double dy, final double dz) {
 		return createRayWithDirection(createPoint(ox, oy, oz), createVector(dx, dy, dz));
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @param p
+	 * @return
+	 */
 	public WB_Ray createParallelRayThroughPoint(final WB_Line L, final WB_Coord p) {
 		return createRayWithDirection(p, L.getDirection());
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
 	public WB_Segment createSegment(final WB_Coord p1, final WB_Coord p2) {
 		return new WB_Segment(p1, p2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param direction
+	 * @param length
+	 * @return
+	 */
 	public WB_Segment createSegmentWithLength(final WB_Coord origin, final WB_Coord direction, final double length) {
 		return createSegment(origin, createPoint(origin).addMulSelf(length, createNormalizedVector(direction)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @return
+	 */
 	public WB_Segment createSegment(final double x1, final double y1, final double x2, final double y2) {
 		return createSegment(createPoint(x1, y1), createVector(x2, y2));
 	}
 
+	/**
+	 *
+	 *
+	 * @param ox
+	 * @param oy
+	 * @param dx
+	 * @param dy
+	 * @param length
+	 * @return
+	 */
 	public WB_Segment createSegmentWithLength(final double ox, final double oy, final double dx, final double dy,
 			final double length) {
 		return createSegment(createPoint(ox, oy),
 				createPoint(ox, oy).addMul(length, createNormalizedVector(dx, dy, 0)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param x1
+	 * @param y1
+	 * @param z1
+	 * @param x2
+	 * @param y2
+	 * @param z2
+	 * @return
+	 */
 	// 3D
 	public WB_Segment createSegment(final double x1, final double y1, final double z1, final double x2, final double y2,
 			final double z2) {
 		return createSegment(createPoint(x1, y1, z1), createVector(x2, y2, z2));
 	}
 
+	/**
+	 *
+	 *
+	 * @param ox
+	 * @param oy
+	 * @param oz
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 * @param length
+	 * @return
+	 */
 	public WB_Segment createSegmentWithLength(final double ox, final double oy, final double oz, final double dx,
 			final double dy, final double dz, final double length) {
 		return createSegment(createPoint(ox, oy, oz),
 				createPoint(ox, oy, oz).addMul(length, createNormalizedVector(dx, dy, dz)));
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param P
+	 * @return
+	 */
 	public WB_Polygon[] splitSimplePolygon(final WB_Polygon poly, final WB_Plane P) {
 		List<WB_Point> frontVerts = new WB_PointList();
 		List<WB_Point> backVerts = new WB_PointList();
@@ -614,13 +1372,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		final WB_Polygon[] polys = new WB_Polygon[2];
 		if (numVerts > 0) {
 			WB_Point a = new WB_Point(poly.getPoint(numVerts - 1));
-			WB_Classification aSide = WB_GeometryOp3D.classifyPointToPlane3D(a, P);
+			WB_Classification aSide = WB_GeometryOp.classifyPointToPlane3D(a, P);
 			WB_Point b;
 			WB_Classification bSide;
 			for (int n = 0; n < numVerts; n++) {
 				WB_Point intersection;
 				b = new WB_Point(poly.getPoint(n));
-				bSide = WB_GeometryOp3D.classifyPointToPlane3D(b, P);
+				bSide = WB_GeometryOp.classifyPointToPlane3D(b, P);
 				if (bSide == WB_Classification.FRONT) {
 					if (aSide == WB_Classification.BACK) {
 						intersection = getIntersection(b, a, P);
@@ -658,18 +1416,47 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return polys;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1x
+	 * @param p1y
+	 * @param p1z
+	 * @param p2x
+	 * @param p2y
+	 * @param p2z
+	 * @param p3x
+	 * @param p3y
+	 * @param p3z
+	 * @return
+	 */
 	public WB_Triangle createTriangle(final double p1x, final double p1y, final double p1z, final double p2x,
 			final double p2y, final double p2z, final double p3x, final double p3y, final double p3z) {
 		return createTriangle(createPoint(p1x, p1y, p1z), createPoint(p2x, p2y, p2z), createPoint(p3x, p3y, p3z));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @return
+	 */
 	public WB_Triangle createTriangle(final WB_Coord p1, final WB_Coord p2, final WB_Coord p3) {
 		return new WB_Triangle(p1, p2, p3);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param inversionSphere
+	 * @return
+	 */
 	public WB_Point createInversionPoint(final WB_Coord p, final WB_Sphere inversionSphere) {
 		final double r2 = inversionSphere.getRadius() * inversionSphere.getRadius();
-		final double OP = WB_GeometryOp3D.getDistance3D(inversionSphere.getCenter(), p);
+		final double OP = WB_GeometryOp.getDistance3D(inversionSphere.getCenter(), p);
 		if (WB_Epsilon.isZero(OP)) {
 			return null;
 		}
@@ -678,20 +1465,33 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createPoint(WB_Point.addMul(inversionSphere.getCenter(), OPp, v));
 	}
 
+	/**
+	 *
+	 *
+	 * @param C
+	 * @param inversionCircle
+	 * @return
+	 */
 	public WB_Circle createInversionCircle(final WB_Circle C, final WB_Circle inversionCircle) {
-		if (WB_GeometryOp2D.classifyPointToCircle2D(inversionCircle.getCenter(), C) == WB_Classification.ON) {
+		if (WB_GeometryOp.classifyPointToCircle2D(inversionCircle.getCenter(), C) == WB_Classification.ON) {
 			return null;
 		}
 		final double x0 = inversionCircle.getCenter().xd();
 		final double y0 = inversionCircle.getCenter().yd();
 		final double k = inversionCircle.getRadius();
 		final double k2 = k * k;
-		final double s = k2 / (WB_GeometryOp3D.getSqDistance3D(C.getCenter(), inversionCircle.getCenter())
+		final double s = k2 / (WB_GeometryOp.getSqDistance3D(C.getCenter(), inversionCircle.getCenter())
 				- C.getRadius() * C.getRadius());
 		return createCircleWithRadius(x0 + s * (C.getCenter().xd() - x0), y0 + s * (C.getCenter().yd() - y0),
 				Math.abs(s) * C.getRadius());
 	}
 
+	/**
+	 *
+	 *
+	 * @param tri
+	 * @return
+	 */
 	public WB_Circle createCircumcircle3D(final WB_Triangle tri) {
 		final WB_Plane P = tri.getPlane();
 		if (P == null) {
@@ -705,6 +1505,12 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createCircleWithRadius(createCircumcenter(tri), tri.getPlane().getNormal(), radius);
 	}
 
+	/**
+	 *
+	 *
+	 * @param tri
+	 * @return
+	 */
 	public WB_Circle createIncircle(final WB_Triangle tri) {
 		final WB_Plane P = tri.getPlane();
 		if (P == null) {
@@ -721,39 +1527,106 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createCircleWithRadius(createPoint(x, y, z), tri.getPlane().getNormal(), radius);
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param normal
+	 * @return
+	 */
 	public WB_Plane createPlane(final WB_Coord origin, final WB_Coord normal) {
 		return new WB_Plane(origin, normal);
 	}
 
+	/**
+	 *
+	 *
+	 * @param ox
+	 * @param oy
+	 * @param oz
+	 * @param nx
+	 * @param ny
+	 * @param nz
+	 * @return
+	 */
 	public WB_Plane createPlane(final double ox, final double oy, final double oz, final double nx, final double ny,
 			final double nz) {
 		return new WB_Plane(createPoint(ox, oy, oz), createVector(nx, ny, nz));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @return
+	 */
 	public WB_Plane createPlane(final WB_Coord p1, final WB_Coord p2, final WB_Coord p3) {
 		final WB_Vector v21 = createVectorFromTo(p1, p2);
 		final WB_Vector v31 = createVectorFromTo(p1, p3);
 		return new WB_Plane(p1, v21.crossSelf(v31));
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	public WB_Plane createPlane(final WB_Triangle T) {
 		return new WB_Plane(T.p1(), T.p2(), T.p3());
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public WB_Plane createFlippedPlane(final WB_Plane P) {
 		return new WB_Plane(P.getOrigin(), P.getNormal().mul(-1));
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param normal
+	 * @param offset
+	 * @return
+	 */
 	public WB_Plane createOffsetPlane(final WB_Coord origin, final WB_Coord normal, final double offset) {
 		return new WB_Plane(createPoint(origin).addMulSelf(offset, normal), normal);
 	}
 
+	/**
+	 *
+	 *
+	 * @param ox
+	 * @param oy
+	 * @param oz
+	 * @param nx
+	 * @param ny
+	 * @param nz
+	 * @param offset
+	 * @return
+	 */
 	public WB_Plane createOffsetPlane(final double ox, final double oy, final double oz, final double nx,
 			final double ny, final double nz, final double offset) {
 		return new WB_Plane(createPoint(ox + offset * nx, oy + offset * ny, oz + offset * nz),
 				createVector(nx, ny, nz));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @param offset
+	 * @return
+	 */
 	public WB_Plane createOffsetPlane(final WB_Coord p1, final WB_Coord p2, final WB_Coord p3, final double offset) {
 		final WB_Vector v21 = createVectorFromTo(p1, p2);
 		final WB_Vector v31 = createVectorFromTo(p1, p3);
@@ -762,18 +1635,48 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return new WB_Plane(createPoint(p1).addMulSelf(offset, n), n);
 	}
 
+	public WB_SimpleMesh createMesh(final WB_CoordCollection points, final int[][] faces) {
+		return new WB_SimpleMesh(points, faces);
+	}
+
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param faces
+	 * @return
+	 */
 	public WB_SimpleMesh createMesh(final WB_Coord[] points, final int[][] faces) {
 		return new WB_SimpleMesh(points, faces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param faces
+	 * @return
+	 */
 	public WB_SimpleMesh createMesh(final Collection<? extends WB_Coord> points, final int[][] faces) {
 		return new WB_SimpleMesh(points, faces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param aabb
+	 * @return
+	 */
 	public WB_SimpleMesh createMesh(final WB_AABB aabb) {
 		return createMesh(aabb.getCorners(), aabb.getFaces());
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	public WB_SimpleMesh createUniqueMesh(final WB_SimpleMesh mesh) {
 		final List<WB_Coord> uniqueVertices = new WB_CoordList();
 		final int[] oldnew = new int[mesh.getNumberOfVertices()];
@@ -806,6 +1709,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(uniqueVertices, newfaces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param threshold
+	 * @return
+	 */
 	public WB_SimpleMesh createUniqueMesh(final WB_SimpleMesh mesh, final double threshold) {
 		final List<WB_Coord> uniqueVertices = new WB_CoordList();
 		final int[] oldnew = new int[mesh.getNumberOfVertices()];
@@ -839,6 +1749,14 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(uniqueVertices, newfaces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @param radius
+	 * @param h
+	 * @return
+	 */
 	public WB_SimpleMesh createRegularPrism(final int n, final double radius, final double h) {
 		final List<WB_Point> lpoints = new WB_PointList();
 		for (int i = 0; i < n; i++) {
@@ -850,6 +1768,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(lpoints, createPrismFaces(n));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param h
+	 * @return
+	 */
 	public WB_SimpleMesh createPrism(final Collection<? extends WB_Coord> points, final double h) {
 		final WB_Vector offset = createVector(0, 0, h);
 		final List<WB_Point> lpoints = new WB_PointList();
@@ -860,6 +1785,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(lpoints, createPrismFaces(points.size()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param h
+	 * @return
+	 */
 	public WB_SimpleMesh createPrismOpen(final Collection<? extends WB_Coord> points, final double h) {
 		final WB_Vector offset = createVector(0, 0, h);
 		final List<WB_Point> lpoints = new WB_PointList();
@@ -870,6 +1802,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(lpoints, createPrismFacesOpen(points.size()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param h
+	 * @return
+	 */
 	public WB_SimpleMesh createPrism(final WB_Coord[] points, final double h) {
 		final WB_Vector offset = createVector(0, 0, h);
 		final List<WB_Point> lpoints = new WB_PointList();
@@ -880,6 +1819,12 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(lpoints, createPrismFaces(points.length));
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @return
+	 */
 	private int[][] createPrismFaces(final int n) {
 		final int[][] faces = new int[2 + n][];
 		faces[n] = new int[n];
@@ -898,6 +1843,12 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return faces;
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @return
+	 */
 	private int[][] createPrismFacesOpen(final int n) {
 		final int[][] faces = new int[1 + n][];
 		faces[n] = new int[n];
@@ -914,10 +1865,25 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return faces;
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param h
+	 * @return
+	 */
 	public WB_SimpleMesh createPrism(final WB_Polygon poly, final double h) {
 		return createPrism(poly, h, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param h
+	 * @param offset
+	 * @return
+	 */
 	public WB_SimpleMesh createPrism(final WB_Polygon poly, final double h, final double offset) {
 		if (h == 0) {
 			return createMesh(poly, offset);
@@ -965,10 +1931,23 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(lpoints, prismfaces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @return
+	 */
 	public WB_SimpleMesh createMesh(final WB_Polygon poly) {
 		return createMesh(poly, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param offset
+	 * @return
+	 */
 	public WB_SimpleMesh createMesh(final WB_Polygon poly, final double offset) {
 		final WB_Vector N = poly.getPlane().getNormal();
 		final WB_Vector offset1 = N.mul(offset);
@@ -991,6 +1970,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(lpoints, prismfaces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param h
+	 * @return
+	 */
 	public WB_SimpleMesh createPrismOpen(final WB_Polygon poly, final double h) {
 		final WB_Vector offset = createVector(0, 0, h);
 		final List<WB_Point> lpoints = new WB_PointList();
@@ -1016,6 +2002,14 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(lpoints, faces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @param radius
+	 * @param h
+	 * @return
+	 */
 	public WB_SimpleMesh createRegularAntiPrism(final int n, final double radius, final double h) {
 		final List<WB_Point> points = new WB_PointList();
 		for (int i = 0; i < n; i++) {
@@ -1027,6 +2021,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(points, createAntiprismFaces(n));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param h
+	 * @return
+	 */
 	public WB_SimpleMesh createAntiPrism(final Collection<? extends WB_Coord> points, final double h) {
 		final WB_Vector offset = createVector(0, 0, h);
 		final List<WB_Point> lpoints = new WB_PointList();
@@ -1037,6 +2038,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(lpoints, createAntiprismFaces(points.size()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param h
+	 * @return
+	 */
 	public WB_SimpleMesh createAntiPrism(final WB_Coord[] points, final double h) {
 		final WB_Vector offset = createVector(0, 0, h);
 		final List<WB_Point> lpoints = new WB_PointList();
@@ -1047,6 +2055,12 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(lpoints, createAntiprismFaces(points.length));
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @return
+	 */
 	private int[][] createAntiprismFaces(final int n) {
 		final int[][] faces = new int[2 + 2 * n][];
 		faces[2 * n] = new int[n];
@@ -1068,6 +2082,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return faces;
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param h
+	 * @return
+	 */
 	public WB_SimpleMesh createAntiPrism(final WB_Polygon poly, final double h) {
 		final WB_Vector offset = createVector(0, 0, h);
 		final List<WB_Point> lpoints = new WB_PointList();
@@ -1114,6 +2135,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(lpoints, prismfaces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param type
+	 * @param edgeLength
+	 * @return
+	 */
 	public WB_SimpleMesh createArchimedes(final int type, final double edgeLength) {
 		final List<WB_Point> vertices;
 		final int[][] faces;
@@ -1135,6 +2163,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(vertices, faces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param type
+	 * @param edgeLength
+	 * @return
+	 */
 	public WB_SimpleMesh createCatalan(final int type, final double edgeLength) {
 		final List<WB_Point> vertices;
 		final int[][] faces;
@@ -1156,6 +2191,12 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(vertices, faces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param vertices
+	 * @return
+	 */
 	private List<WB_Point> createVerticesFromArray(final double[][] vertices) {
 		final List<WB_Point> points = new WB_PointList();
 		for (final double[] vertice : vertices) {
@@ -1164,6 +2205,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return points;
 	}
 
+	/**
+	 *
+	 *
+	 * @param type
+	 * @param edgeLength
+	 * @return
+	 */
 	public WB_SimpleMesh createJohnson(final int type, final double edgeLength) {
 		final List<WB_Point> vertices;
 		final int[][] faces;
@@ -1196,6 +2244,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(vertices, faces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param type
+	 * @param edgeLength
+	 * @return
+	 */
 	public WB_SimpleMesh createOtherPolyhedron(final int type, final double edgeLength) {
 		final List<WB_Point> vertices;
 		final int[][] faces;
@@ -1217,6 +2272,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(vertices, faces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param type
+	 * @param edgeLength
+	 * @return
+	 */
 	public WB_SimpleMesh createPlato(final int type, final double edgeLength) {
 		final List<WB_Point> vertices;
 		final int[][] faces;
@@ -1238,63 +2300,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(vertices, faces);
 	}
 
-	public WB_SimpleMesh createPolyhedronFromWRL(String name, final double radius) {
-		final BufferedReader br = new BufferedReader(new InputStreamReader(
-				this.getClass().getClassLoader().getResourceAsStream("resources/" + name + ".wrl")));
-		final List<WB_Point> points = new WB_PointList();
-		final List<int[]> faces = new WB_List<>();
-		String line;
-		String[] words;
-		try {
-			while ((line = br.readLine()) != null) {
-				if (line.contains("Title Info")) {
-					line = br.readLine().trim();
-					words = line.split("\"");
-					name = words[1].trim();
-				}
-				if (line.contains("Coordinate3")) {
-					line = br.readLine().trim();
-					line = br.readLine().trim();
-					while (!line.contains("]")) {
-						words = line.split("\\s+");
-						words[2] = words[2].substring(0, words[2].length() - 1);
-						points.add(createPoint(Double.parseDouble(words[0].trim()), Double.parseDouble(words[1].trim()),
-								Double.parseDouble(words[2].trim())));
-						line = br.readLine().trim();
-					}
-				}
-				if (line.contains("IndexedFaceSet")) {
-					line = br.readLine().trim();
-					line = br.readLine().trim();
-					while (!line.contains("]")) {
-						words = line.split(",");
-						final int[] face = new int[words.length - 1];
-						for (int i = 0; i < words.length - 1; i++) {
-							face[i] = Integer.parseInt(words[i].trim());
-						}
-						faces.add(face);
-						line = br.readLine().trim();
-					}
-				}
-			}
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-		final int[][] ifaces = new int[faces.size()][];
-		for (int i = 0; i < faces.size(); i++) {
-			ifaces[i] = faces.get(i);
-		}
-		double d2 = 0;
-		for (final WB_Point p : points) {
-			d2 = Math.max(d2, p.getSqLength3D());
-		}
-		d2 = radius / Math.sqrt(d2);
-		for (final WB_Point p : points) {
-			p.mulSelf(d2);
-		}
-		return createMesh(points, ifaces);
-	}
-
+	/**
+	 *
+	 *
+	 * @param vectors
+	 * @param scale
+	 * @return
+	 */
 	public WB_SimpleMesh createZonohedron(final WB_Coord[] vectors, final double scale) {
 		final int n = vectors.length;
 		if (n < 3) {
@@ -1319,6 +2331,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createConvexHull(points, false);
 	}
 
+	/**
+	 *
+	 *
+	 * @param type
+	 * @param radius
+	 * @return
+	 */
 	public WB_SimpleMesh createStellatedIcosahedron(final int type, final double radius) {
 		final BufferedReader br = new BufferedReader(new InputStreamReader(
 				this.getClass().getClassLoader().getResourceAsStream("resources/stellated_icosahedron1-59.txt")));
@@ -1332,12 +2351,12 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		try {
 			thisline = br.readLine();
 			pointindices = thisline.split("\\s+");
-			final int startpoint = Integer.parseInt(pointindices[2 * type]);
-			final int endpoint = Integer.parseInt(pointindices[2 * type + 1]);
+			final int startpoint = Integer.parseInt(pointindices[2 * (type - 1)]);
+			final int endpoint = Integer.parseInt(pointindices[2 * type - 1]);
 			thisline = br.readLine();
 			faceindices = thisline.split("\\s+");
-			final int startface = Integer.parseInt(faceindices[2 * type]);
-			final int endface = Integer.parseInt(faceindices[2 * type + 1]);
+			final int startface = Integer.parseInt(faceindices[2 * (type - 1)]);
+			final int endface = Integer.parseInt(faceindices[2 * type - 1]);
 			int currentline = 2;
 			while ((thisline = br.readLine()) != null && currentline <= endface) {
 				if (currentline >= startpoint && currentline <= endpoint) {
@@ -1373,14 +2392,33 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createMesh(points, ifaces);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public WB_SimpleMesh createConvexHull(final List<? extends WB_Coord> points) {
 		return createConvexHull(points, true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public WB_SimpleMesh createConvexHull(final WB_Coord[] points) {
 		return createConvexHull(points, true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param triangulate
+	 * @return
+	 */
 	public WB_SimpleMesh createConvexHull(final WB_Coord[] points, final boolean triangulate) {
 		final List<WB_Coord> uniqueVertices = new WB_CoordList();
 		final WB_KDTreeInteger3D<WB_Coord> kdtree = new WB_KDTreeInteger3D<>();
@@ -1411,6 +2449,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param triangulate
+	 * @return
+	 */
 	public WB_SimpleMesh createConvexHull(final List<? extends WB_Coord> points, final boolean triangulate) {
 		final List<WB_Coord> uniqueVertices = new WB_CoordList();
 		final WB_KDTreeInteger3D<WB_Coord> kdtree = new WB_KDTreeInteger3D<>();
@@ -1441,6 +2486,14 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param triangulate
+	 * @param threshold
+	 * @return
+	 */
 	public WB_SimpleMesh createConvexHullWithThreshold(final WB_Coord[] points, final boolean triangulate,
 			final double threshold) {
 		final List<WB_Coord> uniqueVertices = new WB_CoordList();
@@ -1473,6 +2526,14 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param triangulate
+	 * @param threshold
+	 * @return
+	 */
 	public WB_SimpleMesh createConvexHullWithThreshold(final List<? extends WB_Coord> points, final boolean triangulate,
 			final double threshold) {
 		final List<WB_Coord> uniqueVertices = new WB_CoordList();
@@ -1505,6 +2566,15 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @return
+	 */
 	public WB_Point createClosestPointOnTriangle(final WB_Coord p, final WB_Coord a, final WB_Coord b,
 			final WB_Coord c) {
 		final WB_Vector ab = createVectorFromTo(a, b);
@@ -1548,6 +2618,13 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return createPoint(a).addSelf(ab.mul(v)).addSelf(ac.mul(w));
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param poly
+	 * @return
+	 */
 	public WB_Point createClosestPointOnPolygon(final WB_Coord p, final WB_Polygon poly) {
 		final int[] triangles = poly.getTriangles();
 		final int n = triangles.length;
@@ -1569,103 +2646,280 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return closest;
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param radius
+	 * @return
+	 */
 	public WB_Sphere createSphereWithRadius(final WB_Coord center, final double radius) {
 		return new WB_Sphere(center, radius);
 	}
 
+	/**
+	 *
+	 *
+	 * @param center
+	 * @param diameter
+	 * @return
+	 */
 	public WB_Sphere createSphereWithDiameter(final WB_Coord center, final double diameter) {
 		return createSphereWithRadius(center, .5 * diameter);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param radius
+	 * @return
+	 */
 	public WB_Sphere createSphereWithRadius(final double x, final double y, final double z, final double radius) {
 		return createSphereWithRadius(createPoint(x, y, z), radius);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param diameter
+	 * @return
+	 */
 	public WB_Sphere createSphereWithDiameter(final double x, final double y, final double z, final double diameter) {
 		return createSphereWithRadius(createPoint(x, y, z), .5 * diameter);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 * @param p4
+	 * @return
+	 */
 	public WB_Tetrahedron createTetrahedron(final WB_Coord p1, final WB_Coord p2, final WB_Coord p3,
 			final WB_Coord p4) {
 		return new WB_Tetrahedron(p1, p2, p3, p4);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param P
+	 * @return
+	 */
 	public WB_Point getIntersection(final WB_Coord a, final WB_Coord b, final WB_Plane P) {
-		final Object o = WB_GeometryOp3D.getIntersection3D(a, b, P).getObject();
+		final Object o = WB_GeometryOp.getIntersection3D(a, b, P).getObject();
 		return o == null ? null : (WB_Point) o;
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @return
+	 */
 	public WB_Polygon createPolygonConvexHull(final WB_Polygon poly) {
 		return WB_JTS.createPolygonConvexHull(poly);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @return
+	 */
 	public List<WB_Polygon> createBufferedPolygons(final WB_Polygon poly, final double d) {
 		return WB_JTS.createBufferedPolygons(poly, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @param n
+	 * @return
+	 */
 	public List<WB_Polygon> createBufferedPolygons(final WB_Polygon poly, final double d, final int n) {
 		return WB_JTS.createBufferedPolygons(poly, d, n);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @return
+	 */
 	public List<WB_Polygon> createBufferedPolygonsStraight(final WB_Polygon poly, final double d) {
 		return WB_JTS.createBufferedPolygonsStraight(poly, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @return
+	 */
 	public List<WB_Polygon> createBufferedPolygons(final Collection<? extends WB_Polygon> poly, final double d) {
 		return WB_JTS.createBufferedPolygons(poly, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @param n
+	 * @return
+	 */
 	public List<WB_Polygon> createBufferedPolygons(final Collection<? extends WB_Polygon> poly, final double d,
 			final int n) {
 		return WB_JTS.createBufferedPolygons(poly, d, n);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @return
+	 */
 	public List<WB_Polygon> createBufferedPolygonsStraight(final Collection<? extends WB_Polygon> poly,
 			final double d) {
 		return WB_JTS.createBufferedPolygonsStraight(poly, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @return
+	 */
 	public List<WB_Polygon> createBoundaryPolygons(final WB_Polygon poly) {
 		return WB_JTS.createBoundaryPolygons(poly);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @return
+	 */
 	public List<WB_Polygon> createRibbonPolygons(final WB_Polygon poly, final double d) {
 		return WB_JTS.createRibbonPolygons(poly, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param d
+	 * @return
+	 */
 	public List<WB_Polygon> createRibbonPolygons(final Collection<? extends WB_Polygon> poly, final double d) {
 		return WB_JTS.createRibbonPolygons(poly, d);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param o
+	 * @param i
+	 * @return
+	 */
 	public List<WB_Polygon> createRibbonPolygons(final WB_Polygon poly, final double o, final double i) {
 		return WB_JTS.createRibbonPolygons(poly, o, i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param o
+	 * @param i
+	 * @return
+	 */
 	public List<WB_Polygon> createRibbonPolygons(final Collection<? extends WB_Polygon> poly, final double o,
 			final double i) {
 		return WB_JTS.createRibbonPolygons(poly, o, i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param tol
+	 * @return
+	 */
 	public List<WB_Polygon> createSimplifiedPolygon(final WB_Polygon poly, final double tol) {
 		return WB_JTS.createSimplifiedPolygon(poly, tol);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param max
+	 * @return
+	 */
 	public List<WB_Polygon> createDensifiedPolygon(final WB_Polygon poly, final double max) {
 		return WB_JTS.createDensifiedPolygon(poly, max);
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param container
+	 * @return
+	 */
 	public List<WB_Polygon> constrainPolygons(final WB_Polygon poly, final WB_Polygon container) {
 		return WB_JTS.constrainPolygons(poly, container);
 	}
 
+	/**
+	 *
+	 *
+	 * @param polygons
+	 * @param container
+	 * @return
+	 */
 	public List<WB_Polygon> constrainPolygons(final WB_Polygon[] polygons, final WB_Polygon container) {
 		return WB_JTS.constrainPolygons(polygons, container);
 	}
 
+	/**
+	 *
+	 *
+	 * @param polygons
+	 * @param container
+	 * @return
+	 */
 	public List<WB_Polygon> constrainPolygons(final List<WB_Polygon> polygons, final WB_Polygon container) {
 		return WB_JTS.constrainPolygons(polygons, container);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param threshold
+	 * @return
+	 */
 	public List<WB_Coord> createUniquePoints(final List<WB_Coord> points, final double threshold) {
 		final List<WB_Coord> uniqueVertices = new WB_CoordList();
 		final WB_KDTreeInteger3D<WB_Coord> kdtree = new WB_KDTreeInteger3D<>();
@@ -1686,6 +2940,12 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return uniqueVertices;
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	public List<WB_Coord> createUniquePoints(final List<WB_Coord> points) {
 		final List<WB_Coord> uniqueVertices = new WB_CoordList();
 		final WB_KDTreeInteger3D<WB_Coord> kdtree = new WB_KDTreeInteger3D<>();
@@ -1706,6 +2966,12 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 		return uniqueVertices;
 	}
 
+	/**
+	 *
+	 *
+	 * @param planes
+	 * @return
+	 */
 	public List<WB_Plane> createUniquePlanes(final List<WB_Plane> planes) {
 		final List<WB_Plane> uniquePlanes = new WB_List<>();
 		boolean unique = true;
@@ -1716,7 +2982,7 @@ public class WB_GeometryFactory3D extends WB_GeometryFactory2D {
 			unique = true;
 			for (int j = 0; j < i; j++) {
 				Pj = planes.get(j);
-				if (WB_GeometryOp3D.isEqual(Pi, Pj)) {
+				if (WB_GeometryOp.isEqual(Pi, Pj)) {
 					unique = false;
 					break;
 				}

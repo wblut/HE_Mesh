@@ -6,21 +6,40 @@ import java.util.List;
 
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class WB_AABB {
+	/**  */
 	protected double[] _min;
+	/**  */
 	protected double[] _max;
+	/**  */
 	int _id;
 
+	/**
+	 *
+	 *
+	 * @param p
+	 */
 	public WB_AABB(final WB_Coord p) {
 		init();
 		setToNull();
 		expandToInclude(p);
 	}
 
+	/**
+	 *
+	 */
 	public WB_AABB() {
 		init();
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 */
 	public WB_AABB(final WB_Coord[] points) {
 		if (points == null) {
 			throw new NullPointerException("Array not initialized.");
@@ -49,6 +68,11 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 */
 	public WB_AABB(final Collection<? extends WB_Coord> points) {
 		if (points == null) {
 			throw new IllegalArgumentException("Collection not initialized.");
@@ -76,6 +100,12 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param min
+	 * @param max
+	 */
 	public WB_AABB(final double[] min, final double[] max) {
 		init();
 		if (min.length == 3 && max.length == 3) {
@@ -104,6 +134,12 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param min
+	 * @param max
+	 */
 	public WB_AABB(final float[] min, final float[] max) {
 		init();
 		if (min.length == 3 && max.length == 3) {
@@ -132,6 +168,12 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param min
+	 * @param max
+	 */
 	public WB_AABB(final int[] min, final int[] max) {
 		init();
 		if (min.length == 3 && max.length == 3) {
@@ -160,6 +202,12 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param min
+	 * @param max
+	 */
 	public WB_AABB(final WB_Coord min, final WB_Coord max) {
 		init();
 		for (int i = 0; i < 3; i++) {
@@ -173,12 +221,30 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param minx
+	 * @param miny
+	 * @param maxx
+	 * @param maxy
+	 */
 	public WB_AABB(final double minx, final double miny, final double maxx, final double maxy) {
 		this();
 		expandToInclude(minx, miny, 0);
 		expandToInclude(maxx, maxy, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param minx
+	 * @param miny
+	 * @param minz
+	 * @param maxx
+	 * @param maxy
+	 * @param maxz
+	 */
 	public WB_AABB(final double minx, final double miny, final double minz, final double maxx, final double maxy,
 			final double maxz) {
 		this();
@@ -186,6 +252,11 @@ public class WB_AABB {
 		expandToInclude(maxx, maxy, maxz);
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 */
 	public WB_AABB(final double[] values) {
 		init();
 		if (values.length == 0) {
@@ -205,6 +276,11 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 */
 	public WB_AABB(final int[] values) {
 		init();
 		if (values.length == 0) {
@@ -224,6 +300,11 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 */
 	public WB_AABB(final float[] values) {
 		init();
 		if (values.length == 0) {
@@ -243,6 +324,12 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public double getSize(final int i) {
 		if (isNull()) {
 			return 0;
@@ -250,6 +337,11 @@ public class WB_AABB {
 		return _max[i] - _min[i];
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int minOrdinate() {
 		if (isNull()) {
 			return 0;
@@ -266,6 +358,11 @@ public class WB_AABB {
 		return ord;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int maxOrdinate() {
 		if (isNull()) {
 			return 0;
@@ -282,14 +379,29 @@ public class WB_AABB {
 		return ord;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 */
 	public void expandToInclude(final WB_Coord p) {
 		expandToInclude(p.xd(), p.yd(), p.zd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 */
 	public void add(final WB_Coord p) {
 		expandToInclude(p.xd(), p.yd(), p.zd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param distance
+	 */
 	public void expandBy(final double distance) {
 		if (isNull()) {
 			return;
@@ -304,6 +416,11 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param delta
+	 */
 	public void expandBy(final double[] delta) {
 		if (isNull()) {
 			return;
@@ -318,6 +435,13 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 */
 	public void expandBy(final double dx, final double dy, final double dz) {
 		if (isNull()) {
 			return;
@@ -342,6 +466,11 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 */
 	public void expandToInclude(final double[] p) {
 		if (isNull()) {
 			for (int i = 0; i < 3; i++) {
@@ -360,6 +489,13 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public void expandToInclude(final double x, final double y, final double z) {
 		if (isNull()) {
 			_min[0] = x;
@@ -390,15 +526,30 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param other
+	 */
 	public void expandToInclude(final WB_AABB other) {
 		expandToInclude(other._min);
 		expandToInclude(other._max);
 	}
 
+	/**
+	 *
+	 *
+	 * @param other
+	 */
 	public void add(final WB_AABB other) {
 		expandToInclude(other);
 	}
 
+	/**
+	 *
+	 *
+	 * @param d
+	 */
 	public void translate(final double[] d) {
 		if (isNull()) {
 			return;
@@ -409,6 +560,12 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param other
+	 * @return
+	 */
 	public boolean intersects(final WB_AABB other) {
 		if (isNull() || other.isNull()) {
 			return false;
@@ -424,10 +581,22 @@ public class WB_AABB {
 		return true;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public boolean intersects(final WB_Coord p) {
 		return intersects(p.xd(), p.yd(), p.zd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	public boolean intersects(final double[] x) {
 		if (isNull()) {
 			return false;
@@ -443,6 +612,14 @@ public class WB_AABB {
 		return true;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public boolean intersects(final double x, final double y, final double z) {
 		if (isNull()) {
 			return false;
@@ -468,6 +645,12 @@ public class WB_AABB {
 		return true;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sphere
+	 * @return
+	 */
 	public boolean intersects(final WB_Sphere sphere) {
 		final WB_Coord c = sphere.getCenter();
 		final double r = sphere.getRadius();
@@ -498,18 +681,42 @@ public class WB_AABB {
 		return d <= r * r;
 	}
 
+	/**
+	 *
+	 *
+	 * @param other
+	 * @return
+	 */
 	public boolean contains(final WB_AABB other) {
 		return covers(other);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public boolean contains(final WB_Coord p) {
 		return covers(p);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	public boolean contains(final double[] x) {
 		return covers(x);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	public boolean covers(final double[] x) {
 		if (isNull()) {
 			return false;
@@ -525,6 +732,14 @@ public class WB_AABB {
 		return true;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public boolean covers(final double x, final double y, final double z) {
 		if (isNull()) {
 			return false;
@@ -550,10 +765,22 @@ public class WB_AABB {
 		return true;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public boolean covers(final WB_Coord p) {
 		return covers(p.xd(), p.yd(), p.zd());
 	}
 
+	/**
+	 *
+	 *
+	 * @param other
+	 * @return
+	 */
 	public boolean covers(final WB_AABB other) {
 		if (isNull() || other.isNull()) {
 			return false;
@@ -569,6 +796,12 @@ public class WB_AABB {
 		return true;
 	}
 
+	/**
+	 *
+	 *
+	 * @param other
+	 * @return
+	 */
 	public double getDistance(final WB_AABB other) {
 		if (intersects(other)) {
 			return 0;
@@ -586,6 +819,12 @@ public class WB_AABB {
 		return Math.sqrt(sqr);
 	}
 
+	/**
+	 *
+	 *
+	 * @param other
+	 * @return
+	 */
 	public double getDistanceSquare(final WB_AABB other) {
 		if (intersects(other)) {
 			return 0;
@@ -603,6 +842,12 @@ public class WB_AABB {
 		return sqr;
 	}
 
+	/**
+	 *
+	 *
+	 * @param tuple
+	 * @return
+	 */
 	public double getDistance(final WB_Coord tuple) {
 		double dx = 0;
 		double sqr = 0;
@@ -616,6 +861,12 @@ public class WB_AABB {
 		return Math.sqrt(sqr);
 	}
 
+	/**
+	 *
+	 *
+	 * @param tuple
+	 * @return
+	 */
 	public double getDistanceSquare(final WB_Coord tuple) {
 		double dx = 0;
 		double sqr = 0;
@@ -629,6 +880,12 @@ public class WB_AABB {
 		return sqr;
 	}
 
+	/**
+	 *
+	 *
+	 * @param other
+	 * @return
+	 */
 	public boolean equals(final WB_AABB other) {
 		if (isNull()) {
 			return other.isNull();
@@ -644,6 +901,11 @@ public class WB_AABB {
 		return true;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public String toString() {
 		String string = "WB_AABB [";
@@ -655,6 +917,11 @@ public class WB_AABB {
 		return string;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int numberOfPoints() {
 		if (isNull()) {
 			return 0;
@@ -662,6 +929,11 @@ public class WB_AABB {
 		return 8;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int numberOfSegments() {
 		if (isNull()) {
 			return 0;
@@ -669,6 +941,11 @@ public class WB_AABB {
 		return 12;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int numberOfTriangles() {
 		if (isNull()) {
 			return 0;
@@ -676,6 +953,11 @@ public class WB_AABB {
 		return 12;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int numberOfFaces() {
 		if (isNull()) {
 			return 0;
@@ -683,6 +965,11 @@ public class WB_AABB {
 		return 6;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	private List<double[]> getCoords() {
 		if (isNull()) {
 			return null;
@@ -706,6 +993,11 @@ public class WB_AABB {
 		return points;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point[] getCorners() {
 		if (isNull()) {
 			return null;
@@ -729,6 +1021,11 @@ public class WB_AABB {
 		return points;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<int[]> getSegments() {
 		final List<double[]> points = getCoords();
 		final List<int[]> segments = new ArrayList<>(numberOfSegments());
@@ -752,23 +1049,46 @@ public class WB_AABB {
 		return segments;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getId() {
 		return _id;
 	}
 
+	/**
+	 *
+	 *
+	 * @param id
+	 */
 	public void setId(final int id) {
 		_id = id;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isDegenerate() {
 		return getTrueDim() < 3 && getTrueDim() > -1;
 	}
 
+	/**
+	 *
+	 *
+	 * @param src
+	 */
 	public void set(final WB_AABB src) {
 		System.arraycopy(src._min, 0, _min, 0, 3);
 		System.arraycopy(src._max, 0, _max, 0, 3);
 	}
 
+	/**
+	 *
+	 */
 	private void init() {
 		_min = new double[3];
 		_max = new double[3];
@@ -778,10 +1098,21 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_AABB get() {
 		return new WB_AABB(_min, _max);
 	}
 
+	/**
+	 *
+	 *
+	 * @param aabb
+	 * @return
+	 */
 	public WB_AABB getUnion(final WB_AABB aabb) {
 		final double[] newmin = new double[3];
 		final double[] newmax = new double[3];
@@ -792,6 +1123,12 @@ public class WB_AABB {
 		return new WB_AABB(newmin, newmax);
 	}
 
+	/**
+	 *
+	 *
+	 * @param other
+	 * @return
+	 */
 	public WB_AABB getIntersection(final WB_AABB other) {
 		if (isNull() || other.isNull() || !intersects(other)) {
 			return null;
@@ -805,6 +1142,14 @@ public class WB_AABB {
 		return new WB_AABB(newmin, newmax);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @param q
+	 * @return
+	 */
 	public static boolean intersects(final WB_Coord p1, final WB_Coord p2, final WB_Coord q) {
 		if (q.xd() >= (p1.xd() < p2.xd() ? p1.xd() : p2.xd()) && q.xd() <= (p1.xd() > p2.xd() ? p1.xd() : p2.xd())
 				&& q.yd() >= (p1.yd() < p2.yd() ? p1.yd() : p2.yd())
@@ -816,6 +1161,15 @@ public class WB_AABB {
 		return false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p1
+	 * @param p2
+	 * @param q1
+	 * @param q2
+	 * @return
+	 */
 	public static boolean intersects(final WB_Coord p1, final WB_Coord p2, final WB_Coord q1, final WB_Coord q2) {
 		double minq = Math.min(q1.xd(), q2.xd());
 		double maxq = Math.max(q1.xd(), q2.xd());
@@ -850,74 +1204,167 @@ public class WB_AABB {
 		return true;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getWidth() {
 		return getSize(0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getHeight() {
 		return getSize(1);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getDepth() {
 		return getSize(2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public double getMin(final int i) {
 		return _min[i];
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public double getMax(final int i) {
 		return _max[i];
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	public double getCenter(final int i) {
 		return 0.5 * (_min[i] + _max[i]);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getMinX() {
 		return _min[0];
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getMaxX() {
 		return _max[0];
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getCenterX() {
 		return 0.5 * (_min[0] + _max[0]);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getMinY() {
 		return _min[1];
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getMaxY() {
 		return _max[1];
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getCenterY() {
 		return 0.5 * (_min[1] + _max[1]);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getMinZ() {
 		return _min[2];
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getMaxZ() {
 		return _max[2];
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getCenterZ() {
 		return 0.5 * (_min[2] + _max[2]);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getVolume() {
 		return getWidth() * getHeight() * getDepth();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getArea() {
 		return 2.0 * (getWidth() * getHeight() + getWidth() * getDepth() + getDepth() * getHeight());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double minExtent() {
 		if (isNull()) {
 			return 0.0;
@@ -931,6 +1378,11 @@ public class WB_AABB {
 		return h < d ? h : d;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double maxExtent() {
 		if (isNull()) {
 			return 0.0;
@@ -944,6 +1396,13 @@ public class WB_AABB {
 		return h > d ? h : d;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public void translate(final double x, final double y, final double z) {
 		if (isNull()) {
 			return;
@@ -956,6 +1415,11 @@ public class WB_AABB {
 		_max[2] += z;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public List<int[]> getTriangles() {
 		final List<int[]> tris = new ArrayList<>();
 		final int[] tri01 = { 4, 5, 6 };
@@ -985,6 +1449,11 @@ public class WB_AABB {
 		return tris;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[][] getFaces() {
 		final int[][] faces = new int[6][];
 		faces[0] = new int[] { 4, 5, 7, 6 };
@@ -996,14 +1465,29 @@ public class WB_AABB {
 		return faces;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point getMin() {
 		return new WB_Point(_min);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point getMax() {
 		return new WB_Point(_max);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Point getCenter() {
 		final double[] center = new double[3];
 		for (int i = 0; i < 3; i++) {
@@ -1012,10 +1496,20 @@ public class WB_AABB {
 		return new WB_Point(center);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getDim() {
 		return 3;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getTrueDim() {
 		if (!isValid()) {
 			return -1;
@@ -1029,6 +1523,11 @@ public class WB_AABB {
 		return dim;
 	}
 
+	/**
+	 *
+	 *
+	 * @param factor
+	 */
 	public void pad(final double factor) {
 		final WB_Point c = getCenter();
 		for (int i = 0; i < 3; i++) {
@@ -1037,6 +1536,11 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int hashCode() {
 		int result = 17;
@@ -1047,11 +1551,20 @@ public class WB_AABB {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	private int hashCode(final double v) {
 		final long tmp = Double.doubleToLongBits(v);
 		return (int) (tmp ^ tmp >>> 32);
 	}
 
+	/**
+	 *
+	 */
 	public void setToNull() {
 		for (int i = 0; i < 3; i++) {
 			_min[i] = Double.POSITIVE_INFINITY;
@@ -1059,10 +1572,20 @@ public class WB_AABB {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isNull() {
 		return _max[0] < _min[0];
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isValid() {
 		return !isNull();
 	}

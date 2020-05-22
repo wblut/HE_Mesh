@@ -1,7 +1,7 @@
 package wblut.hemesh;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_ConstantScalarParameter;
@@ -10,7 +10,13 @@ import wblut.math.WB_EaseScalarParameter;
 import wblut.math.WB_LinearScalarParameter;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class HEC_Cone extends HEC_Creator {
+	/**
+	 *
+	 */
 	public HEC_Cone() {
 		super();
 		parameters.set("facets", 6);
@@ -26,6 +32,14 @@ public class HEC_Cone extends HEC_Creator {
 		setCreationAxis(WB_Vector.Y());
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @param H
+	 * @param facets
+	 * @param steps
+	 */
 	public HEC_Cone(final double R, final double H, final int facets, final int steps) {
 		this();
 		parameters.set("facets", facets);
@@ -34,48 +48,103 @@ public class HEC_Cone extends HEC_Creator {
 		parameters.set("steps", steps);
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @return
+	 */
 	public HEC_Cone setRadius(final double R) {
 		parameters.set("radius", R);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param H
+	 * @return
+	 */
 	public HEC_Cone setHeight(final double H) {
 		parameters.set("height", H);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param facets
+	 * @return
+	 */
 	public HEC_Cone setFacets(final int facets) {
 		parameters.set("facets", facets);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param steps
+	 * @return
+	 */
 	public HEC_Cone setSteps(final int steps) {
 		parameters.set("steps", steps);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param cap
+	 * @return
+	 */
 	public HEC_Cone setCap(final boolean cap) {
 		parameters.set("cap", cap);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param rev
+	 * @return
+	 */
 	public HEC_Cone setReverse(final boolean rev) {
 		parameters.set("reverse", rev);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param direction
+	 * @return
+	 */
 	public HEC_Cone align(final WB_Coord direction) {
 		setAxis(direction);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param endpoint
+	 * @return
+	 */
 	public HEC_Cone align(final WB_Coord origin, final WB_Coord endpoint) {
-		setHeight(WB_GeometryOp3D.getDistance3D(origin, endpoint));
+		setHeight(WB_GeometryOp.getDistance3D(origin, endpoint));
 		setCenter(origin);
 		setAxis(new WB_Vector(origin, endpoint));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param segment
+	 * @return
+	 */
 	public HEC_Cone align(final WB_Segment segment) {
 		setHeight(segment.getLength());
 		setCenter(segment.getOrigin());
@@ -83,76 +152,169 @@ public class HEC_Cone extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	public HEC_Cone setProfile(final WB_ScalarParameter t) {
 		parameters.set("profile", t);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	public HEC_Cone setTaper(final WB_ScalarParameter t) {
 		parameters.set("taper", t);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param E
+	 * @param type
+	 * @return
+	 */
 	public HEC_Cone setTaper(final WB_Ease E, final WB_Ease.EaseType type) {
 		parameters.set("taper", new WB_EaseScalarParameter(0, 1, 0, 1, true, E, type));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public HEC_Cone setPhase(final double p) {
 		parameters.set("phase", p);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	public HEC_Cone setHeightTaper(final WB_ScalarParameter t) {
 		parameters.set("heighttaper", t);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param E
+	 * @param type
+	 * @return
+	 */
 	public HEC_Cone setHeigthTaper(final WB_Ease E, final WB_Ease.EaseType type) {
 		parameters.set("heighttaper", new WB_EaseScalarParameter(0, 1, 0, 1, true, E, type));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getRadius() {
 		return parameters.get("radius", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getHeight() {
 		return parameters.get("height", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	int getSteps() {
 		return parameters.get("steps", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	int getFacets() {
 		return parameters.get("facets", 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	boolean getCap() {
 		return parameters.get("cap", true);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	boolean getReverse() {
 		return parameters.get("reverse", true);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getPhase() {
 		return parameters.get("phase", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	WB_ScalarParameter getTaper() {
 		return (WB_ScalarParameter) parameters.get("taper", new WB_LinearScalarParameter(0.0, 1.0, 0.0, 1.0));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	WB_ScalarParameter getHeightTaper() {
 		return (WB_ScalarParameter) parameters.get("heighttaper", new WB_LinearScalarParameter(0.0, 1.0, 0.0, 1.0));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	WB_ScalarParameter getProfile() {
 		return (WB_ScalarParameter) parameters.get("profile", new WB_ConstantScalarParameter(1.0));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final boolean cap = getCap();
@@ -268,6 +430,11 @@ public class HEC_Cone extends HEC_Creator {
 		return fl.createBase();
 	}
 
+	/**
+	 *
+	 *
+	 * @param args
+	 */
 	public static void main(final String[] args) {
 		final HEC_Cone creator = new HEC_Cone();
 		creator.setRadius(200).setHeight(400);

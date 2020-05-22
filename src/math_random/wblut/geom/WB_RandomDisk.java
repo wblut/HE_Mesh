@@ -1,23 +1,46 @@
 package wblut.geom;
 
+/**
+ *
+ */
 public class WB_RandomDisk extends WB_RandomFactory {
+	/**  */
 	private double radius;
 
+	/**
+	 *
+	 */
 	public WB_RandomDisk() {
 		super();
 		radius = 1.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param seed
+	 */
 	public WB_RandomDisk(final long seed) {
 		super(seed);
 		radius = 1.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public WB_RandomDisk setRadius(final double r) {
 		radius = r;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_Point nextPointImp() {
 		final double r = radius * Math.sqrt(randomGen.nextDouble());
@@ -25,6 +48,11 @@ public class WB_RandomDisk extends WB_RandomFactory {
 		return new WB_Point(r * Math.cos(t), r * Math.sin(t), 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_Vector nextVectorImp() {
 		final double r = radius * Math.sqrt(randomGen.nextDouble());

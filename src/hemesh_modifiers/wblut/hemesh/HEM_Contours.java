@@ -1,32 +1,64 @@
 package wblut.hemesh;
 
-import java.util.Set;
-
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HEM_Contours extends HEM_Modifier {
+	/**  */
 	boolean dblAtt;
+	/**  */
 	boolean fltAtt;
+	/**  */
 	boolean intAtt;
 
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HEM_Contours setAttribute(final String name) {
 		parameters.set("attribute", name);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	String getAttribute() {
 		return (String) parameters.get("attribute", null);
 	}
 
+	/**
+	 *
+	 *
+	 * @param level
+	 * @return
+	 */
 	public HEM_Contours setLevel(final double level) {
 		parameters.set("level", level);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getLevel() {
 		return parameters.get("level", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		final String attribute = getAttribute();
@@ -166,6 +198,12 @@ public class HEM_Contours extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		final HE_Mesh mesh = selection.getParent();
@@ -308,6 +346,13 @@ public class HEM_Contours extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param structure
+	 * @param attribute
+	 * @return
+	 */
 	private HE_DoubleMap getValues(final HE_HalfedgeStructure structure, final String attribute) {
 		final HE_DoubleMap values = new HE_DoubleMap();
 		HE_Mesh mesh = null;

@@ -2,12 +2,22 @@ package wblut.hemesh;
 
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class HEC_Sphere extends HEC_Creator {
+	/**  */
 	private double rx, ry, rz;
+	/**  */
 	private int uFacets;
+	/**  */
 	private int vFacets;
+	/**  */
 	private double phase;
 
+	/**
+	 *
+	 */
 	public HEC_Sphere() {
 		super();
 		rx = ry = rz = 100;
@@ -16,6 +26,12 @@ public class HEC_Sphere extends HEC_Creator {
 		setCreationAxis(WB_Vector.Y());
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @return
+	 */
 	public HEC_Sphere setRadius(final double R) {
 		rx = R;
 		ry = R;
@@ -23,6 +39,14 @@ public class HEC_Sphere extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param rx
+	 * @param ry
+	 * @param rz
+	 * @return
+	 */
 	public HEC_Sphere setRadius(final double rx, final double ry, final double rz) {
 		this.rx = rx;
 		this.ry = ry;
@@ -30,21 +54,44 @@ public class HEC_Sphere extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param facets
+	 * @return
+	 */
 	public HEC_Sphere setUFacets(final int facets) {
 		uFacets = facets;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param facets
+	 * @return
+	 */
 	public HEC_Sphere setVFacets(final int facets) {
 		vFacets = facets;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public HEC_Sphere setPhase(final double p) {
 		phase = p;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final double[][] vertices = new double[2 * uFacets + (uFacets + 1) * (vFacets - 1)][3];
@@ -106,6 +153,13 @@ public class HEC_Sphere extends HEC_Creator {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @param v
+	 * @return
+	 */
 	private int index(final int u, final int v) {
 		if (v == 0) {
 			return 2 * u;

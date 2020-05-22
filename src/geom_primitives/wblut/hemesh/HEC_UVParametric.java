@@ -3,13 +3,25 @@ package wblut.hemesh;
 import wblut.geom.WB_Point;
 import wblut.math.WB_VectorParameter;
 
-public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
+/**
+ *
+ */
+public class HEC_UVParametric extends HEC_FromFacelist {
+	/**  */
+	// Creator {
 	protected int usteps;
+	/**  */
 	protected int vsteps;
+	/**  */
 	protected WB_VectorParameter evaluator;
+	/**  */
 	protected double uRange, vRange, uMin, uMax, vMin, vMax, s;
+	/**  */
 	protected boolean fixDuplicatedVertices;
 
+	/**
+	 *
+	 */
 	public HEC_UVParametric() {
 		super();
 		setOverride(true);
@@ -22,22 +34,48 @@ public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
 		fixDuplicatedVertices = true;
 	}
 
+	/**
+	 *
+	 *
+	 * @param eval
+	 * @return
+	 */
 	public HEC_UVParametric setEvaluator(final WB_VectorParameter eval) {
 		evaluator = eval;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEC_UVParametric setFixDuplicatedVertices(final boolean b) {
 		fixDuplicatedVertices = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param usteps
+	 * @param vsteps
+	 * @return
+	 */
 	public HEC_UVParametric setUVSteps(final int usteps, final int vsteps) {
 		this.usteps = usteps > 1 ? usteps : 32;
 		this.vsteps = usteps > 1 ? vsteps : 32;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param umin
+	 * @param umax
+	 * @return
+	 */
 	public HEC_UVParametric setURange(final double umin, final double umax) {
 		this.uMin = umin;
 		this.uMax = umax;
@@ -45,6 +83,13 @@ public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param vmin
+	 * @param vmax
+	 * @return
+	 */
 	public HEC_UVParametric setVRange(final double vmin, final double vmax) {
 		this.vMin = vmin;
 		this.vMax = vmax;
@@ -52,6 +97,11 @@ public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		s = getScale();

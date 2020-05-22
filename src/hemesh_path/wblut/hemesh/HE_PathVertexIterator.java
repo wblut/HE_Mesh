@@ -2,11 +2,22 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
+/**
+ *
+ */
 public class HE_PathVertexIterator implements Iterator<HE_Vertex> {
+	/**  */
 	private final HE_PathHalfedge _start;
+	/**  */
 	private HE_PathHalfedge _current;
+	/**  */
 	private boolean endreached;
 
+	/**
+	 *
+	 *
+	 * @param path
+	 */
 	public HE_PathVertexIterator(final HE_Path path) {
 		_start = path.getPathHalfedge();
 		_current = null;
@@ -17,6 +28,11 @@ public class HE_PathVertexIterator implements Iterator<HE_Vertex> {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public boolean hasNext() {
 		if (_start == null) {
@@ -25,6 +41,11 @@ public class HE_PathVertexIterator implements Iterator<HE_Vertex> {
 		return _current == null || _current.getNextInPath() != _start && !endreached;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public HE_Vertex next() {
 		if (_current == null) {
@@ -39,6 +60,9 @@ public class HE_PathVertexIterator implements Iterator<HE_Vertex> {
 		return endreached ? _current.getHalfedge().getEndVertex() : _current.getHalfedge().getVertex();
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void remove() {
 		throw new UnsupportedOperationException();

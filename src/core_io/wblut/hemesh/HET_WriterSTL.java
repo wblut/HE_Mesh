@@ -12,28 +12,57 @@ import java.util.zip.GZIPOutputStream;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 class HET_WriterSTL {
+	/**  */
 	public static final int DEFAULT_RGB = -1;
+	/**  */
 	public static final STLColorModel NONE = new NoColorModel();
+	/**  */
 	public static final STLColorModel DEFAULT = new DefaultSTLColorModel();
+	/**  */
 	public static final STLColorModel MATERIALISE = new MaterialiseSTLColorModel(0xffffffff);
+	/**  */
 	public static final int DEFAULT_BUFFER = 0x10000;
+	/**  */
 	protected OutputStream ds;
+	/**  */
 	protected byte[] buf = new byte[4];
+	/**  */
 	protected int bufferSize;
+	/**  */
 	protected WB_Vector scale = new WB_Vector(1, 1, 1);
+	/**  */
 	protected boolean useInvertedNormals = false;
+	/**  */
 	protected STLColorModel colorModel;
 
+	/**
+	 *
+	 */
 	public HET_WriterSTL() {
 		this(DEFAULT, DEFAULT_BUFFER);
 	}
 
+	/**
+	 *
+	 *
+	 * @param cm
+	 * @param bufSize
+	 */
 	public HET_WriterSTL(final STLColorModel cm, final int bufSize) {
 		colorModel = cm;
 		this.bufferSize = bufSize;
 	}
 
+	/**
+	 *
+	 *
+	 * @param stream
+	 * @param numFaces
+	 */
 	public void beginSave(final OutputStream stream, final int numFaces) {
 		try {
 			ds = new BufferedOutputStream(new DataOutputStream(stream), bufferSize);
@@ -43,6 +72,13 @@ class HET_WriterSTL {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
 	static public OutputStream createOutputStream(final File file) throws IOException {
 		if (file == null) {
 			throw new IllegalArgumentException("file can't be null");
@@ -55,6 +91,11 @@ class HET_WriterSTL {
 		return stream;
 	}
 
+	/**
+	 *
+	 *
+	 * @param file
+	 */
 	static public void createDirectories(final File file) {
 		try {
 			final String parentName = file.getParent();
@@ -69,6 +110,13 @@ class HET_WriterSTL {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param fn
+	 * @param name
+	 * @param numFaces
+	 */
 	public void beginSave(final String fn, final String name, final int numFaces) {
 		try {
 			beginSave(createOutputStream(new File(fn, name + ".stl")), numFaces);
@@ -77,6 +125,9 @@ class HET_WriterSTL {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void endSave() {
 		try {
 			ds.flush();
@@ -86,10 +137,27 @@ class HET_WriterSTL {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param normal
+	 */
 	public void face(final WB_Coord a, final WB_Coord b, final WB_Coord c, final WB_Coord normal) {
 		face(a, b, c, normal, DEFAULT_RGB);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param normal
+	 * @param rgb
+	 */
 	public void face(final WB_Coord a, final WB_Coord b, final WB_Coord c, final WB_Coord normal, final int rgb) {
 		try {
 			writeVector(normal);
@@ -108,6 +176,11 @@ class HET_WriterSTL {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 */
 	private final void prepareBuffer(final int a) {
 		buf[3] = (byte) (a >>> 24);
 		buf[2] = (byte) (a >> 16 & 0xff);
@@ -115,23 +188,50 @@ class HET_WriterSTL {
 		buf[0] = (byte) (a & 0xff);
 	}
 
+	/**
+	 *
+	 *
+	 * @param s
+	 */
 	public void setScale(final float s) {
 		scale.set(s, s, s);
 	}
 
+	/**
+	 *
+	 *
+	 * @param s
+	 */
 	public void setScale(final WB_Coord s) {
 		scale.set(s);
 	}
 
+	/**
+	 *
+	 *
+	 * @param state
+	 */
 	public void useInvertedNormals(final boolean state) {
 		useInvertedNormals = state;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @throws IOException
+	 */
 	protected void writeFloat(final float a) throws IOException {
 		prepareBuffer(Float.floatToRawIntBits(a));
 		ds.write(buf, 0, 4);
 	}
 
+	/**
+	 *
+	 *
+	 * @param num
+	 * @throws IOException
+	 */
 	protected void writeHeader(final int num) throws IOException {
 		final byte[] header = new byte[80];
 		colorModel.formatHeader(header);
@@ -139,11 +239,22 @@ class HET_WriterSTL {
 		writeInt(num);
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @throws IOException
+	 */
 	protected void writeInt(final int a) throws IOException {
 		prepareBuffer(a);
 		ds.write(buf, 0, 4);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 */
 	protected void writeScaledVector(final WB_Coord v) {
 		try {
 			writeFloat(v.xf() * scale.xf());
@@ -154,12 +265,23 @@ class HET_WriterSTL {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @throws IOException
+	 */
 	protected void writeShort(final int a) throws IOException {
 		buf[0] = (byte) (a & 0xff);
 		buf[1] = (byte) (a >> 8 & 0xff);
 		ds.write(buf, 0, 2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 */
 	protected void writeVector(final WB_Coord v) {
 		try {
 			writeFloat(v.xf());
@@ -170,35 +292,87 @@ class HET_WriterSTL {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public interface STLColorModel {
+		/**
+		 *
+		 *
+		 * @param header
+		 */
 		void formatHeader(byte[] header);
 
+		/**
+		 *
+		 *
+		 * @param rgb
+		 * @return
+		 */
 		int formatRGB(int rgb);
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		int getDefaultRGB();
 	}
 
+	/**
+	 *
+	 */
 	public static class NoColorModel implements STLColorModel {
+		/**
+		 *
+		 *
+		 * @param header
+		 */
 		@Override
 		public void formatHeader(final byte[] header) {
 		}
 
+		/**
+		 *
+		 *
+		 * @param rgb
+		 * @return
+		 */
 		@Override
 		public int formatRGB(final int rgb) {
 			return 0;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getDefaultRGB() {
 			return 0;
 		}
 	}
 
+	/**
+	 *
+	 */
 	public static class DefaultSTLColorModel implements STLColorModel {
+		/**
+		 *
+		 *
+		 * @param header
+		 */
 		@Override
 		public void formatHeader(final byte[] header) {
 		}
 
+		/**
+		 *
+		 *
+		 * @param rgb
+		 * @return
+		 */
 		@Override
 		public int formatRGB(final int rgb) {
 			int col15bits = rgb >> 3 & 0x1f;
@@ -208,33 +382,69 @@ class HET_WriterSTL {
 			return col15bits;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getDefaultRGB() {
 			return 0;
 		}
 	}
 
+	/**
+	 *
+	 */
 	public static class MaterialiseSTLColorModel implements STLColorModel {
+		/**  */
 		protected int baseColor;
+		/**  */
 		protected boolean useFacetColors;
 
+		/**
+		 *
+		 *
+		 * @param rgb
+		 */
 		public MaterialiseSTLColorModel(final int rgb) {
 			this(rgb, false);
 		}
 
+		/**
+		 *
+		 *
+		 * @param rgb
+		 * @param enableFacets
+		 */
 		public MaterialiseSTLColorModel(final int rgb, final boolean enableFacets) {
 			baseColor = rgb;
 			useFacetColors = enableFacets;
 		}
 
+		/**
+		 *
+		 *
+		 * @param enabled
+		 */
 		public void enableFacetColors(final boolean enabled) {
 			this.useFacetColors = enabled;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public boolean facetColorsEnabled() {
 			return useFacetColors;
 		}
 
+		/**
+		 *
+		 *
+		 * @param header
+		 */
 		@Override
 		public void formatHeader(final byte[] header) {
 			final char[] col = new char[] { 'C', 'O', 'L', 'O', 'R', '=' };
@@ -247,6 +457,12 @@ class HET_WriterSTL {
 			header[9] = (byte) (baseColor >>> 24);
 		}
 
+		/**
+		 *
+		 *
+		 * @param rgb
+		 * @return
+		 */
 		@Override
 		public int formatRGB(final int rgb) {
 			int col15bits = rgb >> 19 & 0x1f;
@@ -259,16 +475,31 @@ class HET_WriterSTL {
 			return col15bits;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public int getBaseColor() {
 			return baseColor;
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public int getDefaultRGB() {
 			// set bit 15 to indicate use of base color
 			return 0x8000;
 		}
 
+		/**
+		 *
+		 *
+		 * @param baseColor
+		 */
 		public void setBaseColor(final int baseColor) {
 			this.baseColor = baseColor;
 		}

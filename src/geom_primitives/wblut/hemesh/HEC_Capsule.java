@@ -1,12 +1,18 @@
 package wblut.hemesh;
 
 import wblut.geom.WB_Coord;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 
+/**
+ *
+ */
 public class HEC_Capsule extends HEC_Creator {
+	/**
+	 *
+	 */
 	public HEC_Capsule() {
 		super();
 		setCreationAxis(new WB_Vector(WB_Vector.Y()));
@@ -21,6 +27,15 @@ public class HEC_Capsule extends HEC_Creator {
 		parameters.set("phase", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @param H
+	 * @param facets
+	 * @param steps
+	 * @param capsteps
+	 */
 	public HEC_Capsule(final double R, final double H, final int facets, final int steps, final int capsteps) {
 		this();
 		parameters.set("facets", facets);
@@ -31,61 +46,130 @@ public class HEC_Capsule extends HEC_Creator {
 		parameters.set("bottomcapsteps", capsteps);
 	}
 
+	/**
+	 *
+	 *
+	 * @param R
+	 * @return
+	 */
 	public HEC_Capsule setRadius(final double R) {
 		parameters.set("radius", R);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param H
+	 * @return
+	 */
 	public HEC_Capsule setHeight(final double H) {
 		parameters.set("height", H);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param steps
+	 * @return
+	 */
 	public HEC_Capsule setSteps(final int steps) {
 		parameters.set("steps", steps);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param facets
+	 * @return
+	 */
 	public HEC_Capsule setFacets(final int facets) {
 		parameters.set("facets", facets);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param steps
+	 * @return
+	 */
 	public HEC_Capsule setCapSteps(final int steps) {
 		parameters.set("topcapsteps", steps);
 		parameters.set("bottomcapsteps", steps);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param topsteps
+	 * @param bottomsteps
+	 * @return
+	 */
 	public HEC_Capsule setCapSteps(final int topsteps, final int bottomsteps) {
 		parameters.set("topcapsteps", topsteps);
 		parameters.set("bottomcapsteps", bottomsteps);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param topcap
+	 * @param bottomcap
+	 * @return
+	 */
 	public HEC_Capsule setCap(final boolean topcap, final boolean bottomcap) {
 		parameters.set("topcap", topcap);
 		parameters.set("bottomcap", bottomcap);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @return
+	 */
 	public HEC_Capsule setPhase(final double p) {
 		parameters.set("phase", p);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param direction
+	 * @return
+	 */
 	public HEC_Capsule align(final WB_Coord direction) {
 		setAxis(direction);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param origin
+	 * @param endpoint
+	 * @return
+	 */
 	public HEC_Capsule align(final WB_Coord origin, final WB_Coord endpoint) {
-		setHeight(WB_GeometryOp3D.getDistance3D(origin, endpoint));
+		setHeight(WB_GeometryOp.getDistance3D(origin, endpoint));
 		setCenter(WB_Point.mulAddMul(0.5, origin, 0.5, endpoint));
 		setAxis(new WB_Vector(origin, endpoint));
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param segment
+	 * @return
+	 */
 	public HEC_Capsule align(final WB_Segment segment) {
 		setHeight(segment.getLength());
 		setCenter(segment.getCenter());
@@ -93,42 +177,92 @@ public class HEC_Capsule extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getRadius() {
 		return parameters.get("radius", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getHeight() {
 		return parameters.get("height", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	int getSteps() {
 		return parameters.get("steps", 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	int getFacets() {
 		return parameters.get("facets", 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	int getBottomCapSteps() {
 		return parameters.get("bottomcapsteps", 3);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	int getTopCapSteps() {
 		return parameters.get("topcapsteps", 3);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	boolean getBottomCap() {
 		return parameters.get("bottomcap", true);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	boolean getTopCap() {
 		return parameters.get("topcap", true);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getPhase() {
 		return parameters.get("phase", 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		final boolean bottomcap = getBottomCap();

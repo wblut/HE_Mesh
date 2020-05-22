@@ -9,13 +9,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Coord;
 import wblut.geom.WB_CoordList;
 import wblut.geom.WB_GeometryFactory3D;
-import wblut.geom.WB_GeometryOp3D;
-import wblut.geom.WB_IntersectionResult;
+import wblut.geom.WB_GeometryOp;
+import wblut.geom.WB_Intersection;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_List;
 import wblut.geom.WB_Plane;
@@ -24,23 +23,39 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 class HET_FaceSplitter {
+	/**  */
 	List<PolyEdge> splitPoly;
+	/**  */
 	List<PolyEdge> edgesOnLine;
+	/**  */
 	private final WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
 
+	/**
+	 *
+	 */
 	HET_FaceSplitter() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @param P
+	 * @return
+	 */
 	// Divide a face whose edges have been split before by a plane
 	List<HE_Vertex[]> splitFace(final HE_Face f, final WB_Plane P) {
 		final List<HE_Vertex[]> subfaces = new ArrayList<>();
 		final WB_Plane Q = HE_MeshOp.getPlane(f);
-		final WB_IntersectionResult intersection = WB_GeometryOp3D.getIntersection3D(P, Q);
+		final WB_Intersection intersection = WB_GeometryOp.getIntersection3D(P, Q);
 		if (!intersection.intersection) {
 			return null;
 		} else {
-			final List<HE_Vertex> coords = f.getFaceVertices();
+			final HE_VertexList coords = f.getFaceVertices();
 			processEdges(coords, P);
 			sortEdges((WB_Line) intersection.object);
 			splitPolygon();
@@ -49,13 +64,19 @@ class HET_FaceSplitter {
 		return subfaces;
 	}
 
-	void processEdges(final List<HE_Vertex> coords, final WB_Plane P) {
+	/**
+	 *
+	 *
+	 * @param coords
+	 * @param P
+	 */
+	void processEdges(final HE_VertexList coords, final WB_Plane P) {
 		splitPoly = new WB_List<>();
 		edgesOnLine = new WB_List<>();
 		for (final HE_Vertex coord : coords) {
-			final WB_Classification edgeStartSide = WB_GeometryOp3D.classifyPointToPlane3D(coord, P);
+			final WB_Classification edgeStartSide = WB_GeometryOp.classifyPointToPlane3D(coord, P);
 			splitPoly.add(new PolyEdge(coord, edgeStartSide));
-			if (WB_GeometryOp3D.classifyPointToPlane3D(coord, P) == ON) {
+			if (WB_GeometryOp.classifyPointToPlane3D(coord, P) == ON) {
 				edgesOnLine.add(splitPoly.get(splitPoly.size() - 1));
 			}
 			// all split are dealt with before calling HET_FaceSplitter
@@ -66,6 +87,11 @@ class HET_FaceSplitter {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 */
 	void sortEdges(final WB_Line L) {
 		Collections.sort(edgesOnLine, new EdgeOnLineComparator(L));
 		for (int i = 1; i < edgesOnLine.size(); i++) {
@@ -73,6 +99,9 @@ class HET_FaceSplitter {
 		}
 	}
 
+	/**
+	 *
+	 */
 	void splitPolygon() {
 		if (edgesOnLine.size() == 2) {
 			createBridge(edgesOnLine.get(0), edgesOnLine.get(1));
@@ -131,6 +160,12 @@ class HET_FaceSplitter {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param srcEdge
+	 * @param dstEdge
+	 */
 	void createBridge(final PolyEdge srcEdge, final PolyEdge dstEdge) {
 		final PolyEdge srcToDst = new PolyEdge(srcEdge.pos, srcEdge.side);
 		final PolyEdge dstToSrc = new PolyEdge(dstEdge.pos, dstEdge.side);
@@ -146,6 +181,9 @@ class HET_FaceSplitter {
 		dstEdge.prev = srcToDst;
 	}
 
+	/**
+	 *
+	 */
 	void verifyCycles() {
 		for (final PolyEdge edge : splitPoly) {
 			PolyEdge curEdge = edge;
@@ -158,6 +196,11 @@ class HET_FaceSplitter {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	List<HE_Vertex[]> collectPolygons() {
 		final List<HE_Vertex[]> resPolys = new ArrayList<>();
 		for (final PolyEdge e : splitPoly) {
@@ -181,18 +224,35 @@ class HET_FaceSplitter {
 		return resPolys;
 	}
 
+	/**
+	 *
+	 */
 	static class PolyEdge {
+		/**  */
 		HE_Vertex pos; // start position on edge
+		/**  */
 		WB_Classification side; // start position's side of split
-								// line
+		/**  */
+		// line
 		PolyEdge next; // next polygon in linked list
+		/**  */
 		PolyEdge prev; // previous polygon in linked list
+		/**  */
 		double distOnLine; // distance relative to first point
-							// on split line
+		/**  */
+		// on split line
 		boolean isSource; // for visualization
+		/**  */
 		boolean isDestination; // for visualization
+		/**  */
 		boolean visited; // for collecting split polygons
 
+		/**
+		 *
+		 *
+		 * @param pos
+		 * @param side
+		 */
 		PolyEdge(final HE_Vertex pos, final WB_Classification side) {
 			this.pos = pos;
 			this.side = side;
@@ -205,21 +265,43 @@ class HET_FaceSplitter {
 		}
 	}
 
+	/**
+	 *
+	 */
 	static class EdgeOnLineComparator implements Comparator<PolyEdge> {
+		/**  */
 		WB_Line L;
 
+		/**
+		 *
+		 *
+		 * @param L
+		 */
 		EdgeOnLineComparator(final WB_Line L) {
 			this.L = L;
 		}
 
+		/**
+		 *
+		 *
+		 * @param e0
+		 * @param e1
+		 * @return
+		 */
 		@Override
 		public int compare(final PolyEdge e0, final PolyEdge e1) {
-			final double d = WB_GeometryOp3D.getParameterOfPointOnLine3D(e0.pos, L)
-					- WB_GeometryOp3D.getParameterOfPointOnLine3D(e1.pos, L);
+			final double d = WB_GeometryOp.getParameterOfPointOnLine3D(e0.pos, L)
+					- WB_GeometryOp.getParameterOfPointOnLine3D(e1.pos, L);
 			return WB_Epsilon.isZero(d) ? 0 : d > 0 ? 1 : -1;
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	WB_Polygon polygonFromArray(final double[][] points) {
 		final List<WB_Coord> coords = new WB_CoordList();
 		for (final double[] p : points) {
@@ -232,6 +314,12 @@ class HET_FaceSplitter {
 		return new WB_Polygon(coords);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	WB_Plane planeFromArray(final double[][] points) {
 		final WB_Point p0 = new WB_Point(points[0]);
 		final WB_Point p1 = new WB_Point(points[1]);
@@ -239,6 +327,12 @@ class HET_FaceSplitter {
 		return new WB_Plane(p0, p1, p2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	WB_Line lineFromArray(final double[][] points) {
 		final WB_Point p0 = new WB_Point(points[0]);
 		final WB_Point p1 = new WB_Point(points[1]);

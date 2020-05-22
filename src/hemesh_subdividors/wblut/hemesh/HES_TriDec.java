@@ -10,11 +10,20 @@ import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HES_TriDec extends HES_Simplifier {
+	/**  */
 	private Heap heap;
+	/**  */
 	HE_DoubleMap vertexCost;
+	/**  */
 	int counter;
 
+	/**
+	 *
+	 */
 	public HES_TriDec() {
 		parameters.set("limit", Double.POSITIVE_INFINITY);
 		parameters.set("lambda", 20.0);
@@ -22,27 +31,56 @@ public class HES_TriDec extends HES_Simplifier {
 		parameters.set("goal", -1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	public HES_TriDec setLambda(final double f) {
 		parameters.set("lambda", f);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	public HES_TriDec setLimit(final double f) {
 		parameters.set("limit", f);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HES_TriDec setGoal(final int r) {
 		parameters.set("goal", r);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @return
+	 */
 	public HES_TriDec setFraction(final double f) {
 		parameters.set("fraction", f);
 		parameters.set("goal", -1);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 */
 	public static void getImportance(final HE_Mesh mesh) {
 		mesh.addDoubleAttribute("importance", 0.0, false);
 		final HE_VertexIterator vItr = mesh.vItr();
@@ -54,7 +92,7 @@ public class HES_TriDec extends HES_Simplifier {
 		int i = 0;
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			vvi = visualImportance(v);
+			vvi = visualImportance(v, mesh);
 			values[i++] = vvi;
 			if (vvi < min) {
 				min = vvi;
@@ -72,22 +110,48 @@ public class HES_TriDec extends HES_Simplifier {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getLambda() {
 		return parameters.get("lambda", 20.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getFraction() {
 		return parameters.get("fraction", -1.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double getLimit() {
 		return parameters.get("limit", Double.POSITIVE_INFINITY);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	int getGoal() {
 		return parameters.get("goal", -1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		tracker.setStartStatus(this, "Starting HES_TriDec.");
@@ -113,7 +177,7 @@ public class HES_TriDec extends HES_Simplifier {
 		buildHeap(mesh, null, lambda);
 		HE_Vertex v;
 		Entry entry;
-		List<HE_Vertex> vertices;
+		HE_VertexList vertices;
 		final int count = mesh.getNumberOfVertices() - goal;
 		final WB_ProgressCounter pcounter = new WB_ProgressCounter(count, 10);
 		tracker.setCounterStatus(this, "Removing vertices from heap (" + heap.size() + ").", pcounter);
@@ -144,6 +208,12 @@ public class HES_TriDec extends HES_Simplifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		tracker.setStartStatus(this, "Starting HES_TriDec.");
@@ -172,7 +242,7 @@ public class HES_TriDec extends HES_Simplifier {
 		buildHeap(mesh, selection, lambda);
 		HE_Vertex v;
 		Entry entry;
-		List<HE_Vertex> vertices;
+		HE_VertexList vertices;
 		final int count = mesh.getNumberOfVertices() - goal;
 		final WB_ProgressCounter pcounter = new WB_ProgressCounter(count, 10);
 		tracker.setCounterStatus(this, "Removing vertices.", pcounter);
@@ -204,6 +274,13 @@ public class HES_TriDec extends HES_Simplifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param selection
+	 * @param lambda
+	 */
 	private void buildHeap(final HE_Mesh mesh, final HE_Selection selection, final double lambda) {
 		final HE_HalfedgeStructure sel = (selection == null) ? mesh : selection;
 		final WB_ProgressCounter pcounter = new WB_ProgressCounter(sel.getNumberOfVertices(), 10);
@@ -215,13 +292,13 @@ public class HES_TriDec extends HES_Simplifier {
 		double min;
 		double c;
 		HE_Halfedge minhe;
-		List<HE_Halfedge> vstar;
+		HE_HalfedgeList vstar;
 		HE_Vertex v;
 		double vvi;
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			v.setInternalLabel(counter);
-			vvi = visualImportance(v);
+			vvi = visualImportance(v, mesh);
 			if (vvi < Double.POSITIVE_INFINITY) {
 				vstar = v.getHalfedgeStar();
 				minhe = vstar.get(0);
@@ -232,7 +309,7 @@ public class HES_TriDec extends HES_Simplifier {
 					// boundary inward
 					for (final HE_Halfedge element : vstar) {
 						if (element.isInnerBoundary()) {
-							c = halfedgeCollapseCost(element, lambda);
+							c = halfedgeCollapseCost(element, lambda, mesh);
 							if (c < min) {
 								min = c;
 								minhe = element;
@@ -241,7 +318,7 @@ public class HES_TriDec extends HES_Simplifier {
 					}
 				} else {
 					for (final HE_Halfedge element : vstar) {
-						c = halfedgeCollapseCost(element, lambda);
+						c = halfedgeCollapseCost(element, lambda, mesh);
 						if (!Double.isNaN(c) && c < min) {
 							min = c;
 							minhe = element;
@@ -258,16 +335,24 @@ public class HES_TriDec extends HES_Simplifier {
 		}
 	}
 
-	private void updateHeap(final List<HE_Vertex> vertices, final HE_Mesh mesh, final HE_Selection selection,
+	/**
+	 *
+	 *
+	 * @param vertices
+	 * @param mesh
+	 * @param selection
+	 * @param lambda
+	 */
+	private void updateHeap(final HE_VertexList vertices, final HE_Mesh mesh, final HE_Selection selection,
 			final double lambda) {
 		double min;
 		double c;
 		HE_Halfedge minhe;
-		List<HE_Halfedge> vstar;
+		HE_HalfedgeList vstar;
 		double vvi;
 		for (final HE_Vertex v : vertices) {
 			if (selection == null || selection.contains(v)) {
-				vvi = visualImportance(v);
+				vvi = visualImportance(v, mesh);
 				v.setInternalLabel(counter);
 				vertexCost.remove(v.getKey());
 				vstar = v.getHalfedgeStar();
@@ -279,7 +364,7 @@ public class HES_TriDec extends HES_Simplifier {
 					// boundary inward
 					for (final HE_Halfedge element : vstar) {
 						if (element.isInnerBoundary()) {
-							c = halfedgeCollapseCost(element, lambda);
+							c = halfedgeCollapseCost(element, lambda, mesh);
 							if (c < min) {
 								min = c;
 								minhe = element;
@@ -288,7 +373,7 @@ public class HES_TriDec extends HES_Simplifier {
 					}
 				} else {
 					for (final HE_Halfedge element : vstar) {
-						c = halfedgeCollapseCost(element, lambda);
+						c = halfedgeCollapseCost(element, lambda, mesh);
 						if (!Double.isNaN(c) && c < min) {
 							min = c;
 							minhe = element;
@@ -304,14 +389,20 @@ public class HES_TriDec extends HES_Simplifier {
 		}
 	}
 
-	private static double visualImportance(final HE_Vertex v) {
-		final List<HE_Face> faces = v.getFaceStar();
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
+	private static double visualImportance(final HE_Vertex v, final HE_Mesh mesh) {
+		final HE_FaceList faces = v.getFaceStar();
 		final WB_Vector nom = new WB_Vector();
 		double denom = 0.0;
 		double A;
 		for (final HE_Face f : faces) {
 			A = HE_MeshOp.getFaceArea(f);
-			nom.addMulSelf(A, HE_MeshOp.getFaceNormal(f));
+			nom.addMulSelf(A, mesh.getFaceNormal(f));
 			denom += A;
 		}
 		if (WB_Epsilon.isZero(denom)) {
@@ -327,11 +418,18 @@ public class HES_TriDec extends HES_Simplifier {
 		return result;
 	}
 
-	private double halfedgeCollapseCost(final HE_Halfedge he, final double lambda) {
+	/**
+	 *
+	 *
+	 * @param he
+	 * @param lambda
+	 * @return
+	 */
+	private double halfedgeCollapseCost(final HE_Halfedge he, final double lambda, final HE_Mesh mesh) {
 		final HE_Face f = he.getFace();
 		final HE_Face fp = he.getPair().getFace();
-		final List<HE_Vertex> vineighbors = he.getVertex().getNeighborVertices();
-		final List<HE_Vertex> vfneighbors = he.getEndVertex().getNeighborVertices();
+		final HE_VertexList vineighbors = he.getVertex().getNeighborVertices();
+		final HE_VertexList vfneighbors = he.getEndVertex().getNeighborVertices();
 		int shared = 0;
 		final int max = f == null || fp == null ? 1 : 2;
 		for (final HE_Vertex vi : vineighbors) {
@@ -374,7 +472,7 @@ public class HES_TriDec extends HES_Simplifier {
 							cost += 0.5 * (T.getArea() + HE_MeshOp.getFaceArea(fl));
 						} else {
 							cost += 0.5 * (T.getArea() + HE_MeshOp.getFaceArea(fl))
-									* (1.0 - WB_Vector.dot(HE_MeshOp.getFaceNormal(fl), T.getPlane().getNormal()));
+									* (1.0 - WB_Vector.dot(mesh.getFaceNormal(fl), T.getPlane().getNormal()));
 						}
 					}
 				} else {
@@ -386,21 +484,40 @@ public class HES_TriDec extends HES_Simplifier {
 		return cost;
 	}
 
+	/**
+	 *
+	 */
 	public class Heap {
+		/**  */
 		private final List<Entry> heap;
+		/**  */
 		private final List<Double> keys;
 
+		/**
+		 *
+		 */
 		public Heap() {
 			heap = new WB_List<>();
 			keys = new WB_List<>();
 		}
 
+		/**
+		 *
+		 *
+		 * @param key
+		 * @param obj
+		 */
 		public void push(final Double key, final HE_Vertex obj) {
 			heap.add(new Entry(obj, obj.getInternalLabel()));
 			keys.add(key);
 			pushUp(heap.size() - 1);
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public Entry pop() {
 			if (heap.size() > 0) {
 				swap(0, heap.size() - 1);
@@ -413,38 +530,90 @@ public class HES_TriDec extends HES_Simplifier {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public Entry getFirst() {
 			return heap.get(0);
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public double getFirstKey() {
 			return keys.get(0);
 		}
 
+		/**
+		 *
+		 *
+		 * @param index
+		 * @return
+		 */
 		public Entry get(final int index) {
 			return heap.get(index);
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		public int size() {
 			return heap.size();
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @return
+		 */
 		protected int parent(final int i) {
 			return (i - 1) / 2;
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @return
+		 */
 		protected int left(final int i) {
 			return 2 * i + 1;
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @return
+		 */
 		protected int right(final int i) {
 			return 2 * i + 2;
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @param j
+		 * @return
+		 */
 		protected boolean hasPriority(final int i, final int j) {
 			return keys.get(i) <= keys.get(j);
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 * @param j
+		 */
 		protected void swap(final int i, final int j) {
 			final Entry tmp = heap.get(i);
 			heap.set(i, heap.get(j));
@@ -454,6 +623,11 @@ public class HES_TriDec extends HES_Simplifier {
 			keys.set(j, tmpv);
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 */
 		public void pushDown(final int i) {
 			final int left = left(i);
 			final int right = right(i);
@@ -470,6 +644,11 @@ public class HES_TriDec extends HES_Simplifier {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param i
+		 */
 		public void pushUp(int i) {
 			while (i > 0 && !hasPriority(parent(i), i)) {
 				swap(parent(i), i);
@@ -477,6 +656,11 @@ public class HES_TriDec extends HES_Simplifier {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @return
+		 */
 		@Override
 		public String toString() {
 			final StringBuffer s = new StringBuffer("Heap:\n");
@@ -495,10 +679,21 @@ public class HES_TriDec extends HES_Simplifier {
 		}
 	}
 
+	/**
+	 *
+	 */
 	class Entry {
+		/**  */
 		HE_Vertex v;
+		/**  */
 		int version;
 
+		/**
+		 *
+		 *
+		 * @param v
+		 * @param i
+		 */
 		Entry(final HE_Vertex v, final int i) {
 			this.v = v;
 			version = i;

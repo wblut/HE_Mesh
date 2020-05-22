@@ -15,39 +15,66 @@ import processing.core.PApplet;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_ScalarParameter;
 
+/**
+ *
+ */
 public class WB_IsoSurfaceRaw3D {
+	/**  */
 	final static int ONVERTEX = 1;
+	/**  */
 	final static int ONEDGE = 2;
+	/**  */
 	final static int NEGATIVE = 4;
+	/**  */
 	final static int EQUAL = 8;
+	/**  */
 	final static int POSITIVE = 16;
+	/**  */
 	final static WB_Point[] gridvertices = new WB_Point[] { new WB_Point(0, 0, 0), new WB_Point(1, 0, 0),
 			new WB_Point(0, 1, 0), new WB_Point(1, 1, 0), new WB_Point(0, 0, 1), new WB_Point(1, 0, 1),
 			new WB_Point(0, 1, 1), new WB_Point(1, 1, 1), };
+	/**  */
 	// EDGES: 2 vertices per edge
 	final static int[][] edges = { { 0, 1 }, { 1, 3 }, { 2, 3 }, { 0, 4 }, { 1, 5 }, { 2, 6 }, { 3, 7 }, { 4, 5 },
 			{ 4, 6 }, { 5, 7 }, { 6, 7 } };
 	// ISOVERTICES: 20
 	// type=ONVERTEX iso vertex on vertex, index in vertex list
+	/**  */
 	// type=ONEDGE iso vertex on edge, index in edge list
 	final static int[][] isovertices = new int[][] { { ONVERTEX, 0 }, { ONVERTEX, 1 }, { ONVERTEX, 2 }, { ONVERTEX, 3 },
 			{ ONVERTEX, 4 }, { ONVERTEX, 5 }, { ONVERTEX, 6 }, { ONVERTEX, 7 }, { ONEDGE, 0 }, { ONEDGE, 1 },
 			{ ONEDGE, 2 }, { ONEDGE, 3 }, { ONEDGE, 4 }, { ONEDGE, 5 }, { ONEDGE, 6 }, { ONEDGE, 7 }, { ONEDGE, 8 },
 			{ ONEDGE, 9 }, { ONEDGE, 10 }, { ONEDGE, 11 } };
+	/**  */
 	private final int[][] entries;
+	/**  */
 	private WB_IsoValues3D values;
+	/**  */
 	private int resx, resy, resz;
+	/**  */
 	private double cx, cy, cz;
+	/**  */
 	private double dx, dy, dz;
+	/**  */
 	private double isolevel;
+	/**  */
 	private double boundary;
+	/**  */
 	private WB_IndexedObjectMap<WB_Point> xedges;
+	/**  */
 	private WB_IndexedObjectMap<WB_Point> yedges;
+	/**  */
 	private WB_IndexedObjectMap<WB_Point> zedges;
+	/**  */
 	private WB_IndexedObjectMap<WB_Point> vertices;
+	/**  */
 	private boolean invert;
+	/**  */
 	private WB_CoordList triangles;
 
+	/**
+	 *
+	 */
 	public WB_IsoSurfaceRaw3D() {
 		String line = "";
 		final String cvsSplitBy = " ";
@@ -87,6 +114,14 @@ public class WB_IsoSurfaceRaw3D {
 		boundary = Double.NaN;
 	}
 
+	/**
+	 *
+	 *
+	 * @param resx
+	 * @param resy
+	 * @param resz
+	 * @return
+	 */
 	public WB_IsoSurfaceRaw3D setResolution(final int resx, final int resy, final int resz) {
 		this.resx = resx;
 		this.resy = resy;
@@ -94,6 +129,14 @@ public class WB_IsoSurfaceRaw3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 * @return
+	 */
 	public WB_IsoSurfaceRaw3D setSize(final double dx, final double dy, final double dz) {
 		this.dx = dx;
 		this.dy = dy;
@@ -101,6 +144,12 @@ public class WB_IsoSurfaceRaw3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public WB_IsoSurfaceRaw3D setValues(final double[][][] values) {
 		this.values = new WB_IsoValues3D.GridRaw3D(values);
 		resx = values.length - 1;
@@ -109,6 +158,12 @@ public class WB_IsoSurfaceRaw3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public WB_IsoSurfaceRaw3D setValues(final float[][][] values) {
 		this.values = new WB_IsoValues3D.Grid3D(values);
 		resx = values.length - 1;
@@ -117,6 +172,21 @@ public class WB_IsoSurfaceRaw3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param function
+	 * @param xi
+	 * @param yi
+	 * @param zi
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 * @param sizeI
+	 * @param sizeJ
+	 * @param sizeK
+	 * @return
+	 */
 	public WB_IsoSurfaceRaw3D setValues(final WB_ScalarParameter function, final double xi, final double yi,
 			final double zi, final double dx, final double dy, final double dz, final int sizeI, final int sizeJ,
 			final int sizeK) {
@@ -127,6 +197,12 @@ public class WB_IsoSurfaceRaw3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public WB_IsoSurfaceRaw3D setValues(final WB_HashGridDouble3D values) {
 		this.values = new WB_IsoValues3D.HashGrid3D(values);
 		resx = values.getSizeI() - 1;
@@ -135,6 +211,16 @@ public class WB_IsoSurfaceRaw3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param images
+	 * @param home
+	 * @param sizeI
+	 * @param sizeJ
+	 * @param sizeK
+	 * @return
+	 */
 	public WB_IsoSurfaceRaw3D setValues(final String[] images, final PApplet home, final int sizeI, final int sizeJ,
 			final int sizeK) {
 		this.values = new WB_IsoValues3D.ImageStack3D(images, home, sizeI, sizeJ, sizeK);
@@ -144,6 +230,17 @@ public class WB_IsoSurfaceRaw3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param images
+	 * @param home
+	 * @param sizeI
+	 * @param sizeJ
+	 * @param sizeK
+	 * @param mode
+	 * @return
+	 */
 	public WB_IsoSurfaceRaw3D setValues(final String[] images, final PApplet home, final int sizeI, final int sizeJ,
 			final int sizeK, final WB_IsoValues3D.Mode mode) {
 		this.values = new WB_IsoValues3D.ImageStack3D(images, home, sizeI, sizeJ, sizeK, mode);
@@ -153,6 +250,12 @@ public class WB_IsoSurfaceRaw3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param values
+	 * @return
+	 */
 	public WB_IsoSurfaceRaw3D setValues(final WB_IsoValues3D values) {
 		this.values = values;
 		resx = values.getSizeI() - 1;
@@ -161,26 +264,55 @@ public class WB_IsoSurfaceRaw3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public WB_IsoSurfaceRaw3D setIsolevel(final double v) {
 		isolevel = v;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 * @return
+	 */
 	public WB_IsoSurfaceRaw3D setBoundary(final double v) {
 		boundary = v;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_IsoSurfaceRaw3D clearBoundary() {
 		boundary = Double.NaN;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param invert
+	 * @return
+	 */
 	public WB_IsoSurfaceRaw3D setInvert(final boolean invert) {
 		this.invert = invert;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param c
+	 * @return
+	 */
 	public WB_IsoSurfaceRaw3D setCenter(final WB_Coord c) {
 		cx = c.xd();
 		cy = c.yd();
@@ -188,6 +320,11 @@ public class WB_IsoSurfaceRaw3D {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public float[] getTriangles() {
 		vertices = new WB_IndexedObjectMap<>();
 		xedges = new WB_IndexedObjectMap<>();
@@ -205,6 +342,11 @@ public class WB_IsoSurfaceRaw3D {
 		return output;
 	}
 
+	/**
+	 *
+	 *
+	 * @param file
+	 */
 	static void createDirectories(final File file) {
 		try {
 			final String parentName = file.getParent();
@@ -219,6 +361,13 @@ public class WB_IsoSurfaceRaw3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
 	static OutputStream createOutputStream(final File file) throws IOException {
 		if (file == null) {
 			throw new IllegalArgumentException("file can't be null");
@@ -231,6 +380,9 @@ public class WB_IsoSurfaceRaw3D {
 		return stream;
 	}
 
+	/**
+	 *
+	 */
 	private void polygoniseRaw() {
 		triangles = new WB_CoordList();
 		final WB_Point offset = new WB_Point(cx - 0.5 * resx * dx, cy - 0.5 * resy * dy, cz - 0.5 * resz * dz);
@@ -253,6 +405,16 @@ public class WB_IsoSurfaceRaw3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param cubeindex
+	 * @param offset
+	 * @return
+	 */
 	private List<WB_Coord> getPolygonsRaw(final int i, final int j, final int k, final int cubeindex,
 			final WB_Point offset) {
 		final int[] indices = entries[cubeindex];
@@ -269,6 +431,14 @@ public class WB_IsoSurfaceRaw3D {
 		return triangles;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	private int classifyCell(final int i, final int j, final int k) {
 		if (Double.isNaN(boundary)) {
 			if (i < 0 || j < 0 || k < 0 || i >= resx || j >= resy || k >= resz) {
@@ -377,6 +547,16 @@ public class WB_IsoSurfaceRaw3D {
 		return cubeindex;
 	}
 
+	/**
+	 *
+	 *
+	 * @param isopointindex
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @return
+	 */
 	private WB_Point getIsoVertex(final int isopointindex, final int i, final int j, final int k,
 			final WB_Point offset) {
 		if (isovertices[isopointindex][0] == ONVERTEX) {
@@ -433,6 +613,15 @@ public class WB_IsoSurfaceRaw3D {
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @return
+	 */
 	private WB_Point vertex(final int i, final int j, final int k, final WB_Point offset) {
 		WB_Point vertex = vertices.get(index(i, j, k));
 		if (vertex != null) {
@@ -444,6 +633,15 @@ public class WB_IsoSurfaceRaw3D {
 		return vertex;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @return
+	 */
 	private WB_Point xedge(final int i, final int j, final int k, final WB_Point offset) {
 		final WB_Point p0 = new WB_Point(i * dx, j * dy, k * dz);
 		final WB_Point p1 = new WB_Point(i * dx + dx, j * dy, k * dz);
@@ -459,6 +657,15 @@ public class WB_IsoSurfaceRaw3D {
 		return xedge;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @return
+	 */
 	private WB_Point yedge(final int i, final int j, final int k, final WB_Point offset) {
 		WB_Point yedge = yedges.get(index(i, j, k));
 		if (yedge != null) {
@@ -474,6 +681,15 @@ public class WB_IsoSurfaceRaw3D {
 		return yedge;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param offset
+	 * @return
+	 */
 	private WB_Point zedge(final int i, final int j, final int k, final WB_Point offset) {
 		WB_Point zedge = zedges.get(index(i, j, k));
 		if (zedge != null) {
@@ -489,6 +705,16 @@ public class WB_IsoSurfaceRaw3D {
 		return zedge;
 	}
 
+	/**
+	 *
+	 *
+	 * @param isolevel
+	 * @param p1
+	 * @param p2
+	 * @param valp1
+	 * @param valp2
+	 * @return
+	 */
 	private WB_Point interp(final double isolevel, final WB_Point p1, final WB_Point p2, final double valp1,
 			final double valp2) {
 		double mu;
@@ -506,10 +732,26 @@ public class WB_IsoSurfaceRaw3D {
 				p1.zd() + mu * (p2.zd() - p1.zd()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	private int index(final int i, final int j, final int k) {
 		return i + 1 + (resx + 2) * (j + 1) + (resx + 2) * (resy + 2) * (k + 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @return
+	 */
 	private double value(final int i, final int j, final int k) {
 		if (Double.isNaN(boundary)) { // if no boundary is set i,j,k should
 			// always be between o and resx,rey,resz

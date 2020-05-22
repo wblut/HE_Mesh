@@ -1,12 +1,23 @@
 package wblut.hemesh;
 
+/**
+ *
+ */
 public class HEC_SeaShell extends HEC_Creator {
+	/**  */
 	private double D, A, alpha, beta, mu, omega, phi, a, b, L, P, W1, W2, N, sc;
+	/**  */
 	private double muf, omegaf, phif, Lf, Pf, W1f, W2f;
+	/**  */
 	private double smin, smax, thetamin, thetamax;
+	/**  */
 	private double sdiv, thetadiv;
+	/**  */
 	private int ssteps, thetasteps;
 
+	/**
+	 *
+	 */
 	public HEC_SeaShell() {
 		super();
 		setD(1);
@@ -28,6 +39,15 @@ public class HEC_SeaShell extends HEC_Creator {
 		setDivisions(10, 10);
 	}
 
+	/**
+	 *
+	 *
+	 * @param sm
+	 * @param sM
+	 * @param thetam
+	 * @param thetaM
+	 * @return
+	 */
 	public HEC_SeaShell setRange(final double sm, final double sM, final double thetam, final double thetaM) {
 		smin = Math.min(sm, sM) / 180.0 * Math.PI;
 		smax = Math.max(sm, sM) / 180.0 * Math.PI;
@@ -36,77 +56,168 @@ public class HEC_SeaShell extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param sdiv
+	 * @param thetadiv
+	 * @return
+	 */
 	public HEC_SeaShell setDivisions(final double sdiv, final double thetadiv) {
 		this.sdiv = sdiv / 180.0 * Math.PI;
 		this.thetadiv = thetadiv / 180.0 * Math.PI;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param D
+	 * @return
+	 */
 	public HEC_SeaShell setD(final double D) {
 		this.D = D;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param A
+	 * @return
+	 */
 	public HEC_SeaShell setA(final double A) {
 		this.A = A;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param alpha
+	 * @return
+	 */
 	public HEC_SeaShell setAlpha(final double alpha) {
 		this.alpha = alpha / 180.0 * Math.PI;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param beta
+	 * @return
+	 */
 	public HEC_SeaShell setBeta(final double beta) {
 		this.beta = beta / 180.0 * Math.PI;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mu
+	 * @return
+	 */
 	public HEC_SeaShell setMu(final double mu) {
 		this.mu = mu / 180.0 * Math.PI;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param omega
+	 * @return
+	 */
 	public HEC_SeaShell setOmega(final double omega) {
 		this.omega = omega / 180.0 * Math.PI;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param phi
+	 * @return
+	 */
 	public HEC_SeaShell setPhi(final double phi) {
 		this.phi = phi / 180.0 * Math.PI;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param muf
+	 * @return
+	 */
 	public HEC_SeaShell setMuFactor(final double muf) {
 		this.muf = muf / 360.0;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param omegaf
+	 * @return
+	 */
 	public HEC_SeaShell setOmegaFactor(final double omegaf) {
 		this.omegaf = omegaf / 360.0;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param phif
+	 * @return
+	 */
 	public HEC_SeaShell setPhiFactor(final double phif) {
 		this.phif = phif / 360.0;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @return
+	 */
 	public HEC_SeaShell seta(final double a) {
 		this.a = a;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEC_SeaShell setb(final double b) {
 		this.b = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 * @return
+	 */
 	public HEC_SeaShell setL(final double L) {
 		this.L = L;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param P
+	 * @return
+	 */
 	public HEC_SeaShell setP(final double P) {
 		this.P = P / 180.0 * Math.PI;
 		while (this.P > Math.PI) {
@@ -118,41 +229,88 @@ public class HEC_SeaShell extends HEC_Creator {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param W1
+	 * @return
+	 */
 	public HEC_SeaShell setW1(final double W1) {
 		this.W1 = W1 / 180.0 * Math.PI;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param W2
+	 * @return
+	 */
 	public HEC_SeaShell setW2(final double W2) {
 		this.W2 = W2 / 180.0 * Math.PI;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Lf
+	 * @return
+	 */
 	public HEC_SeaShell setLFactor(final double Lf) {
 		this.Lf = 0.5 * Lf / Math.PI;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param Pf
+	 * @return
+	 */
 	public HEC_SeaShell setPFactor(final double Pf) {
 		this.Pf = Pf / 360.0;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param W1f
+	 * @return
+	 */
 	public HEC_SeaShell setW1Factor(final double W1f) {
 		this.W1f = W1f / 360.0;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param W2f
+	 * @return
+	 */
 	public HEC_SeaShell setW2Factor(final double W2f) {
 		this.W2f = W2f / 360.0;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param N
+	 * @return
+	 */
 	public HEC_SeaShell setN(final double N) {
 		this.N = N;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		sc = getScale();
@@ -200,6 +358,12 @@ public class HEC_SeaShell extends HEC_Creator {
 		return fl.createBase();
 	}
 
+	/**
+	 *
+	 *
+	 * @param theta
+	 * @return
+	 */
 	private double l(final double theta) {
 		final double tmp = N * theta / (2.0 * Math.PI);
 		double result = 2 * Math.PI / N * (tmp - (int) tmp);
@@ -212,6 +376,14 @@ public class HEC_SeaShell extends HEC_Creator {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param s
+	 * @param theta
+	 * @param lt
+	 * @return
+	 */
 	private double k(final double s, final double theta, final double lt) {
 		if (W1 + W1f * theta == 0 || W2 + W2f * theta == 0 || N == 0) {
 			return 0;
@@ -228,6 +400,14 @@ public class HEC_SeaShell extends HEC_Creator {
 		return (L + Lf * theta) * Math.exp(-tmp1 * tmp1 - tmp2 * tmp2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param s
+	 * @param theta
+	 * @param lt
+	 * @return
+	 */
 	private double H(final double s, final double theta, final double lt) {
 		final double tmp1 = Math.cos(s) / a;
 		final double tmp2 = Math.sin(s) / b;

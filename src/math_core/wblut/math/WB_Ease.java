@@ -1,39 +1,112 @@
 package wblut.math;
 
+/**
+ *
+ */
 public abstract class WB_Ease {
+	/**  */
 	private static final double pmn = 1.70158; // Penner’s Magic Number.
 
+	/**
+	 *
+	 */
 	public enum EaseType {
-		IN, OUT, INOUT
+		/**  */
+		IN,
+		/**  */
+		OUT,
+		/**  */
+		INOUT
 	}// 0= in, 1=out, 2=inout
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @param parameters
+	 * @return
+	 */
 	public abstract double easeIn(double t, double... parameters);
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @param parameters
+	 * @return
+	 */
 	public abstract double easeOut(double t, double... parameters);
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @param parameters
+	 * @return
+	 */
 	public abstract double easeInOut(double t, double... parameters);
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	public abstract double easeIn(double t);
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	public abstract double easeOut(double t);
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	public abstract double easeInOut(double t);
 
+	/**  */
 	public static WB_Ease linear = new EaseLinear();
+	/**  */
 	public static WB_Ease quad = new EaseQuad();
+	/**  */
 	public static WB_Ease cubic = new EaseCubic();
+	/**  */
 	public static WB_Ease quart = new EaseQuart();
+	/**  */
 	public static WB_Ease quint = new EaseQuint();
+	/**  */
 	public static WB_Ease sine = new EaseSine();
+	/**  */
 	public static WB_Ease expo = new EaseExpo();
+	/**  */
 	public static WB_Ease circ = new EaseCirc();
+	/**  */
 	public static WB_Ease back = new EaseBack();
+	/**  */
 	public static WB_Ease bounce = new EaseBounce();
+	/**  */
 	public static WB_Ease elastic = new EaseElastic();
 
+	/**
+	 *
+	 */
 	private WB_Ease() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param type
+	 * @param t
+	 * @param params
+	 * @return
+	 */
 	public double ease(final EaseType type, final double t, final double... params) {
 		switch (type) {
 		case IN:
@@ -45,6 +118,13 @@ public abstract class WB_Ease {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param type
+	 * @param t
+	 * @return
+	 */
 	public double ease(final EaseType type, final double t) {
 		switch (type) {
 		case IN:
@@ -56,102 +136,235 @@ public abstract class WB_Ease {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public static WB_Ease getLinear() {
 		return new EaseLinear();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public static WB_Ease getQuad() {
 		return new EaseQuad();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public static WB_Ease getCubic() {
 		return new EaseCubic();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public static WB_Ease getQuart() {
 		return new EaseQuart();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public static WB_Ease getQuint() {
 		return new EaseQuint();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public static WB_Ease getSine() {
 		return new EaseSine();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public static WB_Ease getExpo() {
 		return new EaseExpo();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public static WB_Ease getCirc() {
 		return new EaseCirc();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public static WB_Ease getBack() {
 		return new EaseBack();
 	}
 
+	/**
+	 *
+	 *
+	 * @param s
+	 * @return
+	 */
 	public static WB_Ease getBack(final double s) {
 		return new EaseBack(s);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public static WB_Ease getBounce() {
 		return new EaseBounce();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public static WB_Ease getElastic() {
 		return new EaseElastic();
 	}
 
+	/**
+	 *
+	 *
+	 * @param a
+	 * @param p
+	 * @return
+	 */
 	public static WB_Ease getElastic(final double a, final double p) {
 		return new EaseElastic(a, p);
 	}
 
+	/**
+	 *
+	 */
 	static class EaseLinear extends WB_Ease {
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeIn(final double t, final double... params) {
 			return params[1] * t / params[2] + params[20];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeOut(final double t, final double... params) {
 			return params[1] * t / params[2] + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeInOut(final double t, final double... params) {
 			return params[1] * t / params[2] + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeIn(final double t) {
 			return t;
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeOut(final double t) {
 			return t;
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeInOut(final double t) {
 			return t;
 		}
 	}
 
+	/**
+	 *
+	 */
 	static class EaseQuad extends WB_Ease {
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeIn(double t, final double... params) {
 			t /= params[2];
 			return params[1] * t * t + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeIn(final double t) {
 			return t * t;
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		// quadratic easing out - decelerating to zero velocity
 		@Override
 		public double easeOut(double t, final double... params) {
@@ -159,12 +372,25 @@ public abstract class WB_Ease {
 			return -params[1] * t * (t - 2) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeOut(final double t) {
 			return -t * (t - 2);
 		}
 
 		// quadratic easing in/out - acceleration until halfway, then
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		// deceleration
 		@Override
 		public double easeInOut(double t, final double... params) {
@@ -176,6 +402,12 @@ public abstract class WB_Ease {
 			return -params[1] * 0.5 * (t * (t - 2) - 1.0) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeInOut(double t) {
 			t /= 0.5;
@@ -187,18 +419,41 @@ public abstract class WB_Ease {
 		}
 	}
 
+	/**
+	 *
+	 */
 	static class EaseCubic extends WB_Ease {
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeIn(double t, final double... params) {
 			t /= params[2];
 			return params[1] * t * t * t + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeIn(final double t) {
 			return t * t * t;
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		// cubic easing3 out - decelerating to zero velocity
 		@Override
 		public double easeOut(double t, final double... params) {
@@ -207,12 +462,25 @@ public abstract class WB_Ease {
 			return params[1] * (t * t * t + 1.0) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeOut(double t) {
 			t--;
 			return t * t * t + 1.0;
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		// cubic easing in/out - acceleration until halfway, then deceleration
 		@Override
 		public double easeInOut(double t, final double... params) {
@@ -224,6 +492,12 @@ public abstract class WB_Ease {
 			return params[1] * 0.5 * (t * t * t + 2) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeInOut(double t) {
 			t /= 0.5;
@@ -235,18 +509,41 @@ public abstract class WB_Ease {
 		}
 	}
 
+	/**
+	 *
+	 */
 	static class EaseQuart extends WB_Ease {
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeIn(double t, final double... params) {
 			t /= params[2];
 			return params[1] * t * t * t * t + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeIn(final double t) {
 			return t * t * t * t;
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeOut(double t, final double... params) {
 			t /= params[2];
@@ -254,12 +551,25 @@ public abstract class WB_Ease {
 			return -params[1] * (t * t * t * t - 1.0) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeOut(double t) {
 			t--;
 			return -(t * t * t * t - 1.0);
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeInOut(double t, final double... params) {
 			t /= 0.5 * params[2];
@@ -270,6 +580,12 @@ public abstract class WB_Ease {
 			return -params[1] * 0.5 * (t * t * t * t - 2) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeInOut(double t) {
 			t /= 0.5;
@@ -281,18 +597,41 @@ public abstract class WB_Ease {
 		}
 	}
 
+	/**
+	 *
+	 */
 	static class EaseQuint extends WB_Ease {
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeIn(double t, final double... params) {
 			t /= params[2];
 			return params[1] * t * t * t * t * t + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeIn(final double t) {
 			return t * t * t * t * t;
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeOut(double t, final double... params) {
 			t /= params[2];
@@ -300,12 +639,25 @@ public abstract class WB_Ease {
 			return params[1] * (t * t * t * t * t + 1.0) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeOut(double t) {
 			t--;
 			return t * t * t * t * t + 1.0;
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeInOut(double t, final double... params) {
 			t /= 0.5 * params[2];
@@ -316,6 +668,12 @@ public abstract class WB_Ease {
 			return params[1] * 0.5 * (t * t * t * t * t + 2) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeInOut(double t) {
 			t /= 0.5;
@@ -327,59 +685,137 @@ public abstract class WB_Ease {
 		}
 	}
 
+	/**
+	 *
+	 */
 	static class EaseSine extends WB_Ease {
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeIn(final double t, final double... params) {
 			return -params[1] * Math.cos(t / params[2] * (Math.PI * 0.5)) + params[1] + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeIn(final double t) {
 			return -Math.cos(t * (Math.PI * 0.5)) + 1.0;
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeOut(final double t, final double... params) {
 			return params[1] * Math.sin(t / params[2] * (Math.PI * 0.5)) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeOut(final double t) {
 			return Math.sin(t * (Math.PI * 0.5));
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeInOut(final double t, final double... params) {
 			return -params[1] * 0.5 * (Math.cos(Math.PI * t / params[2]) - 1.0) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeInOut(final double t) {
 			return -0.5 * (Math.cos(Math.PI * t) - 1.0);
 		}
 	}
 
+	/**
+	 *
+	 */
 	static class EaseExpo extends WB_Ease {
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeIn(final double t, final double... params) {
 			return params[1] * Math.pow(2, 10 * (t / params[2] - 1.0)) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeIn(final double t) {
 			return Math.pow(2, 10 * (t - 1.0));
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeOut(final double t, final double... params) {
 			return params[1] * (-Math.pow(2, -10 * t / params[2]) + 1.0) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeOut(final double t) {
 			return -Math.pow(2, -10 * t) + 1.0;
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeInOut(double t, final double... params) {
 			t /= 0.5 * params[2];
@@ -390,6 +826,12 @@ public abstract class WB_Ease {
 			return params[1] * 0.5 * (-Math.pow(2, -10 * t) + 2) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeInOut(double t) {
 			t /= 0.5;
@@ -401,18 +843,41 @@ public abstract class WB_Ease {
 		}
 	}
 
+	/**
+	 *
+	 */
 	static class EaseCirc extends WB_Ease {
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeIn(double t, final double... params) {
 			t /= params[2];
 			return -params[1] * (Math.sqrt(1.0 - t * t) - 1.0) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeIn(final double t) {
 			return -(Math.sqrt(1.0 - t * t) - 1.0);
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeOut(double t, final double... params) {
 			t /= params[2];
@@ -420,12 +885,25 @@ public abstract class WB_Ease {
 			return params[1] * Math.sqrt(1.0 - t * t) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeOut(double t) {
 			t--;
 			return Math.sqrt(1.0 - t * t);
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeInOut(double t, final double... params) {
 			t /= 0.5 * params[2];
@@ -436,6 +914,12 @@ public abstract class WB_Ease {
 			return params[1] * 0.5 * (Math.sqrt(1.0 - t * t) + 1.0) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeInOut(double t) {
 			t /= 0.5;
@@ -447,28 +931,60 @@ public abstract class WB_Ease {
 		}
 	}
 
+	/**
+	 *
+	 */
 	static class EaseBack extends WB_Ease {
+		/**  */
 		double s;
 
+		/**
+		 *
+		 */
 		public EaseBack() {
 			s = pmn;
 		}
 
+		/**
+		 *
+		 *
+		 * @param s
+		 */
 		public EaseBack(final double s) {
 			this.s = s;
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeIn(double t, final double... params) {
 			t /= params[2];
 			return params[1] * t * t * ((s + 1.0) * t - s) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeIn(final double t) {
 			return t * t * ((s + 1.0) * t - s);
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeOut(double t, final double... params) {
 			t /= params[2];
@@ -476,12 +992,25 @@ public abstract class WB_Ease {
 			return params[1] * (t * t * ((s + 1.0) * t + s) + 1.0) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeOut(double t) {
 			t--;
 			return t * t * ((s + 1.0) * t + s) + 1.0;
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeInOut(double t, final double... params) {
 			t /= params[2] * 0.5;
@@ -492,6 +1021,12 @@ public abstract class WB_Ease {
 			return params[1] / 2 * (t * t * ((s + 1.0) * t + s) + 2) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeInOut(double t) {
 			t /= 0.5;
@@ -503,17 +1038,40 @@ public abstract class WB_Ease {
 		}
 	}
 
+	/**
+	 *
+	 */
 	static class EaseBounce extends WB_Ease {
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeIn(final double t, final double... params) {
 			return params[1] - easeOut(params[2] - t, 0.0, params[1], params[2]) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeIn(final double t) {
 			return 1.0 - easeOut(1.0 - t, 0.0, 1.0, 1.0);
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeOut(double t, final double... params) {
 			t /= params[2];
@@ -528,6 +1086,12 @@ public abstract class WB_Ease {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeOut(double t) {
 			if (t < 1.0 / 2.75) {
@@ -541,6 +1105,13 @@ public abstract class WB_Ease {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeInOut(final double t, final double... params) {
 			if (t < params[2] * 0.5) {
@@ -550,6 +1121,12 @@ public abstract class WB_Ease {
 			}
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeInOut(final double t) {
 			if (t < 0.5) {
@@ -560,20 +1137,41 @@ public abstract class WB_Ease {
 		}
 	}
 
+	/**
+	 *
+	 */
 	static class EaseElastic extends WB_Ease {
+		/**  */
 		double a;
+		/**  */
 		double p;
 
+		/**
+		 *
+		 */
 		public EaseElastic() {
 			p = 0.3;
 			a = 1.0;
 		}
 
+		/**
+		 *
+		 *
+		 * @param a
+		 * @param p
+		 */
 		public EaseElastic(final double a, final double p) {
 			this.p = p;
 			this.a = a;
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeIn(double t, final double... params) {
 			double s;
@@ -597,6 +1195,12 @@ public abstract class WB_Ease {
 			return -(la * Math.pow(2, 10 * t) * Math.sin((t * params[2] - s) * (2 * Math.PI) / lp)) + params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeIn(double t) {
 			double s;
@@ -619,6 +1223,13 @@ public abstract class WB_Ease {
 			return -(la * Math.pow(2, 10 * t) * Math.sin((t - s) * (2 * Math.PI) / lp));
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeOut(double t, final double... params) {
 			double s;
@@ -642,6 +1253,12 @@ public abstract class WB_Ease {
 					+ params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeOut(final double t) {
 			double s;
@@ -663,6 +1280,13 @@ public abstract class WB_Ease {
 			return la * Math.pow(2, -10 * t) * Math.sin((t - s) * (2 * Math.PI) / lp) + 1;
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @param params
+		 * @return
+		 */
 		@Override
 		public double easeInOut(double t, final double... params) {
 			double s;
@@ -692,6 +1316,12 @@ public abstract class WB_Ease {
 					+ params[0];
 		}
 
+		/**
+		 *
+		 *
+		 * @param t
+		 * @return
+		 */
 		@Override
 		public double easeInOut(double t) {
 			double s;

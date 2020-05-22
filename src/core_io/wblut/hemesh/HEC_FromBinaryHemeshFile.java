@@ -5,24 +5,47 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.zip.InflaterInputStream;
 
+/**
+ *
+ */
 public class HEC_FromBinaryHemeshFile extends HEC_Creator {
+	/**  */
 	private String path;
 
+	/**
+	 *
+	 */
 	public HEC_FromBinaryHemeshFile() {
 		super();
 		setOverride(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param path
+	 */
 	public HEC_FromBinaryHemeshFile(final String path) {
 		this();
 		this.path = path;
 	}
 
+	/**
+	 *
+	 *
+	 * @param path
+	 * @return
+	 */
 	public HEC_FromBinaryHemeshFile setPath(final String path) {
 		this.path = path;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		if (path == null) {

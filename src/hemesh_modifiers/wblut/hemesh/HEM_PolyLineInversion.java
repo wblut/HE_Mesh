@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import wblut.geom.WB_AABBTree3D;
-import wblut.geom.WB_GeometryOp3D;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_List;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PolyLine;
@@ -12,18 +12,34 @@ import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
 import wblut.hemesh.HE_MeshOp.HE_FaceLineIntersection;
 
+/**
+ *
+ */
 public class HEM_PolyLineInversion extends HEM_Modifier {
+	/**  */
 	private WB_PolyLine polyLine;
+	/**  */
 	private double r, r2;
+	/**  */
 	private double icutoff;
+	/**  */
 	private boolean linear;
 
+	/**
+	 *
+	 */
 	public HEM_PolyLineInversion() {
 		super();
 		icutoff = 0.0001;
 		linear = false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @param r
+	 */
 	public HEM_PolyLineInversion(final WB_PolyLine poly, final double r) {
 		super();
 		polyLine = poly;
@@ -33,27 +49,57 @@ public class HEM_PolyLineInversion extends HEM_Modifier {
 		linear = false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param poly
+	 * @return
+	 */
 	public HEM_PolyLineInversion setPolyLine(final WB_PolyLine poly) {
 		polyLine = poly;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param r
+	 * @return
+	 */
 	public HEM_PolyLineInversion setRadius(final double r) {
 		this.r = r;
 		r2 = r * r;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param cutoff
+	 * @return
+	 */
 	public HEM_PolyLineInversion setCutoff(final double cutoff) {
 		icutoff = 1.0 / cutoff;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param b
+	 * @return
+	 */
 	public HEM_PolyLineInversion setLinear(final boolean b) {
 		linear = b;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		if (polyLine == null) {
@@ -83,7 +129,7 @@ public class HEM_PolyLineInversion extends HEM_Modifier {
 		double ri, rf;
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			q = WB_GeometryOp3D.getClosestPoint3D(v, polyLine);
+			q = WB_GeometryOp.getClosestPoint3D(v, polyLine);
 			if (linear) {
 				d = WB_Vector.subToVector3D(v, q);
 				d.normalizeSelf();
@@ -101,6 +147,12 @@ public class HEM_PolyLineInversion extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		if (polyLine == null) {
@@ -133,7 +185,7 @@ public class HEM_PolyLineInversion extends HEM_Modifier {
 		double ri, rf;
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			q = WB_GeometryOp3D.getClosestPoint3D(v, polyLine);
+			q = WB_GeometryOp.getClosestPoint3D(v, polyLine);
 			if (linear) {
 				d = WB_Vector.subToVector3D(v, q);
 				d.normalizeSelf();

@@ -2,57 +2,125 @@ package wblut.math;
 
 import java.io.Serializable;
 
+/**
+ *
+ */
 public strictfp final class WB_DoubleDouble implements Serializable, Comparable<Object>, Cloneable {
+	/**  */
 	private static final long serialVersionUID = -2751466014056438637L;
+	/**  */
 	public static final WB_DoubleDouble PI = new WB_DoubleDouble(3.141592653589793116e+00, 1.224646799147353207e-16);
+	/**  */
 	public static final WB_DoubleDouble TWO_PI = new WB_DoubleDouble(6.283185307179586232e+00,
 			2.449293598294706414e-16);
+	/**  */
 	public static final WB_DoubleDouble PI_2 = new WB_DoubleDouble(1.570796326794896558e+00, 6.123233995736766036e-17);
+	/**  */
 	public static final WB_DoubleDouble E = new WB_DoubleDouble(2.718281828459045091e+00, 1.445646891729250158e-16);
+	/**  */
 	public static final WB_DoubleDouble NaN = new WB_DoubleDouble(Double.NaN, Double.NaN);
+	/**  */
 	public static final double EPS = 1.23259516440783e-32;
+	/**  */
 	public static final WB_DoubleDouble ZERO = new WB_DoubleDouble(0.0, 0.0);
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	private static WB_DoubleDouble createNaN() {
 		return new WB_DoubleDouble(Double.NaN, Double.NaN);
 	}
 
+	/**
+	 *
+	 *
+	 * @param str
+	 * @return
+	 * @throws NumberFormatException
+	 */
 	public static WB_DoubleDouble valueOf(final String str) throws NumberFormatException {
 		return parse(str);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	public static WB_DoubleDouble valueOf(final double x) {
 		return new WB_DoubleDouble(x);
 	}
 
+	/**  */
 	private static final double SPLIT = 134217729.0D; // 2^27+1, for IEEE double
+	/**  */
 	private double hi = 0.0;
+	/**  */
 	private double lo = 0.0;
 
+	/**
+	 *
+	 */
 	public WB_DoubleDouble() {
 		init(0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 */
 	public WB_DoubleDouble(final double x) {
 		init(x);
 	}
 
+	/**
+	 *
+	 *
+	 * @param hi
+	 * @param lo
+	 */
 	public WB_DoubleDouble(final double hi, final double lo) {
 		init(hi, lo);
 	}
 
+	/**
+	 *
+	 *
+	 * @param dd
+	 */
 	public WB_DoubleDouble(final WB_DoubleDouble dd) {
 		init(dd);
 	}
 
+	/**
+	 *
+	 *
+	 * @param str
+	 * @throws NumberFormatException
+	 */
 	public WB_DoubleDouble(final String str) throws NumberFormatException {
 		this(parse(str));
 	}
 
+	/**
+	 *
+	 *
+	 * @param dd
+	 * @return
+	 */
 	public static WB_DoubleDouble copy(final WB_DoubleDouble dd) {
 		return new WB_DoubleDouble(dd);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public Object clone() {
 		try {
@@ -63,35 +131,82 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 */
 	private void init(final double x) {
 		init(x, 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param hi
+	 * @param lo
+	 */
 	private void init(final double hi, final double lo) {
 		this.hi = hi;
 		this.lo = lo;
 	}
 
+	/**
+	 *
+	 *
+	 * @param dd
+	 */
 	private void init(final WB_DoubleDouble dd) {
 		init(dd.hi, dd.lo);
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble add(final WB_DoubleDouble y) {
 		return copy(this).selfAdd(y);
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble add(final double y) {
 		return copy(this).selfAdd(y);
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble selfAdd(final WB_DoubleDouble y) {
 		return selfAdd(y.hi, y.lo);
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble selfAdd(final double y) {
 		return selfAdd(y, 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param yhi
+	 * @param ylo
+	 * @return
+	 */
 	private WB_DoubleDouble selfAdd(final double yhi, final double ylo) {
 		double H, h, T, t, S, s, e, f;
 		S = hi + yhi;
@@ -113,14 +228,32 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble subtract(final WB_DoubleDouble y) {
 		return add(y.negate());
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble subtract(final double y) {
 		return add(-y);
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble selfSubtract(final WB_DoubleDouble y) {
 		if (isNaN()) {
 			return this;
@@ -128,6 +261,12 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return selfAdd(-y.hi, -y.lo);
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble selfSubtract(final double y) {
 		if (isNaN()) {
 			return this;
@@ -135,6 +274,11 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return selfAdd(-y, 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_DoubleDouble negate() {
 		if (isNaN()) {
 			return this;
@@ -142,6 +286,12 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return new WB_DoubleDouble(-hi, -lo);
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble multiply(final WB_DoubleDouble y) {
 		if (y.isNaN()) {
 			return createNaN();
@@ -149,6 +299,12 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return copy(this).selfMultiply(y);
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble multiply(final double y) {
 		if (Double.isNaN(y)) {
 			return createNaN();
@@ -156,14 +312,33 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return copy(this).selfMultiply(y, 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble selfMultiply(final WB_DoubleDouble y) {
 		return selfMultiply(y.hi, y.lo);
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble selfMultiply(final double y) {
 		return selfMultiply(y, 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param yhi
+	 * @param ylo
+	 * @return
+	 */
 	private WB_DoubleDouble selfMultiply(final double yhi, final double ylo) {
 		double hx, tx, hy, ty, C, c;
 		C = SPLIT * hi;
@@ -184,6 +359,12 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble divide(final WB_DoubleDouble y) {
 		double hc, tc, hy, ty, C, c, U, u;
 		C = hi / y.hi;
@@ -204,6 +385,12 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return new WB_DoubleDouble(zhi, zlo);
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble divide(final double y) {
 		if (Double.isNaN(y)) {
 			return createNaN();
@@ -211,14 +398,33 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return copy(this).selfDivide(y, 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble selfDivide(final WB_DoubleDouble y) {
 		return selfDivide(y.hi, y.lo);
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public WB_DoubleDouble selfDivide(final double y) {
 		return selfDivide(y, 0.0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param yhi
+	 * @param ylo
+	 * @return
+	 */
 	private WB_DoubleDouble selfDivide(final double yhi, final double ylo) {
 		double hc, tc, hy, ty, C, c, U, u;
 		C = hi / yhi;
@@ -239,6 +445,11 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_DoubleDouble reciprocal() {
 		double hc, tc, hy, ty, C, c, U, u;
 		C = 1.0 / hi;
@@ -258,6 +469,11 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return new WB_DoubleDouble(zhi, zlo);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_DoubleDouble floor() {
 		if (isNaN()) {
 			return NaN;
@@ -272,6 +488,11 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return new WB_DoubleDouble(fhi, flo);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_DoubleDouble ceil() {
 		if (isNaN()) {
 			return NaN;
@@ -286,6 +507,11 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return new WB_DoubleDouble(fhi, flo);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int signum() {
 		if (isPositive()) {
 			return 1;
@@ -296,6 +522,11 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return 0;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_DoubleDouble rint() {
 		if (isNaN()) {
 			return this;
@@ -305,6 +536,11 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return plus5.floor();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_DoubleDouble trunc() {
 		if (isNaN()) {
 			return NaN;
@@ -316,6 +552,11 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_DoubleDouble abs() {
 		if (isNaN()) {
 			return NaN;
@@ -326,14 +567,30 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return new WB_DoubleDouble(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_DoubleDouble sqr() {
 		return this.multiply(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	public static WB_DoubleDouble sqr(final double x) {
 		return valueOf(x).selfMultiply(x);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_DoubleDouble sqrt() {
 		if (isZero()) {
 			return valueOf(0.0);
@@ -349,10 +606,22 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return axdd.add(d2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	public static WB_DoubleDouble sqrt(final double x) {
 		return valueOf(x).sqrt();
 	}
 
+	/**
+	 *
+	 *
+	 * @param exp
+	 * @return
+	 */
 	public WB_DoubleDouble pow(final int exp) {
 		if (exp == 0.0) {
 			return valueOf(1.0);
@@ -379,50 +648,116 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return s;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double doubleValue() {
 		return hi + lo;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int intValue() {
 		return (int) hi;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isZero() {
 		return hi == 0.0 && lo == 0.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isNegative() {
 		return hi < 0.0 || hi == 0.0 && lo < 0.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isPositive() {
 		return hi > 0.0 || hi == 0.0 && lo > 0.0;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isNaN() {
 		return Double.isNaN(hi);
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public boolean equals(final WB_DoubleDouble y) {
 		return hi == y.hi && lo == y.lo;
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public boolean gt(final WB_DoubleDouble y) {
 		return hi > y.hi || hi == y.hi && lo > y.lo;
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public boolean ge(final WB_DoubleDouble y) {
 		return hi > y.hi || hi == y.hi && lo >= y.lo;
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public boolean lt(final WB_DoubleDouble y) {
 		return hi < y.hi || hi == y.hi && lo < y.lo;
 	}
 
+	/**
+	 *
+	 *
+	 * @param y
+	 * @return
+	 */
 	public boolean le(final WB_DoubleDouble y) {
 		return hi < y.hi || hi == y.hi && lo <= y.lo;
 	}
 
+	/**
+	 *
+	 *
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public int compareTo(final Object o) {
 		final WB_DoubleDouble other = (WB_DoubleDouble) o;
@@ -441,16 +776,31 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return 0;
 	}
 
+	/**  */
 	private static final int MAX_PRINT_DIGITS = 32;
+	/**  */
 	private static final WB_DoubleDouble TEN = WB_DoubleDouble.valueOf(10.0);
+	/**  */
 	private static final WB_DoubleDouble ONE = WB_DoubleDouble.valueOf(1.0);
+	/**  */
 	private static final String SCI_NOT_EXPONENT_CHAR = "E";
+	/**  */
 	private static final String SCI_NOT_ZERO = "0.0E0";
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public String dump() {
 		return "DD<" + hi + ", " + lo + ">";
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public String toString() {
 		final int mag = magnitude(hi);
@@ -460,6 +810,11 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return toSciNotation();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public String toStandardNotation() {
 		final String specialStr = getSpecialNumberString();
 		if (specialStr != null) {
@@ -488,6 +843,11 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return num;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public String toSciNotation() {
 		// special case zero, to allow as
 		if (isZero()) {
@@ -518,6 +878,13 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return digitsWithDecimal + expStr;
 	}
 
+	/**
+	 *
+	 *
+	 * @param insertDecimalPoint
+	 * @param magnitude
+	 * @return
+	 */
 	private String extractSignificantDigits(final boolean insertDecimalPoint, final int[] magnitude) {
 		WB_DoubleDouble y = this.abs();
 		// compute *correct* magnitude of y
@@ -585,6 +952,13 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return buf.toString();
 	}
 
+	/**
+	 *
+	 *
+	 * @param ch
+	 * @param len
+	 * @return
+	 */
 	private static String stringOfChar(final char ch, final int len) {
 		final StringBuffer buf = new StringBuffer();
 		for (int i = 0; i < len; i++) {
@@ -593,6 +967,11 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return buf.toString();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	private String getSpecialNumberString() {
 		if (isZero()) {
 			return "0.0";
@@ -603,6 +982,12 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @return
+	 */
 	private static int magnitude(final double x) {
 		final double xAbs = Math.abs(x);
 		final double xLog10 = Math.log(xAbs) / Math.log(10);
@@ -614,6 +999,13 @@ public strictfp final class WB_DoubleDouble implements Serializable, Comparable<
 		return xMag;
 	}
 
+	/**
+	 *
+	 *
+	 * @param str
+	 * @return
+	 * @throws NumberFormatException
+	 */
 	public static WB_DoubleDouble parse(final String str) throws NumberFormatException {
 		int i = 0;
 		final int strlen = str.length();

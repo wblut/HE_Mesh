@@ -11,11 +11,24 @@ import java.util.List;
 
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class WB_PolygonSplitter {
+	/**  */
 	List<PolyEdge> splitPoly;
+	/**  */
 	List<PolyEdge> edgesOnLine;
+	/**  */
 	WB_GeometryFactory3D gf = new WB_GeometryFactory3D();
 
+	/**
+	 *
+	 *
+	 * @param polygon
+	 * @param L
+	 * @return
+	 */
 	// Split a convex or concave polygon without holes with a given line
 	public List<WB_Polygon> splitSimplePolygon2D(final WB_Polygon polygon, final WB_Line L) {
 		final List<WB_Polygon> polys = new ArrayList<>();
@@ -27,11 +40,18 @@ public class WB_PolygonSplitter {
 		return polys;
 	}
 
+	/**
+	 *
+	 *
+	 * @param polygon
+	 * @param P
+	 * @return
+	 */
 	// Split a convex or concave polygon without holes with a given plane
 	public List<WB_Polygon> splitSimplePolygon3D(final WB_Polygon polygon, final WB_Plane P) {
 		final List<WB_Polygon> polys = new ArrayList<>();
 		final WB_Plane Q = polygon.getPlane();
-		final WB_IntersectionResult intersection = WB_GeometryOp3D.getIntersection3D(P, Q);
+		final WB_Intersection intersection = WB_GeometryOp.getIntersection3D(P, Q);
 		if (!intersection.intersection) {
 			polys.add(polygon);
 		} else {
@@ -44,6 +64,13 @@ public class WB_PolygonSplitter {
 		return polys;
 	}
 
+	/**
+	 *
+	 *
+	 * @param polygon
+	 * @param L
+	 * @return
+	 */
 	public List<WB_Polygon> splitPolygon2D(final WB_Polygon polygon, final WB_Line L) {
 		final List<WB_Polygon> polys = new ArrayList<>();
 		final WB_Polygon spolygon = gf.createSimplePolygon(polygon);
@@ -55,12 +82,19 @@ public class WB_PolygonSplitter {
 		return polys;
 	}
 
+	/**
+	 *
+	 *
+	 * @param polygon
+	 * @param P
+	 * @return
+	 */
 	// Split a convex or concave polygon without holes with a given plane
 	public List<WB_Polygon> splitPolygon3D(final WB_Polygon polygon, final WB_Plane P) {
 		final WB_Polygon spolygon = gf.createSimplePolygon(polygon);
 		final List<WB_Polygon> polys = new ArrayList<>();
 		final WB_Plane Q = spolygon.getPlane();
-		final WB_IntersectionResult intersection = WB_GeometryOp3D.getIntersection3D(P, Q);
+		final WB_Intersection intersection = WB_GeometryOp.getIntersection3D(P, Q);
 		if (!intersection.intersection) {
 			polys.add(spolygon);
 		} else {
@@ -73,18 +107,24 @@ public class WB_PolygonSplitter {
 		return polys;
 	}
 
+	/**
+	 *
+	 *
+	 * @param coords
+	 * @param P
+	 */
 	void splitEdges(final List<? extends WB_Coord> coords, final WB_Plane P) {
 		splitPoly = new WB_List<>();
 		edgesOnLine = new WB_List<>();
 		for (int i = 0; i < coords.size(); i++) {
 			final WB_Segment edge = new WB_Segment(coords.get(i), coords.get((i + 1) % coords.size()));
-			final WB_Classification edgeStartSide = WB_GeometryOp3D.classifyPointToPlane3D(P, edge.getOrigin());
-			final WB_Classification edgeEndSide = WB_GeometryOp3D.classifyPointToPlane3D(P, edge.getEndpoint());
+			final WB_Classification edgeStartSide = WB_GeometryOp.classifyPointToPlane3D(P, edge.getOrigin());
+			final WB_Classification edgeEndSide = WB_GeometryOp.classifyPointToPlane3D(P, edge.getEndpoint());
 			splitPoly.add(new PolyEdge(coords.get(i), edgeStartSide));
 			if (edgeStartSide == ON) {
 				edgesOnLine.add(splitPoly.get(splitPoly.size() - 1));
 			} else if (edgeStartSide != edgeEndSide && edgeEndSide != ON) {
-				final WB_IntersectionResult intersection = WB_GeometryOp3D.getIntersection3D(edge, P);
+				final WB_Intersection intersection = WB_GeometryOp.getIntersection3D(edge, P);
 				assert intersection.intersection;
 				splitPoly.add(new PolyEdge((WB_Coord) intersection.object, ON));
 				edgesOnLine.add(splitPoly.get(splitPoly.size() - 1));
@@ -96,18 +136,24 @@ public class WB_PolygonSplitter {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param coords
+	 * @param L
+	 */
 	void splitEdges(final List<? extends WB_Coord> coords, final WB_Line L) {
 		splitPoly = new WB_List<>();
 		edgesOnLine = new WB_List<>();
 		for (int i = 0; i < coords.size(); i++) {
 			final WB_Segment edge = new WB_Segment(coords.get(i), coords.get((i + 1) % coords.size()));
-			final WB_Classification edgeStartSide = WB_GeometryOp2D.classifyPointToLine2D(edge.getOrigin(), L);
-			final WB_Classification edgeEndSide = WB_GeometryOp2D.classifyPointToLine2D(edge.getEndpoint(), L);
+			final WB_Classification edgeStartSide = WB_GeometryOp.classifyPointToLine2D(edge.getOrigin(), L);
+			final WB_Classification edgeEndSide = WB_GeometryOp.classifyPointToLine2D(edge.getEndpoint(), L);
 			splitPoly.add(new PolyEdge(coords.get(i), edgeStartSide));
 			if (edgeStartSide == ON) {
 				edgesOnLine.add(splitPoly.get(splitPoly.size() - 1));
 			} else if (edgeStartSide != edgeEndSide && edgeEndSide != ON) {
-				final WB_IntersectionResult intersection = WB_GeometryOp2D.getClosestPoint2D(L, edge);
+				final WB_Intersection intersection = WB_GeometryOp.getClosestPoint2D(L, edge);
 				assert intersection.intersection;
 				splitPoly.add(new PolyEdge((WB_Coord) intersection.object, ON));
 				edgesOnLine.add(splitPoly.get(splitPoly.size() - 1));
@@ -119,6 +165,11 @@ public class WB_PolygonSplitter {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param L
+	 */
 	void sortEdges(final WB_Line L) {
 		Collections.sort(edgesOnLine, new EdgeOnLineComparator(L));
 		for (int i = 1; i < edgesOnLine.size(); i++) {
@@ -126,6 +177,9 @@ public class WB_PolygonSplitter {
 		}
 	}
 
+	/**
+	 *
+	 */
 	void splitPolygon() {
 		PolyEdge reUseSrc = null;
 		for (int i = 0; i < edgesOnLine.size(); i++) {
@@ -179,6 +233,12 @@ public class WB_PolygonSplitter {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param srcEdge
+	 * @param dstEdge
+	 */
 	void createBridge(final PolyEdge srcEdge, final PolyEdge dstEdge) {
 		final PolyEdge srcToDst = new PolyEdge(srcEdge.pos, srcEdge.side);
 		final PolyEdge dstToSrc = new PolyEdge(dstEdge.pos, dstEdge.side);
@@ -194,6 +254,9 @@ public class WB_PolygonSplitter {
 		dstEdge.prev = srcToDst;
 	}
 
+	/**
+	 *
+	 */
 	void verifyCycles() {
 		for (final PolyEdge edge : splitPoly) {
 			PolyEdge curEdge = edge;
@@ -206,6 +269,11 @@ public class WB_PolygonSplitter {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	List<WB_Polygon> collectPolygons() {
 		final List<WB_Polygon> resPolys = new ArrayList<>();
 		for (final PolyEdge e : splitPoly) {
@@ -224,16 +292,33 @@ public class WB_PolygonSplitter {
 		return resPolys;
 	}
 
+	/**
+	 *
+	 */
 	static class PolyEdge {
+		/**  */
 		WB_Coord pos; // start position on edge
+		/**  */
 		WB_Classification side; // start position's side of split line
+		/**  */
 		PolyEdge next; // next polygon in linked list
+		/**  */
 		PolyEdge prev; // previous polygon in linked list
+		/**  */
 		double distOnLine; // distance relative to first point on split line
+		/**  */
 		boolean isSource; // for visualization
+		/**  */
 		boolean isDestination; // for visualization
+		/**  */
 		boolean visited; // for collecting split polygons
 
+		/**
+		 *
+		 *
+		 * @param pos
+		 * @param side
+		 */
 		PolyEdge(final WB_Coord pos, final WB_Classification side) {
 			this.pos = pos;
 			this.side = side;
@@ -246,21 +331,43 @@ public class WB_PolygonSplitter {
 		}
 	}
 
+	/**
+	 *
+	 */
 	static class EdgeOnLineComparator implements Comparator<PolyEdge> {
+		/**  */
 		WB_Line L;
 
+		/**
+		 *
+		 *
+		 * @param L
+		 */
 		EdgeOnLineComparator(final WB_Line L) {
 			this.L = L;
 		}
 
+		/**
+		 *
+		 *
+		 * @param e0
+		 * @param e1
+		 * @return
+		 */
 		@Override
 		public int compare(final PolyEdge e0, final PolyEdge e1) {
-			final double d = WB_GeometryOp3D.getParameterOfPointOnLine3D(e0.pos, L)
-					- WB_GeometryOp3D.getParameterOfPointOnLine3D(e1.pos, L);
+			final double d = WB_GeometryOp.getParameterOfPointOnLine3D(e0.pos, L)
+					- WB_GeometryOp.getParameterOfPointOnLine3D(e1.pos, L);
 			return WB_Epsilon.isZero(d) ? 0 : d > 0 ? 1 : -1;
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	WB_Polygon polygonFromArray(final double[][] points) {
 		final List<WB_Coord> coords = new WB_CoordList();
 		for (final double[] p : points) {
@@ -273,6 +380,12 @@ public class WB_PolygonSplitter {
 		return new WB_Polygon(coords);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	WB_Plane planeFromArray(final double[][] points) {
 		final WB_Point p0 = new WB_Point(points[0]);
 		final WB_Point p1 = new WB_Point(points[1]);
@@ -280,12 +393,23 @@ public class WB_PolygonSplitter {
 		return new WB_Plane(p0, p1, p2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @return
+	 */
 	WB_Line lineFromArray(final double[][] points) {
 		final WB_Point p0 = new WB_Point(points[0]);
 		final WB_Point p1 = new WB_Point(points[1]);
 		return gf.createLineThroughPoints(p0, p1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param args
+	 */
 	public static void main(final String[] args) {
 		final WB_PolygonSplitter ps = new WB_PolygonSplitter();
 		final WB_Polygon poly0 = ps

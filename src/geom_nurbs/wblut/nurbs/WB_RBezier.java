@@ -1,24 +1,39 @@
 package wblut.nurbs;
 
-import wblut.geom.WB_Coord;
+import wblut.geom.WB_CoordCollection;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PointHomogeneous;
 import wblut.math.WB_Bernstein;
 
+/**
+ *
+ */
 public class WB_RBezier extends WB_Bezier {
+	/**  */
 	private final double[] weights;
+	/**  */
 	protected WB_PointHomogeneous[] wpoints;
 
-	public WB_RBezier(final WB_Coord[] controlPoints) {
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 */
+	public WB_RBezier(final WB_CoordCollection controlPoints) {
 		super(controlPoints);
 		weights = new double[n + 1];
 		wpoints = new WB_PointHomogeneous[n + 1];
 		for (int i = 0; i < n + 1; i++) {
 			weights[i] = 1.0;
-			wpoints[i] = new WB_PointHomogeneous(points[i], weights[i]);
+			wpoints[i] = new WB_PointHomogeneous(points.get(i), weights[i]);
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 */
 	public WB_RBezier(final WB_PointHomogeneous[] controlPoints) {
 		super(controlPoints);
 		weights = new double[n + 1];
@@ -31,15 +46,27 @@ public class WB_RBezier extends WB_Bezier {
 		}
 	}
 
-	public WB_RBezier(final WB_Coord[] controlPoints, final double[] weights) {
+	/**
+	 *
+	 *
+	 * @param controlPoints
+	 * @param weights
+	 */
+	public WB_RBezier(final WB_CoordCollection controlPoints, final double[] weights) {
 		super(controlPoints);
 		this.weights = weights;
 		wpoints = new WB_PointHomogeneous[n + 1];
 		for (int i = 0; i < n + 1; i++) {
-			wpoints[i] = new WB_PointHomogeneous(points[i], weights[i]);
+			wpoints[i] = new WB_PointHomogeneous(points.get(i), weights[i]);
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param u
+	 * @return
+	 */
 	@Override
 	public WB_Point getPointOnCurve(final double u) {
 		final double[] B = WB_Bernstein.getBernsteinCoefficientsOfOrderN(u, n);
@@ -56,6 +83,11 @@ public class WB_RBezier extends WB_Bezier {
 		return new WB_Point(C.project());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public WB_RBezier elevateDegree() {
 		final WB_PointHomogeneous[] npoints = new WB_PointHomogeneous[n + 2];

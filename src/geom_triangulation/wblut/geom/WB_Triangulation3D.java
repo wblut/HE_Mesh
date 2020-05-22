@@ -3,18 +3,38 @@ package wblut.geom;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ */
 public class WB_Triangulation3D {
+	/**  */
 	private int[] _tetrahedra;
+	/**  */
 	private int[] _triangles;
+	/**  */
 	private WB_CoordCollection _points;
+	/**  */
 	private int[] _edges;
+	/**  */
 	private int[][] neighbors;
+	/**  */
 	private int high;
 
+	/**
+	 *
+	 */
 	@SuppressWarnings("unused")
 	private WB_Triangulation3D() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 * @param tetra
+	 * @param triangles
+	 * @param edges
+	 */
 	public WB_Triangulation3D(final WB_CoordCollection points, final int[] tetra, final int[] triangles,
 			final int[] edges) {
 		_points = points;
@@ -24,26 +44,56 @@ public class WB_Triangulation3D {
 		extractNeighbors(_edges);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_CoordCollection getPoints() {
 		return _points;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getTetrahedra() {
 		return _tetrahedra;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getTriangles() {
 		return _triangles;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getEdges() {
 		return _edges;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[][] getNeighbors() {
 		return neighbors;
 	}
 
+	/**
+	 *
+	 *
+	 * @param edges
+	 */
 	@SuppressWarnings("unchecked")
 	private void extractNeighbors(final int[] edges) {
 		high = -1;
@@ -73,6 +123,11 @@ public class WB_Triangulation3D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Network getNetwork() {
 		return new WB_Network(getPoints(), getEdges());
 	}

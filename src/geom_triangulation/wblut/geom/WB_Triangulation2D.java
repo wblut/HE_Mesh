@@ -6,20 +6,41 @@ import java.util.List;
 
 import wblut.hemesh.HE_ObjectMap;
 
+/**
+ *
+ */
 public class WB_Triangulation2D {
+	/**  */
 	private int[] triangles;
+	/**  */
 	private int[] edges;
+	/**  */
 	private int[][] neighbors;
+	/**  */
 	private int high;
 
+	/**
+	 *
+	 */
 	public WB_Triangulation2D() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @param E
+	 */
 	public WB_Triangulation2D(final int[] T, final int[] E) {
 		triangles = T;
 		edges = E;
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 */
 	public WB_Triangulation2D(final int[] T) {
 		triangles = T;
 		if (triangles.length == 0) {
@@ -30,14 +51,29 @@ public class WB_Triangulation2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getTriangles() {
 		return triangles;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[] getEdges() {
 		return edges;
 	}
 
+	/**
+	 *
+	 *
+	 * @param tris
+	 */
 	@SuppressWarnings("unchecked")
 	private void extractEdges(final int[] tris) {
 		high = -1;
@@ -82,10 +118,23 @@ public class WB_Triangulation2D {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int[][] getNeighbors() {
 		return neighbors;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @param f
+	 * @return
+	 */
 	private long getIndex(final int i, final int j, final int f) {
 		return i > j ? j + i * f : i + j * f;
 	}

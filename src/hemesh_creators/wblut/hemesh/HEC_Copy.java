@@ -4,46 +4,94 @@ import java.util.Iterator;
 import java.util.Set;
 
 import wblut.core.WB_ProgressReporter.WB_ProgressCounter;
+import wblut.geom.WB_Coord;
 
+/**
+ *
+ */
 public class HEC_Copy extends HEC_Creator {
+	/**  */
 	private HE_HalfedgeStructure source;
+	/**  */
 	HE_LongMap vertexCorrelation;
+	/**  */
 	HE_LongMap faceCorrelation;
+	/**  */
 	HE_LongMap halfedgeCorrelation;
 
+	/**
+	 *
+	 */
 	public HEC_Copy() {
 		super();
 		setOverride(true);
 		setModelViewOverride(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param source
+	 */
 	public HEC_Copy(final HE_HalfedgeStructure source) {
 		this();
 		setMesh(source);
 	}
 
+	/**
+	 *
+	 *
+	 * @param source
+	 * @return
+	 */
 	public HEC_Copy setMesh(final HE_HalfedgeStructure source) {
 		this.source = source;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param source
+	 * @return
+	 */
 	public HEC_Copy setSource(final HE_HalfedgeStructure source) {
 		this.source = source;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_LongMap getVertexCorrelation() {
 		return vertexCorrelation;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_LongMap getFaceCorrelation() {
 		return faceCorrelation;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_LongMap getHalfedgeCorrelation() {
 		return halfedgeCorrelation;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		tracker.setStartStatus(this, "Starting HEC_Copy.");
@@ -303,6 +351,12 @@ public class HEC_Copy extends HEC_Creator {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param result
+	 */
 	void copySelections(final HE_Mesh mesh, final HE_Mesh result) {
 		final String[] names = mesh.getSelectionNames();
 		for (final String name : names) {
@@ -334,6 +388,12 @@ public class HEC_Copy extends HEC_Creator {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @param result
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	void copyAttributes(final HE_Mesh mesh, final HE_Mesh result) {
 		Set<String> names = mesh.getAttributeNames();
@@ -532,6 +592,72 @@ public class HEC_Copy extends HEC_Creator {
 				sf = sfItr.next();
 				key = faceCorrelation.get(sf.getKey());
 				final String o = sourceAtt.get(sf.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+		}
+		names = mesh.getPointAttributeNames();
+		for (final String name : names) {
+			final HE_PointAttribute sourceAtt = mesh.getPointAttribute(name);
+			final HE_PointAttribute targetAtt = result.addPointAttribute(name, sourceAtt.defaultValue,
+					sourceAtt.persistent);
+			final HE_VertexIterator svItr = source.vItr();
+			while (svItr.hasNext()) {
+				sv = svItr.next();
+				key = vertexCorrelation.get(sv.getKey());
+				final WB_Coord o = sourceAtt.get(sv.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_HalfedgeIterator sheItr = source.heItr();
+			while (sheItr.hasNext()) {
+				she = sheItr.next();
+				key = halfedgeCorrelation.get(she.getKey());
+				final WB_Coord o = sourceAtt.get(she.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_FaceIterator sfItr = source.fItr();
+			while (sfItr.hasNext()) {
+				sf = sfItr.next();
+				key = faceCorrelation.get(sf.getKey());
+				final WB_Coord o = sourceAtt.get(sf.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+		}
+		names = mesh.getVectorAttributeNames();
+		for (final String name : names) {
+			final HE_VectorAttribute sourceAtt = mesh.getVectorAttribute(name);
+			final HE_VectorAttribute targetAtt = result.addVectorAttribute(name, sourceAtt.defaultValue,
+					sourceAtt.persistent);
+			final HE_VertexIterator svItr = source.vItr();
+			while (svItr.hasNext()) {
+				sv = svItr.next();
+				key = vertexCorrelation.get(sv.getKey());
+				final WB_Coord o = sourceAtt.get(sv.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_HalfedgeIterator sheItr = source.heItr();
+			while (sheItr.hasNext()) {
+				she = sheItr.next();
+				key = halfedgeCorrelation.get(she.getKey());
+				final WB_Coord o = sourceAtt.get(she.getKey());
+				if (o != sourceAtt.defaultValue) {
+					targetAtt.set(key, o);
+				}
+			}
+			final HE_FaceIterator sfItr = source.fItr();
+			while (sfItr.hasNext()) {
+				sf = sfItr.next();
+				key = faceCorrelation.get(sf.getKey());
+				final WB_Coord o = sourceAtt.get(sf.getKey());
 				if (o != sourceAtt.defaultValue) {
 					targetAtt.set(key, o);
 				}

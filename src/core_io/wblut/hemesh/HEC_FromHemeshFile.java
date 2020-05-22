@@ -4,24 +4,47 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ *
+ */
 public class HEC_FromHemeshFile extends HEC_Creator {
+	/**  */
 	private String path;
 
+	/**
+	 *
+	 */
 	public HEC_FromHemeshFile() {
 		super();
 		setOverride(true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param path
+	 */
 	public HEC_FromHemeshFile(final String path) {
 		this();
 		this.path = path;
 	}
 
+	/**
+	 *
+	 *
+	 * @param path
+	 * @return
+	 */
 	public HEC_FromHemeshFile setPath(final String path) {
 		this.path = path;
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh createBase() {
 		if (path == null) {
@@ -137,12 +160,5 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 		mesh.addHalfedges(halfedges);
 		mesh.addFaces(faces);
 		return mesh;
-	}
-
-	public static void main(final String[] args) {
-		final HEC_FromHemeshFile creator = new HEC_FromHemeshFile();
-		creator.setPath("D:/resources/isa_BP3D_4.0_obj_99/hemesh/FJ2810.hemesh");
-		final HE_Mesh body = new HE_Mesh(creator);
-		body.stats();
 	}
 }

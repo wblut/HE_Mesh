@@ -1,26 +1,62 @@
 package wblut.geom;
 
+/**
+ *
+ */
 public class WB_PointHomogeneous extends WB_Point4D {
+	/**
+	 *
+	 */
 	public WB_PointHomogeneous() {
 		super(0, 0, 0, 0);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public WB_PointHomogeneous(final double x, final double y, final double z) {
 		super(x, y, z, 1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param w
+	 */
 	public WB_PointHomogeneous(final double x, final double y, final double z, final double w) {
 		super(x, y, z, w);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 */
 	public WB_PointHomogeneous(final WB_PointHomogeneous v) {
 		super(v);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_PointHomogeneous get() {
 		return new WB_PointHomogeneous(this);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 */
 	public WB_PointHomogeneous(final WB_Coord v) {
 		setX(v.xd());
 		setY(v.yd());
@@ -28,6 +64,12 @@ public class WB_PointHomogeneous extends WB_Point4D {
 		setW(1);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 * @param w
+	 */
 	public WB_PointHomogeneous(final WB_Coord p, final double w) {
 		setX(p.xd() * w);
 		setY(p.yd() * w);
@@ -35,6 +77,14 @@ public class WB_PointHomogeneous extends WB_Point4D {
 		setW(w);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param w
+	 */
 	@Override
 	public void set(final double x, final double y, final double z, final double w) {
 		setX(x);
@@ -43,6 +93,11 @@ public class WB_PointHomogeneous extends WB_Point4D {
 		setW(w);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p
+	 */
 	public void set(final WB_PointHomogeneous p) {
 		setX(p.xd());
 		setY(p.yd());
@@ -50,19 +105,37 @@ public class WB_PointHomogeneous extends WB_Point4D {
 		setW(p.wd());
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_Coord project() {
 		if (w == 0) {
-			return new WB_Vector(x, y, z);
+			return new WB_Vector(xd(), yd(), zd());
 		}
 		final double iw = 1.0 / wd();
 		return new WB_Point(xd() * iw, yd() * iw, zd() * iw);
 	}
 
+	/**
+	 *
+	 *
+	 * @param w
+	 */
 	public void setWeight(final double w) {
 		final WB_Coord p = project();
 		set(p.xd(), p.yd(), p.zd(), w);
 	}
 
+	/**
+	 *
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param t
+	 * @return
+	 */
 	public static WB_PointHomogeneous interpolate(final WB_PointHomogeneous p0, final WB_PointHomogeneous p1,
 			final double t) {
 		return new WB_PointHomogeneous(p0.xd() + t * (p1.xd() - p0.xd()), p0.yd() + t * (p1.yd() - p0.yd()),

@@ -4,9 +4,19 @@ import java.util.List;
 
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class WB_Ring extends WB_PolyLine {
+	/**  */
 	private final WB_GeometryFactory3D geometryfactory = new WB_GeometryFactory3D();
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public WB_Vector getDirection(final int i) {
 		if (i < 0 || i > numberOfPoints - 1) {
@@ -15,6 +25,12 @@ public class WB_Ring extends WB_PolyLine {
 		return directions.get(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public WB_Vector getNormal(final int i) {
 		if (i < 0 || i > numberOfPoints - 1) {
@@ -30,6 +46,12 @@ public class WB_Ring extends WB_PolyLine {
 		return n;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public double a(final int i) {
 		if (i < 0 || i > numberOfPoints - 1) {
@@ -38,6 +60,12 @@ public class WB_Ring extends WB_PolyLine {
 		return -directions.get(i).yd();
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public double b(final int i) {
 		if (i < 0 || i > numberOfPoints - 1) {
@@ -46,6 +74,12 @@ public class WB_Ring extends WB_PolyLine {
 		return directions.get(i).xd();
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public double c(final int i) {
 		if (i < 0 || i > numberOfPoints - 1) {
@@ -54,6 +88,12 @@ public class WB_Ring extends WB_PolyLine {
 		return points.get(i).xd() * directions.get(i).yd() - points.get(i).yd() * directions.get(i).xd();
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public double getLength(final int i) {
 		if (i < 0 || i > numberOfPoints - 1) {
@@ -62,19 +102,35 @@ public class WB_Ring extends WB_PolyLine {
 		return incLengths[i] - (i == 0 ? 0 : incLengths[i - 1]);
 	}
 
+	/**
+	 *
+	 */
 	protected WB_Ring() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 */
 	protected WB_Ring(final List<? extends WB_Coord> points) {
 		super(points);
 		getDirections();
 	}
 
+	/**
+	 *
+	 *
+	 * @param points
+	 */
 	protected WB_Ring(final WB_Coord[] points) {
 		super(points);
 		getDirections();
 	}
 
+	/**
+	 *
+	 */
 	private void getDirections() {
 		directions = new WB_VectorList();
 		incLengths = new double[numberOfPoints];
@@ -87,6 +143,12 @@ public class WB_Ring extends WB_PolyLine {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public boolean equals(final Object o) {
 		if (o == this) {
@@ -107,6 +169,11 @@ public class WB_Ring extends WB_PolyLine {
 		return true;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isCCW() {
 		final int nPts = getNumberOfPoints();
 		// sanity check
@@ -154,6 +221,12 @@ public class WB_Ring extends WB_PolyLine {
 		return isCCW;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public WB_Point getPoint(final int i) {
 		if (i < 0 || i > numberOfPoints - 1) {
@@ -162,6 +235,13 @@ public class WB_Ring extends WB_PolyLine {
 		return points.get(i);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @return
+	 */
 	@Override
 	public double getd(final int i, final int j) {
 		if (i < 0 || i > numberOfPoints - 1) {
@@ -170,6 +250,13 @@ public class WB_Ring extends WB_PolyLine {
 		return points.get(i).getd(j);
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @param j
+	 * @return
+	 */
 	@Override
 	public float getf(final int i, final int j) {
 		if (i < 0 || i > numberOfPoints - 1) {
@@ -178,6 +265,12 @@ public class WB_Ring extends WB_PolyLine {
 		return points.get(i).getf(j);
 	}
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	@Override
 	public WB_Point getPointOnLine(final double t) {
 		if (t < 0 || t > incLengths[numberOfPoints - 1]) {
@@ -195,6 +288,12 @@ public class WB_Ring extends WB_PolyLine {
 		return points.get(index).addMul(x, directions.get(index));
 	}
 
+	/**
+	 *
+	 *
+	 * @param t
+	 * @return
+	 */
 	@Override
 	public WB_Point getParametricPointOnLine(final double t) {
 		if (t < 0 || t > numberOfPoints - 1) {
@@ -207,11 +306,22 @@ public class WB_Ring extends WB_PolyLine {
 		return points.get((int) t).mulAddMul(1 - ft, ft, points.get(1 + (int) t));
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public int getNumberOfPoints() {
 		return numberOfPoints;
 	}
 
+	/**
+	 *
+	 *
+	 * @param i
+	 * @return
+	 */
 	@Override
 	public WB_Segment getSegment(final int i) {
 		if (i < 0 || i > numberOfPoints - 1) {
@@ -220,6 +330,12 @@ public class WB_Ring extends WB_PolyLine {
 		return geometryfactory.createSegment(getPoint(i), getPoint((i + 1) % numberOfPoints));
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_Ring apply(final WB_Transform3D T) {
 		final List<WB_Point> tpoints = new WB_PointList();
@@ -229,6 +345,12 @@ public class WB_Ring extends WB_PolyLine {
 		return geometryfactory.createRing(tpoints);
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_Ring apply2D(final WB_Transform2D T) {
 		final List<WB_Point> tpoints = new WB_PointList();
@@ -238,6 +360,12 @@ public class WB_Ring extends WB_PolyLine {
 		return geometryfactory.createRing(tpoints);
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_Ring apply2DSelf(final WB_Transform2D T) {
 		for (final WB_Point p : points) {
@@ -248,6 +376,12 @@ public class WB_Ring extends WB_PolyLine {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param T
+	 * @return
+	 */
 	@Override
 	public WB_Ring applySelf(final WB_Transform3D T) {
 		for (final WB_Point p : points) {

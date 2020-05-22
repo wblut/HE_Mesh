@@ -1,14 +1,29 @@
 package wblut.math;
 
+/**
+ *
+ */
 public class WB_M44 {
+	/**  */
 	public double m11, m12, m13, m14;
+	/**  */
 	public double m21, m22, m23, m24;
+	/**  */
 	public double m31, m32, m33, m34;
+	/**  */
 	public double m41, m42, m43, m44;
 
+	/**
+	 *
+	 */
 	public WB_M44() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param matrix44
+	 */
 	public WB_M44(final double[][] matrix44) {
 		m11 = matrix44[0][0];
 		m12 = matrix44[0][1];
@@ -28,6 +43,26 @@ public class WB_M44 {
 		m44 = matrix44[3][3];
 	}
 
+	/**
+	 *
+	 *
+	 * @param m11
+	 * @param m12
+	 * @param m13
+	 * @param m14
+	 * @param m21
+	 * @param m22
+	 * @param m23
+	 * @param m24
+	 * @param m31
+	 * @param m32
+	 * @param m33
+	 * @param m34
+	 * @param m41
+	 * @param m42
+	 * @param m43
+	 * @param m44
+	 */
 	public WB_M44(final double m11, final double m12, final double m13, final double m14, final double m21,
 			final double m22, final double m23, final double m24, final double m31, final double m32, final double m33,
 			final double m34, final double m41, final double m42, final double m43, final double m44) {
@@ -49,6 +84,11 @@ public class WB_M44 {
 		this.m44 = m44;
 	}
 
+	/**
+	 *
+	 *
+	 * @param matrix44
+	 */
 	public void set(final double[][] matrix44) {
 		m11 = matrix44[0][0];
 		m12 = matrix44[0][1];
@@ -68,6 +108,11 @@ public class WB_M44 {
 		m44 = matrix44[3][3];
 	}
 
+	/**
+	 *
+	 *
+	 * @param matrix44
+	 */
 	public void set(final float[][] matrix44) {
 		m11 = matrix44[0][0];
 		m12 = matrix44[0][1];
@@ -87,6 +132,11 @@ public class WB_M44 {
 		m44 = matrix44[3][3];
 	}
 
+	/**
+	 *
+	 *
+	 * @param matrix44
+	 */
 	public void set(final int[][] matrix44) {
 		m11 = matrix44[0][0];
 		m12 = matrix44[0][1];
@@ -106,6 +156,26 @@ public class WB_M44 {
 		m44 = matrix44[3][3];
 	}
 
+	/**
+	 *
+	 *
+	 * @param m11
+	 * @param m12
+	 * @param m13
+	 * @param m14
+	 * @param m21
+	 * @param m22
+	 * @param m23
+	 * @param m24
+	 * @param m31
+	 * @param m32
+	 * @param m33
+	 * @param m34
+	 * @param m41
+	 * @param m42
+	 * @param m43
+	 * @param m44
+	 */
 	public void set(final double m11, final double m12, final double m13, final double m14, final double m21,
 			final double m22, final double m23, final double m24, final double m31, final double m32, final double m33,
 			final double m34, final double m41, final double m42, final double m43, final double m44) {
@@ -127,10 +197,20 @@ public class WB_M44 {
 		this.m44 = m44;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_M44 get() {
 		return new WB_M44(m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 */
 	public void add(final WB_M44 m) {
 		m11 += m.m11;
 		m12 += m.m12;
@@ -150,6 +230,11 @@ public class WB_M44 {
 		m44 += m.m44;
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 */
 	public void sub(final WB_M44 m) {
 		m11 -= m.m11;
 		m12 -= m.m12;
@@ -169,6 +254,11 @@ public class WB_M44 {
 		m44 -= m.m44;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 */
 	public void mul(final double f) {
 		m11 *= f;
 		m12 *= f;
@@ -188,6 +278,11 @@ public class WB_M44 {
 		m44 *= f;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 */
 	public void div(final double f) {
 		final double invf = WB_Epsilon.isZero(f) ? 0 : 1.0 / f;
 		m11 *= invf;
@@ -208,6 +303,12 @@ public class WB_M44 {
 		m44 *= invf;
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 * @param result
+	 */
 	public void addInto(final WB_M44 m, final WB_M44 result) {
 		result.m11 = m11 + m.m11;
 		result.m12 = m12 + m.m12;
@@ -227,6 +328,12 @@ public class WB_M44 {
 		result.m44 = m44 + m.m44;
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 * @param result
+	 */
 	public void subInto(final WB_M44 m, final WB_M44 result) {
 		result.m11 = m11 - m.m11;
 		result.m12 = m12 - m.m12;
@@ -246,6 +353,12 @@ public class WB_M44 {
 		result.m44 = m44 - m.m44;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @param result
+	 */
 	public void multInto(final double f, final WB_M44 result) {
 		result.m11 = f * m11;
 		result.m12 = f * m12;
@@ -265,6 +378,12 @@ public class WB_M44 {
 		result.m44 = f * m44;
 	}
 
+	/**
+	 *
+	 *
+	 * @param f
+	 * @param result
+	 */
 	public void divInto(final double f, final WB_M44 result) {
 		final double invf = WB_Epsilon.isZero(f) ? 0 : 1.0 / f;
 		result.m11 = invf * m11;
@@ -285,6 +404,12 @@ public class WB_M44 {
 		result.m44 = invf * m44;
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 * @return
+	 */
 	public WB_M44 mult(final WB_M44 m) {
 		return new WB_M44(m11 * m.m11 + m12 * m.m21 + m13 * m.m31 + m14 * m.m41,
 				m11 * m.m12 + m12 * m.m22 + m13 * m.m32 + m14 * m.m42,
@@ -304,6 +429,12 @@ public class WB_M44 {
 				m41 * m.m14 + m42 * m.m24 + m43 * m.m34 + m44 * m.m44);
 	}
 
+	/**
+	 *
+	 *
+	 * @param m
+	 * @param result
+	 */
 	public void multInto(final WB_M44 m, final WB_M44 result) {
 		result.set(m11 * m.m11 + m12 * m.m21 + m13 * m.m31 + m14 * m.m41,
 				m11 * m.m12 + m12 * m.m22 + m13 * m.m32 + m14 * m.m42,
@@ -323,6 +454,13 @@ public class WB_M44 {
 				m41 * m.m14 + m42 * m.m24 + m43 * m.m34 + m44 * m.m44);
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @param m
+	 * @return
+	 */
 	public static WB_M44 mult(final WB_M44 n, final WB_M44 m) {
 		return new WB_M44(n.m11 * m.m11 + n.m12 * m.m21 + n.m13 * m.m31 + n.m14 * m.m41,
 				n.m11 * m.m12 + n.m12 * m.m22 + n.m13 * m.m32 + n.m14 * m.m42,
@@ -342,6 +480,13 @@ public class WB_M44 {
 				n.m41 * m.m14 + n.m42 * m.m24 + n.m43 * m.m34 + n.m44 * m.m44);
 	}
 
+	/**
+	 *
+	 *
+	 * @param n
+	 * @param m
+	 * @param result
+	 */
 	public static void multInto(final WB_M44 n, final WB_M44 m, final WB_M44 result) {
 		result.set(n.m11 * m.m11 + n.m12 * m.m21 + n.m13 * m.m31 + n.m14 * m.m41,
 				n.m11 * m.m12 + n.m12 * m.m22 + n.m13 * m.m32 + n.m14 * m.m42,
@@ -361,6 +506,11 @@ public class WB_M44 {
 				n.m41 * m.m14 + n.m42 * m.m24 + n.m43 * m.m34 + n.m44 * m.m44);
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_M44 inverse() {
 		final double[][] m = new double[][] { { m11, m12, m13, m14 }, { m21, m22, m23, m24 }, { m31, m32, m33, m34 },
 				{ m41, m12, m43, m44 } };
@@ -439,6 +589,9 @@ public class WB_M44 {
 		return I;
 	}
 
+	/**
+	 *
+	 */
 	public void transpose() {
 		double tmp = m12;
 		m12 = m21;
@@ -460,10 +613,20 @@ public class WB_M44 {
 		m43 = tmp;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public WB_M44 getTranspose() {
 		return new WB_M44(m11, m21, m31, m41, m12, m22, m32, m42, m13, m23, m33, m43, m14, m24, m34, m44);
 	}
 
+	/**
+	 *
+	 *
+	 * @param result
+	 */
 	public void transposeInto(final WB_M44 result) {
 		result.set(m11, m21, m31, m41, m12, m22, m32, m42, m13, m23, m33, m43, m14, m24, m34, m44);
 	}

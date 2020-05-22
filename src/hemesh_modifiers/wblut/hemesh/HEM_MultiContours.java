@@ -2,22 +2,50 @@ package wblut.hemesh;
 
 import java.util.Arrays;
 
+/**
+ *
+ */
 public class HEM_MultiContours extends HEM_Modifier {
+	/**
+	 *
+	 *
+	 * @param name
+	 * @return
+	 */
 	public HEM_MultiContours setAttribute(final String name) {
 		parameters.set("attribute", name);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	String getAttribute() {
 		return (String) parameters.get("attribute", null);
 	}
 
+	/**
+	 *
+	 *
+	 * @param levels
+	 * @return
+	 */
 	public HEM_MultiContours setLevels(final double... levels) {
 		Arrays.sort(levels);
 		parameters.set("levels", levels);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param min
+	 * @param max
+	 * @param increment
+	 * @return
+	 */
 	public HEM_MultiContours setLevelRange(final double min, final double max, final double increment) {
 		final double[] levels = new double[(int) ((max - min) / increment) + 1];
 		for (int i = 0; i <= (int) ((max - min) / increment); i++) {
@@ -27,10 +55,21 @@ public class HEM_MultiContours extends HEM_Modifier {
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	double[] getLevels() {
 		return (double[]) parameters.get("levels", null);
 	}
 
+	/**
+	 *
+	 *
+	 * @param mesh
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Mesh mesh) {
 		final HE_Selection splitEdges = mesh.getNewSelection();
@@ -70,6 +109,12 @@ public class HEM_MultiContours extends HEM_Modifier {
 		return mesh;
 	}
 
+	/**
+	 *
+	 *
+	 * @param selection
+	 * @return
+	 */
 	@Override
 	protected HE_Mesh applySelf(final HE_Selection selection) {
 		final HE_Mesh mesh = selection.getParent();

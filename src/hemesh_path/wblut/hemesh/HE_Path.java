@@ -1,10 +1,17 @@
 package wblut.hemesh;
 
-import java.util.List;
-
+/**
+ *
+ */
 public class HE_Path extends HE_MeshElement {
+	/**  */
 	protected HE_PathHalfedge _phalfedge;
 
+	/**
+	 *
+	 *
+	 * @param loop
+	 */
 	public HE_Path(final HE_Halfedge loop) {
 		super();
 		_phalfedge = new HE_PathHalfedge(loop);
@@ -22,12 +29,22 @@ public class HE_Path extends HE_MeshElement {
 		first.setPrev(current);
 	}
 
+	/**
+	 *
+	 *
+	 * @param face
+	 */
 	public HE_Path(final HE_Face face) {
 		this(face.getHalfedge());
 	}
 
+	/**
+	 *
+	 *
+	 * @param v
+	 */
 	public HE_Path(final HE_Vertex v) {
-		final List<HE_Halfedge> halfedges = new HE_HalfedgeList();
+		final HE_HalfedgeList halfedges = new HE_HalfedgeList();
 		HE_Halfedge hev = v.getHalfedge();
 		HE_Halfedge circuit;
 		do {
@@ -41,6 +58,14 @@ public class HE_Path extends HE_MeshElement {
 		createFromList(halfedges, true);
 	}
 
+	/**
+	 *
+	 *
+	 * @param v0
+	 * @param v1
+	 * @param mesh
+	 * @return
+	 */
 	public static HE_Path getShortestPath(final HE_Vertex v0, final HE_Vertex v1, final HE_Mesh mesh) {
 		if (!mesh.contains(v0) || !mesh.contains(v1) || v0 == v1) {
 			return null;
@@ -50,12 +75,24 @@ public class HE_Path extends HE_MeshElement {
 		return HE_MeshOp.createPathFromIndices(mesh, shortestpath, false);
 	}
 
-	public HE_Path(final List<HE_Halfedge> halfedges, final boolean loop) {
+	/**
+	 *
+	 *
+	 * @param halfedges
+	 * @param loop
+	 */
+	public HE_Path(final HE_HalfedgeList halfedges, final boolean loop) {
 		super();
 		createFromList(halfedges, loop);
 	}
 
-	private void createFromList(final List<HE_Halfedge> halfedges, final boolean loop) {
+	/**
+	 *
+	 *
+	 * @param halfedges
+	 * @param loop
+	 */
+	private void createFromList(final HE_HalfedgeList halfedges, final boolean loop) {
 		_phalfedge = new HE_PathHalfedge(halfedges.get(0));
 		HE_PathHalfedge current = _phalfedge;
 		HE_PathHalfedge next;
@@ -71,10 +108,20 @@ public class HE_Path extends HE_MeshElement {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public long key() {
 		return super.getKey();
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public int getPathOrder() {
 		int result = 0;
 		if (_phalfedge == null) {
@@ -88,6 +135,11 @@ public class HE_Path extends HE_MeshElement {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double getPathLength() {
 		double result = 0;
 		if (_phalfedge == null) {
@@ -101,6 +153,11 @@ public class HE_Path extends HE_MeshElement {
 		return result;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public double[] getPathIncLengths() {
 		final double[] result = new double[getPathOrder() + 1];
 		if (_phalfedge == null) {
@@ -117,8 +174,13 @@ public class HE_Path extends HE_MeshElement {
 		return result;
 	}
 
-	public List<HE_Halfedge> getHalfedges() {
-		final List<HE_Halfedge> fhe = new HE_HalfedgeList();
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_HalfedgeList getHalfedges() {
+		final HE_HalfedgeList fhe = new HE_HalfedgeList();
 		if (_phalfedge == null) {
 			return fhe;
 		}
@@ -132,8 +194,13 @@ public class HE_Path extends HE_MeshElement {
 		return fhe;
 	}
 
-	public List<HE_Vertex> getPathVertices() {
-		final List<HE_Vertex> fhe = new HE_VertexList();
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_VertexList getPathVertices() {
+		final HE_VertexList fhe = new HE_VertexList();
 		if (_phalfedge == null) {
 			return fhe;
 		}
@@ -150,8 +217,13 @@ public class HE_Path extends HE_MeshElement {
 		return fhe;
 	}
 
-	public List<HE_Halfedge> getPathEdges() {
-		final List<HE_Halfedge> fe = new HE_HalfedgeList();
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_HalfedgeList getPathEdges() {
+		final HE_HalfedgeList fe = new HE_HalfedgeList();
 		if (_phalfedge == null) {
 			return fe;
 		}
@@ -167,20 +239,38 @@ public class HE_Path extends HE_MeshElement {
 		return fe;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public HE_PathHalfedge getPathHalfedge() {
 		return _phalfedge;
 	}
 
+	/**
+	 *
+	 *
+	 * @param phalfedge
+	 */
 	public void setPathHalfedge(final HE_PathHalfedge phalfedge) {
 		_phalfedge = phalfedge;
 	}
 
+	/**
+	 *
+	 */
 	public void clearPathHalfedge() {
 		_phalfedge = null;
 	}
 
-	public List<HE_Face> getPathInnerFaces() {
-		final List<HE_Face> ff = new HE_FaceList();
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_FaceList getPathInnerFaces() {
+		final HE_FaceList ff = new HE_FaceList();
 		if (getPathHalfedge() == null) {
 			return ff;
 		}
@@ -198,8 +288,13 @@ public class HE_Path extends HE_MeshElement {
 		return ff;
 	}
 
-	public List<HE_Face> getPathOuterFaces() {
-		final List<HE_Face> ff = new HE_FaceList();
+	/**
+	 *
+	 *
+	 * @return
+	 */
+	public HE_FaceList getPathOuterFaces() {
+		final HE_FaceList ff = new HE_FaceList();
 		if (getPathHalfedge() == null) {
 			return ff;
 		}
@@ -217,6 +312,11 @@ public class HE_Path extends HE_MeshElement {
 		return ff;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	@Override
 	public String toString() {
 		String s = "HE_Path key: " + key() + ". Connects " + getPathOrder() + " vertices: ";
@@ -231,15 +331,28 @@ public class HE_Path extends HE_MeshElement {
 		return s;
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void clear() {
 		_phalfedge = null;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isLoop() {
 		return _phalfedge.getPrevInPath() != null;
 	}
 
+	/**
+	 *
+	 *
+	 * @return
+	 */
 	public boolean isCut() {
 		if (isLoop()) {
 			return true;
@@ -257,6 +370,9 @@ public class HE_Path extends HE_MeshElement {
 		return true;
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void clearPrecomputed() {
 	}
